@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.util.List;
 import org.dspace.authorize.AuthorizeManager;
 import org.dspace.authorize.ResourcePolicy;
+import org.dspace.workflow.WorkflowItem;
 
 /**
  *
@@ -55,10 +56,20 @@ public class DefaultItemVersionProvider extends AbstractVersionProvider implemen
             // and reset canonical
             if(history.isLastVersion(versionToDelete) && history.size() > 1)
             {
-                // reset the previous version to archived
+                // if a new version gets archived, the old one is set to false.
+                // we need to do the oposite now, if the old version was previously
+                // unarchived. If the old version is still archived, the new
+                // version is a WorkspaceItem or WorkflowItem we should skip this,
+                // as unarchiving of previous versions is done only when a newer
+                // version gets archived.
                 Item item = history.getPrevious(versionToDelete).getItem();
-                item.setArchived(true);
-                item.update();
+                if (!item.isArchived()
+                        && WorkspaceItem.findByItem(c, versionToDelete.getItem()) == null
+                        && WorkflowItem.findByItem(c, versionToDelete.getItem()) == null)
+                {
+                    item.setArchived(true);
+                    item.update();
+                }
             }
 
             // assign tombstone to the Identifier and reset canonical to the previous version only if there is a previous version
@@ -85,7 +96,7 @@ public class DefaultItemVersionProvider extends AbstractVersionProvider implemen
             {
                 identifierService.reserve(c, itemNew);
             } catch (IdentifierException e) {
-                throw new RuntimeException("Can't create Identifier!");
+                throw new RuntimeException("Can't create Identifier!", e);
             }
             // DSpace knows several types of resource policies (see the class
             // org.dspace.authorize.ResourcePolicy): Submission, Workflow, Custom

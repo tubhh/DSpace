@@ -79,6 +79,7 @@ public abstract class AbstractVersionProvider {
                 {
                     bundleNew.setPrimaryBitstreamID(bitstreamNew.getID());
                 }
+                bitstreamNew.update();
             }
         }
     }
@@ -91,7 +92,6 @@ public abstract class AbstractVersionProvider {
 	    for (Metadatum value : bitstreamMeta) {
 		    newBitstream.addMetadata(value.schema, value.element, value.qualifier, value.language, value.value, value.authority, value.confidence);
 	    }
-	    newBitstream.updateMetadata();
 	    return newBitstream;
     }
 

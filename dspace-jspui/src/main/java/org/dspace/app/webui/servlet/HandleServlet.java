@@ -42,6 +42,8 @@ import org.dspace.eperson.EPerson;
 import org.dspace.eperson.Group;
 import org.dspace.eperson.Subscribe;
 import org.dspace.handle.HandleManager;
+import org.dspace.identifier.DOI;
+import org.dspace.identifier.IdentifierService;
 import org.dspace.plugin.CollectionHomeProcessor;
 import org.dspace.plugin.CommunityHomeProcessor;
 import org.dspace.plugin.ItemHomeProcessor;
@@ -355,6 +357,12 @@ public class HandleServlet extends DSpaceServlet
             // set a variable to create an edit button
             request.setAttribute("admin_button", Boolean.TRUE);
         }
+        // show submitters a button to create a new item version
+        else if (item.canCreateNewVersion(context))
+        {
+            // set a variable to create a button to create a new item version
+            request.setAttribute("submitter_button", Boolean.TRUE);
+        }
 
         // Get the collections
         Collection[] collections = item.getCollections();
@@ -420,6 +428,39 @@ public class HandleServlet extends DSpaceServlet
             throw new ServletException(ce);
         }
 
+        // lookup if we have a DOI
+        String doi = null;
+        IdentifierService identifierService = (new DSpace()).getSingletonService(IdentifierService.class);
+        if (identifierService != null)
+        {
+            doi = identifierService.lookup(UIUtil.obtainContext(request), item, DOI.class);
+        }
+        if (doi != null)
+        {
+            try
+            {
+                doi = DOI.DOIToExternalForm(doi);
+            }
+            catch (Exception ex)
+            {
+                doi = null;
+                log.error("Unable to convert DOI '" + doi + "' into external form.", ex);
+            }
+        }
+
+        // use handle as preferred Identifier if not configured otherwise.
+        String preferredIdentifier = null;
+        if (item.getHandle() != null) {
+            preferredIdentifier = HandleManager.getCanonicalForm(item.getHandle());
+        }
+        if ("doi".equalsIgnoreCase(ConfigurationManager.getProperty("webui.preferred.identifier")))
+        {
+            if (doi != null)
+            {
+                preferredIdentifier = doi;
+            }
+        }
+
         // Enable suggest link or not
         boolean suggestEnable = false;
         if (!ConfigurationManager.getBooleanProperty("webui.suggest.enable"))
@@ -456,8 +497,10 @@ public class HandleServlet extends DSpaceServlet
         request.setAttribute("display.all", Boolean.valueOf(displayAll));
         request.setAttribute("item", item);
         request.setAttribute("collections", collections);
-        request.setAttribute("dspace.layout.head", headMetadata);
         request.setAttribute("crisID", context.getCrisID());
+        request.setAttribute("dspace.layout.head", headMetadata);
+        request.setAttribute("doi", doi);
+        request.setAttribute("preferred_identifier", preferredIdentifier);
         JSPManager.showJSP(request, response, "/display-item.jsp");
     }
     
@@ -535,11 +578,21 @@ public class HandleServlet extends DSpaceServlet
             }
             else if (request.getParameter("submit_unsubscribe") != null)
             {
+                // Unsubscribe button pressed.
+                // Only registered can unsubscribe, so redirect unless logged in.
+                if (context.getCurrentUser() == null &&
+                    !Authenticate
+                            .startAuthentication(context, request, response))
+
+                    return;
+                else
+                {
                 Subscribe.unsubscribe(context, context.getCurrentUser(),
                         community);
                 updated = true;
             }
-            
+            }
+
             // No button pressed, display community home page
             log.info(LogManager.getHeader(context, "view_community",
                     "community_id=" + community.getID()));
@@ -561,7 +614,7 @@ public class HandleServlet extends DSpaceServlet
             {
                 subscribed = Subscribe.isSubscribed(context, e, community);
             }
-            
+
             // is the user a COMMUNITY_EDITOR?
             if (community.canEditBoolean())
             {
@@ -600,7 +653,7 @@ public class HandleServlet extends DSpaceServlet
             request.setAttribute("logged.in", new Boolean(e != null));
             request.setAttribute("subscribed", new Boolean(subscribed));
             JSPManager.showJSP(request, response, "/community-home.jsp");
-            
+
             if (updated)
             {
                 context.complete();
@@ -677,19 +730,9 @@ public class HandleServlet extends DSpaceServlet
             }
             else if (request.getParameter("submit_unsubscribe") != null)
             {
-                // Unsubscribe button pressed.
-                // Only registered can unsubscribe, so redirect unless logged in.
-                if (context.getCurrentUser() == null &&
-                    !Authenticate
-                            .startAuthentication(context, request, response))
-
-                    return;
-                else
-                {
                 Subscribe.unsubscribe(context, context.getCurrentUser(),
                         collection);
                 updated = true;
-            }
             }
 
             // display collection home page

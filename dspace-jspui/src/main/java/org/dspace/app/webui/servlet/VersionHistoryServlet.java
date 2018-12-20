@@ -50,6 +50,19 @@ public class VersionHistoryServlet extends DSpaceServlet
         if (item == null) {
         	throw new IllegalArgumentException("Item is null");
         }
+
+        // using configurationService.getPropertyAsType instead of getBooleanProperty
+        // to get an instance of java.lang.Boolean instead of the primary type boolean.
+        // Doing this prevents to rely on Javas auto boxing and unboxing feature.
+        Boolean show_submitter = new DSpace()
+                .getConfigurationService()
+                .getPropertyAsType("versioning.item.history.include.submitter",
+                        Boolean.FALSE);
+        if (show_submitter == null)
+        {
+            // set default if not configured
+            show_submitter = Boolean.FALSE;
+        }
         
         if(!AuthorizeManager.isAdmin(context,
                         item.getOwningCollection()))
@@ -61,7 +74,13 @@ public class VersionHistoryServlet extends DSpaceServlet
                 throw new AuthorizeException();
             }
 
+        } else {
+            // if user is admin override show_submitter
+            show_submitter = Boolean.TRUE;
+            // ... and link the E-Mailadress
+            request.setAttribute("isAdmin", Boolean.TRUE);
         }
+        request.setAttribute("showSubmitter", show_submitter);
 
         // manage if versionID is not came by request
         VersionHistory history = VersionUtil.retrieveVersionHistory(context,

@@ -50,6 +50,9 @@ import org.dspace.core.Email;
 import org.dspace.core.I18nUtil;
 import org.dspace.eperson.EPerson;
 import org.dspace.util.ItemUtils;
+import org.dspace.handle.HandleManager;
+import org.dspace.identifier.DOI;
+import org.dspace.identifier.IdentifierService;
 import org.dspace.utils.DSpace;
 
 /**
@@ -60,7 +63,6 @@ import org.dspace.utils.DSpace;
  */
 public class UIUtil extends Util
 {
-    
     /** Whether to look for x-forwarded headers for logging IP addresses */
     private static Boolean useProxies;
 
@@ -72,23 +74,23 @@ public class UIUtil extends Util
 	 */
 	private static Pattern p = Pattern.compile("[^/]*$");
 
-	private static final Set<String> RTL;
+    private static final Set<String> RTL;
 
-	static {
-	  Set<String> lang = new HashSet<String>();
-	  lang.add("ar");
-	  lang.add("dv");
-	  lang.add("fa");
-	  lang.add("ha");
-	  lang.add("he");
-	  lang.add("iw");
-	  lang.add("ji");
-	  lang.add("ps");
-	  lang.add("ur");
-	  lang.add("yi");
-	  RTL = Collections.unmodifiableSet(lang);
-	}
-	
+    static {
+      Set<String> lang = new HashSet<String>();
+      lang.add("ar");
+      lang.add("dv");
+      lang.add("fa");
+      lang.add("ha");
+      lang.add("he");
+      lang.add("iw");
+      lang.add("ji");
+      lang.add("ps");
+      lang.add("ur");
+      lang.add("yi");
+      RTL = Collections.unmodifiableSet(lang);
+    }
+
     /**
      * Obtain a new context object. If a context object has already been created
      * for this HTTP request, it is re-used, otherwise it is created. If a user
@@ -188,6 +190,74 @@ public class UIUtil extends Util
         c.setCurrentLocale(sessionLocale);
 
         return c;
+    }
+
+    /**
+     * Returns a string array containing the URL to address this Item in DSpace,
+     * the official URL of its preferred identifier (example given
+     * http://dx.doi.org/10.5072/123) and the preferred identifier in canonical
+     * form (example given doi:10.5072/123). The configuration property
+     * webui.preferred.identifier can be used to configure which identifier
+     * should be preferred.
+     * If no identifier is found this method returns null. If no handle but a
+     * DOI is found the first value of the array is null.
+     *
+     * @param ctx DSpace Context
+     * @param item the item
+     * @return
+     * @throws SQLException
+     */
+    public static String[] getItemIdentifier(Context ctx, Item item)
+            throws SQLException
+    {
+        // look up the the version handle
+        String versionHandle = item.getHandle();
+
+        // lookup the version doi
+        String versionDOI = null;
+        IdentifierService identifierService = (new DSpace()).getSingletonService(IdentifierService.class);
+        if (identifierService != null)
+        {
+            versionDOI = identifierService.lookup(ctx, item, DOI.class);
+        }
+
+        // resolve identifiers
+        String[] handles = null;
+        if (versionHandle != null)
+        {
+            handles = new String[] {
+                    HandleManager.resolveToURL(ctx, versionHandle),
+                    HandleManager.getCanonicalForm(versionHandle),
+                    versionHandle,
+                    "hdl:" + versionHandle
+            };
+        }
+        String[] dois = null;
+        if (versionDOI != null)
+        {
+            try {
+                dois = new String[] {
+                        HandleManager.resolveToURL(ctx, versionHandle),
+                        DOI.DOIToExternalForm(versionDOI),
+                        DOI.formatIdentifier(versionDOI).substring(DOI.SCHEME.length()),
+                        DOI.formatIdentifier(versionDOI)
+                };
+            } catch (Exception ex) {
+                dois = null;
+                log.error("Unable to format DOI " + versionDOI
+                                  + ". " + ex.getClass().getName() + ": " + ex.getMessage());
+            }
+        }
+
+        // do we prefer DOIs or handles?
+        if (dois != null
+                && ("doi".equalsIgnoreCase(ConfigurationManager.getProperty("webui.preferred.identifier"))
+                || handles == null))
+        {
+            return dois;
+        }
+
+        return handles;
     }
 
     /**
@@ -612,7 +682,8 @@ public class UIUtil extends Util
         	throw new JspException(sqle.getMessage(), sqle);
         }
     }
-    
+
+
     public static int getItemStatus(HttpServletRequest request, Item item)
             throws SQLException
     {
@@ -718,5 +789,4 @@ public class UIUtil extends Util
     private static boolean isTextRTL(Locale locale) {
         return RTL.contains(locale.getLanguage());
     }
-    
 }

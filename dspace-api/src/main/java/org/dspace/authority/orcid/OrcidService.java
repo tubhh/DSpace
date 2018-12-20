@@ -25,7 +25,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -34,6 +40,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.lang.StringUtils;
+import org.apache.geronimo.mail.util.StringBufferOutputStream;
 import org.apache.log4j.Logger;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.orcid.jaxb.activities.Educations;
@@ -275,7 +282,7 @@ public class OrcidService extends RestSource
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error(e.getMessage(), e);
         }
         return message;
     }
@@ -292,7 +299,7 @@ public class OrcidService extends RestSource
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error(e.getMessage(), e);
         }
         return message;
     }
@@ -308,7 +315,7 @@ public class OrcidService extends RestSource
         }
         catch (Exception e)
         {
-            log.error(e);
+        	log.error(e.getMessage(), e);
         }
         return message;
     }
@@ -324,7 +331,7 @@ public class OrcidService extends RestSource
         }
         catch (Exception e)
         {
-            log.error(e);
+        	log.error(e.getMessage(), e);
         }
         return message;
     }
@@ -340,7 +347,7 @@ public class OrcidService extends RestSource
         }
         catch (Exception e)
         {
-            log.error(e);
+        	log.error(e.getMessage(), e);
         }
         return message;
     }
@@ -357,7 +364,7 @@ public class OrcidService extends RestSource
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error(e.getMessage(), e);
         }
         return message;
     }
@@ -373,7 +380,7 @@ public class OrcidService extends RestSource
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error(e.getMessage(), e);
         }
         return message;
     }
@@ -1731,7 +1738,7 @@ public class OrcidService extends RestSource
             }
             catch (IOException e)
             {
-
+            	log.error(e.getMessage(), e);
             }
         }
 
@@ -1764,7 +1771,7 @@ public class OrcidService extends RestSource
         return response;
     }
 
-    /**
+	/**
      * HTTP PUT method used to update resource by putCode
      * 
      * @param endpoint
@@ -1813,7 +1820,7 @@ public class OrcidService extends RestSource
         return response;
     }
 
-    public String retrievePutCode(Response response) throws Exception
+	public String retrievePutCode(Response response) throws Exception
     {
         StatusType status = response.getStatusInfo();
         if (status != null)

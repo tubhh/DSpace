@@ -43,7 +43,7 @@ j(document).ready(function() {
     	<div class="panel-heading">
     		<h4 class="panel-title">
         		<a data-toggle="collapse" data-parent="#${holder.shortName}" href="#collapseOne${holder.shortName}">
-          			${holder.title} 
+          			<fmt:message key="RPAdditionalFieldStorage.box.${holder.shortName}.label"/>
         		</a></h4>
     	</div>
 		<div id="collapseOne${holder.shortName}" class="panel-collapse collapse in">
@@ -54,6 +54,7 @@ j(document).ready(function() {
 			<div class="dynaField"></div>								
 			<c:choose>
 				<c:when test="${!empty anagraficaObject.anagrafica4view['orcid']}">
+                                        <br/><span style="min-width: 30em;"><a target="_blank" href="https://sandbox.orcid.org/${anagraficaObject.anagrafica4view['orcid'][0]}"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" /> sandbox.orcid.org/${anagraficaObject.anagrafica4view['orcid'][0]}</a></span>
 					<c:forEach items="${propertiesDefinitionsInHolder[holder.shortName]}" var="tipologiaDaVisualizzare" varStatus="status">
 						<c:choose>
 						<c:when test="${!empty anagraficaObject.anagrafica4view['system-orcid-token-authenticate']}">
@@ -88,9 +89,9 @@ j(document).ready(function() {
 						</c:when>
 						<c:otherwise>
 							<% if(scopeMetadata.contains("/person/update"))  { %>
-								<c:set var="showmissedrepeaticon" value="true"/>
+								<c:set var="showmissedpersonrepeaticon" value="true"/>
 							<% } else { %>
-								<c:set var="showmissedrepeaticon" value="false"/>
+								<c:set var="showmissedpersonrepeaticon" value="false"/>
 							<% } %>
 						</c:otherwise>
 						</c:choose>
@@ -125,7 +126,6 @@ j(document).ready(function() {
 					</div></div>
 					</c:when>
 					<c:otherwise>
-					
 					<div class="col-md-5"><div class="panel panel-default">
   						<div class="panel-heading">
     						<h3 class="panel-title"><fmt:message key="jsp.orcid.custom.box.label.grantedauthorization"/></h3>
@@ -204,14 +204,14 @@ j(document).ready(function() {
   							</div>
 							<div class="container">	
 								<div class="col-md-12">
-									<ul class="oauth-scopes">			
+									<ul class="oauth-scopes">
 											<c:if test="${showauthenticate eq false && showmissedidicon eq true}">
 												<li><span class="bottomTooltip" data-toggle="popover" data-container="body" data-content="<fmt:message key="jsp.orcid.custom.box.label.authorization.showauthenticate.tooltip"/>"><fmt:message key="jsp.orcid.custom.box.label.authorization.showauthenticate"/></span></li>
 											</c:if>
 											<c:if test="${showorcidprofilereadlimited eq false && showmissedeyesicon eq true}">
 												<li><span class="bottomTooltip" data-toggle="popover" data-container="body" data-content="<fmt:message key="jsp.orcid.custom.box.label.authorization.showorcidprofilereadlimited.tooltip"/>"><fmt:message key="jsp.orcid.custom.box.label.authorization.showorcidprofilereadlimited"/></span></li>
 											</c:if>											
-											<c:if test="${showorcidbioupdate eq false && showmissedrepeaticon eq true}">
+											<c:if test="${showorcidbioupdate eq false && showmissedpersonrepeaticon eq true}">
 												<li><span class="bottomTooltip" data-toggle="popover" data-container="body" data-content="<fmt:message key="jsp.orcid.custom.box.label.authorization.showorcidbioupdate.tooltip"/>"><fmt:message key="jsp.orcid.custom.box.label.authorization.showorcidbioupdate"/></span></li>
 											</c:if>
 											<c:if test="${showorcidworksupdate eq false && showmissedrepeaticon eq true}">
@@ -224,17 +224,19 @@ j(document).ready(function() {
 					</div></div>									
 					</c:when>
 					<c:otherwise>
-						<div class="col-md-2"><div class="row"><a class="col-md-offset-4" href="http://orcid.org"><img src="<%= request.getContextPath() %>/image/orcid_64x64.png" title="ORCID Website"></a></div>
-						</div>					
+						<div class="col-md-2"><div class="row"><a class="col-md-offset-4" href="http://sandbox.orcid.org"><img src="<%= request.getContextPath() %>/image/orcid_64x64.png" title="ORCID Website"></a></div>
+						</div>
+<!--					
 						<div class="col-md-5"><div class="panel panel-default">
   						<div class="panel-heading">
 						    <h3 class="panel-title"><fmt:message key="jsp.orcid.custom.box.label.missedauthorization"/></h3>
   						</div>
-  						<div class="panel-body">
+ 						<div class="panel-body">
   							<div class="alert alert-success"><fmt:message key="jsp.orcid.custom.box.label.missedauthorization.empty"/></div>
+  						</div> 
   						</div>
   						</div>
-  						</div>					
+-->					
 					</c:otherwise>
 					</c:choose>
 				</c:when>
@@ -248,17 +250,16 @@ j(document).ready(function() {
 		            <div class="dynaClear">&nbsp;</div>
 		            <div class="dynaClear">&nbsp;</div>
 					<div class="dynaField">
-		                          
 		            </div>
 					<div class="dynaClear">
 						<div class="dynaField">
 							<div class="dynaFieldValue">
 								<div class="btn-group" role="group">
-								  <a href="<%= request.getContextPath() %>/oauth-login?show-login=false">
+								  <a href="<%= request.getContextPath() %>/oauth-login?show-login=false&from=${requestScope['javax.servlet.forward.request_uri']}">
 			      						<button class="btn btn-default"><fmt:message key="jsp.orcid.custom.box.button.create"/></button>
 			      				  </a>								  
 								  <span>&nbsp;&nbsp;&nbsp;<img src="<%= request.getContextPath() %>/image/orcid_64x64.png" title="ORCID Authentication">&nbsp;&nbsp;&nbsp;</span>
-								  <a href="<%= request.getContextPath() %>/oauth-login?show-login=true">
+								  <a href="<%= request.getContextPath() %>/oauth-login?show-login=true&from=${requestScope['javax.servlet.forward.request_uri']}">
 			      						<button class="btn btn-default"><fmt:message key="jsp.orcid.custom.box.button.connect"/></button>
 			      				  </a>
 								</div>

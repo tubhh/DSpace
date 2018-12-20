@@ -21,6 +21,13 @@
       <relativePath>..</relativePath>
    </parent>
 
+   <repositories>
+      <repository>
+        <id>Sonatype OSS Snapshots</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      </repository>
+   </repositories>
+
    <properties>
        <!-- This is the path to the root [dspace-src] directory. -->
        <root.basedir>${basedir}/../../..</root.basedir>
@@ -235,6 +242,11 @@
                <artifactId>ant</artifactId>
             </exclusion>
          </exclusions>
+      </dependency>
+      <dependency>
+            <groupId>com.github.tomtung</groupId>
+            <artifactId>latex2unicode_2.11</artifactId>
+            <version>0.1-SNAPSHOT</version>
       </dependency>
 
    </dependencies>

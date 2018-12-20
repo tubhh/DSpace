@@ -13,13 +13,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.AbstractUnitTest;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.*;
+import org.dspace.kernel.ServiceManager;
 import org.dspace.services.ConfigurationService;
 import org.dspace.storage.rdbms.DatabaseManager;
 import org.dspace.storage.rdbms.TableRow;
+import org.dspace.utils.DSpace;
 import org.junit.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
@@ -551,6 +555,32 @@ public class DOIIdentifierProviderTest
 
         assertNotNull("Minted DOI is null?!", retrievedDOI);
         assertTrue("Mint did not returned an existing DOI!", doi.equals(retrievedDOI));
+    }
+
+    @Test
+    public void testMint_returns_a_previously_minted_DOI()
+            throws SQLException, AuthorizeException, IOException, IdentifierException
+    {
+        Item item = newItem();
+        String mintedDoi = provider.mint(context, item);
+        String remintedDoi = provider.mint(context, item);
+
+        assertFalse("Minted DOI is null or empty?!", StringUtils.isEmpty(mintedDoi));
+        assertFalse("Minted DOI is null or empty?!", StringUtils.isEmpty(remintedDoi));
+        assertTrue("Register did not returned a previously minted DOI!", mintedDoi.equals(remintedDoi));
+    }
+
+    @Test
+    public void testRegister_returns_existing_DOI()
+        throws SQLException, AuthorizeException, IOException, IdentifierException
+    {
+        Item item = newItem();
+        String mintedDoi = provider.mint(context, item);
+        String registeredDoi = provider.register(context, item);
+
+        assertFalse("Minted DOI is null or empty?!", StringUtils.isEmpty(mintedDoi));
+        assertFalse("Registered DOI is null?!", StringUtils.isEmpty(registeredDoi));
+        assertTrue("Register did not returned a previously minted DOI!", mintedDoi.equals(registeredDoi));
     }
 
     @Test

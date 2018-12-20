@@ -13,6 +13,7 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.handle.HandleManager;
 import org.dspace.utils.DSpace;
 import org.dspace.versioning.Version;
+import org.dspace.versioning.VersionDAO;
 import org.dspace.versioning.VersionHistory;
 import org.dspace.versioning.VersioningService;
 import org.junit.After;
@@ -21,8 +22,10 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -135,5 +138,29 @@ public class VersioningTest extends AbstractUnitTest {
         assertThat("Test_version_delete", Item.find(context, versionedItem.getID()), nullValue());
         assertThat("Test_version_handle_delete", HandleManager.resolveToObject(context, versionedItem.getHandle()), nullValue());
         context.restoreAuthSystemState();
+    }
+
+    @Test
+    public void testStableVersionNumbers() throws Exception {
+        try {
+            context.turnOffAuthorisationSystem();
+            VersionDAO versionDAO = new VersionDAO();
+
+            int versionNumber1 = versionDAO.findByItem(context, versionedItem).getVersionNumber();
+            Version version2 = versioningService.createNewVersion(context, versionedItem.getID(), "Test 2");
+            int versionNumber2 = version2.getVersionNumber();
+            WorkspaceItem wsi = WorkspaceItem.findByItem(context, version2.getItem());
+            InstallItem.installItem(context, wsi);
+            context.commit();
+
+            versioningService.removeVersion(context, version2.getItem());
+            Version version3 = versioningService.createNewVersion(context, versionedItem.getID(), "Test 3");
+            assertNotEquals("Test_version_stable_numbers1", versionNumber1, versionNumber2);
+            assertNotEquals("Test_version_stable_numbers2", versionNumber2, (int) version3.getVersionNumber());
+            assertNotEquals("Test_version_stable_numbers3", versionNumber1, (int) version3.getVersionNumber());
+        } finally {
+            context.restoreAuthSystemState();
+        }
+
     }
 }

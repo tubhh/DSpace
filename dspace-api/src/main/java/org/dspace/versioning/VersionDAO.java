@@ -23,6 +23,7 @@ import java.util.List;
  * @author Fabio Bolognesi (fabio at atmire dot com)
  * @author Mark Diggory (markd at atmire dot com)
  * @author Ben Bosman (ben at atmire dot com)
+ * @author Pascal-Nicolas Becker (dspace at pascal dash becker dot de)
  */
 public class VersionDAO
 {
@@ -36,6 +37,23 @@ public class VersionDAO
     protected final static String VERSION_SUMMARY = "version_summary";
     protected final static String HISTORY_ID = "versionhistory_id";
 
+    /**
+     * Returns the number the next new version should get. If a version was deleted, we don't assign that number again,
+     * unless we are reinstating the deleted version. This method ensures that we assign new version number only to new
+     * versions.
+     *
+     * @param context DSpace's context object
+     * @param versionHistory The VersionHistory to which the new version will belong to.
+     * @throws SQLException If the database makes funky things
+     * @return The next number a new version should get.
+     */
+    public int getNextVersionNumber(Context context, VersionHistory versionHistory) throws SQLException
+    {
+        String query = "SELECT (COALESCE(MAX(" + VERSION_NUMBER + "), 0) + 1) AS next FROM " + TABLE_NAME + " WHERE "
+                + HISTORY_ID +" = ?";
+        TableRow tr = DatabaseManager.querySingle(context, query, versionHistory.getVersionHistoryId());
+        return tr.getIntColumn("next");
+    }
 
     public VersionImpl find(Context context, int id) {
         try
@@ -83,11 +101,38 @@ public class VersionDAO
         }
     }
 
+    public VersionImpl findByVersionHistoryAndVersionNumber(Context context, VersionHistory vh, int versionNumber) throws SQLException
+    {
+        String query = "SELECT * FROM " + VersionDAO.TABLE_NAME + " WHERE " + VersionDAO.HISTORY_ID + " = ? AND "
+                + VersionDAO.VERSION_NUMBER + " = ?";
 
+        TableRow row = DatabaseManager.querySingle(context, query, vh.getVersionHistoryId(), versionNumber);
+
+        if (row == null)
+        {
+            return null;
+        }
+        return new VersionImpl(context, row);
+    }
+
+    /**
+     * This method returns versions that have an item associated. Instead of deleting versions
+     * we set the item, date, summary and eperson null but preserve the version number. This is
+     * necessary as some IdentifierProviders rely on unique version numbers. This method
+     * returns only versions that were not (soft) deleted before. See
+     * {@link #findAllByVersionHistory(Context, int)} if you're looking for a method returning
+     * all versions.
+     *
+     * @param context DSpace's context object
+     * @param versionHistoryId The version history's id
+     * @return A list of all versions that have associated items and are connected to the provided version history.
+     */
     public List<Version> findByVersionHistory(Context context, int versionHistoryId) {
         TableRowIterator tri = null;
-        try {
-            tri = DatabaseManager.query(context, "SELECT * FROM " + TABLE_NAME + " where " + HISTORY_ID + "=" + versionHistoryId + " order by " + VERSION_NUMBER + " desc");
+        try
+        {
+            tri = DatabaseManager.query(context, "SELECT * FROM " + TABLE_NAME + " where " + HISTORY_ID + "="
+                    + versionHistoryId + " AND " + ITEM_ID + " IS NOT NULL ORDER BY " + VERSION_NUMBER + " DESC");
 
             List<Version> versions = new ArrayList<Version>();
             while (tri.hasNext())
@@ -99,20 +144,76 @@ public class VersionDAO
                 if (fromCache != null)
                 {
                     versions.add(fromCache);
-                }else{
+                }
+                else
+                {
                     versions.add(new VersionImpl(context, tr));
                 }
             }
             return versions;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             throw new RuntimeException(e.getMessage(), e);
-        } finally {
+        }
+        finally
+        {
             if (tri != null)
             {
                 tri.close();
             }
         }
+    }
 
+    /**
+     * This method returns all versions of an version history, including soft deleted versions.
+     * Instead of deleting a version, we set the item, date, summary and eperson null but
+     * preserve the version number. This is necessary as some IdentifierServices rely on unique
+     * version numbers. If a version gets deleted, we should not apply the same version number
+     * to a nother version again. This method returns all versions, including the soft deleted
+     * versions.
+     *
+     * @param context
+     * @param versionHistoryId
+     * @return
+     */
+    public List<Version> findAllByVersionHistory(Context context, int versionHistoryId)
+    {
+        TableRowIterator tri = null;
+        try
+        {
+            tri = DatabaseManager.query(context, "SELECT * FROM " + TABLE_NAME + " where " + HISTORY_ID + "="
+                    + versionHistoryId + " ORDER BY " + VERSION_NUMBER + " DESC");
+
+            List<Version> versions = new ArrayList<Version>();
+            while (tri.hasNext())
+            {
+                TableRow tr = tri.next();
+
+                VersionImpl fromCache = (VersionImpl) context.fromCache(VersionImpl.class, tr.getIntColumn(VERSION_ID));
+
+                if (fromCache != null)
+                {
+                    versions.add(fromCache);
+                }
+                else
+                {
+                    versions.add(new VersionImpl(context, tr));
+                }
+            }
+            return versions;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+        finally
+        {
+            if (tri != null)
+            {
+                tri.close();
+            }
+        }
     }
 
 
@@ -131,7 +232,13 @@ public class VersionDAO
     }
 
 
-    public void delete(Context c, int versionID) {
+    /**
+     * Use {@link VersioningService#removeVersion(Context, int)}  instead.
+     *
+     * @param c DSpace's context object
+     * @param versionID The ID of the version you want to remove
+     */
+    protected void delete(Context c, int versionID) {
         try {
             //TODO Do I have to manage the event?
             //context.addEvent(new Event(Event.DELETE, Constants.VERSION, getID(), getEmail()));

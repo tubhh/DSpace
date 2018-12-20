@@ -93,6 +93,12 @@ public class VersionHistoryImpl implements VersionHistory
         return getNext(version)!=null;
     }
 
+    /**
+     * Returns the versions of this version history, that haven't been deleted before. Should be equal to running
+     * {@link VersionDAO#findByVersionHistory(Context, int)}, but does not need to access the database.
+     *
+     * @return A list of (not previously deleted) versions associated with this version history.
+     */
     public List<Version> getVersions()
     {
         return versions;

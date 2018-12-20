@@ -80,7 +80,9 @@ public abstract class NetworkSubmissionLookupDataLoader implements
                         .get("year").iterator().next()
                         : null;
                 int yearInt = Integer.parseInt(year);
-                results = search(null, title, authors, yearInt);
+                if (title != null || authors != null) {
+                	results = search(null, title, authors, yearInt);
+                }
             }
         }
         catch (HttpException e)

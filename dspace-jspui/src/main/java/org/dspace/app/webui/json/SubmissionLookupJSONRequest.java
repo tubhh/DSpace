@@ -65,10 +65,6 @@ import com.google.gson.JsonObject;
 public class SubmissionLookupJSONRequest extends JSONRequest
 {
 
-    private SubmissionLookupService service = new DSpace().getServiceManager()
-            .getServiceByName(SubmissionLookupService.class.getName(),
-                    SubmissionLookupService.class);
-
     private static Logger log = Logger
             .getLogger(SubmissionLookupJSONRequest.class);
 
@@ -78,6 +74,12 @@ public class SubmissionLookupJSONRequest extends JSONRequest
     {
         Gson json = new Gson();
         String suuid = req.getParameter("s_uuid");
+		// unfortunately the service needs to be a prototype bean as it holds data
+		// providers with state attributes!
+        SubmissionLookupService service = new DSpace().getServiceManager()
+                .getServiceByName(SubmissionLookupService.class.getName(),
+                        SubmissionLookupService.class);
+
         SubmissionLookupDTO subDTO = service.getSubmissionLookupDTO(req, suuid);
         // Check that we have a file upload request
         boolean isMultipart = ServletFileUpload.isMultipartContent(req);
@@ -138,7 +140,7 @@ public class SubmissionLookupJSONRequest extends JSONRequest
 
             subDTO.setItems(result);
             service.storeDTOs(req, suuid, subDTO);
-            List<Map<String, Object>> dto = getLightResultList(result);
+            List<Map<String, Object>> dto = getLightResultList(service, result);
             JsonElement tree = json.toJsonTree(dto);
             JsonObject jo = new JsonObject();
             jo.add("result", tree);
@@ -194,7 +196,7 @@ public class SubmissionLookupJSONRequest extends JSONRequest
 
             subDTO.setItems(result);
             service.storeDTOs(req, suuid, subDTO);
-            List<Map<String, Object>> dto = getLightResultList(result);
+            List<Map<String, Object>> dto = getLightResultList(service, result);
             JsonElement tree = json.toJsonTree(dto);
             JsonObject jo = new JsonObject();
             jo.add("result", tree);
@@ -203,7 +205,7 @@ public class SubmissionLookupJSONRequest extends JSONRequest
         else if ("details".equalsIgnoreCase(req.getParameter("type")))
         {
             String i_uuid = req.getParameter("i_uuid");
-            Map<String, Object> dto = getDetails(subDTO.getLookupItem(i_uuid),
+            Map<String, Object> dto = getDetails(service, subDTO.getLookupItem(i_uuid),
                     context);
             JsonElement tree = json.toJsonTree(dto);
             JsonObject jo = new JsonObject();
@@ -316,7 +318,7 @@ public class SubmissionLookupJSONRequest extends JSONRequest
             }
             subDTO.setItems(result);
             service.storeDTOs(req, suuid, subDTO);
-            List<Map<String, Object>> dto = getLightResultList(result);
+            List<Map<String, Object>> dto = getLightResultList(service, result);
             if (skipPreview)
             {
                 Map<String, Object> skip = new HashMap<String, Object>();
@@ -341,10 +343,10 @@ public class SubmissionLookupJSONRequest extends JSONRequest
         }
     }
 
-    private Map<String, Object> getDetails(ItemSubmissionLookupDTO item,
+    private Map<String, Object> getDetails(SubmissionLookupService service, ItemSubmissionLookupDTO item,
             Context context)
     {
-        List<String> fieldOrder = getFieldOrder();
+        List<String> fieldOrder = getFieldOrder(service);
         Record totalData = item.getTotalPublication(service.getProviders());
         Set<String> availableFields = totalData.getFields();
         List<String[]> fieldsLabels = new ArrayList<String[]>();
@@ -381,7 +383,7 @@ public class SubmissionLookupJSONRequest extends JSONRequest
         return data;
     }
 
-    private List<String> getFieldOrder()
+    private List<String> getFieldOrder(SubmissionLookupService service)
     {
     	if (service.getDetailFields()!=null){
     		return service.getDetailFields();
@@ -414,7 +416,7 @@ public class SubmissionLookupJSONRequest extends JSONRequest
     	return defaultValues;
     }
 
-    private List<Map<String, Object>> getLightResultList(
+    private List<Map<String, Object>> getLightResultList(SubmissionLookupService service,
             List<ItemSubmissionLookupDTO> result)
     {
         List<Map<String, Object>> publications = new ArrayList<Map<String, Object>>();

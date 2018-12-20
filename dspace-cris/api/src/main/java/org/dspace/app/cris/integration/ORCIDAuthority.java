@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.orcid.OrcidAuthorityValue;
@@ -31,7 +32,7 @@ public class ORCIDAuthority extends RPAuthority {
 	@Override
 	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
 		Choices choices = super.getMatches(field, query, collection, start, limit, locale);		
-		return new Choices(addExternalResults(field, query, choices, start, limit==0?DEFAULT_MAX_ROWS:limit), choices.start, choices.total, choices.confidence, choices.more);
+		return new Choices(addExternalResults(field, query, choices, start, limit<=0?DEFAULT_MAX_ROWS:limit), choices.start, choices.total, choices.confidence, choices.more);
 	}
 
 	protected Choice[] addExternalResults(String field, String text, Choices choices, int start, int max) {
@@ -44,9 +45,16 @@ public class ORCIDAuthority extends RPAuthority {
 				for (AuthorityValue val : values) {
 					if (added < max) {						
 						Map<String, String> extras = ((OrcidAuthorityValue)val).choiceSelectMap();
+						String inst = ((OrcidAuthorityValue)val).getInstitution();
+						String orcid = ((OrcidAuthorityValue)val).getOrcid_id();
 						extras.put("insolr", "false");
 						extras.put("link", getLink((OrcidAuthorityValue)val));
-						results.add(new Choice(val.generateString(), val.getValue(), val.getValue(), extras));
+						StringBuffer sb = new StringBuffer(val.getValue());
+						if (StringUtils.isNotBlank(inst)) {
+							sb.append(" (").append(inst).append(")");
+						}
+						sb.append(" - ").append(orcid);
+						results.add(new Choice(val.generateString(), sb.toString(), val.getValue(), extras));
 						added++;
 					}
 				}

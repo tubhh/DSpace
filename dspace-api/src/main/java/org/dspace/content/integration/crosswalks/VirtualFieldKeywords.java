@@ -24,7 +24,7 @@ public class VirtualFieldKeywords implements VirtualFieldDisseminator, VirtualFi
     public String[] getMetadata(Item item, Map<String, String> fieldCache, String fieldName)
     {
         // Get the citation from the item
-        String keywordsDC = "dc.subject.keywords";
+        String keywordsDC = "dc.subject";
         if(ConfigurationManager.getProperty("crosswalk.virtualkeywords.value") != null) 
         	keywordsDC = ConfigurationManager.getProperty("crosswalk.virtualkeywords.value");
         

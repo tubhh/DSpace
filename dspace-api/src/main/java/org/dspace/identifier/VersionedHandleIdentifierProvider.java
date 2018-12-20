@@ -7,6 +7,7 @@
  */
 package org.dspace.identifier;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.*;
@@ -14,15 +15,18 @@ import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
-import org.dspace.storage.rdbms.DatabaseManager;
-import org.dspace.storage.rdbms.TableRow;
+import org.dspace.handle.HandleManager;
 import org.dspace.utils.DSpace;
 import org.dspace.versioning.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -41,8 +45,6 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
 
     private static final char DOT = '.';
 
-    private String[] supportedPrefixes = new String[]{"info:hdl", "hdl", "http://"};
-
     private VersionDAO versionDAO;
     private VersionHistoryDAO versionHistoryDAO;
 
@@ -54,179 +56,196 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
 
     public boolean supports(String identifier)
     {
-        for(String prefix : supportedPrefixes)
+        String prefix = getPrefix();
+        String canonicalPrefix = ConfigurationManager.getProperty("handle.canonical.prefix");
+
+        if (identifier == null)
         {
-            if(identifier.startsWith(prefix))
+            return false;
+        }
+
+        // return true if handle has valid starting pattern
+        if (identifier.startsWith(prefix + "/")
+                || identifier.startsWith(canonicalPrefix)
+                || identifier.startsWith("hdl:")
+                || identifier.startsWith("info:hdl")
+                || identifier.matches("^https?://hdl\\.handle\\.net/.*")
+                || identifier.matches("^https?://.+/handle/.*"))
+        {
+            return true;
+        }
+
+        //Check additional prefixes supported in the config file
+        List<String> prefixes = new ArrayList<String>();
+        String additionals = ConfigurationManager.getProperty("handle.additional.prefixes");
+        if (StringUtils.isNotBlank(additionals))
+        {
+            for (String additionalPrefix : additionals.split(","))
             {
-                return true;
+                additionalPrefix = StringUtils.trim(additionalPrefix);
+                if (StringUtils.isNotBlank(additionalPrefix)
+                        && StringUtils.startsWith(identifier, additionalPrefix + "/"))
+                {
+                    return true;
+                }
             }
         }
 
-        try {
-            String outOfUrl = retrieveHandleOutOfUrl(identifier);
-            if(outOfUrl != null)
-            {
-                return true;
-            }
-        } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-        }
-
+        // otherwise, assume invalid handle
         return false;
     }
 
     public String register(Context context, DSpaceObject dso)
     {
+        String id = mint(context, dso);
         try
         {
-            String id = mint(context, dso);
-
-            // move canonical to point the latest version
-            if(dso != null && dso.getType() == Constants.ITEM)
+            if (dso instanceof Item)
             {
-                Item item = (Item)dso;
-                VersionHistory history = retrieveVersionHistory(context, (Item)dso);
-                if(history!=null)
-                {
-                    String canonical = getCanonical(item);
-                    // Modify Canonical: 12345/100 will point to the new item
-                    TableRow canonicalRecord = findHandleInternal(context, canonical);
-                    modifyHandleRecord(context, dso, canonicalRecord, canonical);
-
-                    // in case of first version we have to modify the previous metadata to be xxxx.1
-                    Version version = history.getVersion(item);
-                    Version previous = history.getPrevious(version);
-                    if (history.isFirstVersion(previous))
-                    {
-                        modifyHandleMetadata(previous.getItem(), (canonical + DOT + 1));
-                    }
-                    // Check if our previous item hasn't got a handle anymore.
-                    // This only occurs when a switch has been made from the standard handle identifier provider
-                    // to the versioned one, in this case no "versioned handle" is reserved so we need to create one
-                    if(previous != null && getHandleInternal(context, Constants.ITEM, previous.getItemID()) == null){
-                        makeIdentifierBasedOnHistory(context, previous.getItem(), canonical, history);
-
-                    }
-                }
-                populateHandleMetadata(item);
+                populateHandleMetadata(context, (Item) dso, id);
             }
-
-            return id;
-        }catch (Exception e){
-            log.error(LogManager.getHeader(context, "Error while attempting to create handle", "Item id: " + (dso != null ? dso.getID() : "")), e);
-            throw new RuntimeException("Error while attempting to create identifier for Item id: " + (dso != null ? dso.getID() : ""));
         }
+        catch (Exception e)
+        {
+            log.error(LogManager.getHeader(context, "Error while attempting to create handle", "Item id: " + (dso != null ? dso.getID() : "")), e);
+            throw new RuntimeException("Error while attempting to create identifier for Item id: " + (dso != null ? dso.getID() : ""), e);
+        }
+        return id;
     }
 
     public void register(Context context, DSpaceObject dso, String identifier)
+            throws IdentifierException
     {
-        try
+        if (dso instanceof Item && identifier != null)
         {
-
             Item item = (Item) dso;
 
-            // if for this identifier is already present a record in the Handle table and the corresponding item
-            // has an history someone is trying to restore the latest version for the item. When
-            // trying to restore the latest version the identifier in input doesn't have the for 1234/123.latestVersion
-            // it is the canonical 1234/123
-            VersionHistory itemHistory = getHistory(context, identifier);
-            if(!identifier.matches(".*/.*\\.\\d+") && itemHistory!=null){
+            // if identifier == 1234.5/100.4 reinstate the version 4 in the
+            // version table if absent
 
-                int newVersionNumber = itemHistory.getLatestVersion().getVersionNumber()+1;
-                String canonical = identifier;
-                identifier = identifier.concat(".").concat("" + newVersionNumber);
-                restoreItAsVersion(context, dso, identifier, item, canonical, itemHistory);
-            }
-            // if identifier == 1234.5/100.4 reinstate the version 4 in the version table if absent
-            else if(identifier.matches(".*/.*\\.\\d+"))
-            {
-                // if it is a version of an item is needed to put back the record
-                // in the versionitem table
-                String canonical = getCanonical(identifier);
-                DSpaceObject canonicalItem = this.resolve(context, canonical);
-                if(canonicalItem==null){
-                    restoreItAsCanonical(context, dso, identifier, item, canonical);
-                }
-                else{
-                    VersionHistory history = retrieveVersionHistory(context, (Item)canonicalItem);
-                    if(history==null){
-                        restoreItAsCanonical(context, dso, identifier, item, canonical);
-                    }
-                    else
-                    {
-                        restoreItAsVersion(context, dso, identifier, item, canonical, history);
 
-                    }
-                }
-            }
-            else
+            Matcher versionHandleMatcher = Pattern.compile("^.*/.*\\.(\\d+)$").matcher(identifier);
+            // do we have to register a versioned handle?
+            if (versionHandleMatcher.matches())
             {
-                //A regular handle
-                createNewIdentifier(context, dso, identifier);
-                if(dso instanceof Item)
+                // parse the version number from the handle
+                int versionNumber = - 1;
+                try
                 {
-                    populateHandleMetadata(item);
+                    versionNumber = Integer.valueOf(versionHandleMatcher.group(1));
+                }
+                catch (NumberFormatException ex)
+                {
+                    throw new IllegalStateException("Cannot detect the interger value of a digit.", ex);
+                }
+
+                // get history
+                VersionHistory history = versionHistoryDAO.find(context, item.getID(), versionDAO);
+
+                // do we have a version history?
+                if (history != null)
+                {
+                    // get the version
+                    Version version = versionDAO.findByItem(context, item);
+
+                    // did we found a version?
+                    if (version != null)
+                    {
+                        // do the version's number and the handle versionnumber match?
+                        if (version.getVersionNumber() != versionNumber)
+                        {
+                            throw new IdentifierException("Trying to register a handle without matching its item's version number.");
+                        }
+
+                        // create the handle
+                        try {
+                            HandleManager.createHandle(context, dso, identifier);
+                            populateHandleMetadata(context, item, identifier);
+                            return;
+                        } catch (AuthorizeException ex) {
+                            throw new IdentifierException("Current user does not "
+                                                                  + "have the privileges to add the handle "
+                                                                  + identifier + " to the item's ("
+                                                                  + dso.getID() + ") metadata.", ex);
+                        } catch (SQLException | IOException ex) {
+                            throw new RuntimeException("Unable to create handle '"
+                                                               + identifier + "' for "
+                                                               + Constants.typeText[dso.getType()] + " " + dso.getID()
+                                                               + ".", ex);
+                        }
+                    }
+                } else {
+                    try {
+                        // either no VersionHistory or no Version exists.
+                        // Restore item with the appropriate version number.
+                        restoreItAsVersion(context, item, identifier, versionNumber);
+                    } catch (SQLException | IOException ex) {
+                        throw new RuntimeException("Unable to restore a versioned "
+                                                           + "handle as there was a problem in creating a "
+                                                           + "neccessary item version: ", ex);
+                    } catch (AuthorizeException ex) {
+                        throw new RuntimeException("Unable to restore a versioned "
+                                                           + "handle as the current user was not allowed to "
+                                                           + "create a neccessary item version: ", ex);
+                    }
+                    return;
                 }
             }
-        }catch (Exception e){
-            log.error(LogManager.getHeader(context, "Error while attempting to create handle", "Item id: " + dso.getID()), e);
-            throw new RuntimeException("Error while attempting to create identifier for Item id: " + dso.getID(), e);
+        }
+
+        try {
+            // either we have a DSO not of type item or the handle was not a
+            // versioned (e.g. 123456789/100) one
+            // just register it.
+            createNewIdentifier(context, dso, identifier);
+            if (dso instanceof Item) {
+                populateHandleMetadata(context, (Item) dso, identifier);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException("Unable to create handle '"
+                                               + identifier + "' for "
+                                               + Constants.typeText[dso.getType()] + " " + dso.getID()
+                                               + " in cause of a problem with the database: ", ex);
+        } catch (AuthorizeException ex) {
+            throw new IdentifierException("Current user does not "
+                                                  + "have the privileges to add the handle "
+                                                  + identifier + " to the item's ("
+                                                  + dso.getID() + ") metadata.", ex);
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable add the handle '"
+                                               + identifier + "' for "
+                                               + Constants.typeText[dso.getType()] + " " + dso.getID()
+                                               + " in the object's metadata.", ex);
         }
     }
 
-    private VersionHistory getHistory(Context context, String identifier)
+    private void restoreItAsVersion(Context context, Item item, String identifier, int versionNumber)
+            throws SQLException, IOException, AuthorizeException
     {
-        DSpaceObject item = this.resolve(context, identifier);
-        if(item!=null){
-            VersionHistory history = retrieveVersionHistory(context, (Item)item);
-            return history;
-        }
-        return null;
-    }
+        createNewIdentifier(context, item, identifier);
+        populateHandleMetadata(context, item, identifier);
 
-    private void restoreItAsVersion(Context context, DSpaceObject dso, String identifier, Item item, String canonical, VersionHistory history) throws SQLException, IOException, AuthorizeException
-    {
-        createNewIdentifier(context, dso, identifier);
-        populateHandleMetadata(item);
-
-        int versionNumber = Integer.parseInt(identifier.substring(identifier.lastIndexOf(".") + 1));
-        createVersion(context, history, item, "Restoring from AIP Service", new Date(), versionNumber);
-        Version latest = history.getLatestVersion();
-
-
-        // if restoring the lastest version: needed to move the canonical
-        if(latest.getVersionNumber() < versionNumber){
-            TableRow canonicalRecord = findHandleInternal(context, canonical);
-            modifyHandleRecord(context, dso, canonicalRecord, canonical);
+        Version version = versionDAO.findByItem(context, item);
+        if (version == null)
+        {
+            VersionHistory history = versionHistoryDAO.find(context, item.getID(), versionDAO);
+            if (history == null)
+            {
+                history = versionHistoryDAO.create(context);
+            }
+            version = createVersion(context, history, item, "Restoring from AIP Service", new Date(), versionNumber);
         }
     }
-
-    private void restoreItAsCanonical(Context context, DSpaceObject dso, String identifier, Item item, String canonical) throws SQLException, IOException, AuthorizeException
-    {
-        createNewIdentifier(context, dso, identifier);
-        populateHandleMetadata(item);
-
-        int versionNumber = Integer.parseInt(identifier.substring(identifier.lastIndexOf(".")+1));
-        VersionHistory history=versionHistoryDAO.create(context);
-        createVersion(context, history, item, "Restoring from AIP Service", new Date(), versionNumber);
-
-        TableRow canonicalRecord = findHandleInternal(context, canonical);
-        modifyHandleRecord(context, dso, canonicalRecord, canonical);
-
-    }
-
 
     public void reserve(Context context, DSpaceObject dso, String identifier)
     {
         try{
-            TableRow handle = DatabaseManager.create(context, "Handle");
-            modifyHandleRecord(context, dso, handle, identifier);
+            HandleManager.createHandle(context, dso, identifier);
         }catch(Exception e){
             log.error(LogManager.getHeader(context, "Error while attempting to create handle", "Item id: " + dso.getID()), e);
             throw new RuntimeException("Error while attempting to create identifier for Item id: " + dso.getID());
         }
     }
-
 
     /**
      * Creates a new handle in the database.
@@ -252,7 +271,7 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
 
             if(history!=null)
             {
-                handleId = makeIdentifierBasedOnHistory(context, dso, handleId, history);
+                handleId = makeIdentifierBasedOnHistory(context, dso, history);
             }else{
                 handleId = createNewIdentifier(context, dso, null);
             }
@@ -265,76 +284,11 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
 
     public DSpaceObject resolve(Context context, String identifier, String... attributes)
     {
-        // We can do nothing with this, return null
-        try{
-            TableRow dbhandle = findHandleInternal(context, identifier);
-
-            if (dbhandle == null)
-            {
-                //Check for an url
-                identifier = retrieveHandleOutOfUrl(identifier);
-                if(identifier != null)
-                {
-                    dbhandle = findHandleInternal(context, identifier);
-                }
-
-                if(dbhandle == null)
-                {
-                    return null;
-                }
-            }
-
-            if ((dbhandle.isColumnNull("resource_type_id"))
-                    || (dbhandle.isColumnNull("resource_id")))
-            {
-                throw new IllegalStateException("No associated resource type");
-            }
-
-            // What are we looking at here?
-            int handletypeid = dbhandle.getIntColumn("resource_type_id");
-            int resourceID = dbhandle.getIntColumn("resource_id");
-
-            if (handletypeid == Constants.ITEM)
-            {
-                Item item = Item.find(context, resourceID);
-
-                if (log.isDebugEnabled())
-                {
-                    log.debug("Resolved handle " + identifier + " to item "
-                            + ((item == null) ? (-1) : item.getID()));
-                }
-
-                return item;
-            }
-            else if (handletypeid == Constants.COLLECTION)
-            {
-                Collection collection = Collection.find(context, resourceID);
-
-                if (log.isDebugEnabled()) {
-                    log.debug("Resolved handle " + identifier + " to collection "
-                            + ((collection == null) ? (-1) : collection.getID()));
-                }
-
-                return collection;
-            }
-            else if (handletypeid == Constants.COMMUNITY)
-            {
-                Community community = Community.find(context, resourceID);
-
-                if (log.isDebugEnabled()) {
-                    log.debug("Resolved handle " + identifier + " to community "
-                            + ((community == null) ? (-1) : community.getID()));
-                }
-
-                return community;
-            }
-
-
+        try {
+            return HandleManager.resolveToObject(context, identifier);
         }catch (Exception e){
             log.error(LogManager.getHeader(context, "Error while resolving handle to item", "handle: " + identifier), e);
         }
-//        throw new IllegalStateException("Unsupported Handle Type "
-//                + Constants.typeText[handletypeid]);
         return null;
     }
 
@@ -343,22 +297,7 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
 
         try
         {
-            TableRow row = getHandleInternal(context, dso.getType(), dso.getID());
-            if (row == null)
-            {
-                if (dso.getType() == Constants.SITE)
-                {
-                    return Site.getSiteHandle();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return row.getStringColumn("handle");
-            }
+            return HandleManager.findHandle(context, dso);
         }catch(SQLException sqe){
             throw new IdentifierNotResolvableException(sqe.getMessage(),sqe);
         }
@@ -370,30 +309,12 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
     }
 
     public void delete(Context context, DSpaceObject dso) throws IdentifierException {
-
         try {
-            if (dso instanceof Item)
-            {
-                Item item = (Item) dso;
-
-                // If it is the most current version occurs to move the canonical to the previous version
-                VersionHistory history = retrieveVersionHistory(context, item);
-                if(history!=null && history.getLatestVersion().getItem().equals(item) && history.size() > 1)
-                {
-                    Item previous = history.getPrevious(history.getLatestVersion()).getItem();
-
-                    // Modify Canonical: 12345/100 will point to the new item
-                    String canonical = getCanonical(previous);
-                    TableRow canonicalRecord = findHandleInternal(context, canonical);
-                    modifyHandleRecord(context, previous, canonicalRecord, canonical);
-                }
-            }
+            HandleManager.unbindHandle(context, dso);
         } catch (Exception e) {
             log.error(LogManager.getHeader(context, "Error while attempting to register doi", "Item id: " + dso.getID()), e);
             throw new IdentifierException("Error while moving doi identifier", e);
         }
-
-
     }
 
     public static String retrieveHandleOutOfUrl(String url) throws SQLException
@@ -437,187 +358,56 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
     }
 
     protected String createNewIdentifier(Context context, DSpaceObject dso, String handleId) throws SQLException {
-        TableRow handle=null;
-        if(handleId != null)
+        if (StringUtils.isBlank(handleId))
         {
-            handle = findHandleInternal(context, handleId);
-
-
-            if(handle!=null && !handle.isColumnNull("resource_id"))
-            {
-                //Check if this handle is already linked up to this specified DSpace Object
-                int resourceID = handle.getIntColumn("resource_id");
-                int resourceType = handle.getIntColumn("resource_type_id");
-
-                if(resourceID==dso.getID() && resourceType ==dso.getType())
-                {
-                    //This handle already links to this DSpace Object -- so, there's nothing else we need to do
-                    return handleId;
-                }
-                else
-                {
-                    //handle found in DB table & already in use by another existing resource
-                    throw new IllegalStateException("Attempted to create a handle which is already in use: " + handleId);
-                }
-            }
-
+            return HandleManager.createHandle(context, dso);
+        } else {
+            return HandleManager.createHandle(context, dso, handleId);
         }
-        else if(handle!=null && !handle.isColumnNull("resource_type_id"))
-        {
-            //If there is a 'resource_type_id' (but 'resource_id' is empty), then the object using
-            // this handle was previously unbound (see unbindHandle() method) -- likely because object was deleted
-            int previousType = handle.getIntColumn("resource_type_id");
-
-            //Since we are restoring an object to a pre-existing handle, double check we are restoring the same *type* of object
-            // (e.g. we will not allow an Item to be restored to a handle previously used by a Collection)
-            if(previousType != dso.getType())
-            {
-                throw new IllegalStateException("Attempted to reuse a handle previously used by a " +
-                        Constants.typeText[previousType] + " for a new " +
-                        Constants.typeText[dso.getType()]);
-            }
-        }
-
-        if(handle==null){
-            handle = DatabaseManager.create(context, "Handle");
-        }
-
-        if(handleId==null)
-            handleId = createId(handle.getIntColumn("handle_id"));
-
-        modifyHandleRecord(context, dso, handle, handleId);
-
-        return handleId;
     }
 
-    protected String makeIdentifierBasedOnHistory(Context context, DSpaceObject dso, String handleId, VersionHistory history) throws AuthorizeException, SQLException
+    protected String makeIdentifierBasedOnHistory(Context context, DSpaceObject dso, VersionHistory history) throws AuthorizeException, SQLException
     {
-        Item item = (Item)dso;
+        if (! (dso instanceof Item))
+        {
+            throw new IllegalStateException("Cannot create versioned handle for " + "objects other then item: Currently versioning supports " + "items only.");
+        }
 
-        // FIRST time a VERSION is created 2 identifiers will be minted  and the canonical will be updated to point to the newer URL:
-        //  - id.1-->old URL
-        //  - id.2-->new URL
+        Item item = (Item) dso;
+
+        // The first version will have a handle like 12345/100 to be backward compatible
+        // to DSpace installation that started without versioning.
+        // Mint foreach new VERSION an identifier like: 12345/100.versionNumber.
+
         Version version = history.getVersion(item);
-        Version previous = history.getPrevious(version);
-        String canonical = getCanonical(previous.getItem());
-        if (history.isFirstVersion(previous))
+        Version firstVersion = history.getFirstVersion();
+
+        String bareHandle = firstVersion.getItem().getHandle();
+        if (bareHandle.matches(".*/.*\\.\\d+"))
         {
-            // add a new Identifier for previous item: 12345/100.1
-            String identifierPreviousItem=canonical + DOT + 1;
-            //Make sure that this hasn't happened already
-            if(findHandleInternal(context, identifierPreviousItem) == null)
-            {
-                TableRow handle = DatabaseManager.create(context, "Handle");
-                modifyHandleRecord(context, previous.getItem(), handle, identifierPreviousItem);
-            }
+            bareHandle = bareHandle.substring(0, bareHandle.lastIndexOf(DOT));
         }
 
+        // add a new Identifier for new item: 12345/100.x
+        int versionNumber = version.getVersionNumber();
+        String identifier = bareHandle;
 
-        // add a new Identifier for this item: 12345/100.x
-        String idNew = canonical + DOT + version.getVersionNumber();
-        //Make sure we don't have an old handle hanging around (if our previous version was deleted in the workspace)
-        TableRow handleRow = findHandleInternal(context, idNew);
-        if(handleRow == null)
+        if (versionNumber > 1)
         {
-            handleRow = DatabaseManager.create(context, "Handle");
-        }
-        modifyHandleRecord(context, dso, handleRow, idNew);
-
-        return handleId;
-    }
-
-
-    protected String modifyHandleRecord(Context context, DSpaceObject dso, TableRow handle, String handleId) throws SQLException
-    {
-        handle.setColumn("handle", handleId);
-        handle.setColumn("resource_type_id", dso.getType());
-        handle.setColumn("resource_id", dso.getID());
-        DatabaseManager.update(context, handle);
-
-        if (log.isDebugEnabled())
-        {
-            log.debug("Created new handle for "
-                    + Constants.typeText[dso.getType()] + " " + handleId);
-        }
-        return handleId;
-    }
-
-    protected String getCanonical(Item item)
-    {
-        String canonical = item.getHandle();
-        if( canonical.matches(".*/.*\\.\\d+") && canonical.lastIndexOf(DOT)!=-1)
-        {
-            canonical =  canonical.substring(0, canonical.lastIndexOf(DOT));
+            identifier = identifier.concat(String.valueOf(DOT)).concat(String.valueOf(versionNumber));
         }
 
-        return canonical;
-    }
-
-    protected String getCanonical(String identifier)
-    {
-        String canonical = identifier;
-        if( canonical.matches(".*/.*\\.\\d+") && canonical.lastIndexOf(DOT)!=-1)
+        // Ensure this handle does not exist already.
+        if (HandleManager.resolveToObject(context, identifier) == null)
         {
-            canonical =  canonical.substring(0, canonical.lastIndexOf(DOT));
+            HandleManager.createHandle(context, dso, identifier);
         }
-
-        return canonical;
-    }
-
-    /**
-     * Find the database row corresponding to handle.
-     *
-     * @param context DSpace context
-     * @param handle The handle to resolve
-     * @return The database row corresponding to the handle
-     * @exception java.sql.SQLException If a database error occurs
-     */
-    protected static TableRow findHandleInternal(Context context, String handle)
-            throws SQLException {
-        if (handle == null)
+        else
         {
-            throw new IllegalArgumentException("Handle is null");
+            throw new IllegalStateException("A versioned handle is used for another version already!");
         }
-
-        return DatabaseManager.findByUnique(context, "Handle", "handle", handle);
+        return identifier;
     }
-
-    /**
-     * Return the handle for an Object, or null if the Object has no handle.
-     *
-     * @param context
-     *            DSpace context
-     * @param type
-     *            The type of object
-     * @param id
-     *            The id of object
-     * @return The handle for object, or null if the object has no handle.
-     * @exception java.sql.SQLException
-     *                If a database error occurs
-     */
-    protected static TableRow getHandleInternal(Context context, int type, int id)
-            throws SQLException
-    {
-        String sql = "SELECT * FROM Handle WHERE resource_type_id = ? AND resource_id = ?";
-
-        return DatabaseManager.querySingleTable(context, "Handle", sql, type, id);
-    }
-
-    /**
-     * Create a new handle id. The implementation uses the PK of the RDBMS
-     * Handle table.
-     *
-     * @return A new handle id
-     * @exception java.sql.SQLException
-     *                If a database error occurs
-     */
-    protected static String createId(int id) throws SQLException
-    {
-        String handlePrefix = getPrefix();
-
-        return handlePrefix + (handlePrefix.endsWith("/") ? "" : "/") + id;
-    }
-
 
     protected VersionHistory retrieveVersionHistory(Context c, Item item)
     {
@@ -625,42 +415,45 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
         return versioningService.findVersionHistory(c, item.getID());
     }
 
-    protected void populateHandleMetadata(Item item)
+    protected void populateHandleMetadata(Context context, Item item, String handle)
             throws SQLException, IOException, AuthorizeException
     {
-        String handleref = getCanonicalForm(getCanonical(item));
+        String handleref = HandleManager.getCanonicalForm(handle);
 
-        // Add handle as identifier.uri DC value.
-        // First check that identifier doesn't already exist.
-        boolean identifierExists = false;
-        Metadatum[] identifiers = item.getDC("identifier", "uri", Item.ANY);
+        // we want to remove the old handle and insert the new. To do so, we
+        // load all identifiers, clear the metadata field, re add all
+        // identifiers which are not from type handle and add the new handle.
+        Metadatum[] identifiers = item.getMetadata(MetadataSchema.DC_SCHEMA, "identifier", "uri", Item.ANY);
+        item.clearMetadata(MetadataSchema.DC_SCHEMA, "identifier", "uri", Item.ANY);
+
         for (Metadatum identifier : identifiers)
         {
-            if (handleref.equals(identifier.value))
+            if (this.supports(identifier.value))
             {
-                identifierExists = true;
+                // ignore handles
+                log.debug("Removing identifier " + identifier.value);
+                continue;
             }
+            log.debug("Preserving identifier " + identifier.value);
+            item.addMetadata(identifier.schema,
+                             identifier.element,
+                             identifier.qualifier,
+                             identifier.language,
+                             identifier.value,
+                             identifier.authority,
+                             identifier.confidence);
         }
-        if (!identifierExists)
-        {
-            item.addDC("identifier", "uri", null, handleref);
-        }
-    }
 
-    protected void modifyHandleMetadata(Item item, String handle)
-            throws SQLException, IOException, AuthorizeException
-    {
-        String handleref = getCanonicalForm(handle);
-        item.clearMetadata("dc", "identifier", "uri", Item.ANY);
-        item.addDC("identifier", "uri", null, handleref);
+        // Add handle as identifier.uri DC value.
+        if (StringUtils.isNotBlank(handleref))
+        {
+            item.addMetadata(MetadataSchema.DC_SCHEMA, "identifier", "uri", null, handleref);
+        }
         item.update();
     }
 
-
     protected VersionImpl createVersion(Context c, VersionHistory vh, Item item, String summary, Date date, int versionNumber) {
         try {
-            VersionImpl version = versionDAO.create(c);
-
             // check if an equals versionNumber is already present in the DB (at this point it should never happen).
             if(vh!=null && vh.getVersions()!=null){
                 for(Version v : vh.getVersions()){
@@ -670,6 +463,13 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
                 }
             }
 
+            // check if the version was soft deleted before
+            VersionImpl version = versionDAO.findByVersionHistoryAndVersionNumber(c, vh, versionNumber);
+            // create a new version, if we cannot find any previously deleted version with this number.
+            if (version == null)
+            {
+                version = versionDAO.create(c);
+            }
             version.setVersionNumber(versionNumber);
             version.setVersionDate(date);
             version.setEperson(item.getSubmitter());
@@ -681,12 +481,6 @@ public class VersionedHandleIdentifierProvider extends IdentifierProvider {
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
-    }
-
-    protected int getNextVersionNumer(Version latest){
-        if(latest==null) return 1;
-
-        return latest.getVersionNumber()+1;
     }
 
     public void setVersionDAO(VersionDAO versionDAO)

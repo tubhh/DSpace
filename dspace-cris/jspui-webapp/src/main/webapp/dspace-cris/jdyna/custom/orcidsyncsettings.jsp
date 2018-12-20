@@ -19,7 +19,7 @@
     	<div class="panel-heading">
     		<h4 class="panel-title">
         		<a data-toggle="collapse" data-parent="#${holder.shortName}" href="#collapseOne${holder.shortName}">
-          			${holder.title} 
+          			<fmt:message key="RPAdditionalFieldStorage.box.${holder.shortName}.label"/>
         		</a></h4>
     	</div>
 		<div id="collapseOne${holder.shortName}" class="panel-collapse collapse in">
@@ -28,7 +28,20 @@
             <div class="dynaClear">&nbsp;</div>
             <div class="dynaClear">&nbsp;</div>
 			<div class="dynaField"></div>								
-					
+                            <c:choose>
+                                            <c:when test="${empty anagraficaObject.anagrafica4view['system-orcid-token-activities-update']}">
+                                                <span class="label label-warning"><fmt:message key="jsp.orcid.custom.push-activities-not-available"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                        <br/><a href="<%= request.getContextPath() %>/cris/tools/rp/editDynamicData.htm?id=${researcher.id}&tabId=17"><fmt:message key="jsp.orcid.custom.pushlink"/></a><br/>
+                                        <c:choose>
+                                            <c:when test="${!empty anagraficaObject.anagrafica4view['orcid-push-manual'] && anagraficaObject.anagrafica4view['orcid-push-manual'][0].value.object==1}">
+                                                <span class="label label-warning"><fmt:message key="jsp.orcid.custom.box.label.preferences.manual"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="label label-info"><fmt:message key="jsp.orcid.custom.box.label.preferences.batch"/></span>
+                                            </c:otherwise>
+                                        </c:choose>
 					<div class="col-md-4"><div class="panel panel-default">
   						<div class="panel-heading">
     						<h3 class="panel-title"><fmt:message key="jsp.orcid.custom.box.label.preferences.publications"/></h3>
@@ -58,7 +71,10 @@
 							</div>
 						</div>   
 					</div></div>
-
+                        </c:otherwise>
+                        </c:choose>
+<%--
+<c:if test="${!empty anagraficaObject.anagrafica4view['orcid-projects-prefs']}">
 					<div class="col-md-4"><div class="panel panel-default">
   						<div class="panel-heading">
     						<h3 class="panel-title"><fmt:message key="jsp.orcid.custom.box.label.preferences.grant"/></h3>
@@ -88,8 +104,9 @@
 							</div>
 						</div>   
 					</div></div>
-
-
+</c:if>
+--%>
+<%--
 					<div class="col-md-4"><div class="panel panel-default">
   						<div class="panel-heading">
     						<h3 class="panel-title"><fmt:message key="jsp.orcid.custom.box.label.preferences.profile"/></h3>
@@ -112,6 +129,7 @@
 									</c:forEach>
 							</div>							
 					</div></div>
+--%>
 					</div>
 				</div>
 			</div>

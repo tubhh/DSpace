@@ -22,10 +22,16 @@ import org.dspace.content.Item;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
 import org.dspace.handle.HandleManager;
+import org.dspace.identifier.DOI;
+import org.dspace.identifier.IdentifierException;
+import org.dspace.identifier.IdentifierService;
 import org.dspace.plugin.ItemHomeProcessor;
 import org.dspace.plugin.PluginException;
+import org.dspace.utils.DSpace;
 import org.dspace.versioning.Version;
+import org.dspace.versioning.VersionDAO;
 import org.dspace.versioning.VersionHistory;
+import org.dspace.versioning.VersionHistoryDAO;
 
 public class VersioningItemHome implements ItemHomeProcessor {
 
@@ -38,19 +44,31 @@ public class VersioningItemHome implements ItemHomeProcessor {
 			AuthorizeException {
 		boolean versioningEnabled = ConfigurationManager.getBooleanProperty(
 				"versioning", "enabled");
+		boolean submitterCanCreateNewVersion = ConfigurationManager.getBooleanProperty(
+				"versioning", "submitterCanCreateNewVersion", false);
 		boolean newVersionAvailable = false;
 		boolean showVersionWorkflowAvailable = false;
 		boolean hasVersionButton = false;
 		boolean hasVersionHistory = false;
-		
+
+		IdentifierService identifierService = (new DSpace()).getSingletonService(IdentifierService.class);
 		VersionHistory history = null;
 		List<Version> historyVersions = new ArrayList<Version>();
-		String latestVersionHandle = null;
-		String latestVersionURL = null;
+		String latestVersionIdentifier = null;
+
 		if (versioningEnabled) {
 			try {
 				if(item.canEdit()) {
 					if (VersionUtil.isLatest(context, item) && item.isArchived()) {
+						hasVersionButton = true;
+					}
+				}
+				else if (submitterCanCreateNewVersion)
+				{
+					if (VersionUtil.isLatest(context, item)
+							&& item.isArchived()
+							&& item.canCreateNewVersion(context))
+					{
 						hasVersionButton = true;
 					}
 				}
@@ -86,23 +104,55 @@ public class VersioningItemHome implements ItemHomeProcessor {
 				throw new PluginException(e.getMessage());
 			}
 
-			if (latestVersion != null) {
-				if (latestVersion != null
-						&& latestVersion.getItemID() != item.getID()) {
-					// We have a newer version
-					Item latestVersionItem = latestVersion.getItem();
-					if (latestVersionItem.isArchived()) {
-						// Available, add a link for the user alerting him that
-						// a new version is available
-						newVersionAvailable = true;
-						try {
-							latestVersionURL = HandleManager.resolveToURL(
-									context, latestVersionItem.getHandle());
-						} catch (SQLException e) {
-							throw new PluginException(e.getMessage());
+			if (latestVersion != null
+					&& latestVersion != null
+					&& latestVersion.getItemID() != item.getID())
+			{
+				// We have a newer version
+				Item latestVersionItem = latestVersion.getItem();
+				if (latestVersionItem.isArchived())
+				{
+					// Available, add a link for the user alerting him that
+					// a new version is available
+					newVersionAvailable = true;
+
+					// look up the the latest version handle
+					String latestVersionHandle = latestVersionItem.getHandle();
+					if (latestVersionHandle != null)
+					{
+						latestVersionIdentifier = HandleManager.getCanonicalForm(latestVersionHandle);
+					}
+
+					// lookup the latest version doi
+					String latestVersionDOI = null;
+					if (identifierService != null)
+					{
+						latestVersionDOI = identifierService.lookup(context, latestVersionItem, DOI.class);
+					}
+					if (latestVersionDOI != null)
+					{
+						try
+						{
+							latestVersionDOI = DOI.DOIToExternalForm(latestVersionDOI);
 						}
-						latestVersionHandle = latestVersionItem.getHandle();
-					} else {
+						catch (IdentifierException ex)
+						{
+							log.error("Unable to convert DOI '" + latestVersionDOI + "' into external form: " + ex.toString(),
+									  ex);
+							throw new PluginException(ex);
+						}
+					}
+
+					// do we prefer to use handle or DOIs?
+					if ("doi".equalsIgnoreCase(ConfigurationManager.getProperty("webui.preferred.identifier")))
+					{
+						if (latestVersionDOI != null)
+						{
+							latestVersionIdentifier = latestVersionDOI;
+						}
+					}
+					else
+					{
 						// We might be dealing with a workflow/workspace item
 						showVersionWorkflowAvailable = true;
 					}
@@ -119,9 +169,8 @@ public class VersioningItemHome implements ItemHomeProcessor {
 				newVersionAvailable);
 		request.setAttribute("versioning.showversionwfavailable",
 				showVersionWorkflowAvailable);
-		request.setAttribute("versioning.latestversionhandle",
-				latestVersionHandle);
-		request.setAttribute("versioning.latestversionurl", latestVersionURL);
+		request.setAttribute("versioning.latest_version_identifier",
+				latestVersionIdentifier);
 
 	}
 

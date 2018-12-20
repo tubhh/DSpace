@@ -64,13 +64,13 @@ public class CrossRefOnlineDataLoader extends NetworkSubmissionLookupDataLoader
             List<Record> items = null;
             List<Record> results = new ArrayList<Record>();
             
-            if (getApiKey() == null){
+            if (apiKey == null){
             	throw new RuntimeException("No CrossRef API key is specified!");
             }
             
             try
             {
-                items = crossrefService.search(context, dois, getApiKey());
+                items = crossrefService.search(context, dois, apiKey);
             }
             catch (JDOMException e)
             {

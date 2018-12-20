@@ -2162,4 +2162,19 @@ public class Item extends DSpaceObject implements BrowsableDSpaceObject
         return wrapperService.getWrapper(this);    
     }
 
+    public boolean canCreateNewVersion(Context context) throws SQLException
+    {
+        if (AuthorizeManager.isAdmin(context, this))
+        {
+            return true;
+        }
+        
+        if ((context.getCurrentUser() != null)
+            && context.getCurrentUser().equals(this.getSubmitter()))
+        {
+            return ConfigurationManager.getBooleanProperty("versioning", "submitterCanCreateNewVersion", false);
+        }
+        return false;
+    }
+
 }

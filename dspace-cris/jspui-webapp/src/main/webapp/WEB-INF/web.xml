@@ -599,6 +599,22 @@
     	<servlet-class>org.dspace.app.webui.servlet.ReferencesServlet</servlet-class>
   	</servlet>  
 
+  <!-- BibTeX Export by ZBW -->
+  <servlet>
+        <servlet-name>bibtexexport</servlet-name>
+        <servlet-class>org.dspace.app.webui.servlet.BibTeXExportServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+        <servlet-name>bibtexexport</servlet-name>
+        <url-pattern>/bibtexexport/*</url-pattern>
+  </servlet-mapping>
+
+  <mime-mapping>
+    <extension>bib</extension>
+    <mime-type>text/x-bibtex</mime-type>
+  </mime-mapping>
+
 	<!-- Deduplication -->
 	<servlet>
     	<servlet-name>deduplication</servlet-name>

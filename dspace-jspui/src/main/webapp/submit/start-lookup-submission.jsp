@@ -36,7 +36,6 @@
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace" %>
 
 <%
-    String contextPath = "/dspace-jspui";
 	request.setAttribute("LanguageSwitch", "hide");
 
     //get collections to choose from
@@ -165,7 +164,7 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
 	    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
 	      <h4 class="panel-title">
 	        <a>
-	          <i span class="fa fa-chevron-down"></i> <fmt:message key="jsp.submit.start-lookup-submission.manual-submission"/>
+	          <i class="fa fa-chevron-down"></i> <fmt:message key="jsp.submit.start-lookup-submission.manual-submission"/>
 	        </a>
 	      </h4>
 	    </div>
@@ -200,12 +199,13 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
 	    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
 	      <h4 class="panel-title">
 	        <a>
-	          <i span class="fa fa-chevron-right"></i> <fmt:message key="jsp.submit.start-lookup-submission.search"/>
+	          <i class="fa fa-chevron-right"></i> <fmt:message key="jsp.submit.start-lookup-submission.search"/>
 	        </a>
 	      </h4>
 	    </div>
 	    <div id="collapseTwo" class="panel-collapse collapse">
 	      <div class="panel-body">
+	      	<div id="submission-search">
 	      	<form id="form-submission-search" action="" method="post">
 		<input type="hidden" id="suuid-search" name="suuid" value="<%= uuid %>"/>
 		<input type="hidden" id="iuuid-search" name="iuuid" value=""/>
@@ -222,7 +222,7 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
 		<p class="help-block"><fmt:message key="jsp.submit.start-lookup-submission.search.hints"/></p>
 		<div class="form-group">
 			<label for="search_title"><fmt:message key="jsp.submit.start-lookup-submission.search.title"/>:</label> 
-			<textarea class="form-control submission-lookup-search" name="search_title" id="search_title" cols="50" row="4"></textarea>
+			<textarea class="form-control submission-lookup-search" name="search_title" id="search_title" cols="50" rows="4"></textarea>
 		</div>
 		<div class="form-group">
 			<label for="search_year"><fmt:message key="jsp.submit.start-lookup-submission.search.year"/>:</label> 
@@ -231,12 +231,12 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
 		
 		<div class="form-group">
 			<label for="search_authors"><fmt:message key="jsp.submit.start-lookup-submission.search.authors"/>:</label> 
-			<textarea class="form-control submission-lookup-search" name="search_authors" id="search_authors"cols="50" row="4"></textarea>
+			<textarea class="form-control submission-lookup-search" name="search_authors" id="search_authors" cols="50" rows="4"></textarea>
 		</div>
 		
-		<div class="row">			
-			<button type="button" class="btn btn-primary col-md-2 pull-right" id="search_go"><fmt:message key="jsp.submit.start-lookup-submission.search-go"/></button>
+		<button type="button" class="btn btn-primary col-md-2 pull-right" id="search_go"><fmt:message key="jsp.submit.start-lookup-submission.search-go"/></button>
 		</form>
+		</div>
 	</div>
 	    </div>
 	  </div>
@@ -371,26 +371,30 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
 			<p class="alert alert-warning"><fmt:message key="jsp.submit.start-lookup-submission.noresult"/></p>
 			<div id="no_result_manual_submission"></div>
 		</div>
-		<div id="result-form">
-			<form class="form-horizontal" id="form-submission-identifiers" action="" method="post">
-				<div class="form-group">
-					<label for="select-collection-manual" class="col-sm-2 control-label"><fmt:message key="jsp.submit.start-lookup-submission.select.collection.label"/></label>
-					<div class="col-sm-7">
-							<dspace:selectcollection klass="form-control" id="select-collection-identifier" collection="<%= collection_id %>"/>
-					</div>
-					<button class="btn btn-success" id="identifier-submission-button" type="button"><fmt:message key="jsp.submit.general.submit"/> </button>
-					</div>
-				<input type="hidden" id="iuuid" name="iuuid" value=""/>
-				<input type="hidden" id="fuuid" name="fuuid" value=""/>
-				<input type="hidden" id="suuid" name="suuid" value="<%= uuid %>"/>
-				<input type="hidden" id="collectionid" name="collectionid" value=""/>
-				<input type="hidden" id="iuuid_batch" name="iuuid_batch" value=""/>
-				<input type="hidden" id="filePath" name="filePath" value=""/>
-			</form>
-			<input type="checkbox" id="checkallresults" name="checkallresults"><fmt:message key="jsp.submit.start-lookup-submission.js.checkallresults"/>
-			<h4 id="no-record" style="display:none"><span class="label label-warning"></span><fmt:message key="jsp.submit.start-lookup-submission.norecordselected" /></span></h4>
-			<h4 id="no-collection" style="display:none"><span class="label label-warning"><fmt:message key="jsp.submit.start-lookup-submission.nocollectionselected" /></span></h4>
-		</div>
+		
+		<form class="form-horizontal" id="form-submission-identifiers" action="" method="post">
+			<br/>
+			<div class="form-group">
+				<label for="select-collection-manual" class="col-sm-2 control-label"><fmt:message key="jsp.submit.start-lookup-submission.select.collection.label"/></label>
+				<div class="col-sm-7">
+						<dspace:selectcollection klass="form-control" id="select-collection-identifier" collection="<%= collection_id %>"/>
+				</div>
+				<button class="btn btn-success" id="identifier-submission-button" type="button"><fmt:message key="jsp.submit.general.submit"/> </button>
+			</div>
+			<input type="hidden" id="iuuid" name="iuuid" value=""/>
+			<input type="hidden" id="fuuid" name="fuuid" value=""/>
+			<input type="hidden" id="suuid" name="suuid" value="<%= uuid %>"/>
+			<input type="hidden" id="collectionid" name="collectionid" value=""/>
+			<input type="hidden" id="iuuid_batch" name="iuuid_batch" value=""/>
+			<input type="hidden" id="filePath" name="filePath" value=""/>
+			<div class="form-group">
+				<label for="checkallresults" class="control-label col-sm-2"><fmt:message key="jsp.submit.start-lookup-submission.js.checkallresults"/></label>
+				<input type="checkbox" id="checkallresults" name="checkallresults" class="col-sm-1">
+			</div>	
+		</form>
+		
+		<h4 id="no-record" class="label label-warning" style="display:none"><fmt:message key="jsp.submit.start-lookup-submission.norecordselected" /></h4>
+		<h4 id="no-collection" class="label label-warning" style="display:none"><fmt:message key="jsp.submit.start-lookup-submission.nocollectionselected" /></h4>
 		<div id="result-list"></div>
 	</div>
 <% 
@@ -532,6 +536,8 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
    					}
     			}
     	});
+	
+		j('#form-submission-identifiers').hide();
    	
     	j('#link-ricerca-identificatore').click(function(){
     		j('#tabs-search-accordion').accordion({'active': 2});

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.dspace.content.Item;
 import org.dspace.content.Metadatum;
+import org.dspace.core.ConfigurationManager;
 
 /**
  * Implements virtual field processing for split pagenumber range information.
@@ -33,8 +34,15 @@ public class VirtualFieldPageNumber implements VirtualFieldDisseminator, Virtual
 			separator = "--";
 		}
 		// Get the citation from the item
-		Metadatum[] dcvs = item.getMetadataValueInDCFormat("dc.relation.firstpage");
-		Metadatum[] dcvs2 = item.getMetadataValueInDCFormat("dc.relation.lastpage");
+                String fieldStartpage = "dc.relation.firstpage";
+                if (ConfigurationManager.getProperty("crosswalk.virtual.field.startpage") != null)
+                    fieldStartpage = ConfigurationManager.getProperty("crosswalk.virtual.field.startpage");
+                String fieldEndpage = "dc.relation.lastpage";
+                if (ConfigurationManager.getProperty("crosswalk.virtual.field.endpage") != null)
+                    fieldEndpage = ConfigurationManager.getProperty("crosswalk.virtual.field.endpage");
+
+		Metadatum[] dcvs = item.getMetadataValueInDCFormat(fieldStartpage);
+		Metadatum[] dcvs2 = item.getMetadataValueInDCFormat(fieldEndpage);
 
 		if ((dcvs != null && dcvs.length > 0) && (dcvs2 != null && dcvs2.length > 0)) {
 			String value = dcvs[0].value + separator + dcvs2[0].value;

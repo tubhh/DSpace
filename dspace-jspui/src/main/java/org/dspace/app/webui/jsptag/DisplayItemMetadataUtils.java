@@ -24,8 +24,10 @@ import org.apache.log4j.Logger;
 import org.dspace.app.util.MetadataExposure;
 import org.dspace.app.webui.util.DateDisplayStrategy;
 import org.dspace.app.webui.util.DefaultDisplayStrategy;
+//import org.dspace.app.webui.util.AuthorityInputformDisplayStrategy;
 import org.dspace.app.webui.util.IDisplayMetadataValueStrategy;
 import org.dspace.app.webui.util.LinkDisplayStrategy;
+import org.dspace.app.webui.util.HtmlDisplayStrategy;
 import org.dspace.app.webui.util.ResolverDisplayStrategy;
 import org.dspace.app.webui.util.StyleSelection;
 import org.dspace.browse.BrowseException;
@@ -226,8 +228,12 @@ public class DisplayItemMetadataUtils {
 						strategy = new DateDisplayStrategy();
 					} else if (displayStrategyName.equalsIgnoreCase("resolver")) {
 						strategy = new ResolverDisplayStrategy();
+					} else if (displayStrategyName.equalsIgnoreCase("html")) {
+						strategy = new HtmlDisplayStrategy();
+//					} else if (displayStrategyName.equalsIgnoreCase("inputform")) {
+//						strategy = new AuthorityInputformDisplayStrategy();
 					} else {
-						strategy = new DefaultDisplayStrategy(displayStrategyName);						
+						strategy = new DefaultDisplayStrategy(displayStrategyName);
 					}
 				}
 

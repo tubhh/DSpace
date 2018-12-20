@@ -9,7 +9,9 @@ package org.dspace.content.integration.crosswalks;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.commons.lang3.StringUtils;
+import org.dspace.content.Metadatum;
 import org.dspace.content.Item;
 import org.dspace.core.ConfigurationManager;
 
@@ -20,16 +22,30 @@ import org.dspace.core.ConfigurationManager;
  */
 public class VirtualFieldRefererType implements VirtualFieldDisseminator, VirtualFieldIngester
 {
+    private static Logger log = Logger
+            .getLogger(VirtualFieldRefererType.class);
+
     public String[] getMetadata(Item item, Map<String, String> fieldCache, String fieldName)
     {
+        String typeDC = "dc.type";
+        if(ConfigurationManager.getProperty("crosswalk.virtualtype.value") != null)
+            typeDC = ConfigurationManager.getProperty("crosswalk.virtualtype.value");
+
+        Metadatum[] dcvs = item.getMetadataValueInDCFormat(typeDC);
+
         String[] virtualFieldName = fieldName.split("\\.");
         
         // virtualFieldName[0] == "virtual"
 		String qualifier = virtualFieldName[2];
 
+        String typeToMatch = "none";
+        if (dcvs != null && dcvs.length > 0) {
+            typeToMatch = dcvs[0].value;
+        }
+
 		String type = ConfigurationManager
-				.getProperty("crosswalk.virtualname.referer.type." + qualifier
-						+ "." + fieldCache.get("formAlias"));
+				.getProperty("crosswalk.virtualname.referer.type." + qualifier + "." + typeToMatch);
+                log.debug("Getting type for bibtex from dspace.cfg parameter crosswalk.virtualname.referer.type." + qualifier+ "." + typeToMatch);
 		if (StringUtils.isNotBlank(type)) {
 			return new String[] { type };
 		}

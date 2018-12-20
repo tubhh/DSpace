@@ -150,7 +150,7 @@ function DSpaceChoiceLookup(url, field, formID, valueInput, authInput,
     if (inputField != null)
         cOffset = $(inputField).cumulativeOffset();
     var width = 600;  // XXX guesses! these should be params, or configured..
-    var height = 470;
+    var height = 550;
     var left; var top;
     if (window.screenX == null) {
         left = window.screenLeft + cOffset.left - (width/2);

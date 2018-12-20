@@ -289,10 +289,10 @@ public class ItemListTag extends TagSupport {
 				if (!StringUtils.isEmpty(tablewidth)) {
 					out.println("<table border=\"0\" style=\"width: "
 							+ tablewidth
-							+ "; table-layout: fixed;\" align=\"center\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
+							+ "; table-layout: fixed;\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
 				} else {
                     // Otherwise, don't constrain the width
-					out.println("<table border=\"0\" align=\"center\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
+					out.println("<table border=\"0\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
                 }
 
                 // Output the known column widths
@@ -322,9 +322,9 @@ public class ItemListTag extends TagSupport {
 			} else if (!StringUtils.isEmpty(tablewidth)) {
 				out.println("<table width=\""
 						+ tablewidth
-						+ "\" align=\"center\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
+						+ "\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
 			} else {
-                out.println("<table align=\"center\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
+                out.println("<table class=\"table table-hover\" summary=\"This table browses all dspace content\">");
             }
 
             // Output the table headers
@@ -521,13 +521,13 @@ public class ItemListTag extends TagSupport {
                     else {
 	                    
 						if (qualifier.equals("*")) {
-							metadataArray = items[i].getMetadataWithoutPlaceholder(schema, element,
+							metadataArray = items[i].getMetadata(schema, element,
 									Item.ANY, Item.ANY);
 						} else if (qualifier.equals("")) {
-							metadataArray = items[i].getMetadataWithoutPlaceholder(schema, element,
+							metadataArray = items[i].getMetadata(schema, element,
 									null, Item.ANY);
 						} else {
-							metadataArray = items[i].getMetadataWithoutPlaceholder(schema, element,
+							metadataArray = items[i].getMetadata(schema, element,
 									qualifier, Item.ANY);
 	                    }
                     }

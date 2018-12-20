@@ -53,8 +53,8 @@ import org.xml.sax.SAXException;
 public class ScopusService
 {
 
-    private static final String ENDPOINT_SEARCH_SCOPUS = "http://api.elsevier.com/content/search/scopus";
-    //private static final String ENDPOINT_SEARCH_SCOPUS = "http://localhost:9999/content/search/scopus";
+    private static final String ENDPOINT_SEARCH_SCOPUS = "https://api.elsevier.com/content/search/scopus";
+    //private static final String ENDPOINT_SEARCH_SCOPUS = "https://localhost:9999/content/search/scopus";
 
     private static final Logger log = Logger.getLogger(ScopusService.class);
 
@@ -68,7 +68,7 @@ public class ScopusService
         StringBuffer query = new StringBuffer();
         if (StringUtils.isNotBlank(title))
         {
-        	query.append("title(").append(title).append("");
+        	query.append("title(").append(title).append(")");
         }
         if (StringUtils.isNotBlank(author))
         {
@@ -95,6 +95,10 @@ public class ScopusService
         String apiKey = ConfigurationManager.getProperty("submission.lookup.scopus.apikey");
         
         List<Record> results = new ArrayList<>();
+        if (StringUtils.isBlank(query)) {
+        	return results;
+        }
+        
         if (!ConfigurationManager.getBooleanProperty(SubmissionLookupService.CFG_MODULE, "remoteservice.demo"))
         {
             GetMethod method = null;
@@ -114,7 +118,12 @@ public class ScopusService
                 boolean lastPageReached= false;
                 while(!lastPageReached){
                         // open session
-		                method = new GetMethod(ENDPOINT_SEARCH_SCOPUS + "?httpAccept=application/xml&apiKey="+ apiKey +"&view=COMPLETE&start="+start+"&query="+URLEncoder.encode(query));
+                		String view = ConfigurationManager.getProperty("submission.lookup.scopus.view");
+                		if (view == null) {
+                			//view = "COMPLETE";
+                			view = "STANDARD";
+                		}
+		                method = new GetMethod(ENDPOINT_SEARCH_SCOPUS + "?httpAccept=application/xml&apiKey="+ apiKey +"&view="+view+"&start="+start+"&query="+URLEncoder.encode(query));
 		
 		                // Execute the method.
 		                int statusCode = client.executeMethod(method);
@@ -155,6 +164,9 @@ public class ScopusService
 		
 		            		for (Element xmlArticle : pubArticles)
 		            		{
+		            			if (XMLUtils.getSingleElement(xmlArticle, "error") != null) {
+		            				continue;
+		            			}
 		            			Record scopusItem = null;
 		            			try
 		            			{

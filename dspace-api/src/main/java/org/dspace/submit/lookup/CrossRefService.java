@@ -10,6 +10,7 @@ package org.dspace.submit.lookup;
 import gr.ekt.bte.core.Record;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -162,7 +163,7 @@ public class CrossRefService
             HttpClient client = new DefaultHttpClient();
             client.getParams().setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, timeout);
 
-            URIBuilder uriBuilder = new URIBuilder("http://search.labs.crossref.org/dois");
+            URIBuilder uriBuilder = new URIBuilder("https://search.crossref.org/dois");
 
             StringBuilder sb = new StringBuilder();
             if (StringUtils.isNotBlank(title))
@@ -177,8 +178,12 @@ public class CrossRefService
             String q = sb.toString().trim();
             uriBuilder.addParameter("q", q);
 
-            uriBuilder.addParameter("year", year != -1 ? String.valueOf(year) : "");
-            uriBuilder.addParameter("rows", count != -1 ? String.valueOf(count) : "");
+            if (year != -1) {
+            	uriBuilder.addParameter("year", String.valueOf(year));
+            }
+            if (count != -1) {
+            	uriBuilder.addParameter("rows", String.valueOf(count));
+            }
             method = new HttpGet(uriBuilder.build());
 
             // Execute the method.
@@ -188,8 +193,10 @@ public class CrossRefService
 
             if (statusCode != HttpStatus.SC_OK)
             {
-                throw new RuntimeException("Http call failed:: "
-                        + statusLine);
+                log.error(LogManager.getHeader(context, "CrossRefService.search", "title="+title+",authors="+authors+",year="+year+ ". Http call failed:: "
+                        + statusLine));
+                // better to return nothing than throw an exception, other provider could help
+                return new ArrayList<Record>();
             }
 
             Gson gson = new Gson();
@@ -211,7 +218,9 @@ public class CrossRefService
         }
         catch (Exception e)
         {
-            throw new RuntimeException(e.getMessage(), e);
+        	log.error(LogManager.getHeader(context, "CrossRefService.search", "title="+title+",authors="+authors+",year="+year+ ". Message: " + e.getMessage()), e);
+            // better to return nothing than throw an exception, other provider could help
+            return new ArrayList<Record>();
         }
         finally
         {

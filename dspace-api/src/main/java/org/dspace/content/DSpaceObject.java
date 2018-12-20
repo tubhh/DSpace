@@ -1340,6 +1340,8 @@ public abstract class DSpaceObject implements IGlobalSearchResult
                 return new String[]{"eperson","phone",null};
             case "language":
                 return new String[]{"eperson","language",null};
+            case "ou":
+                return new String[]{"eperson","ou",null};
             case "orcid":
                 return new String[]{"eperson","orcid",null};
             default:

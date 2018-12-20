@@ -96,6 +96,13 @@ public class MyDSpaceServlet extends DSpaceServlet
             HttpServletResponse response) throws ServletException, IOException,
             SQLException, AuthorizeException
     {
+    	// special case when the user comes from the connect ORCID screen
+    	String customMyRedirect = (String) request.getSession().getAttribute("mydspace.redirect");
+		if (customMyRedirect != null) {
+    		response.sendRedirect(customMyRedirect);
+    		request.getSession().removeAttribute("mydspace.redirect");
+    		return;
+    	}
         // GET displays the main page - everthing else is a POST
         showMainPage(context, request, response);
      }
@@ -862,7 +869,10 @@ public class MyDSpaceServlet extends DSpaceServlet
                     nameGroupSelfClaim);
             if (selfClaimGroup != null && Group.isMember(context, selfClaimGroup.getID()))
             {
-                selfClaim = true;
+                if (Group.isMember(context, selfClaimGroup.getID()))
+                {
+                    selfClaim = true;
+                }
             }
         }
         

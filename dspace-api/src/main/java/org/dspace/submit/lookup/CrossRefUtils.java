@@ -131,14 +131,22 @@ public class CrossRefUtils
         if (journalTitle != null)
             record.addValue("journalTitle", new StringValue(journalTitle));
 
-        String volumeTitle = XMLUtils.getElementValue(dataRoot, "volume_title");
-        if (volumeTitle != null)
-            record.addValue("volumeTitle", new StringValue(volumeTitle));
-
         String articleTitle = XMLUtils.getElementValue(dataRoot,
                 "article_title");
         if (articleTitle != null)
             record.addValue("articleTitle", new StringValue(articleTitle));
+
+        String volumeTitle = XMLUtils.getElementValue(dataRoot, "volume_title");
+        if (volumeTitle != null) {
+        	if (articleTitle == null) {
+				// if this is a book or dissertation we need to flat the volume title to the
+				// first level (article) otherwise the title will be empty
+        		record.addValue("articleTitle", new StringValue(volumeTitle));
+        	}
+        	else {
+        		record.addValue("volumeTitle", new StringValue(volumeTitle));
+        	}
+        }
 
         String publicationType = XMLUtils.getElementValue(dataRoot,
                 "pubblication_type");

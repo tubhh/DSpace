@@ -120,6 +120,10 @@ public class OAuthAuthenticationServlet extends DSpaceServlet {
 				}
 				OAuthClientRequest oAuthClientRequest = builder.buildQueryMessage();
 
+				if (request.getParameter("from") != null) {
+					String from = ConfigurationManager.getProperty("dspace.baseUrl") + request.getParameter("from");
+					request.getSession().setAttribute("mydspace.redirect", request.getParameter("from"));
+				}
 				// Issue a Redirect to the OAuth site to request authorization
 				// code.
 

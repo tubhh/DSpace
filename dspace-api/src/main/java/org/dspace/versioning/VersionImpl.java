@@ -68,7 +68,13 @@ public class VersionImpl implements Version {
 
     public void setEperson(EPerson ePerson) {
         this.eperson = ePerson;
-        myRow.setColumn(VersionDAO.EPERSON_ID, ePerson.getID());
+        if (ePerson == null)
+        {
+            myRow.setColumnNull(VersionDAO.EPERSON_ID);
+        } else
+        {
+            myRow.setColumn(VersionDAO.EPERSON_ID, ePerson.getID());
+        }
     }
 
     public int getItemID() {
@@ -93,7 +99,12 @@ public class VersionImpl implements Version {
     public void setItemID(int itemID)
     {
         this.itemID = itemID;
-        myRow.setColumn(VersionDAO.ITEM_ID, itemID);
+        if (itemID < 0)
+        {
+            myRow.setColumnNull(VersionDAO.ITEM_ID);
+        } else {
+            myRow.setColumn(VersionDAO.ITEM_ID, itemID);
+        }
     }
 
     public Date getVersionDate() {
@@ -102,7 +113,13 @@ public class VersionImpl implements Version {
 
     public void setVersionDate(Date versionDate) {
         this.versionDate = versionDate;
-        myRow.setColumn(VersionDAO.VERSION_DATE, versionDate);
+        if (versionDate == null)
+        {
+            myRow.setColumnNull(VersionDAO.VERSION_DATE);
+        } else
+        {
+            myRow.setColumn(VersionDAO.VERSION_DATE, versionDate);
+        }
     }
 
     public int getVersionNumber() {
@@ -120,7 +137,13 @@ public class VersionImpl implements Version {
 
     public void setSummary(String summary) {
         this.summary = summary;
-        myRow.setColumn(VersionDAO.VERSION_SUMMARY, summary);
+        if (summary == null)
+        {
+            myRow.setColumnNull(VersionDAO.VERSION_SUMMARY);
+        } else
+        {
+            myRow.setColumn(VersionDAO.VERSION_SUMMARY, summary);
+        }
     }
 
 

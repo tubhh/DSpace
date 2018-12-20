@@ -202,7 +202,11 @@ if (info.getPagetotal() > 1)
 <%
 	}
 %>
-			
+<!--
+<c:if test="${empty anagraficaObject.anagrafica4view['system-orcid-token-authenticate']}">
+    <fmt:message key="jsp.cris.orcid.warning.possible-mis-attribution" />
+</c:if>
+-->
 <form id="sortform<%= info.getType() %>" action="#<%= info.getType() %>" method="get">
 	   <input id="sort_by<%= info.getType() %>" type="hidden" name="sort_by<%= info.getType() %>" value=""/>
        <input id="order<%= info.getType() %>" type="hidden" name="order<%= info.getType() %>" value="<%= info.getOrder() %>" />

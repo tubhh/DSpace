@@ -10,6 +10,7 @@ package org.dspace.app.cris.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,7 @@ import org.dspace.app.cris.dao.ResearcherPageDao;
 import org.dspace.app.cris.dao.StatSubscriptionDao;
 import org.dspace.app.cris.dao.UserWSDao;
 import org.dspace.app.cris.model.ACrisObject;
+import org.dspace.app.cris.model.CrisConstants;
 import org.dspace.app.cris.model.CrisSubscription;
 import org.dspace.app.cris.model.OrganizationUnit;
 import org.dspace.app.cris.model.Project;
@@ -44,14 +46,18 @@ import org.dspace.app.cris.model.jdyna.RPProperty;
 import org.dspace.app.cris.model.orcid.OrcidHistory;
 import org.dspace.app.cris.model.orcid.OrcidQueue;
 import org.dspace.app.cris.model.ws.User;
+import org.dspace.app.cris.service.VolatileObjects.CandidateObjectValue;
 import org.dspace.app.cris.util.ResearcherPageUtils;
 import org.dspace.app.util.Util;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.services.ConfigurationService;
 import org.dspace.storage.rdbms.DatabaseUtils;
+import org.dspace.utils.DSpace;
 import org.hibernate.Session;
+import org.springframework.transaction.annotation.Transactional;
 
 import it.cilea.osd.common.model.Identifiable;
+import it.cilea.osd.jdyna.service.IAutoCreateApplicationService;
 import jxl.read.biff.BiffException;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -65,7 +71,7 @@ import net.sf.ehcache.Element;
  * @author cilea
  * 
  */
-public class ApplicationService extends ExtendedTabService
+public class ApplicationService extends ExtendedTabService implements IAutoCreateApplicationService
 {
 
     private ResearcherPageDao researcherPageDao;
@@ -889,7 +895,7 @@ public class ApplicationService extends ExtendedTabService
         }	
     }
 	
-	public <T extends Serializable, PK extends Serializable> void putToCache(Class<T> model,
+	public <T, PK extends Serializable> void putToCache(Class<T> model,
             T object, PK objectId)
     {
 		if (object == null) {
@@ -1071,5 +1077,72 @@ public class ApplicationService extends ExtendedTabService
 		}
 	}
 	
+	VolatileObjects cachedObjects = new VolatileObjects();
 	
+	/***
+	 * Cache a candidate of a new Object
+	 * 
+	 * @param name The cached value	
+	 * @param tag Used to highlight new objects
+	 * @return true if auto created is enabled
+	 */
+	@Override
+	public Integer generateTemporaryPointerCandidate(String type, String name, String tag) {
+		return cachedObjects.addCandidateValue(type, name, tag);
+	}
+
+	@Override
+	public Integer persistTemporaryPointerCandidate(Integer id) {
+		if (id != null && id < 0) {
+			// autocreate
+			CandidateObjectValue candidateObject = cachedObjects.getCandidate(id);
+			if (candidateObject != null) {
+				if (candidateObject.getPersistedObjectID() != null) {
+					return candidateObject.getPersistedObjectID();
+				}
+				Class modelClass = ResearchObject.class;
+				if (candidateObject.getType().equals(CrisConstants.getEntityTypeText(CrisConstants.RP_TYPE_ID))) {
+					modelClass = ResearcherPage.class;
+				}
+				else if (candidateObject.getType().equals(CrisConstants.getEntityTypeText(CrisConstants.OU_TYPE_ID))) {
+					modelClass = OrganizationUnit.class;
+				}
+				else if (candidateObject.getType().equals(CrisConstants.getEntityTypeText(CrisConstants.PROJECT_TYPE_ID))) {
+					modelClass = Project.class;
+				}
+				ACrisObject newObject;
+				try {
+					newObject = (ACrisObject) modelClass.newInstance();
+				} catch (InstantiationException | IllegalAccessException e) {
+					log.error(e.getMessage(), e);
+					return null;
+				}				
+				String prefix = "";
+				boolean active = ConfigurationManager.getBooleanProperty("cris",
+						"widgetpointer." + candidateObject.getType() + ".active");
+				if (newObject instanceof ResearchObject) {
+					prefix = candidateObject.getType().substring(CrisConstants.PREFIX_TYPE.length()); 
+					DynamicObjectType dType = findTypoByShortName(DynamicObjectType.class,
+							prefix);
+	                if (dType != null)
+	                {
+	                    ((ResearchObject) newObject).setTypo(dType);
+	                }
+				}
+				ResearcherPageUtils.buildTextValue(newObject,
+	                    candidateObject.getValue(),
+	                    prefix + newObject.getMetadataFieldTitle());
+	
+				newObject.setStatus(active);
+				saveOrUpdate(modelClass, newObject);
+				putToCache(modelClass, newObject, newObject.getId());
+				candidateObject.setPersistedObjectID(newObject.getId());
+				return newObject.getId();
+			}
+			else {
+				return null;
+			}
+		}
+		return null;
+	}
 } 

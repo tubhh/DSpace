@@ -20,6 +20,8 @@
 <%@page import="org.dspace.versioning.Version"%>
 <%@page import="org.dspace.app.webui.util.VersionUtil"%>
 <%@page import="org.dspace.versioning.VersionHistory"%>
+<%@ page import="org.dspace.core.ConfigurationManager" %>
+<%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"
@@ -34,6 +36,18 @@
 	Item item = (Item) request.getAttribute("item");
 	Boolean removeok = UIUtil.getBoolParameter(request, "delete");
 	Context context = UIUtil.obtainContext(request);
+	boolean show_submitter = false;
+	if (request.getAttribute("showSubmitter") != null)
+	{
+	    show_submitter = ((Boolean) request.getAttribute("showSubmitter")).booleanValue();
+	}
+	boolean isAdmin = false;
+	boolean gotAttribute = false;
+	if (request.getAttribute("isAdmin") != null)
+	{
+	    isAdmin = ((Boolean) request.getAttribute("isAdmin")).booleanValue();
+	    gotAttribute = true;
+	}
 	
 	request.setAttribute("LanguageSwitch", "hide");
 %>
@@ -85,25 +99,43 @@ var j = jQuery.noConflict();
 			<th id="t1" class="oddRowEvenCol"><fmt:message key="jsp.version.history.column1"/></th>
 			<th 			
 				id="t2" class="oddRowOddCol"><fmt:message key="jsp.version.history.column2"/></th>
-			<th 
-				id="t3" class="oddRowEvenCol"><fmt:message key="jsp.version.history.column3"/></th>
+			<% if (isAdmin || show_submitter) { %>
+				<th
+					id="t3" class="oddRowEvenCol"><fmt:message key="jsp.version.history.column3"/></th>
+			<% } %>
 			<th 				
 				id="t4" class="oddRowOddCol"><fmt:message key="jsp.version.history.column4"/></th>
 			<th 
 				id="t5" class="oddRowEvenCol"><fmt:message key="jsp.version.history.column5"/> </th>
 		</tr>
 		
-		<% for(Version versRow : history.getVersions()) {  
-		
-			EPerson versRowPerson = versRow.getEperson();
-			String[] identifierPath = VersionUtil.addItemIdentifier(item, versRow);
+		<% for(Version versRow : history.getVersions())
+        {
 
+            EPerson versRowPerson = versRow.getEperson();
+            String[] identifierPath = UIUtil.getItemIdentifier(context, versRow.getItem());
+            String url = identifierPath[0];
+            String identifier; // identifier in form of an url (prefixed with an resolver)
+            String prefix = (ConfigurationManager.getProperty("webui.identifier.prefix") == null) ? "url" : ConfigurationManager
+                    .getProperty("webui.identifier.prefix");
+            if (StringUtils.equalsIgnoreCase("stripped", prefix)) {
+                identifier = identifierPath[2]; // identifier without any prefix
+            } else if (StringUtils.equalsIgnoreCase("prefixed", prefix)) {
+                identifier = identifierPath[3]; // identifier prefixed with e.g. doi: or hdl:
+            } else {
+                // default: "url"
+                identifier = identifierPath[1]; // identifier in form of an URL prefixed with a resolver.
+			}
 		%>	
 		<tr>
 			<td headers="t0"><input type="checkbox" class="remove" name="remove" value="<%=versRow.getVersionId()%>"/></td>			
 			<td headers="t1" class="oddRowEvenCol"><%= versRow.getVersionNumber() %></td>
-			<td headers="t2" class="oddRowOddCol"><a href="<%= request.getContextPath() + identifierPath[0] %>"><%= identifierPath[1] %></a><%= item.getID()==versRow.getItemID()?"<span class=\"glyphicon glyphicon-asterisk\"></span>":""%></td>
-			<td headers="t3" class="oddRowEvenCol"><a href="mailto:<%= versRowPerson.getEmail() %>"><%=versRowPerson.getFullName() %></a></td>
+			<td headers="t2" class="oddRowOddCol"><a href="<%= url %>"><%= identifier %></a><%= item.getID()==versRow.getItem().getID()?"<span class=\"glyphicon glyphicon-asterisk\"></span>":""%></td>
+			<% if (isAdmin) { %>
+				<td headers="t3" class="oddRowEvenCol"><a href="mailto:<%= versRowPerson.getEmail() %>"><%=versRowPerson.getFullName() %></a></td>
+			<% } else if (show_submitter) { %>
+				<td headers="t3" class="oddRowEvenCol"><%=versRowPerson.getFullName() %></td>
+			<% } %>
 			<td headers="t4" class="oddRowOddCol"><%= versRow.getVersionDate() %></td>
 			<td headers="t5" class="oddRowEvenCol"><%= versRow.getSummary() %><a class="btn btn-default pull-right" href="<%= request.getContextPath() %>/tools/version?itemID=<%= versRow.getItemID()%>&versionID=<%= versRow.getVersionId() %>&submit_update_version"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<fmt:message key="jsp.version.history.update"/></a></td>
 		</tr>

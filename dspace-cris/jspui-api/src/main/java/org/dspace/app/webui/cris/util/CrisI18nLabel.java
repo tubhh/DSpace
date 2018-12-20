@@ -211,7 +211,7 @@ public class CrisI18nLabel implements IDisplayMetadataValueStrategy
                     }
 
                     metadata += "&nbsp;";
-                    metadata += icon;
+//                    metadata += icon;
                     metadata += endLink;
                     metadata += "&nbsp;";
                 }

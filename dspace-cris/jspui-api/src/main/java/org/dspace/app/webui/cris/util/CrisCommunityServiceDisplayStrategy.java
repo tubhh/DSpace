@@ -152,7 +152,7 @@ public class CrisCommunityServiceDisplayStrategy implements IDisplayMetadataValu
             }
             metadata += Utils.addEntities(metadatum.value);
             metadata += "&nbsp;";
-            metadata += icon;
+//            metadata += icon;
             metadata += endLink;
         }
         return metadata;

@@ -429,12 +429,12 @@ public class BrowseListTag extends TagSupport
                 {
                     out.println("<table style=\"width: "
                             + tablewidth
-                            + "; table-layout: fixed;\" align=\"center\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
+                            + "; table-layout: fixed;\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
                 }
                 else
                 {
                     // Otherwise, don't constrain the width
-                    out.println("<table align=\"center\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
+                    out.println("<table class=\"table table-hover\" summary=\"This table browses all dspace content\">");
                 }
 
                 // Output the known column widths
@@ -468,11 +468,11 @@ public class BrowseListTag extends TagSupport
             {
                 out.println("<table width=\""
                         + tablewidth
-                        + "\" align=\"center\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
+                        + "\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
             }
             else
             {
-                out.println("<table align=\"center\" class=\"table table-hover\" summary=\"This table browses all dspace content\">");
+                out.println("<table class=\"table table-hover\" summary=\"This table browses all dspace content\">");
             }
 
             // Output the table headers

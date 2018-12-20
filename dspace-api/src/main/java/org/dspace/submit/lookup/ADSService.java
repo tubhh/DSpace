@@ -129,7 +129,6 @@ public class ADSService
                 URIBuilder uriBuilder = new URIBuilder(
                         END_POINT);
                 uriBuilder.addParameter("q", query);
-                uriBuilder.addParameter("rows", "1000");
                 uriBuilder.addParameter("fl", RESULT_FIELD_LIST);
                 
 	                method = new HttpGet(uriBuilder.build());
@@ -205,7 +204,6 @@ public class ADSService
         return adsResults;
     }
 
-    
     public List<Record> getByADSBibcodes(List<String> bibcodes,String token) throws  URISyntaxException{
 
         StringBuffer query = new StringBuffer();

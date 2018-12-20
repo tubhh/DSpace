@@ -188,7 +188,7 @@ public class PushToORCID
                 result = sendOrcidFunding(applicationService, owner, uuid);
                 break;
             default:
-                result = sendOrcidWork(applicationService, owner, uuid);
+                result = sendOrcidWork(applicationService, owner, uuid, false);
                 break;
             }
         }
@@ -196,7 +196,7 @@ public class PushToORCID
     }
 
     public static boolean sendOrcidWork(ApplicationService applicationService,
-            String crisId, String uuid)
+            String crisId, String uuid, boolean force)
     {
         boolean result = false;
         log.debug("Create DSpace context");
@@ -238,7 +238,7 @@ public class PushToORCID
                         log.info("(Q1)Prepare for Work:" + uuid
                                 + " for ResearcherPage crisID:" + crisId);
                         result = buildOrcidWork(context, orcidService, applicationService,
-                                crisId, orcid, false, tokenCreateWork, dso.getID());
+                                crisId, orcid, force, tokenCreateWork, dso.getID());
                     }
 
                 }
@@ -246,7 +246,7 @@ public class PushToORCID
                 {
                     log.info("ERROR!!! (E1) ERROR for Work:" + uuid
                             + " for ResearcherPage crisID:" + crisId);
-                    log.error(ex.getMessage());
+                    log.error(ex.getMessage(), ex);
                 }
             }
             else
@@ -290,7 +290,7 @@ public class PushToORCID
                     .getEntityByCrisId(crisId, ResearcherPage.class);
             prepareMetadataForProfile(applicationService,
                     mapResearcherMetadataToSend,
-                    mapResearcherMetadataNestedToSend, researcher, true);
+                    mapResearcherMetadataNestedToSend, researcher, false);
 
             OrcidService orcidService = OrcidService.getOrcid();
 
@@ -450,127 +450,136 @@ public class PushToORCID
         return result;
     }
 
-    private static void sendWrapperEducation(OrcidService orcidService,
+    private static boolean sendWrapperEducation(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, List<WrapperEducation> wrapperEducations,
             boolean delete, SingleTimeStampInfo timestampAttempt) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-
+    	boolean result = true;
         if (wrapperEducations != null)
         {
             for (WrapperEducation wrapperEducation : wrapperEducations)
             {
                 Education education = wrapperEducation.getEducation();
-                String md5ContentPartOfResearcher = getMd5Hash(education.getOrganization().getName() + education.getStartDate().toString() + education.getEndDate().toString());
-                sendPartOfResearcher(orcidService, applicationService, crisId, token, orcid, OrcidService.CONSTANT_EDUCATION_UUID, md5ContentPartOfResearcher, education, delete, timestampAttempt);
+                String md5ContentPartOfResearcher = getMd5Hash(education.toString());
+                result = result && sendPartOfResearcher(orcidService, applicationService, crisId, token, orcid, OrcidService.CONSTANT_EDUCATION_UUID, md5ContentPartOfResearcher, education, delete, timestampAttempt);
             }
-
         }
+        return result;
     }
     
-    private static void sendWrapperEmployment(OrcidService orcidService,
+    private static boolean sendWrapperEmployment(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, List<WrapperEmployment> wrapperEmployments,
             boolean delete, SingleTimeStampInfo timestampAttempt) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        
+    	boolean result = true;
         if (wrapperEmployments != null)
         {
             for (WrapperEmployment wrapperEmployment : wrapperEmployments)
             {
                 Employment employment = wrapperEmployment.getEmployment();
-                String md5ContentPartOfResearcher = getMd5Hash(employment.getOrganization().getName() + employment.getStartDate().toString() + employment.getEndDate().toString());
-                sendPartOfResearcher(orcidService, applicationService, crisId, token, orcid, OrcidService.CONSTANT_EMPLOYMENT_UUID, md5ContentPartOfResearcher, employment, delete, timestampAttempt);
+                String md5ContentPartOfResearcher = getMd5Hash(employment.toString());
+                result = result && sendPartOfResearcher(orcidService, applicationService, crisId, token, orcid, OrcidService.CONSTANT_EMPLOYMENT_UUID, md5ContentPartOfResearcher, employment, delete, timestampAttempt);
             }
-
         }
+        return result;
     }
 
-    private static void sendKeywords(OrcidService orcidService,
+    private static boolean sendKeywords(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, List<Keyword> keywords, boolean deleteAndPost, SingleTimeStampInfo timestampAttempt) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
+    	boolean result = true;
         for (Keyword partOfResearcher : keywords)
         {
             String value = partOfResearcher.getContent();
             String md5ContentPartOfResearcher = getMd5Hash(value);
-            sendPartOfResearcher(orcidService, applicationService, crisId,
+            result = result && sendPartOfResearcher(orcidService, applicationService, crisId,
                     token, orcid, OrcidService.CONSTANT_KEYWORD_UUID,
                     md5ContentPartOfResearcher, partOfResearcher,
                     deleteAndPost, timestampAttempt);
         }
+        return result;
     }
 
-    private static void sendAddresses(OrcidService orcidService,
+    private static boolean sendAddresses(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, List<Address> addresses, boolean deleteAndPost, SingleTimeStampInfo timestampAttempt) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
+    	boolean result = true;
         for (Address partOfResearcher : addresses)
         {
             String value = partOfResearcher.getCountry();
             String md5ContentPartOfResearcher = getMd5Hash(value);
-            sendPartOfResearcher(orcidService, applicationService, crisId,
+            result = result && sendPartOfResearcher(orcidService, applicationService, crisId,
                     token, orcid, OrcidService.CONSTANT_ADDRESS_UUID,
                     md5ContentPartOfResearcher, partOfResearcher,
                     deleteAndPost, timestampAttempt);
         }
+        return result;
     }
 
-    private static void sendResearcherUrls(OrcidService orcidService,
+    private static boolean sendResearcherUrls(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, List<ResearcherUrl> researcherUrl,
             boolean deleteAndPost, SingleTimeStampInfo timestampAttempt) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-
+    	boolean result = true;
         for (ResearcherUrl partOfResearcher : researcherUrl)
         {
             String value = partOfResearcher.getUrl().getValue();
             String md5ContentPartOfResearcher = getMd5Hash(value);
-            sendPartOfResearcher(orcidService, applicationService, crisId,
+            result = result && sendPartOfResearcher(orcidService, applicationService, crisId,
                     token, orcid, OrcidService.CONSTANT_RESEARCHERURL_UUID,
                     md5ContentPartOfResearcher, partOfResearcher,
                     deleteAndPost, timestampAttempt);
         }
+        return result;
     }
 
-    private static void sendExternalIdentifiers(OrcidService orcidService,
+    private static boolean sendExternalIdentifiers(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, List<ExternalIdentifier> externalIdentifier,
             boolean deleteAndPost, SingleTimeStampInfo timestampAttempt) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        
+    	boolean result = true;
         for (ExternalIdentifier partOfResearcher : externalIdentifier)
         {
             String value = partOfResearcher.getExternalIdUrl();
             String md5ContentPartOfResearcher = getMd5Hash(value);
-            sendPartOfResearcher(orcidService, applicationService, crisId,
+            result = result && sendPartOfResearcher(orcidService, applicationService, crisId,
                     token, orcid, OrcidService.CONSTANT_EXTERNALIDENTIFIER_UUID,
                     md5ContentPartOfResearcher, partOfResearcher,
                     deleteAndPost, timestampAttempt);
         }
+        return result;
     }
 
-    private static void sendOtherNames(OrcidService orcidService,
+    private static boolean sendOtherNames(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, List<OtherName> otherNames, boolean deleteAndPost, SingleTimeStampInfo timestampAttempt) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
+    	boolean result = true;
         for (OtherName partOfResearcher : otherNames)
         {
             String value = partOfResearcher.getContent();
             String md5ContentPartOfResearcher = getMd5Hash(value);
-            sendPartOfResearcher(orcidService, applicationService, crisId,
+            result = result && sendPartOfResearcher(orcidService, applicationService, crisId,
                     token, orcid, OrcidService.CONSTANT_OTHERNAME_UUID,
                     md5ContentPartOfResearcher, partOfResearcher,
                     deleteAndPost, timestampAttempt);
         }
+        return result;
     }
 
-    private static void sendPartOfResearcher(OrcidService orcidService,
+    private static boolean sendPartOfResearcher(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, String constantUuidPrefix, String constantUuid, 
             Serializable partOfResearcher,
             boolean delete, SingleTimeStampInfo timestampAttempt)
     {
+    	boolean result = true;
         if (partOfResearcher != null)
         {
             Integer constantType = OrcidService.CONSTANT_PART_OF_RESEARCHER_TYPE;
@@ -657,7 +666,9 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
+                    	log.error(ex.getMessage(), ex);
                         errorMessage = ex.getMessage();
+                        result = false;
                     }
 
                     orcidHistory.setEntityUuid(constantUuidPartOf);
@@ -725,6 +736,7 @@ public class PushToORCID
                     {
                         errorMessage = status.getStatusCode() + " REASON:"
                                 + status.getReasonPhrase();
+                        result = false;
                     }
                 }
 
@@ -751,22 +763,24 @@ public class PushToORCID
             catch (Exception e)
             {
                 log.error("ERROR!!! (E0)::PUSHORCID::" + constantUuidPartOf
-                        + " for ResearcherPage crisID:" + crisId, e);
+                        + " for ResearcherPage crisID:" + crisId + " exMessage " + e.getMessage(), e);
+                result = false;
             }
             finally
             {
                 OrcidPreferencesUtils.printXML(partOfResearcher);
             }
         }
-
+        return result;
     }
 
-    private static void sendWork(OrcidService orcidService,
+    private static boolean sendWork(OrcidService orcidService,
             ApplicationService applicationService, String crisId, String token,
             String orcid, String constantUuidPrefix, String constantUuid, 
             Work work,
             boolean delete, SingleTimeStampInfo timestampAttempt)
     {
+    	boolean result = true;
         if (work != null)
         {
             Integer constantType = Constants.ITEM;
@@ -784,6 +798,8 @@ public class PushToORCID
                         orcidService.deleteWork(orcid, token, putCode);
                         applicationService.delete(OrcidHistory.class,
                                 orcidHistory.getId());
+                        // clean the old putcode (if any)
+                        work.setPutCode(null);
                     }
                 }
                 String putCode = null;
@@ -800,6 +816,7 @@ public class PushToORCID
                     catch (Exception ex)
                     {
                         errorMessage = ex.getMessage();
+                        result = false;
                     }
 
                     orcidHistory.setEntityUuid(constantUuidPartOf);
@@ -816,6 +833,7 @@ public class PushToORCID
                     {
                         errorMessage = status.getStatusCode() + " REASON:"
                                 + status.getReasonPhrase();
+                        result = false;
                     }
                 }
 
@@ -843,13 +861,14 @@ public class PushToORCID
             {
                 log.error("ERROR!!! (E0)::PUSHORCID::" + constantUuidPartOf
                         + " for ResearcherPage crisID:" + crisId, e);
+                result = false;
             }
             finally
             {
                 OrcidPreferencesUtils.printXML(work);
             }
         }
-
+        return result;
     }
 
     private static void sendFunding(OrcidService orcidService,
@@ -1241,15 +1260,15 @@ public class PushToORCID
                     "(Q4)Send Personal Information for ResearcherPage crisID:"
                             + crisId);
             
-            sendOtherNames(orcidService, applicationService, crisId, tokenProfile,
+            result = result && sendOtherNames(orcidService, applicationService, crisId, tokenProfile,
                     orcid, otherNames, deleteAndPost, timestampAttempt);
-            sendResearcherUrls(orcidService, applicationService, crisId, tokenProfile,
+            result = result && sendResearcherUrls(orcidService, applicationService, crisId, tokenProfile,
                     orcid, researcherUrls, deleteAndPost, timestampAttempt);
-            sendExternalIdentifiers(orcidService, applicationService, crisId,
+            result = result && sendExternalIdentifiers(orcidService, applicationService, crisId,
                     tokenProfile, orcid, externalIdentifiers, deleteAndPost, timestampAttempt);
-            sendAddresses(orcidService, applicationService, crisId, tokenProfile,
+            result = result && sendAddresses(orcidService, applicationService, crisId, tokenProfile,
                     orcid, addresses, deleteAndPost, timestampAttempt);
-            sendKeywords(orcidService, applicationService, crisId, tokenProfile, orcid,
+            result = result && sendKeywords(orcidService, applicationService, crisId, tokenProfile, orcid,
                     keywords, deleteAndPost, timestampAttempt);
             
             if (StringUtils.isNotBlank(tokenActivities))
@@ -1257,11 +1276,11 @@ public class PushToORCID
                 log.info(
                         "(Q4)Send Affiliations (Employments and Educations) for ResearcherPage crisID:"
                                 + crisId);
-                sendWrapperEducation(orcidService, applicationService, crisId,
+                result = result && sendWrapperEducation(orcidService, applicationService, crisId,
                         tokenActivities, orcid, wrapperEducations,
                         deleteAndPost, timestampAttempt);
 
-                sendWrapperEmployment(orcidService, applicationService, crisId,
+                result = result && sendWrapperEmployment(orcidService, applicationService, crisId,
                         tokenActivities, orcid, wrapperEmployments,
                         deleteAndPost, timestampAttempt);
             }
@@ -1621,7 +1640,7 @@ public class PushToORCID
             Integer ii) throws SQLException, NoSuchAlgorithmException,
             UnsupportedEncodingException
     {
-        boolean result = true;
+        boolean result = false;
         try
         {
             
@@ -1644,7 +1663,7 @@ public class PushToORCID
 
             log.info("(Q4)Send Work for ResearcherPage crisID:" + crisId);
             String value = item.getHandle();
-            sendWork(orcidService, applicationService, crisId, token, orcid,
+            result = sendWork(orcidService, applicationService, crisId, token, orcid,
                     getMd5Hash(value), value, work, deleteAndPost,
                     timestampAttempt);
 
@@ -1781,9 +1800,12 @@ public class PushToORCID
         {
             for (String valIdentifier : itemMetadata.getExternalIdentifier())
             {
+                String resolver = ConfigurationManager.getProperty(
+                             "cris",
+                             "external.uri.resolver."+itemMetadata.getExternalIdentifierType(valIdentifier));
                 ExternalId workExternalIdentifier = new ExternalId();
                 workExternalIdentifier.setExternalIdValue(valIdentifier);
-                workExternalIdentifier.setExternalIdUrl(valIdentifier);
+                workExternalIdentifier.setExternalIdUrl(resolver+valIdentifier);
                 workExternalIdentifier.setExternalIdType(
                         itemMetadata.getExternalIdentifierType(valIdentifier));
                 workExternalIdentifier.setExternalIdRelationship(RelationshipType.SELF);
@@ -1936,7 +1958,7 @@ public class PushToORCID
                     }
                     catch (ParseException e)
                     {
-                        log.error(e.getMessage());
+                        log.error(e.getMessage(), e);
                     }
 
                     FuzzyDate fuzzyStartDate = new FuzzyDate();
@@ -1949,7 +1971,7 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                    	log.error(ex.getMessage(), ex);
                     }
 
                     try
@@ -1962,7 +1984,7 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                    	log.error(ex.getMessage(), ex);
                     }
 
                     try
@@ -1975,7 +1997,7 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                    	log.error(ex.getMessage(), ex);
                     }
                     affiliation.setStartDate(fuzzyStartDate);
                 }
@@ -1983,7 +2005,7 @@ public class PushToORCID
                 List<String> listEndDate = employment.get("affiliationenddate");
                 if (listEndDate != null && !listEndDate.isEmpty())
                 {
-                    String stringEndDate = listStartDate.get(0);
+                    String stringEndDate = listEndDate.get(0);
                     Date endDate;
                     Calendar cal2 = Calendar.getInstance();
                     try
@@ -2998,7 +3020,7 @@ public class PushToORCID
 
                                     List<RPNestedProperty> listEndDate = rpno
                                             .getAnagrafica4view()
-                                            .get("affiliationenddate");
+                                            .get(metadataShortnameINTERNAL + "enddate");
                                     if (listEndDate != null
                                             && !listEndDate.isEmpty())
                                     {
@@ -3011,7 +3033,7 @@ public class PushToORCID
 
                                     List<RPNestedProperty> listStartDate = rpno
                                             .getAnagrafica4view()
-                                            .get("affiliationstartdate");
+                                            .get(metadataShortnameINTERNAL + "startdate");
                                     if (listStartDate != null
                                             && !listStartDate.isEmpty())
                                     {
@@ -3027,7 +3049,7 @@ public class PushToORCID
 
                                     List<RPNestedProperty> listEndDate = rpno
                                             .getAnagrafica4view()
-                                            .get("affiliationenddate");
+                                            .get(metadataShortnameINTERNAL + "enddate");
 
                                     if (listEndDate != null
                                             && !listEndDate.isEmpty())
@@ -3044,7 +3066,7 @@ public class PushToORCID
 
                                             List<RPNestedProperty> listStartDate = rpno
                                                     .getAnagrafica4view()
-                                                    .get("affiliationstartdate");
+                                                    .get(metadataShortnameINTERNAL + "startdate");
                                             RPNestedProperty startDate = listStartDate
                                                     .get(0);
                                             DateValue valSD = (DateValue) startDate

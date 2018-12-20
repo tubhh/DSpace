@@ -157,7 +157,7 @@ public abstract class ACrisRefDisplayStrategy<P extends Property<TP>, TP extends
                 metadata += startLink;
                 metadata += Utils.addEntities(metadatum.value);
                 metadata += "&nbsp;";
-                metadata += icon;
+//                metadata += icon;
                 metadata += endLink;
             }
 

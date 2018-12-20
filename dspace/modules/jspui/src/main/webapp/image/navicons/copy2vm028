@@ -1,0 +1,1 @@
+scp * root@vm028:/srv/dspace/dspace-cris/webapps/jspui/image/navicons

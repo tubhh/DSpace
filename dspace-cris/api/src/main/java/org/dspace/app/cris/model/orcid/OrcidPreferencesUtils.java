@@ -7,6 +7,7 @@
  */
 package org.dspace.app.cris.model.orcid;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import javax.persistence.Transient;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.geronimo.mail.util.StringBufferOutputStream;
 import org.apache.log4j.Logger;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -64,6 +66,7 @@ import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
+import org.dspace.core.LogManager;
 import org.dspace.discovery.SearchServiceException;
 import org.dspace.utils.DSpace;
 
@@ -119,6 +122,7 @@ public class OrcidPreferencesUtils
     public void prepareOrcidQueue(String crisId, DSpaceObject obj)
     {
 		if (obj instanceof ResearcherPage && hasBeenImportedInThisThread((ResearcherPage) obj)) {
+			log.debug("obj has been imported in this thread " + ((ResearcherPage) obj).getCrisID());
 			return;
 		}
         OrcidQueue orcidQueue = getApplicationService()
@@ -133,6 +137,7 @@ public class OrcidPreferencesUtils
             orcidQueue.setFastlookupObjectName(obj.getName());
             orcidQueue.setFastlookupUuid(obj.getHandle());
             getApplicationService().saveOrUpdate(OrcidQueue.class, orcidQueue);
+            log.debug("object_type " + obj.getType() + " id " + obj.getID() + " queued for ORCID synchronization of " + crisId);
         }
     }
 
@@ -759,6 +764,11 @@ public class OrcidPreferencesUtils
         getApplicationService().deleteOrcidQueueByOwnerAndTypeId(crisID,
                 typeId);
     }
+    
+    public void deleteOrcidQueueByOwnerAndUuid(String crisID, String uuid)
+    {
+        getApplicationService().deleteOrcidQueueByOwnerAndUuid(crisID, uuid);
+    }
 
     public boolean sendOrcidProfile(String owner, String uuId)
     {
@@ -771,9 +781,9 @@ public class OrcidPreferencesUtils
                 uuId);
     }
 
-    public boolean sendOrcidWork(String owner, String uuId)
+    public boolean sendOrcidWork(String owner, String uuId, boolean force)
     {
-        return PushToORCID.sendOrcidWork(getApplicationService(), owner, uuId);
+        return PushToORCID.sendOrcidWork(getApplicationService(), owner, uuId, force);
     }
 
     public List<OrcidHistory> getOrcidHistoryInSuccessByOwner(String crisID)
@@ -1129,13 +1139,16 @@ public class OrcidPreferencesUtils
                 marshaller.setProperty(
                         javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT,
                         Boolean.TRUE);
-                marshaller.marshal(jaxbSerializableObject, System.out);
+        		StringBuffer sb = new StringBuffer();
+        		StringBufferOutputStream sbOut = new StringBufferOutputStream(sb);
+        		marshaller.marshal(jaxbSerializableObject, sbOut);
+        		log.debug(sb.toString());
+        		sbOut.close();
             }
         }
-        catch (javax.xml.bind.JAXBException ex)
+        catch (javax.xml.bind.JAXBException | IOException ex)
         {
-            java.util.logging.Logger.getLogger("global")
-                    .log(java.util.logging.Level.SEVERE, null, ex); // NOI18N
+        	log.debug(ex.getMessage(), ex);
         }
     }
 

@@ -141,7 +141,7 @@ public class DCInputSet
 	    }
     	return false;
     }
-	
+
     private static boolean doField(DCInput dcf, boolean addTitleAlternative, 
 		    					   boolean addPublishedBefore)
     {

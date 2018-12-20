@@ -28,8 +28,8 @@ submissionLookupIdentifiers = function(identInputs){
 			if (info == null || info.result == null || info.result.length == 0)
 			{
 				j('#result-list').hide();
+				j('#form-submission-identifiers').hide();
 				j('#empty-result').show();
-				j('#result-form').hide();
 			}
 			else
 			{
@@ -65,6 +65,7 @@ submissionLookupSearch = function(){
 			if (info == null || info.result == null || info.result.length == 0)
 			{
 				j('#result-list').hide();
+				j('#form-submission-identifiers').hide();
 				j('#empty-result').show();
 			}
 			else
@@ -111,13 +112,13 @@ submissionLookupDetails = function(button, suffixID){
 
 submissionLookupShowResult = function(info, suffixID){
 	j('#result-list').show();
+	j('#form-submission-identifiers').show();
 	j('#empty-result').hide();
-	j('#result-form').show();
 	j('#result-list').html(" ");
 	for (var i=0;i<info.result.length;i++)
 	{
 		var bt = j('<button class="btn btn-info" type="button">').append(j('#jsseedetailsbuttonmessage').text());
-		var checkbox = j('<input type="checkbox" id="checkresult'+i+'" class="checkresult" name="checkresult" value="'+info.result[i].uuid+'" />');
+		var checkbox = j('<input type="checkbox" id="checkresult'+i+'" class="checkresult pull-right" name="checkresult" value="'+info.result[i].uuid+'" />');
 		var par = j('<p class="sl-result">');
 		var divImg = j('<div class="submission-lookup-providers">');
 		par.append(divImg);
@@ -141,6 +142,7 @@ submissionLookupShowResult = function(info, suffixID){
 		});
 	}
 	
+	j('#checkallresults').show();
 	j('#checkallresults').click(function(){
 		if( j("#checkallresults").is(':checked') ){
 	       j(".checkresult").prop("checked",true);
@@ -149,6 +151,7 @@ submissionLookupShowResult = function(info, suffixID){
         }
 	});
 	
+	j('#identifier-submission-button').show();
 	j('#identifier-submission-button').click(function(){
 		var recordsChecked = [];
 		var warnCol = false;

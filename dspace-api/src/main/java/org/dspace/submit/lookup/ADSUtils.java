@@ -53,9 +53,6 @@ public class ADSUtils {
 				record.addValue(field, new StringValue(obj.toString()));
 			}
 		}
-		
-		Object typeObj = doc.get("doctype");
-		record.addValue("adstype", new StringValue(typeObj.toString()));
 		return record;
 	}
 }

@@ -9,11 +9,14 @@ package org.dspace.app.cris.configuration;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.dspace.browse.BrowsableDSpaceObject;
 import org.dspace.content.Metadatum;
 import org.dspace.content.Item;
+import org.dspace.content.MetadataValue;
 import org.dspace.sort.SortException;
 import org.dspace.sort.SortOption;
+import org.dspace.util.ItemUtils;
 import org.springframework.beans.factory.annotation.Required;
 
 public class ColumnVisualizationConfiguration
@@ -112,7 +115,10 @@ public class ColumnVisualizationConfiguration
                     split.length > 2 ? split[2] : null, Item.ANY);
             for (Metadatum v : values)
             {
-                sb.append(v.value).append(", ");
+    			if (!StringUtils.equals(v.value, MetadataValue.PARENT_PLACEHOLDER_VALUE))
+    			{
+    				sb.append(v.value).append(", ");
+    			}
             }
         }
         return sb.length() > 0 ? sb.substring(0, sb.length() - 2) : null;
