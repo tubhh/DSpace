@@ -21,7 +21,7 @@
 			<xsl:apply-templates select="@*|node()" />
 		</xsl:copy>
 	</xsl:template>
-	
+
  	<!-- Formatting dc.date.issued -->
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field/text()">
 		<xsl:call-template name="formatdate">
@@ -43,6 +43,8 @@
 	<!-- Prefixing and Modifying dc.rights -->
 	<!-- Removing unwanted -->
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:element" />
+	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field[not (contains(., 'open access') or contains(., 'openAccess') or contains(., 'restrictedAccess') or contains(., 'embargoedAccess'))]" />
+
 	<!-- Replacing -->
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field/text()">
 		<xsl:choose>
@@ -63,7 +65,16 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+
+        <!-- Adding funding information -->
+        <xsl:template match="/doc:metadata/doc:element[@name='openaire']/doc:element[@name='funder']/doc:element[@name='name']/doc:element/doc:field/text()">
+                <xsl:call-template name="fundinginfo">
+                    <xsl:with-param name="funderName" select="." />
+                    <xsl:with-param name="funderProgramme" select="../../../../doc:element[@name='programme']/doc:element/doc:field/text()" />
+                    <xsl:with-param name="funderProjectId" select="../../../../doc:element[@name='projectid']/doc:element/doc:field/text()" />
+                </xsl:call-template>
+        </xsl:template>
+
 	<!-- AUXILIARY TEMPLATES -->
 	
 	<!-- dc.type prefixing -->
@@ -88,4 +99,15 @@
 		</xsl:variable>
 		<xsl:value-of select="$sub" />
 	</xsl:template>
+
+        <!-- Funding information -->
+        <xsl:template name="fundinginfo">
+                <xsl:param name="funderName" />
+                <xsl:param name="funderProgramme" />
+                <xsl:param name="funderProjectId" />
+                <xsl:text>info:eu-repo/grantAgreement/</xsl:text>
+                <xsl:value-of select="$funderName" /><xsl:text>/</xsl:text>
+                <xsl:value-of select="$funderProgramme" /><xsl:text>/</xsl:text>
+                <xsl:value-of select="$funderProjectId" />
+        </xsl:template>
 </xsl:stylesheet>

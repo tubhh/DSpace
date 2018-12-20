@@ -79,6 +79,9 @@
     		<dim:field mdschema="dc" element="description" qualifier="abstract">
     			<xsl:value-of select="epdcx:valueString"/>
     		</dim:field>
+    		<dim:field mdschema="tuhh" element="abstract" qualifier="english">
+    			<xsl:value-of select="epdcx:valueString"/>
+    		</dim:field>
     	</xsl:if>
     	
     	<!-- creator element: dc.contributor.author -->
@@ -98,6 +101,9 @@
     			</xsl:if>
     			<xsl:value-of select="epdcx:valueString"/>
     		</xsl:element>
+    		<dim:field mdschema="tuhh" element="publisher" qualifier="doi">
+    			<xsl:value-of select="epdcx:valueString"/>
+    		</dim:field>
     	</xsl:if>
     	
     	<!-- language element: dc.language.iso -->
@@ -111,7 +117,17 @@
     	<xsl:if test="./@epdcx:propertyURI='http://purl.org/dc/elements/1.1/type' and ./@epdcx:vesURI='http://purl.org/eprint/terms/Type'">
     		<xsl:if test="./@epdcx:valueURI='http://purl.org/eprint/type/JournalArticle'">
     			<dim:field mdschema="dc" element="type">
-    				Journal Article
+    				Article
+    			</dim:field>
+    		</xsl:if>
+    		<xsl:if test="./@epdcx:valueURI='http://purl.org/eprint/entityType/JournalArticle'">
+    			<dim:field mdschema="dc" element="type">
+    				Article
+    			</dim:field>
+    		</xsl:if>
+    		<xsl:if test="./@epdcx:valueURI='http://purl.org/eprint/entityType/ScholarlyWork'">
+    			<dim:field mdschema="dc" element="type">
+    				Article
     			</dim:field>
     		</xsl:if>
     	</xsl:if>
@@ -131,13 +147,42 @@
 	    		</dim:field>
     		</xsl:if>
     	</xsl:if>
-    	
+
+    	<!-- publisher element: dc.publisher -->
+    	<xsl:if test="./@epdcx:propertyURI='http://purl.org/dc/elements/1.1/publisher'">
+    		<dim:field mdschema="dc" element="publisher">
+    			<xsl:value-of select="epdcx:valueString"/>
+    		</dim:field>
+    	</xsl:if>
+
     	<!-- copyright holder element: dc.rights.holder -->
     	<xsl:if test="./@epdcx:propertyURI='http://purl.org/eprint/terms/copyrightHolder'">
     		<dim:field mdschema="dc" element="rights" qualifier="holder">
     			<xsl:value-of select="epdcx:valueString"/>
     		</dim:field>
     	</xsl:if>
+
+        <!-- license element: dc.rights -->
+        <xsl:if test="./@epdcx:propertyURI='http://purl.org/dc/terms/accessRights'">
+            <dim:field mdschema="dc" element="rights">
+                <xsl:value-of select="epdcx:valueString"/>
+            </dim:field>
+        </xsl:if>
+
+        <!-- license element: dc.rights -->
+        <xsl:if test="./@epdcx:propertyURI='http://purl.org/eprint/terms/JournalName'">
+            <dim:field mdschema="tuhh" element="relation" qualifier="ispartof">
+                <xsl:value-of select="epdcx:valueString"/>
+            </dim:field>
+        </xsl:if>
+
+        <!-- license element: dc.rights -->
+        <xsl:if test="./@epdcx:propertyURI='http://purl.org/eprint/terms/JournalEISSN'">
+            <dim:field mdschema="dc" element="identifier" qualifier="issn">
+                <xsl:value-of select="epdcx:valueString"/>
+            </dim:field>
+        </xsl:if>
+
 
         <!-- bibliographic citation element: dc.identifier.citation -->
         <xsl:if test="./@epdcx:propertyURI='http://purl.org/eprint/terms/bibliographicCitation'">
