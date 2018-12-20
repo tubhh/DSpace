@@ -1,0 +1,575 @@
+#content { 
+    margin-top: -20px; 
+/*    background:url("https://katalog.tub.tu-harburg.de/interface/themes/blueprint-tubhh/images/bg/bg-tile.jpg") repeat fixed 50% 0% rgb(221, 221, 221); */
+    padding-top:20px; 
+    padding-bottom: 0px; 
+}
+
+.table {
+    width: auto;
+    margin-left: 0px;
+}
+table {
+    border-collapse: separate;
+}
+
+#content .container { background: white; }
+/*body.undernavigation { padding-top: 56px; }*/
+#content .banner { display: none; }
+.btn-success { background-image: linear-gradient(to bottom, #5CB8CC 0px, #33B4DD 100%); border-color: #33B4DD; }
+@media screen and (min-width: 768px){
+    .jumbotron { padding-top: 10px; padding-bottom: 10px }
+    .container .jumbotron { margin-left: 430px; margin-top:20px; }
+    .container .nopadding { margin-left: 0px; padding-left: 60px; }
+    .container .jumbotron .smaller { font-size: 14px; }
+}
+
+footer {
+    clear:both;
+}
+
+.staff {
+    color: #00CCCC;
+}
+
+.exstaff {
+/*    color: goldenrod; */
+    color: green;
+}
+
+.externalstaff {
+    color: black;
+}
+
+.undefinedstaff {
+    color: gray;
+}
+
+@media (max-width: 991px) {
+    .clearing-992 {
+        clear:both;
+    }
+}
+
+.col-md-1 .col-md-2 .col-md-3 .col-md-4 .col-md-5 .col-md-6 .col-md-7 .col-md-8 .col-md-9 .col-md-10 .col-md-11 {
+    background-color: white;
+    float:left;
+}
+
+#communitylist-top-menu a, #userloggedin-top-menu a {padding-top:0.3em;padding-bottom:0.3em;}
+#user-top-menu, #userloggedin-top-menu {margin-right: 15px;}
+
+.metric-ranking > span {
+    display: block;
+    height: 1.7em;
+    width: 1.7em;
+    line-height: 1.7em;
+    -moz-border-radius: 0.85em;
+    border-radius: 0.85em;
+    background-color: #f0ad4e;
+    color: white;
+    text-align: center;
+    font-size: 0.75em;
+}
+.metric-ranking {
+    display: block;
+    height: 1.7em;
+    width: 1.7em;
+    padding: 0.2em;
+    line-height: 1.7em;
+    -moz-border-radius: 0.85em;
+    border-radius: 0.85em;
+    background-color: white;
+    color: white;
+    text-align: center;
+}
+.metric-counter {
+    font-size: 1.5em;
+    font-family: sans-serif;
+    font-weight: bolder;
+}
+.media > .media-heading {
+    text-transform: uppercase;
+}
+.media > .media-body > .row {
+    text-transform: uppercase;
+}
+
+.media {
+    padding: 1em;
+    border-radius: 0.4em;.
+}
+
+.media.download, .media.download_aggregate, .media.download_count,
+.media.download a, .media.download_aggregate a, .media.download_count a {
+    color: white;
+    background: #c0392b;
+}
+.media.view, .media.view_aggregate, .media.view_count,
+.media.view a, .media.view_aggregate a, .media.view_count a {
+    color: white;
+    background: #72c02c;
+}
+
+.media.scopus, .media.scopus_aggregate, .media.scopus_count,
+.media.scopus a, .media.scopus_aggregate a, .media.scopus_count a {
+    color: white;
+    background: #ff7800;
+}
+.media.pubmed, .media.pubmed_aggregate, .media.pubmed_count,
+.media.pubmed a, .media.pubmed_aggregate a, .media.pubmed_count a {
+    color: white;
+    background: #141927;
+}
+.media.wos, .media.wos_aggregate, .media.wos_count,
+.media.wos a, .media.wos_aggregate a, .media.wos_count a {
+    color: white;
+    background: #505050;
+}
+.media.google, .media.google a {
+    color: white;
+    background: #4285f4;
+}
+.media.altmetric {
+    background: white;
+    color: #c7254e;
+    border: 3px solid #c7254e;
+}
+.media > .media-left > i.fa {
+    font-size: 3em;
+}
+
+.col-lg-12 > .media, .col-xs-12 > .media  {margin-bottom: 1em; width: 100%;}
+.media-left {float:left;}
+
+.media.identifier_signature {
+    color: white;
+    background: #505050;
+}
+
+.media.title_signature {
+    color: white;
+    background: #4285f4;
+}
+
+.media.identifier_signature a {
+    color: white;
+}
+
+.media.title_signature a {
+    color: white;
+}
+
+.media.dedup, .media.dedup a {
+    color: white;
+    background: gray;
+}
+
+.img-container{
+    display:block;
+    float:left;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 7px;
+}
+.t1 {
+    display:block;
+    max-width:300px;
+    word-wrap:break-word;
+}
+#t1 {
+    display:block;
+    max-width:300px;
+    word-wrap:break-word;
+}
+.metadataFieldValue {
+    display:block;
+    max-width:500px;
+    word-wrap:break-word;
+}
+
+.sharingbar {
+	height:20px;
+	padding:10px 5px 5px;
+	margin-top:20px;
+	width:600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.sharingbar div.left {
+	margin-left:12px;
+	float:left;
+}
+
+.sharingbar div.left a {
+	margin-right:5px;
+}
+
+.sharingbar div.right {
+	margin-right:12px;
+	float:right;
+}
+
+.sharingbar div.right a {
+	cursor:pointer;
+	margin-right:5px;
+}
+
+.sharingbar div.clear {
+	clear: both;
+}
+
+.sharingbar a {
+        text-decoration: none;
+}
+
+#tulogo {
+    float: left;
+    height: 105px;
+    width: 230px;
+}
+
+#apbranding-box {
+    background: none repeat scroll 0 0 #ffffff;
+    float: right;
+    height: 105px;
+    padding: 0 20px;
+    width: 70%;
+}
+/*
+.sitename {
+    font-size: 170%;
+    font-weight: bold;
+    padding: 12px 0 0 0;
+}
+*/
+.msls {
+    padding-left:10em;
+    float:left;
+    width:auto;
+}
+
+
+.wpsearch {
+    float: right;
+    margin-top: -30px;
+    width:auto;
+}
+
+#branding #searchform {
+    padding-top: 0;
+    right: 7.6%;
+    text-align: right;
+}
+
+#branding #s {
+    float: right;
+    transition-duration: 400ms;
+    transition-property: width, background;
+    transition-timing-function: ease;
+    width: 75px;
+}
+
+.navbar-inverse {
+    margin-top:3em;
+    margin-bottom:3em;
+}
+
+.navbar-form {
+    display:none;
+}
+
+footer.navbar-inverse {
+    max-width:1000px;
+    margin-left: auto ;
+    margin-right: auto ;
+}
+
+.container {
+    max-width:1000px;
+}
+
+ol {
+    font-size:14px;
+    line-height:1.3em;
+}
+
+ul {
+    font-size:14px;
+    line-height:1.3em;
+}
+
+
+li {
+    font-size:14px;
+    line-height:1.3em;
+}
+
+.breadcrumb {
+    display:none;
+}
+
+
+
+.langChangeOn {
+    display:none;
+}
+
+.col-md-2 {
+width: 150px;
+}
+
+/* Administationsstools rechts  */
+.col-md-3 {
+    padding-top:0em;
+}
+
+.col-md-4 {
+/*    padding-top:10px;*/
+}
+
+.col-md-8 {
+/*    padding-top:10px;*/
+}
+
+.col-md-9 {
+    padding-top:1em;
+    padding-bottom:1em;
+}
+
+.panel-primary {
+    margin-top:2em;
+}
+
+.btn {
+    width:auto;
+}
+
+input#s {
+    background: url("../image/search.png") no-repeat scroll 5px 6px rgba(0, 0, 0, 0);
+    border-radius: 2px;
+    font-size: 14px;
+    height: 22px;
+    line-height: 1.2em;
+    padding: 4px 10px 4px 28px;
+}
+
+.assistive-text {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+}
+
+#branding {
+    padding-top: 0;
+    position: relative;
+    z-index: 1;
+}
+
+#page {
+    margin: 2em auto;
+    max-width: 1000px;
+}
+
+body {
+/*    background: url("https://katalog.tub.tu-harburg.de/interface/themes/blueprint-tubhh/images/bg/bg-tile.jpg") repeat fixed 50% 0 rgb(221, 221, 221); */
+    background: rgb(110, 155, 43);
+}
+
+.clear {
+    clear: both;
+}
+
+a:hover, a:focus {
+    cursor: pointer;
+}
+
+.tubdoksearch {
+    float: left;
+    padding-left: 2em;
+    padding-top: 0;
+    width: 25%;
+}
+
+.tubdoklogo {
+    float: right;
+    padding-right: 10px;
+}
+
+.sitename {
+    font-size: 150%;
+    font-weight: normal;
+    padding: 12px 0 0;
+}
+
+#tulogosmall {
+    display: none;
+}
+.tubdoklogosmall {
+    display: none;
+}
+
+
+
+@media (max-width: 1075px) {
+
+#apbranding-box {
+    width: 60% !important;
+}
+.msls {
+    float: left;
+    font-size: 100%;
+    padding-left: 5px;
+    padding-right: 45px;
+    padding-top: 8px;
+}
+.tubdoksearch {
+    float: left;
+    padding-left: 2em;
+    padding-top: 0;
+    width: 25%;
+}
+#main #content {
+    background: #ffffff none repeat scroll 0 0;
+    margin: 0 7.6%;
+    width: auto;
+}
+}
+
+@media (min-width:870px and max-width: 1000px) {
+.tubdoklogo {
+    float: right;
+    margin-top:-120px;
+    padding-right: 10px;
+    height: 50px;
+}
+}
+
+@media (max-width: 800px) {
+#apbranding-box {
+    width: 55% !important;
+}
+.msls {
+    float: left;
+    font-size: 100%;
+    padding-left: 5px;
+    padding-right: 10px;
+    padding-top: 8px;
+}
+.tubdoksearch {
+    padding-left: 40px;
+    padding-right: 5px;
+}
+.tubdoklogo {
+    display: none !important;
+}
+.tubdoklogosmall {
+    display: block !important;
+    background-color: #ffffff;
+    background-image: url("/image/tub_dok_logo.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto 40px;
+    height: 40px;
+}
+#main #content {
+    background: #ffffff none repeat scroll 0 0;
+    margin: 0 7.6%;
+    width: auto;
+}
+}
+
+@media (min-width: 200px) and (max-width: 680px) {
+.t1 {
+    display:block;
+    max-width:50px;
+    word-wrap:break-word;
+}
+#t1,#t2,#t3,#t4 {
+    word-wrap:break-word;
+    font-size:10px;
+}
+.standard {
+    word-wrap:break-word;
+    max-width:100px;
+    font-size:10px;
+}
+.metadataFieldValue {
+    display:block;
+    max-width:200px;
+    word-wrap:break-word;
+}
+.evenRowEvenCol,.evenRowOddCol,.oddRowEvenCol,.oddRowOddCol{
+    word-wrap:break-word;
+    font-size:10px;
+}
+
+#page {
+    margin: 0em auto;
+    max-width: 1000px;
+}
+.msls {
+    padding-left: 30px !important;
+    padding-right: 5px !important;
+}
+.tubdoksearch {
+    float: left;
+    padding-top: 0;
+    width: 25%;
+}
+#main {
+    padding: 0;
+}
+#tulogo {
+    display: none !important;
+}
+.tubdoklogo {
+    display: none !important;
+}
+#tubdoklogomobile {
+    display: block !important;
+    background-color: #ffffff;
+    background-image: url("/image/tub_dok_logo.png");
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-size: auto 30px;
+    height: 80px;
+    float: right;
+    width: 50%;
+    padding-right: 1.5em !important;
+}
+.tubdoklogosmall {
+    display: none !important;
+}
+#tulogosmall {
+    background-color: #ffffff;
+    background-image: url("/image/TUHH-Logo.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: auto 60px;
+    display: block !important;
+    height: 80px;
+    padding-left: 1.5em !important;
+    width: 50%;
+    float: left;
+}
+#apbranding-box {
+    clear: both !important;
+    display: block;
+    float: none !important;
+    margin-top: -25px;
+    padding: 0;
+    width: 100% !important;
+}
+.sitename {
+    padding-bottom: 10px;
+    text-align: center;
+}
+#tequery {
+    width: 100px;
+}
+.img-container {
+    float: auto;
+}
+}
+

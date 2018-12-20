@@ -1,0 +1,10 @@
+/* Linie ueber dem Header -> 3px unten am container-fluid */
+#branding {
+	border-top: solid 6px #009e33;
+}
+
+/* navbar + login */
+.container-fluid {
+	background-color: #efefef;
+	border-bottom: solid 2px #009e33;
+}
