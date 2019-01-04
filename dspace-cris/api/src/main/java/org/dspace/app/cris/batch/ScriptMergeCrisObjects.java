@@ -91,6 +91,12 @@ public class ScriptMergeCrisObjects {
 			options.addOption("p", "replace_notempty", true,
 					"properties to override in the target with the values from the merged objects IF NOT EMPTY");
 
+                        options.addOption("o", "old", true,
+                                "old property name");
+
+                        options.addOption("n", "new", true,
+                                "new property name");
+
 			CommandLine line = parser.parse(options, args);
 
 			if (line.hasOption('h')) {
@@ -108,6 +114,8 @@ public class ScriptMergeCrisObjects {
 			boolean skipMergeProps = line.hasOption('x');
 			boolean delete = line.hasOption('d');
 			String[] skip = line.getOptionValues('s');
+                        String[] oldnames = line.getOptionValues('o');
+                        String[] newnames = line.getOptionValues('n');
 
 			Set<String> toMergeIDs = new LinkedHashSet<String>();
 			for (String m : mergeIDs) {
@@ -126,7 +134,7 @@ public class ScriptMergeCrisObjects {
 			// foreach toMergeIDs
 			for (String m : mergeIDs) {
 				merge(context, applicationService, m, targetCrisObject, delete, skipMergeProps, replace, replace_notempty,
-						skip);
+						skip, oldnames, newnames);
 				context.commit();
 			}
 			context.complete();
@@ -144,7 +152,7 @@ public class ScriptMergeCrisObjects {
 
 	private static void merge(Context context, ApplicationService applicationService, String m,
 			ACrisObject targetCrisObject, boolean delete, boolean skipMergeProps, String[] propsToReplace,
-			String[] propsToReplaceIfNotEmpty, String[] propsToIgnore) throws SQLException {
+			String[] propsToReplaceIfNotEmpty, String[] propsToIgnore, String[] oldProps, String[] newProps) throws SQLException {
 		if (propsToReplace == null) {
 			propsToReplace = new String[0];
 		}
@@ -154,6 +162,10 @@ public class ScriptMergeCrisObjects {
 		if (propsToIgnore == null) {
 			propsToIgnore = new String[0];
 		}
+                if (oldProps == null || newProps == null || oldProps.length != newProps.length) {
+                        oldProps = new String[0];
+                        newProps = new String[0];
+                }
 		
 		ACrisObject objToMerge = applicationService.getEntityByCrisId(m);
 		if (objToMerge == null || !objToMerge.getClass().isInstance(targetCrisObject)) {
@@ -258,6 +270,12 @@ public class ScriptMergeCrisObjects {
 					for (Property p : propsObjToMerge) {
 						ResearcherPageUtils.buildGenericValue(targetCrisObject, p.getObject(), propName, p.getVisibility());
 					}
+                                } else if (ArrayUtils.contains(oldProps, propName)) {
+                                        int i = ArrayUtils.indexOf(oldProps, propName);
+                                        String newname = newProps[i];
+                                        for (Property p : propsObjToMerge) {
+                                                ResearcherPageUtils.buildGenericValue(targetCrisObject, p.getObject(), newname, p.getVisibility());
+                                        }
 				} else {
 					// default treatment, we will add the props from the merged obj to the target if
 					// the target doesn't have any values
