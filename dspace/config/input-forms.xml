@@ -17,10 +17,6 @@
 <!--   <name-map collection-handle="default" form-name="traditional" /> -->
    <name-map collection-handle="default" form-name="tubdokwitheu" />
 <!--   <name-map collection-handle="11420/2" form-name="tubdokwitheu" /> -->
-   <name-map collection-handle="123456789/5" form-name="fdm" />
-   <name-map collection-handle="123456789/4" form-name="metadata" />
-   <name-map collection-handle="123456789/35" form-name="fdm-nontuhh" />
-   <name-map collection-handle="123456789/40" form-name="fdm-nontuhh" />
  </form-map>
 
 
@@ -44,18 +40,6 @@
 
    <form name="tubdokwitheu">
      <page number="1">
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>title</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Title</label>
-         <input-type>onebox</input-type>
-         <!--<hint>Enter the main title of the item.</hint>-->
-         <required>You must enter a main title for this item.</required>
-       </field>
-
 <!--
        <field>
          <dc-schema>tuhh</dc-schema>
@@ -68,26 +52,14 @@
          <required>Enter a contact email address!</required>
        </field>
 -->
-
-      <field>
-          <dc-element>contributor</dc-element>
-          <dc-qualifier>department</dc-qualifier>
-          <label>Author Department</label>
-          <input-type>onebox</input-type>
-          <repeatable>true</repeatable>
-          <parent>dc_contributor_author</parent>
-          <required></required>
-          <hint>Enter an affiliation for each author.</hint>
-       </field>
-
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
          <dc-qualifier>author</dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Author</label>
+         <label>Authors</label>
          <input-type>name</input-type>
-         <hint>Enter the names of the author(s) of this item below.</hint>
+         <hint>Enter the names of the authors of this item below.</hint>
          <required></required>
        </field>
 
@@ -124,6 +96,16 @@
          <required></required>
        </field>
 -->
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>title</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Title</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the main title of the item.</hint>
+         <required>You must enter a main title for this item.</required>
+       </field>
 
        <field>
          <dc-schema>dc</dc-schema>
@@ -163,31 +145,9 @@
          <dc-element>subject</dc-element>
          <dc-qualifier></dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Uncontrolled Subject Headings</label>
+         <label>uncontrolled Subject Headings</label>
          <input-type>onebox</input-type>
-         <hint>Enter 5-6 subject headings here, that are describing the content of the document (only one subject term per line).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>fieldofcompetence</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Areas of Expertise</label>
-         <input-type value-pairs-name="fieldsofcompetence_en">dropdown</input-type>
-         <hint>Select the area of expertise of this publication (multiple selection possible).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>researchfocus</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Forschungsschwerpunkte</label>
-         <input-type value-pairs-name="researchfocus_en">dropdown</input-type>
-         <hint>Select the main research area of this publication (multiple selection possible).</hint>
+         <hint>Enter 5-6 subject headings here, that are describing the content of the document (just one subject term per line).</hint>
          <required></required>
        </field>
 
@@ -210,7 +170,7 @@
          <dc-element>abstract</dc-element>
          <dc-qualifier>german</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Abstract (German)</label>
+         <label>Abstract in german</label>
          <input-type>textarea</input-type>
          <hint>Enter the abstract of the item in german language below. </hint>
          <required></required>
@@ -221,10 +181,21 @@
          <dc-element>abstract</dc-element>
          <dc-qualifier>english</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Abstract (English)</label>
+         <label>Abstract english</label>
          <input-type>textarea</input-type>
          <hint>Enter the abstract of the item in english language below. </hint>
          <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>publication</dc-element>
+         <dc-qualifier>institute</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>TUHH-Institute / Workgroup</label>
+         <input-type>onebox</input-type>
+         <hint>Choose the institute(s) or the workgroup(s), at that this work has been produced by typing the name or the code of the institute (e.g. E-4 Kommunikationsnetze).</hint>
+         <required>Please provide the institute of your publication. You will get suggestions for the institute while typing.</required>
        </field>
 <!--
        <field>
@@ -238,16 +209,6 @@
          <required></required>
        </field>
 -->
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>publication</dc-element>
-         <dc-qualifier>institute</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>TUHH-Institute / Workgroup</label>
-         <input-type>onebox</input-type>
-         <hint>Choose the institute(s) or the workgroup(s), at that this work has been produced.</hint>
-         <required></required>
-       </field>
      </page>
 
      <page number="2">
@@ -274,29 +235,6 @@
        </field>
 
        <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartof</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Part of</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the name of the journal or series, in which this item is published</hint>
-<!--         <hint>Enter the identifier of the item (e.g. URL, DOI, ...), in which this item is part of</hint> -->
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartof</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Part of another tub.dok publication</label>
-         <input-type>onebox</input-type>
-         <hint>This item is part of another item published on tub.dok</hint>
-         <required></required>
-       </field>
-
-       <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>issupplementedby</dc-qualifier>
@@ -310,68 +248,22 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
-         <dc-qualifier>publication</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Related to another tub.dok publication</label>
-         <input-type>onebox</input-type>
-         <hint>This item is related to another item published on tub.dok</hint>
-         <required></required>
-       </field>
-<!-- Experiment mit parent-Element
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>publication</dc-qualifier>
-         <repeatable>false</repeatable>
-         <parent>dc_relation_publication</parent>
-         <label>Type of relation</label>
-         <input-type value-pairs-name="relation_types">dropdown</input-type>
-         <hint>Select the type of relation to the above mentioned publication</hint>
-         <required></required>
-       </field>
--->
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>conference</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Conference</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the conference name, on that this item was presented</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>project</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Project</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the project name, in that context this item was created</hint>
-         <required></required>
-       </field>
-<!--
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
          <dc-qualifier>ispartof</dc-qualifier>
          <repeatable>false</repeatable>
          <label>Journal title</label>
          <input-type>onebox</input-type>
          <hint>Enter the name of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article</type-bind>
        </field>
--->
+
        <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>container</dc-element>
          <dc-qualifier>issue</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Zeitschriftenausgabe</label>
+         <label>Issue</label>
          <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Ausgabennummer der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
+         <hint>Enter the issue number of the journal, in that this article has been published.</hint>
          <required></required>
          <type-bind>Article</type-bind>
        </field>
@@ -381,9 +273,9 @@
          <dc-element>container</dc-element>
          <dc-qualifier>volume</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Zeitschriftenband</label>
+         <label>Volume</label>
          <input-type>onebox</input-type>
-         <hint>Geben Sie hier den Jahrgang (Band) der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
+         <hint>Enter the volume number of the journal, in that this article has been published.</hint>
          <required></required>
          <type-bind>Article</type-bind>
        </field>
@@ -393,9 +285,9 @@
          <dc-element>container</dc-element>
          <dc-qualifier>startpage</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Startseite</label>
+         <label>Start page</label>
          <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Seite im Band an, auf der dieser Artikel oder dieses Kapitel startet.</hint>
+         <hint>Enter the start page of the article in the original volume.</hint>
          <required></required>
        </field>
 
@@ -404,9 +296,31 @@
          <dc-element>container</dc-element>
          <dc-qualifier>endpage</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Endseite</label>
+         <label>End page</label>
          <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Seite im Band an, auf der dieser Artikel oder dieses Kapitel endet.</hint>
+         <hint>Enter the start page of the article in the original volume.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Series</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the series assigned to this item by your community.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Series Number</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the number of the volume in the series assigned to this item by your community.</hint>
          <required></required>
        </field>
 
@@ -421,6 +335,17 @@
                         below.  You can leave out the day and/or month if they aren't
                         applicable.</hint>
          <!--<required>You must enter at least the year.</required>-->
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>conference</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Conference</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the conference name, on that this item was presented</hint>
          <required></required>
        </field>
 
@@ -467,7 +392,8 @@
          <hint>Please select the title of the series, in that this item has been published. If your series is not listed here, just type its name into the next field.</hint>
          <required></required>
        </field>
-
+-->
+<!--
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
@@ -483,7 +409,7 @@
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
          <dc-qualifier>advisor</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Main Advisor</label>
          <input-type>name</input-type>
          <hint>Enter the name of your main thesis advisor (without academic title) here.</hint>
@@ -498,7 +424,7 @@
          <repeatable>true</repeatable>
          <label>Referee</label>
          <input-type>name</input-type>
-         <hint>Enter the name of your thesis referee(s) here.</hint>
+         <hint>Enter the name of your thesis referee(s) (without academic title) here.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -554,6 +480,17 @@
 
      <page number="3">
        <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>oai</dc-element>
+         <dc-qualifier>show</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Submission to DNB</label>
+         <input-type value-pairs-name="oai_flag">dropdown</input-type>
+         <hint>Should this item be harvestable via OAI (e.g. for DNB)?</hint>
+         <visibility>workflow</visibility>
+        </field>
+
+       <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>rights</dc-element>
          <dc-qualifier></dc-qualifier>
@@ -580,14 +517,38 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
+         <dc-qualifier>nationallicense</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Alliance or National License</label>
+         <input-type value-pairs-name="nl_en">dropdown</input-type>
+         <hint>Please select, if this work is covered by a national or alliance license.</hint>
+         <required></required>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>rights</dc-element>
+         <dc-qualifier>nltext</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Note about Alliance or National License</label>
+         <input-type>textarea</input-type>
+         <hint>Text to show for a national or alliance license.</hint>
+         <required></required>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>rights</dc-element>
          <dc-qualifier>cc</dc-qualifier>
          <repeatable>false</repeatable>
          <label>CreativeCommons License</label>
-         <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
+         <input-type value-pairs-name="cc_license_en">dropdown</input-type>
          <hint>If your document is already or shall be under a CreativeCommons License, please select the license here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
          <required></required>
        </field>
-<!--
+
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
@@ -598,277 +559,6 @@
          <hint>If your document is already or shall be under a CreativeCommons License, please select the version of the license here. If you miss your version here, please contact us.</hint>
          <required></required>
        </field>
--->
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>name</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Funder name</label>
-         <input-type value-pairs-name="funder_names">dropdown</input-type>
-         <hint>Choose the name of the funder of this publication. If its not listed here, you can enter it in the Sponsor box below.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>programme</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Funding programme</label>
-         <input-type value-pairs-name="funding_programmes">dropdown</input-type>
-         <hint>Choose the name of the funding programme, that has funded this publication (for example Horizon2020).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>projectid</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Project ID</label>
-         <input-type>textarea</input-type>
-         <hint>Enter the project ID, under which the publication has been funded.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>description</dc-element>
-         <dc-qualifier>sponsorship</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Funder</label>
-         <input-type>textarea</input-type>
-         <hint>Enter the names of any sponsors and/or funding codes in this box, if they have not been entered in one of the boxes above. </hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the doi of one sponsor (according to Fundref, http://fundref.org/fundref/fundref_registry.html) in the box below. </hint>
-         <required></required>
-         <visibility>workflow</visibility>
-       </field>
-     </page>
-
-   </form>
-
-   <form name="fdm">
-     <page number="1">
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>type</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Data type</label>
-         <input-type value-pairs-name="fdm_types_en">dropdown</input-type>
-         <hint>Select the resource type of your data file(s).</hint>
-         <required>The resource type of your data is required.</required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>title</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Title</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required>Please enter the main title for this item.</required>
-       </field>
-
-      <field>
-          <dc-element>contributor</dc-element>
-          <dc-qualifier>department</dc-qualifier>
-          <label>Author Department</label>
-          <input-type>onebox</input-type>
-          <repeatable>true</repeatable>
-          <parent>dc_contributor_author</parent>
-          <required></required>
-          <hint>Enter an affiliation for each author.</hint>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>author</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Author</label>
-         <input-type>name</input-type>
-         <!--<hint>Enter the names of the authors of this item below.</hint>-->
-         <required>Please enter the author(s) of the dataset.</required>
-       </field>
-
-<!--
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>editor</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Editors</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the names of the editors (persons (last name, first name) or corporates) of this item below.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>other</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Other Contributors</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) or corporates here.</hint>
-         <required></required>
-       </field>
-
--->
-       <field>
-         <dc-schema>datacite</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Contributors</label>
-         <input-type value-pairs-name="contributor_fdm_en">qualdrop_value</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) or corporates here and select their role</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>date</dc-element>
-         <dc-qualifier>issued</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Date of Issue</label>
-         <input-type>date</input-type>
-         <hint>Please give the date of publication below.  You can leave out the day and/or month if they aren't applicable.</hint>
-         <required>Please enter at least the year of your data publication.</required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>language</dc-element>
-         <dc-qualifier>iso</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Language</label>
-         <input-type value-pairs-name="common_iso_languages_en">dropdown</input-type>
-         <!--<hint>Select the language of the main content of the item.  If the language does not appear in the list below, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>-->
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>abstract</dc-element>
-         <dc-qualifier>english</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Description (English)</label>
-         <input-type>textarea</input-type>
-         <hint>Information about content, context and reuse of your data.</hint>
-         <required>Please enter descriptive information.</required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>abstract</dc-element>
-         <dc-qualifier>german</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Description (German)</label>
-         <input-type>textarea</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Key Word</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>ddc</dc-qualifier>
-         <!-- An input-type of twobox MUST be marked as repeatable -->
-         <repeatable>true</repeatable>
-         <label>DDC class</label>
-         <input-type>twobox</input-type>
-         <hint>Select an appropriate subject class below. </hint>
-         <required>One DDC class is required as a minimum!</required>
-         <vocabulary>ddc_en</vocabulary>
-         <visibility>workflow</visibility>
-       </field>
-
-
-       <field>
-         <dc-schema>datacite</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Related Identifiers</label>
-         <input-type value-pairs-name="relation_types_en">qualdrop_value</input-type>
-         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation</hint>
-         <required></required>
-       </field>
-
-<!-- Experiment mit parent-Element
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>publication</dc-qualifier>
-         <repeatable>false</repeatable>
-         <parent>dc_relation_publication</parent>
-         <label>Type of relation</label>
-         <input-type value-pairs-name="relation_types">dropdown</input-type>
-         <hint>Select the type of relation to the above mentioned publication</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>conference</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Conference</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the conference name, on that this item was presented</hint>
-         <required></required>
-       </field>
--->
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Access Rights</label>
-         <input-type value-pairs-name="access_rights">dropdown</input-type>
-         <hint>Select the access rights policy appropriate for this publication.</hint>
-         <required>Please select access rights policy!</required>
-         <visibility>workflow</visibility>
-        </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier>cc</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
-         <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf https://creativecommons.org.</hint>
-         <required></required>
-       </field>
-
 
        <field>
          <dc-schema>openaire</dc-schema>
@@ -877,7 +567,7 @@
          <repeatable>false</repeatable>
          <label>EU funder</label>
          <input-type value-pairs-name="funder_names">dropdown</input-type>
-         <hint>For EU-Projects: Please fill out the next three fields.</hint>
+         <hint>For EU projects: Please fill out the next three fields.</hint>
          <required></required>
        </field>
 
@@ -910,7 +600,7 @@
          <repeatable>false</repeatable>
          <label>Project</label>
          <input-type>onebox</input-type>
-         <hint>For projects without EU funding</hint>
+         <hint>For projects without EU funding:</hint>
          <required></required>
        </field>
 
@@ -936,889 +626,6 @@
          <required></required>
          <visibility>workflow</visibility>
        </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>publication</dc-element>
-         <dc-qualifier>institute</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>TUHH-Institute / Workgroup</label>
-         <input-type>onebox</input-type>
-         <hint>Hamburg University of Technology (TUHH):</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>urn</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>URN</label>
-         <input-type>onebox</input-type>
-	 <hint></hint>
-         <required></required>
-       </field>
-
-     </page>
-
-   </form>
-
-   <form name="metadata">
-     <page number="1">
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>title</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Title</label>
-         <input-type>onebox</input-type>
-         <!--<hint>Enter the main title of the item.</hint>-->
-         <required>You must enter a main title for this item.</required>
-       </field>
-
-<!--
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>uploader</dc-element>
-         <dc-qualifier>email</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>eMail contact address</label>
-         <input-type>onebox</input-type>
-         <hint>Enter your contact email address for questions. The address is only used internally and will not be disclosed in any way to others.</hint>
-         <required>Enter a contact email address!</required>
-       </field>
--->
-
-      <field>
-          <dc-element>contributor</dc-element>
-          <dc-qualifier>department</dc-qualifier>
-          <label>Author Department</label>
-          <input-type>onebox</input-type>
-          <repeatable>true</repeatable>
-          <parent>dc_contributor_author</parent>
-          <required></required>
-          <hint>Enter an affiliation for each author.</hint>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>author</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Author</label>
-         <input-type>name</input-type>
-         <hint>Enter the names of the author(s) of dataset.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>editor</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Editors</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the names of the editors (persons (last name, first name) or corporates) of this item below.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>other</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Other Contributors</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) or corporates here.</hint>
-         <required></required>
-       </field>
-<!--
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Contributors</label>
-         <input-type value-pairs-name="common_roles_en">qualdrop_value</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) or corporates here and select their role</hint>
-         <required></required>
-       </field>
--->
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>language</dc-element>
-         <dc-qualifier>iso</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Language</label>
-         <input-type value-pairs-name="common_iso_languages_en">dropdown</input-type>
-         <hint>Select the language of the main content of the item.  If the language does not appear in the list below, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>urn</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>URN</label>
-         <input-type>onebox</input-type>
-         <hint>The URN can get used to identify your work permanently and independently from the URL. It may be helpful to put the URN (as the resolved URL) into your document. You can call the URN by appending it to the URL http://nbn-resolving.de/. This document will get the following URN:</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>type</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Type</label>
-         <input-type value-pairs-name="common_types_en">dropdown</input-type>
-         <hint>Select the type(s) of content of the item.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Uncontrolled Subject Headings</label>
-         <input-type>onebox</input-type>
-         <hint>Enter 5-6 subject headings here, that are describing the content of the document (only one subject term per line).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>fieldofcompetence</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Areas of Expertise</label>
-         <input-type value-pairs-name="fieldsofcompetence_en">dropdown</input-type>
-         <hint>Select the area of expertise of this publication (multiple selection possible).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>researchfocus</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Forschungsschwerpunkte</label>
-         <input-type value-pairs-name="researchfocus_en">dropdown</input-type>
-         <hint>Select the main research area of this publication (multiple selection possible).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>ddc</dc-qualifier>
-         <!-- An input-type of twobox MUST be marked as repeatable -->
-         <repeatable>true</repeatable>
-         <label>DDC class</label>
-         <input-type>twobox</input-type>
-         <hint>Select an appropriate subject class below. </hint>
-         <required>One DDC class is required as a minimum!</required>
-         <vocabulary>ddc_en</vocabulary>
-         <visibility>workflow</visibility>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>abstract</dc-element>
-         <dc-qualifier>german</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Abstract (German)</label>
-         <input-type>textarea</input-type>
-         <hint>Enter the abstract of the item in german language below. </hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>abstract</dc-element>
-         <dc-qualifier>english</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Abstract (English)</label>
-         <input-type>textarea</input-type>
-         <hint>Enter the abstract of the item in english language below. </hint>
-         <required></required>
-       </field>
-<!--
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>publication</dc-element>
-         <dc-qualifier>institute</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>TUHH-Institute(s) / Workgroup(s)</label>
-         <input-type value-pairs-name="tuhh_institutes_en">dropdown</input-type>
-         <hint>Choose the institute(s) or the workgroup(s), at that this work has been produced. You can select multiple institutes by pressing the CTRL-key while clicking the institutes.</hint>
-         <required></required>
-       </field>
--->
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>publication</dc-element>
-         <dc-qualifier>institute</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>TUHH-Institute / Workgroup</label>
-         <input-type>onebox</input-type>
-         <hint>Choose the institute(s) or the workgroup(s), at that this work has been produced.</hint>
-         <required></required>
-       </field>
-     </page>
-
-     <page number="2">
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>isbn</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>ISBN</label>
-         <input-type>onebox</input-type>
-         <hint>If the item has one or more ISBN(s) associated with it, please enter it below.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>issn</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>ISSN</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the ISSN of the journal, where this article has been published.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartof</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Part of</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the name of the journal or series, in which this item is published</hint>
-<!--         <hint>Enter the identifier of the item (e.g. URL, DOI, ...), in which this item is part of</hint> -->
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartof</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Part of another tub.dok publication</label>
-         <input-type>onebox</input-type>
-         <hint>This item is part of another item published on tub.dok</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>issupplementedby</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Supplemented By</label>
-         <input-type>onebox</input-type>
-         <hint>This item is supplemented by research data. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>publication</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Related to another tub.dok publication</label>
-         <input-type>onebox</input-type>
-         <hint>This item is related to another item published on tub.dok</hint>
-         <required></required>
-       </field>
-<!-- Experiment mit parent-Element
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>publication</dc-qualifier>
-         <repeatable>false</repeatable>
-         <parent>dc_relation_publication</parent>
-         <label>Type of relation</label>
-         <input-type value-pairs-name="relation_types">dropdown</input-type>
-         <hint>Select the type of relation to the above mentioned publication</hint>
-         <required></required>
-       </field>
--->
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>conference</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Conference</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the conference name, on that this item was presented</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>project</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Project</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the project name, in that context this item was created</hint>
-         <required></required>
-       </field>
-<!--
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartof</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Journal title</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the name of the journal, in that this article has been published.</hint>
-         <required></required>
-         <type-bind>Article</type-bind>
-       </field>
--->
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>container</dc-element>
-         <dc-qualifier>issue</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Zeitschriftenausgabe</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Ausgabennummer der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
-         <required></required>
-         <type-bind>Article</type-bind>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>container</dc-element>
-         <dc-qualifier>volume</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Zeitschriftenband</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier den Jahrgang (Band) der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
-         <required></required>
-         <type-bind>Article</type-bind>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>container</dc-element>
-         <dc-qualifier>startpage</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Startseite</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Seite im Band an, auf der dieser Artikel oder dieses Kapitel startet.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>container</dc-element>
-         <dc-qualifier>endpage</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Endseite</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Seite im Band an, auf der dieser Artikel oder dieses Kapitel endet.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>date</dc-element>
-         <dc-qualifier>issued</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Date of Issue</label>
-         <input-type>date</input-type>
-         <hint>Please give the date of previous publication or public distribution
-                        below.  You can leave out the day and/or month if they aren't
-                        applicable.</hint>
-         <!--<required>You must enter at least the year.</required>-->
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>publisher</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Publisher</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the name of the publisher of the previously issued instance of this item.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>citation</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Citation</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the standard citation for the previously issued instance of this item.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>publisher</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Publisher's version</label>
-         <input-type value-pairs-name="common_uritypes_en">qualdrop_value</input-type>
-         <hint>Enter the link to the publisher's version of this document.</hint>
-         <required></required>
-       </field>
-<!--
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>series</dc-element>
-         <dc-qualifier>id</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>TUHH-Series</label>
-         <input-type value-pairs-name="tuhh_schriftenreihen">dropdown</input-type>
-         <hint>Please select the title of the series, in that this item has been published. If your series is not listed here, just type its name into the next field.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseries</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Series / Report No.</label>
-         <input-type>series</input-type>
-         <hint>Enter the series and number assigned to this item by your community.</hint>
-         <required></required>
-       </field>
--->
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>advisor</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Main Advisor</label>
-         <input-type>name</input-type>
-         <hint>Enter the name of your main thesis advisor (without academic title) here.</hint>
-         <required></required>
-         <type-bind>Thesis</type-bind>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>referee</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Referee</label>
-         <input-type>name</input-type>
-         <hint>Enter the name of your thesis referee(s) here.</hint>
-         <required></required>
-         <type-bind>Thesis</type-bind>
-       </field>
-
-       <field>
-         <dc-schema>thesis</dc-schema>
-         <dc-element>grantor</dc-element>
-         <dc-qualifier>universityOrInstitution</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Title Granting Institution</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the name of the title granting institution here.</hint>
-         <required></required>
-         <type-bind>Thesis</type-bind>
-       </field>
-
-       <field>
-         <dc-schema>thesis</dc-schema>
-         <dc-element>grantor</dc-element>
-         <dc-qualifier>place</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Place of title granting institution</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the residential place of the title granting institution here.</hint>
-         <required></required>
-         <type-bind>Thesis</type-bind>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>type</dc-element>
-         <dc-qualifier>thesis</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Thesis-Type</label>
-         <input-type value-pairs-name="thesis_types_en">dropdown</input-type>
-         <hint>Select the generic type of your thesis here.</hint>
-         <required>Select the type of thesis you want to submit!</required>
-         <type-bind>Thesis</type-bind>
-       </field>
-
-       <field>
-         <dc-schema>dcterms</dc-schema>
-         <dc-element>dateAccepted</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Date of examination</label>
-         <input-type>date</input-type>
-         <hint>Enter the date of your oral examination associated with your document.</hint>
-         <required>You have to enter the date of your oral examination. If the examinations has not been made yet, you cannot publish your thesis here!</required>
-         <type-bind>Thesis</type-bind>
-       </field>
-     </page>
-
-     <page number="3">
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Access Rights</label>
-         <input-type value-pairs-name="access_rights">dropdown</input-type>
-         <hint>Select the access rights policy appropriate for this publication.</hint>
-         <required>Please select access rights policy!</required>
-         <visibility>workflow</visibility>
-        </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Lizenz</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required></required>
-         <visibility>workflow</visibility>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier>cc</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>CreativeCommons License</label>
-         <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>If your document is already or shall be under a CreativeCommons License, please select the license here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
-         <required></required>
-       </field>
-<!--
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier>ccversion</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>CreativeCommons License Version</label>
-         <input-type value-pairs-name="cc_license_version_en">dropdown</input-type>
-         <hint>If your document is already or shall be under a CreativeCommons License, please select the version of the license here. If you miss your version here, please contact us.</hint>
-         <required></required>
-       </field>
--->
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>name</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Funder name</label>
-         <input-type value-pairs-name="funder_names">dropdown</input-type>
-         <hint>Choose the name of the funder of this publication. If its not listed here, you can enter it in the Sponsor box below.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>programme</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Funding programme</label>
-         <input-type value-pairs-name="funding_programmes">dropdown</input-type>
-         <hint>Choose the name of the funding programme, that has funded this publication (for example Horizon2020).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>projectid</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Project ID</label>
-         <input-type>textarea</input-type>
-         <hint>Enter the project ID, under which the publication has been funded.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>description</dc-element>
-         <dc-qualifier>sponsorship</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Funder</label>
-         <input-type>textarea</input-type>
-         <hint>Enter the names of any sponsors and/or funding codes in this box, if they have not been entered in one of the boxes above. </hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the doi of one sponsor (according to Fundref, http://fundref.org/fundref/fundref_registry.html) in the box below. </hint>
-         <required></required>
-         <visibility>workflow</visibility>
-       </field>
-     </page>
-   </form>
-
-   <form name="fdm-nontuhh">
-     <page number="1">
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>type</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Data type</label>
-         <input-type value-pairs-name="fdm_types_en">dropdown</input-type>
-         <hint>Select the resource type of your data file(s).</hint>
-         <required>The resource type of your data is required.</required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>title</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Title</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required>Please enter the main title for this item.</required>
-       </field>
-
-      <field>
-          <dc-element>contributor</dc-element>
-          <dc-qualifier>department</dc-qualifier>
-          <label>Author Department</label>
-          <input-type>onebox</input-type>
-          <repeatable>true</repeatable>
-          <parent>dc_contributor_author</parent>
-          <required></required>
-          <hint>Enter an affiliation for each author.</hint>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>author</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Author</label>
-         <input-type>name</input-type>
-         <!--<hint>Enter the names of the authors of this item below.</hint>-->
-         <required>Please enter the author(s) of the dataset.</required>
-       </field>
-
-       <field>
-         <dc-schema>datacite</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Contributors</label>
-         <input-type value-pairs-name="contributor_fdm_en">qualdrop_value</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) or corporates here and select their role</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>date</dc-element>
-         <dc-qualifier>issued</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Date of Issue</label>
-         <input-type>date</input-type>
-         <hint>Please give the date of publication below.  You can leave out the day and/or month if they aren't applicable.</hint>
-         <required>Please enter at least the year of your data publication.</required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>language</dc-element>
-         <dc-qualifier>iso</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Language</label>
-         <input-type value-pairs-name="common_iso_languages_en">dropdown</input-type>
-         <!--<hint>Select the language of the main content of the item.  If the language does not appear in the list below, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>-->
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>abstract</dc-element>
-         <dc-qualifier>english</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Description (English)</label>
-         <input-type>textarea</input-type>
-         <hint>Information about content, context and reuse of your data.</hint>
-         <required>Please enter descriptive information.</required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>abstract</dc-element>
-         <dc-qualifier>german</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Description (German)</label>
-         <input-type>textarea</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Key Word</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>ddc</dc-qualifier>
-         <!-- An input-type of twobox MUST be marked as repeatable -->
-         <repeatable>true</repeatable>
-         <label>DDC class</label>
-         <input-type>twobox</input-type>
-         <hint>Select an appropriate subject class below. </hint>
-         <required>One DDC class is required as a minimum!</required>
-         <vocabulary>ddc_en</vocabulary>
-         <visibility>workflow</visibility>
-       </field>
-
-       <field>
-         <dc-schema>datacite</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Related Identifiers</label>
-         <input-type value-pairs-name="relation_types_en">qualdrop_value</input-type>
-         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Access Rights</label>
-         <input-type value-pairs-name="access_rights">dropdown</input-type>
-         <hint>Select the access rights policy appropriate for this publication.</hint>
-         <required>Please select access rights policy!</required>
-         <visibility>workflow</visibility>
-        </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier>cc</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
-         <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf https://creativecommons.org.</hint>
-         <required></required>
-       </field>
-
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>name</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>EU funder</label>
-         <input-type value-pairs-name="funder_names">dropdown</input-type>
-         <hint>For EU-Projects: Please fill out the next three fields.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>programme</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>EU funding programme</label>
-         <input-type value-pairs-name="funding_programmes">dropdown</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>projectid</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>EU project ID</label>
-         <input-type>textarea</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>project</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Project</label>
-         <input-type>onebox</input-type>
-         <hint>For projects without EU funding</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>description</dc-element>
-         <dc-qualifier>sponsorship</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Funder</label>
-         <input-type>textarea</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the doi of one sponsor (according to Fundref, http://fundref.org/fundref/fundref_registry.html) in the box below. </hint>
-         <required></required>
-         <visibility>workflow</visibility>
-       </field>
-
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>urn</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>URN</label>
-         <input-type>onebox</input-type>
-	 <hint></hint>
-         <required></required>
-       </field>
-
      </page>
 
    </form>
@@ -1840,126 +647,25 @@
  <!-- stores the associated stored-values in the database.                  -->
 
  <form-value-pairs>
-   <value-pairs value-pairs-name="relation_types_en" dc-term="datacite_relation">
+   <value-pairs value-pairs-name="nl_en" dc-term="nlrights">
      <pair>
-       <displayed-value>cites</displayed-value>
-       <stored-value>Cites</stored-value>
+       <displayed-value>No</displayed-value>
+       <stored-value>false</stored-value>
      </pair>
      <pair>
-       <displayed-value>is cited by</displayed-value>
-       <stored-value>IsCitedBy</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is supplemented by</displayed-value>
-       <stored-value>IsSupplementedBy</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is a supplement to</displayed-value>
-       <stored-value>IsSupplementTo</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is referenced by</displayed-value>
-       <stored-value>IsReferencedBy</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>references</displayed-value>
-       <stored-value>References</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is previous version of</displayed-value>
-       <stored-value>IsPreviousVersionOf</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is new version of</displayed-value>
-       <stored-value>IsNewVersionOf</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>has as part</displayed-value>
-       <stored-value>HasPart</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is part of</displayed-value>
-       <stored-value>IsPartOf</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>documents</displayed-value>
-       <stored-value>Documents</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is documented by</displayed-value>
-       <stored-value>IsDocumentedBy</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is compiled/created by</displayed-value>
-       <stored-value>IsCompiledBy</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>compiled/created</displayed-value>
-       <stored-value>Compiles</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is identical to</displayed-value>
-       <stored-value>IsIdenticalTo</stored-value>
-     </pair>
-<!--
-     <pair>
-       <displayed-value>is an alternate identifier of this upload</displayed-value>
-       <stored-value>IsAlternateIdentifier</stored-value>
-     </pair>
--->
-   </value-pairs>
-
-   <value-pairs value-pairs-name="fieldsofcompetence_en" dc-term="tuhh_subject_fieldsofcompetence">
-     <pair>
-       <displayed-value>Green Technologies</displayed-value>
-       <stored-value>Green Technologies</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Life Science Technologies</displayed-value>
-       <stored-value>Life Science Technologies</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Aviaton and Maritime Systems</displayed-value>
-       <stored-value>Aviaton and Maritime Systems</stored-value>
+       <displayed-value>Yes</displayed-value>
+       <stored-value>true</stored-value>
      </pair>
    </value-pairs>
 
-   <value-pairs value-pairs-name="researchfocus_en" dc-term="tuhh_subject_researchfocus">
+   <value-pairs value-pairs-name="oai_flag" dc-term="show">
      <pair>
-       <displayed-value>Renewable Energies</displayed-value>
-       <stored-value>Energy</stored-value>
+       <displayed-value>Yes</displayed-value>
+       <stored-value>true</stored-value>
      </pair>
      <pair>
-       <displayed-value>Systems – Storage – Grids</displayed-value>
-       <stored-value>Storage</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Water and Environmental Engineering</displayed-value>
-       <stored-value>Water</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Medical Technology</displayed-value>
-       <stored-value>Medicine</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Biomaterials</displayed-value>
-       <stored-value>Biomaterial</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Biological and Chemical Process Engineering</displayed-value>
-       <stored-value>Processing</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Aeronautics</displayed-value>
-       <stored-value>Aviation</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Logistics and Mobility</displayed-value>
-       <stored-value>Logistics</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Maritime Systems and Structures</displayed-value>
-       <stored-value>Maritime</stored-value>
+       <displayed-value>No</displayed-value>
+       <stored-value>false</stored-value>
      </pair>
    </value-pairs>
 
@@ -1979,60 +685,6 @@
      <pair>
        <displayed-value>ClosedAccess</displayed-value>
        <stored-value>info:eu-repo/semantics/closedAccess</stored-value>
-     </pair>
-   </value-pairs>
-
-   <value-pairs value-pairs-name="dc_relation_types" dc-term="dc_relation">
-     <pair>
-       <displayed-value>is Part of</displayed-value>
-       <stored-value>ispartof</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>is used/referenced/cited by</displayed-value>
-       <stored-value>isusedby</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>references</displayed-value>
-       <stored-value>references</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>replaces</displayed-value>
-       <stored-value>replaces</stored-value>
-     </pair>
-   </value-pairs>
-
-   <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_rights_uri">
-     <pair>
-       <displayed-value>No CC license</displayed-value>
-       <stored-value></stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
-       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
      </pair>
    </value-pairs>
 
@@ -2065,52 +717,6 @@
        <displayed-value>CC BY NC ND (Attribution, non commercial, no derivates)</displayed-value>
        <stored-value>by-nc-nd</stored-value>
      </pair>
-     <pair>
-       <displayed-value>CC 0</displayed-value>
-       <stored-value>cc-null</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Public Domain</displayed-value>
-       <stored-value>pd</stored-value>
-     </pair>
-<!--
-     <pair>
-       <displayed-value>No CC license</displayed-value>
-       <stored-value></stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY (Attribution)</displayed-value>
-       <stored-value>by</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY NC (Attribution, non commercial)</displayed-value>
-       <stored-value>by-nc</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY SA (Attribution, share alike)</displayed-value>
-       <stored-value>by-sa</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY NC SA (Attribution, non commercial, share alike)</displayed-value>
-       <stored-value>by-nc-sa</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY ND (Attribution, no derivates)</displayed-value>
-       <stored-value>by-nd</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY NC ND (Attribution, non commercial, no derivates)</displayed-value>
-       <stored-value>by-nc-nd</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC 0</displayed-value>
-       <stored-value>cc-null</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Public Domain</displayed-value>
-       <stored-value>pd</stored-value>
-     </pair>
--->
    </value-pairs>
 
    <value-pairs value-pairs-name="cc_license_version_en" dc-term="dc_rights_ccversion">
@@ -2236,10 +842,6 @@
        <stored-value>Proceedings</stored-value>
      </pair>
      <pair>
-       <displayed-value>Dataset / Research Data</displayed-value>
-       <stored-value>Dataset</stored-value>
-     </pair>
-     <pair>
        <displayed-value>Image</displayed-value>
        <stored-value>Image</stored-value>
      </pair>
@@ -2252,7 +854,7 @@
        <stored-value>Journal</stored-value>
      </pair>
      <pair>
-       <displayed-value>Learning Object</displayed-value>
+       <displayed-value>Lerning Object</displayed-value>
        <stored-value>Learning Object</stored-value>
      </pair>
      <pair>
@@ -2275,6 +877,12 @@
        <displayed-value>Presentation</displayed-value>
        <stored-value>Presentation</stored-value>
      </pair>
+<!--
+     <pair>
+       <displayed-value>Research Data</displayed-value>
+       <stored-value>ResearchData</stored-value>
+     </pair>
+-->
      <pair>
        <displayed-value>Research Paper</displayed-value>
        <stored-value>Working Paper</stored-value>
@@ -2290,45 +898,6 @@
      <pair>
        <displayed-value>Video/Movie</displayed-value>
        <stored-value>Video</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Other</displayed-value>
-       <stored-value>Other</stored-value>
-     </pair>
-   </value-pairs>
-
-   <value-pairs value-pairs-name="fdm_types_en" dc-term="type">
-     <pair>
-       <displayed-value>Dataset</displayed-value>
-       <stored-value>Dataset</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Audiovisual</displayed-value>
-       <stored-value>Audiovisual</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>DataPaper</displayed-value>
-       <stored-value>DataPaper</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Image</displayed-value>
-       <stored-value>Image</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Image (3D)</displayed-value>
-       <stored-value>Image, 3-D</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>InteractiveResource</displayed-value>
-       <stored-value>InteractiveResource</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Software</displayed-value>
-       <stored-value>Software</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Sound</displayed-value>
-       <stored-value>Sound</stored-value>
      </pair>
      <pair>
        <displayed-value>Other</displayed-value>
@@ -2370,7 +939,7 @@
        <stored-value>Journal</stored-value>
      </pair>
      <pair>
-       <displayed-value>Learning Object</displayed-value>
+       <displayed-value>Lerning Object</displayed-value>
        <stored-value>Learning Object</stored-value>
      </pair>
      <pair>
@@ -2416,7 +985,18 @@
        <stored-value>Other</stored-value>
      </pair>
    </value-pairs>
+   <!-- default language order: (from dspace 1.2.1)
+        "en_US", "en", "es", "de", "fr", "it", "ja", "zh", "other", ""
+     -->
    <value-pairs value-pairs-name="common_iso_languages_en" dc-term="language_iso">
+     <pair>
+       <displayed-value>N/A</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>English (United States)</displayed-value>
+       <stored-value>en_US</stored-value>
+      </pair>
      <pair>
        <displayed-value>English</displayed-value>
        <stored-value>en</stored-value>
@@ -2445,13 +1025,13 @@
        <displayed-value>Chinese</displayed-value>
        <stored-value>zh</stored-value>
      </pair>
-     <!--<pair>
+     <pair>
        <displayed-value>Multiple Languages</displayed-value>
        <stored-value>mul</stored-value>
-     </pair>-->
+     </pair>
      <pair>
-       <displayed-value>N/A</displayed-value>
-       <stored-value></stored-value>
+       <displayed-value>(Other)</displayed-value>
+       <stored-value>other</stored-value>
      </pair>
    </value-pairs>
 
@@ -2463,29 +1043,6 @@
      <pair>
        <displayed-value>Other</displayed-value>
        <stored-value>other</stored-value>
-     </pair>
-   </value-pairs>
-
-   <value-pairs value-pairs-name="contributor_fdm_en" dc-term="datacite_contributor">
-     <pair>
-       <displayed-value>Data Collector</displayed-value>
-       <stored-value>DataCollector</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Data Curator</displayed-value>
-       <stored-value>DataCurator</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Researcher</displayed-value>
-       <stored-value>Researcher</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Contact Person</displayed-value>
-       <stored-value>ContactPerson</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Other</displayed-value>
-       <stored-value>Other</stored-value>
      </pair>
    </value-pairs>
 
@@ -2861,6 +1418,7 @@
      </pair>
 -->
    </value-pairs>
+<!--
    <value-pairs value-pairs-name="tuhh_schriftenreihen" dc-term="tuhh_series_id">
      <pair>
        <displayed-value> </displayed-value>
@@ -2931,6 +1489,6 @@
        <stored-value>16</stored-value>
      </pair>
     </value-pairs>
-
+-->
     </form-value-pairs>
 </input-forms>
