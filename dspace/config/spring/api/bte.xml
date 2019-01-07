@@ -552,7 +552,7 @@
 	</bean>    
 	
 	<!-- PubMed -->
-	<bean id="pubmedOnlineDataLoader" class="org.dspace.submit.lookup.PubmedOnlineDataLoader">
+	<bean id="pubmedOnlineDataLoader" class="org.dspace.submit.lookup.PubmedOnlineDataLoader" scope="prototype">
 		<property name="searchProvider" value="false" />
 		<property name="fieldMap" ref="pubmedInputMap" />
 	</bean>
