@@ -48,7 +48,7 @@
 <%@page import="org.dspace.eperson.EPerson"%>
 <%@page import="org.dspace.versioning.VersionHistory"%>
 <%@page import="org.dspace.app.webui.servlet.MyDSpaceServlet"%>
-<%@page import="eu.zbw.EconStor.BibTeXGenerator.Generator"%>
+<%--<%@page import="eu.zbw.EconStor.BibTeXGenerator.Generator"%>--%>
 
 <%
     // Attributes
@@ -280,14 +280,14 @@ j(document).ready(function() {
     <%
         Metadatum[] cccheck = item.getMetadata("dc", "rights", Item.ANY, Item.ANY);
         for (Metadatum cc : cccheck) {
-            if (cc.value.length() >= 27 && cc.value.substring(8,27).equals("creativecommons.org")) {
+            if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
                 String[] creativecommonsArray = cc.value.split("/");
                 creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1]+"/";
                 creativecommonslink = cc.value;
             }
         }
         if (creativecommons != "") {
-    %>
+%>
                     <div class="well"><fmt:message key="jsp.display-item.creativecommons"/>
                         <% if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/cc0/") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">
@@ -304,6 +304,35 @@ j(document).ready(function() {
                         <% } %>
                     </div>
     <%
+        } else {
+
+        Metadatum[] cc = item.getMetadata("dc", "rights", "cc", Item.ANY);
+        Metadatum[] ccv = item.getMetadata("dc", "rights", "ccversion", Item.ANY);
+        if (cc.length != 0) {
+            creativecommonslink = creativecommons = cc[0].value;
+        }
+        if (ccv.length != 0) {
+            creativecommonslink += "/" + ccv[0].value;
+        }
+        if (creativecommons != "") {
+    %>
+                    <div class="well"><fmt:message key="jsp.display-item.creativecommons"/>
+                        <% if (creativecommons == "cc-null") { %>
+                            <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">
+                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" />
+                            </a>
+                        <% } else if (creativecommons == "pd") { %>
+                            <a href="https://creativecommons.org/share-your-work/public-domain/pdm/">
+                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" />
+                            </a>
+                        <% } else { %>
+                            <a href="https://creativecommons.org/licenses/<%= creativecommonslink %>">
+                                <img src="https://licensebuttons.net/l/<%= creativecommonslink %>/88x31.png" alt="<%= creativecommonslink %>" />
+                            </a>
+                        <% } %>
+                    </div>
+    <%
+        }
         }
     %>
 
@@ -667,12 +696,13 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
-<% if(submitter_button || StringUtils.isNotBlank(crisID)) { %>
+<%-- if(submitter_button || StringUtils.isNotBlank(crisID)) { --%>
+<% if(submitter_button) { %>
        <div class="col-sm-5 col-md-4 col-lg-3">
             <div class="panel panel-warning">
             	<div class="panel-heading"><fmt:message key="jsp.usertools"/></div>
 
-
+<%--
             <% if(StringUtils.isNotBlank(crisID)) { %>
             	<div class="panel-body">
         			<a class="btn btn-primary col-md-12" href="<%= request.getContextPath() %>/tools/claim?handle=<%= handle %>">
@@ -680,6 +710,7 @@ if (dedupEnabled && admin_button) { %>
         			</a>    	
             	</div>
     <% } %>
+--%>
 <%
 //        if (submitter_button && hasVersionButton) {
         if (submitter_button) {
@@ -698,11 +729,11 @@ if (dedupEnabled && admin_button) { %>
 <%
         }
 %>
-
-<!----------------- BibTeX-Export uebernommen von ZBW ------------------------->
        <div class="col-sm-5 col-md-4 col-lg-3">
             <div class="panel panel-warning">
             	<div class="panel-heading"><fmt:message key="jsp.exporttools"/></div>
+<%--
+<!----------------- BibTeX-Export uebernommen von ZBW ------------------------->
 <!--
     <div class="pannel-body">
         <a class="bibtexLink btn btn-primary" href="<%= request.getContextPath() %>/bibtexexport/<%= handle %>/<%= Generator.getBibTeXIdentifier(item) %>.bib">
@@ -711,6 +742,7 @@ if (dedupEnabled && admin_button) { %>
     </div>
 -->
 <!----------------- Ende BibTeX-Export ------------------------->
+--%>
 <!----------------- BibTeX-Export DSpace CRIS ------------------------->
     <%
     	if (exportBiblioEnabled && ( exportBiblioAll || user!=null ) ) {
@@ -734,9 +766,11 @@ if (dedupEnabled && admin_button) { %>
 
     		
     	<% } %>
+<%--
     		<label class="checkbox-inline">
     			<input type="checkbox" id="email" name="email" value="true"/><fmt:message key="exportcitation.option.email" />
     		</label>
+--%>
     			<input type="hidden" name="item_id" value="<%= item.getID() %>" />
     			<input id="export-submit-button" class="bibtexLink btn btn-primary" type="submit" name="submit_export" value="<fmt:message key="exportcitation.option.submitexport" />" />
     		</div>	
