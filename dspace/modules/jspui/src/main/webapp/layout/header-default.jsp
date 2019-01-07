@@ -73,7 +73,6 @@
 		<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/bootstrap-datetimepicker.min.css" />
             <link rel="stylesheet" href="<%= request.getContextPath() %>/css/tubhh.css" type="text/css" />
             <link rel="stylesheet" href="<%= request.getContextPath() %>/css/tor.css" type="text/css" />
-            <link rel="stylesheet" href="<%= request.getContextPath() %>/css/tor-testsystem.css" type="text/css" />
 <%
     if (!"NONE".equals(feedRef))
     {
@@ -166,7 +165,7 @@
 <a class="sr-only" href="#content">Skip navigation</a>
 
 <!-- language switch? -->
-<div class="headmenu">
+<div class="headmenu hide">
     <div class="headmenucol">
 	<a href="">Dummy </a>
     </div>
