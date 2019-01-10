@@ -1,4 +1,6 @@
-DSpace CRIS Integration
-=======================
+This is the prototype built by Hamburg University of Technology in context of the Hamburg Open Science program (HOS).
 
-Check the Wiki: https://wiki.duraspace.org/display/DSPACECRIS/DSpace-CRIS+Home
+It's based on DSpace CRIS (Check the Wiki: https://wiki.duraspace.org/display/DSPACECRIS/DSpace-CRIS+Home).
+
+You can set it up like a normal DSpace system. Compared to generic DSpace CRIS it contains some customizations in the code. There are also some additional metadataformat schemas and the entity configuration has been modified.
+See file TOR-README for further instructions (in german).
