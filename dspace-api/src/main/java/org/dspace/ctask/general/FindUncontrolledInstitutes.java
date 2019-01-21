@@ -82,13 +82,13 @@ public class FindUncontrolledInstitutes extends AbstractCurationTask
                 Context context = Curator.curationContext();
                 Metadatum[] institutes = item.getMetadata("tuhh", "publication", "institute", Item.ANY);
                 if (institutes.length == 0) {
-                    resultsString.append("No institute set for ").append(getItemHandle(item)).append("<br/>!\n");
+                    resultsString.append("No institute set for ").append(getItemHandle(item)).append("!<br/>\n");
                 }
                 else {
                     for (Metadatum institute : institutes) {
                         String auth = institute.authority;
                         if (auth != null) {
-                            resultsString.append("No authority for item ").append(getItemHandle(item)).append("<br/>!\n");
+                            resultsString.append("No authority for item ").append(getItemHandle(item)).append(" for institute ").append(institute.value).append("!<br/>\n");
                         }
                     }
                 }
