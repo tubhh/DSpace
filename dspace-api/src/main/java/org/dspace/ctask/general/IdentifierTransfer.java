@@ -31,17 +31,10 @@ import java.sql.SQLException;
 
 
 /**
- * A basic link checker that is designed to be extended. By default this link checker
- * will check that all links stored in anyschema.anyelement.uri metadata fields return
- * a 20x status code.
- *
- * This link checker can be enhanced by extending this class, and overriding the
- * getURLs and checkURL methods.
- *
  * @author Oliver Goldschmidt
  */
 
-public class TypeSetter extends AbstractCurationTask
+public class IdentifierTransfer extends AbstractCurationTask
 {
 
     // The status of the link checking of this item
@@ -79,39 +72,43 @@ public class TypeSetter extends AbstractCurationTask
             if (!getItemHandle(item).equals(NEW_ITEM_HANDLE)) {
             try {
                 Context context = Curator.curationContext();
-                Metadatum[] types = item.getMetadata("dc", "type", null, Item.ANY);
-                String type = "";
-                if (types.length > 0) {
-                    type = types[0].value;
-                }
-                else {
-                    results.append("No type set for ").append(getItemHandle(item)).append(". Leaving it unset, but setting other type fields.\n");
-                }
-                String thesistype = "";
-                Metadatum[] thesistypes = item.getMetadata("dc", "type", "thesis", Item.ANY);
-                if (thesistypes.length > 0) {
-                    thesistype = thesistypes[0].value;
+                Metadatum[] hdls = item.getMetadata("dc", "identifier", "hdl", Item.ANY);
+                //String hdl = extractHdl(uris);
+                if (hdls.length == 0) {
+                    results.append("Adding handle ").append(getItemHandle(item)).append(" to item ").append(getItemHandle(item)).append("\n");
+                    item.addMetadata("dc", "identifier", "hdl", null, getItemHandle(item), null, -1);
                 }
 
-                item.clearMetadata("dc", "type", "casrai", Item.ANY);
-                item.clearMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
-                item.clearMetadata("dc", "type", "dini", Item.ANY);
-                item.clearMetadata("dc", "type", "driver", Item.ANY);
-                item.clearMetadata("tuhh", "type", "opus", Item.ANY);
+                Metadatum[] tuhhurnMd = item.getMetadata("tuhh", "identifier", "urn", Item.ANY);
+                String tuhhurn = "";
+                if (tuhhurnMd.length > 0) {
+                    tuhhurn = tuhhurnMd[0].value;
+                    Metadatum[] urnMd = item.getMetadata("dc", "identifier", "urn", Item.ANY);
+                    if (urnMd.length == 0) {
+                        item.addMetadata("dc", "identifier", "urn", null, tuhhurn, null, -1);
+                        results.append("Added TUHH URN "+tuhhurn+" to dc.identifier.urn.\n");
+                    }
+                }
 
-                Map<String, String> typeset = mapTypeArray(type, thesistype);
-                item.addMetadata("dc", "type", "dini", null, typeset.get("dini"), null, -1);
-                item.addMetadata("dc", "type", "driver", null, typeset.get("driver"), null, -1);
-                item.addMetadata("dc", "type", "casrai", null, typeset.get("casrai"), null, -1);
-                item.addMetadata("dcterms", "DCMIType", null, null, typeset.get("dcmi"), null, -1);
-                item.addMetadata("tuhh", "type", "opus", null, typeset.get("opus"), null, -1);
+                Metadatum[] tuhhdoi = item.getMetadata("tuhh", "identifier", "doi", Item.ANY);
+                if (tuhhdoi.length == 0) {
+                    Metadatum[] uris = item.getMetadata("dc", "identifier", "uri", Item.ANY);
+                    String doi = extractDOI(uris);
+                    //Metadatum[] dois = item.getMetadata("tuhh", "identifier", "doi", Item.ANY);
 
-                results.append("Setting types for ").append(getItemHandle(item)).append(":\n");
-                results.append("DINI: ").append(typeset.get("dini")).append("\n");
-                results.append("DRIVER: ").append(typeset.get("driver")).append(":\n");
-                results.append("Casrai: ").append(typeset.get("casrai")).append(":\n");
-                results.append("DCMI: ").append(typeset.get("dcmi")).append(":\n");
-                results.append("Opus: ").append(typeset.get("opus")).append(":\n");
+                    item.clearMetadata("dc", "identifier", "uri", Item.ANY);
+                    for (Metadatum uri : uris) {
+                        String name = uri.value;
+                        String isdoi = name.substring(0, 26);
+                        if (isdoi == "http://dx.doi.org/10.0137/" || isdoi == "http://dx.doi.org/10.15480" || isdoi == "http://dx.doi.org/10.5072/") {
+                            results.append("Adding DOI ").append(doi).append(" to item ").append(getItemHandle(item)).append("\n");
+                            item.addMetadata("tuhh", "identifier", "doi", null, doi, null, -1);
+                            item.addMetadata("dc", "identifier", "doi", null, doi, null, -1);
+                        } else {
+                            item.addMetadata("dc", "identifier", "uri", uri.language, uri.value, uri.authority, uri.confidence);
+                        }
+                    }
+                }
 
                 status = Curator.CURATE_SUCCESS;
 
@@ -147,6 +144,28 @@ public class TypeSetter extends AbstractCurationTask
         {
             log.debug(message);
         }
+    }
+
+    private static String extractDOI(Metadatum[] names) {
+        for (Metadatum uri : names) {
+            String name = uri.value;
+            String isdoi = name.substring(0, 26);
+            if (isdoi == "http://dx.doi.org/10.0137/" || isdoi == "http://dx.doi.org/10.15480" || isdoi == "http://dx.doi.org/10.5072/") {
+                return name.substring(18);
+            }
+        }
+        return null;
+    }
+
+    private static String extractHdl(Metadatum[] names) {
+        for (Metadatum uri : names) {
+            String name = uri.value;
+            String[] parts = name.split("/handle/");
+            if (parts.length > 0) {
+                return parts[1];
+            }
+        }
+        return null;
     }
 
     private static String getItemHandle(Item item)
