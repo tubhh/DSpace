@@ -87,7 +87,7 @@ public class FindUncontrolledInstitutes extends AbstractCurationTask
                 else {
                     for (Metadatum institute : institutes) {
                         String auth = institute.authority;
-                        if (auth != null) {
+                        if (auth == null) {
                             resultsString.append("No authority for item ").append(getItemHandle(item)).append(" for institute ").append(institute.value).append("!<br/>\n");
                         }
                     }
