@@ -282,7 +282,11 @@ j(document).ready(function() {
         for (Metadatum cc : cccheck) {
             if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
                 String[] creativecommonsArray = cc.value.split("/");
-                creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1]+"/";
+                if (creativecommonsArray[creativecommonsArray.length-1].equals("deed.de")) {
+                    creativecommons = creativecommonsArray[creativecommonsArray.length-4]+"/"+creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                } else {
+                    creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1];
+                }
                 creativecommonslink = cc.value;
             }
         }
