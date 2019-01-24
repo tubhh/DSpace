@@ -630,6 +630,250 @@
 
    </form>
 
+   <form name="fdm">
+     <page number="1">
+         
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Data type</label>
+         <input-type value-pairs-name="fdm_types_en">dropdown</input-type>
+         <hint>Select the resource type of your data file(s).</hint>
+         <required>The resource type of your data is required.</required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>title</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Title</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required>Please enter the main title for this item.</required>
+       </field>
+
+      <field>
+          <dc-element>contributor</dc-element>
+          <dc-qualifier>department</dc-qualifier>
+          <label>Author Department</label>
+          <input-type>onebox</input-type>
+          <repeatable>true</repeatable>
+          <parent>dc_contributor_author</parent>
+          <required></required>
+          <hint>Enter an affiliation for each author.</hint>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>author</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Author</label>
+         <input-type>name</input-type>
+         <!--<hint>Enter the names of the authors of this item below.</hint>-->
+         <required>Please enter the author(s) of the dataset.</required>
+       </field>
+
+       <field>
+         <dc-schema>datacite</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Contributors</label>
+         <input-type value-pairs-name="contributor_fdm_en">qualdrop_value</input-type>
+         <hint>Enter the names of the contributing persons (last name, first name) or corporates here and select their role</hint>
+         <required></required>
+       </field>
+         
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>date</dc-element>
+         <dc-qualifier>issued</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Date of Issue</label>
+         <input-type>date</input-type>
+         <hint>Please give the date of publication below.  You can leave out the day and/or month if they aren't applicable.</hint>
+         <required>Please enter at least the year of your data publication.</required>
+       </field>
+         
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>language</dc-element>
+         <dc-qualifier>iso</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Language</label>
+         <input-type value-pairs-name="common_iso_languages_en">dropdown</input-type>
+         <!--<hint>Select the language of the main content of the item.  If the language does not appear in the list below, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>-->
+         <required></required>
+       </field>
+         
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>abstract</dc-element>
+         <dc-qualifier>english</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Description (English)</label>
+         <input-type>textarea</input-type>
+         <hint>Information about content, context and reuse of your data.</hint>
+         <required>Please enter descriptive information.</required>
+       </field>
+         
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>abstract</dc-element>
+         <dc-qualifier>german</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Description (German)</label>
+         <input-type>textarea</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+         
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>subject</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Key Word</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>subject</dc-element>
+         <dc-qualifier>ddc</dc-qualifier>
+         <!-- An input-type of twobox MUST be marked as repeatable -->
+         <repeatable>true</repeatable>
+         <label>DDC class</label>
+         <input-type>twobox</input-type>
+         <hint>Select an appropriate subject class below. </hint>
+         <required>One DDC class is required as a minimum!</required>
+         <vocabulary>ddc_en</vocabulary>
+         <visibility>workflow</visibility>
+       </field>
+         
+
+       <field>
+         <dc-schema>datacite</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Related Identifiers</label>
+         <input-type value-pairs-name="relation_types_en">qualdrop_value</input-type>
+         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>openaire</dc-schema>
+         <dc-element>rights</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Access Rights</label>
+         <input-type value-pairs-name="access_rights">dropdown</input-type>
+         <hint>Select the access rights policy appropriate for this publication.</hint>
+         <required>Please select access rights policy!</required>
+         <visibility>workflow</visibility>
+        </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>rights</dc-element>
+         <dc-qualifier>cc</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>CreativeCommons Lizenz</label>
+         <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
+         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf https://creativecommons.org.</hint>
+         <required></required>
+       </field>
+         
+
+       <field>
+         <dc-schema>openaire</dc-schema>
+         <dc-element>funder</dc-element>
+         <dc-qualifier>name</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>EU funder</label>
+         <input-type value-pairs-name="funder_names">dropdown</input-type>
+         <hint>For EU-Projects: Please fill out the next three fields.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>openaire</dc-schema>
+         <dc-element>funder</dc-element>
+         <dc-qualifier>programme</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>EU funding programme</label>
+         <input-type value-pairs-name="funding_programmes">dropdown</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>openaire</dc-schema>
+         <dc-element>funder</dc-element>
+         <dc-qualifier>projectid</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>EU project ID</label>
+         <input-type>textarea</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>project</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Project</label>
+         <input-type>onebox</input-type>
+         <hint>For projects without EU funding</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>sponsorship</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Funder</label>
+         <input-type>textarea</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>sponsor</dc-element>
+         <dc-qualifier>doi</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Fundref-DOI</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the doi of one sponsor (according to Fundref, http://fundref.org/fundref/fundref_registry.html) in the box below. </hint>
+         <required></required>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>publication</dc-element>
+         <dc-qualifier>institute</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>TUHH-Institute / Workgroup</label>
+         <input-type>onebox</input-type>
+         <hint>Hamburg University of Technology (TUHH):</hint>
+         <required></required>
+       </field>
+     </page>
+         
+   </form>
+
  </form-definitions>
 
 
@@ -647,6 +891,172 @@
  <!-- stores the associated stored-values in the database.                  -->
 
  <form-value-pairs>
+   <value-pairs value-pairs-name="relation_types_en" dc-term="datacite_relation">
+     <pair>
+       <displayed-value>cites</displayed-value>
+       <stored-value>Cites</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is cited by</displayed-value>
+       <stored-value>IsCitedBy</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is supplemented by</displayed-value>
+       <stored-value>IsSupplementedBy</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is a supplement to</displayed-value>
+       <stored-value>IsSupplementTo</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is referenced by</displayed-value>
+       <stored-value>IsReferencedBy</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>references</displayed-value>
+       <stored-value>References</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is previous version of</displayed-value>
+       <stored-value>IsPreviousVersionOf</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is new version of</displayed-value>
+       <stored-value>IsNewVersionOf</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>has as part</displayed-value>
+       <stored-value>HasPart</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is part of</displayed-value>
+       <stored-value>IsPartOf</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>documents</displayed-value>
+       <stored-value>Documents</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is documented by</displayed-value>
+       <stored-value>IsDocumentedBy</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is compiled/created by</displayed-value>
+       <stored-value>IsCompiledBy</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>compiled/created</displayed-value>
+       <stored-value>Compiles</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>is identical to</displayed-value>
+       <stored-value>IsIdenticalTo</stored-value>
+     </pair>
+<!--
+     <pair>
+       <displayed-value>is an alternate identifier of this upload</displayed-value>
+       <stored-value>IsAlternateIdentifier</stored-value>
+     </pair>
+-->
+   </value-pairs>
+
+   <value-pairs value-pairs-name="fdm_types_en" dc-term="type">
+     <pair>
+       <displayed-value>Dataset</displayed-value>
+       <stored-value>Dataset</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Audiovisual</displayed-value>
+       <stored-value>Audiovisual</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>DataPaper</displayed-value>
+       <stored-value>DataPaper</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Image</displayed-value>
+       <stored-value>Image</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Image (3D)</displayed-value>
+       <stored-value>Image, 3-D</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>InteractiveResource</displayed-value>
+       <stored-value>InteractiveResource</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Software</displayed-value>
+       <stored-value>Software</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Sound</displayed-value>
+       <stored-value>Sound</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Other</displayed-value>
+       <stored-value>Other</stored-value>
+     </pair>
+   </value-pairs>
+     
+   <value-pairs value-pairs-name="contributor_fdm_en" dc-term="datacite_contributor">
+     <pair>
+       <displayed-value>Data Collector</displayed-value>
+       <stored-value>DataCollector</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Data Curator</displayed-value>
+       <stored-value>DataCurator</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Researcher</displayed-value>
+       <stored-value>Researcher</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Contact Person</displayed-value>
+       <stored-value>ContactPerson</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Other</displayed-value>
+       <stored-value>Other</stored-value>
+     </pair>
+   </value-pairs>
+     
+   <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_rights_uri">
+     <pair>
+       <displayed-value>No CC license</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
+       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+   </value-pairs>
+
    <value-pairs value-pairs-name="nl_en" dc-term="nlrights">
      <pair>
        <displayed-value>No</displayed-value>
