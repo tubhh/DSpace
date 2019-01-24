@@ -355,19 +355,42 @@ public class TypeSettingConsumer implements Consumer
             ret.put("dcmi", "Text");
             break;
         case "Music":
+        case "Sound":
             ret.put("opus", "Musik");
             ret.put("dini", "Sound");
             ret.put("driver", "Sound");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Sound");
             break;
-        case "Other":
-            ret.put("opus", "Sonstiges");
-            ret.put("dini", "Other");
+        case "Dataset":
+            ret.put("opus", "Dataset");
+            ret.put("dini", "ResearchData");
             ret.put("driver", "other");
             ret.put("casrai", "Other");
+            ret.put("dcmi", "Dataset");
+            break;
+        case "Audiovisual":
+            ret.put("opus", "Audiovisuell");
+            ret.put("dini", "MovingImage");
+            ret.put("driver", "other");
+            ret.put("casrai", "Online Resource");
+            ret.put("dcmi", "Image");
+            break;
+        case "DataPaper":
+            ret.put("opus", "DataPaper");
+            ret.put("dini", "ResearchData");
+            ret.put("driver", "other");
+            ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Text");
             break;
+        case "InteractiveResource":
+            ret.put("opus", "Interactive Resource");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Online Resource");
+            ret.put("dcmi", "InteractiveResource");
+            break;
+        case "Other":
         default:
             ret.put("opus", "Sonstiges");
             ret.put("dini", "Other");
