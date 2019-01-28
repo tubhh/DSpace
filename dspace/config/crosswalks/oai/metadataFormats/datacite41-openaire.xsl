@@ -116,8 +116,8 @@
 										  	</nameIdentifier>
 										</xsl:if>
 									<xsl:if test="$gndid[$counter]!='' and $gndid[$counter]!=$placeholder">
-							        		<nameIdentifier schemeURI="https://d-nb.de/" nameIdentifierScheme="GND">
-										   		<!-- <xsl:text>https://d-nb.de/</xsl:text> -->
+							        		<nameIdentifier schemeURI="https://d-nb.info/gnd" nameIdentifierScheme="GND">
+										   		<!-- <xsl:text>https://d-nb.info/gnd/</xsl:text> -->
 										   		<xsl:value-of select="$gndid[$counter]"/>
 										  	</nameIdentifier>
 									</xsl:if>
