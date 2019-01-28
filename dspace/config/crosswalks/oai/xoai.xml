@@ -18,21 +18,198 @@
             <!-- Restrict access to hidden items by default -->
             <Filter ref="defaultFilter" />
 
+            <Set ref="openaccessSet"/>
+
+            <!-- DINI-Zertifikat -->
+            <!-- Publikationstypen -->
+            <Set ref="doctypepreprintSet" />
+            <Set ref="doctypeworkingPaperSet" />
+            <Set ref="doctypearticleSet" />
+            <Set ref="doctypecontributionToPeriodicalSet" />
+            <Set ref="doctypePeriodicalPartSet" />
+            <Set ref="doctypePeriodicalSet" />
+            <Set ref="doctypebookSet" />
+            <Set ref="doctypebookPartSet" />
+            <Set ref="doctypeManuscriptSet" />
+            <Set ref="doctypeStudyThesisSet" />
+            <Set ref="doctypebachelorThesisSet" />
+            <Set ref="doctypemasterThesisSet" />
+            <Set ref="doctypedoctoralThesisSet" />
+            <Set ref="doctypeconferenceObjectSet" />
+            <Set ref="doctypelectureSet" />
+            <Set ref="doctypereviewSet" />
+            <Set ref="doctypeannotationSet" />
+            <Set ref="doctypepatentSet" />
+            <Set ref="doctypereportSet" />
+            <Set ref="doctypeMusicalNotationSet" />
+            <Set ref="doctypeSoundSet" />
+            <Set ref="doctypeImageSet" />
+            <Set ref="doctypeMovingImageSet" />
+            <Set ref="doctypeStillImageSet" />
+            <Set ref="doctypeCourseMaterialSet" />
+            <Set ref="doctypeWebsiteSet" />
+            <Set ref="doctypeSoftwareSet" />
+            <Set ref="doctypeCarthographicMaterialSet" />
+            <Set ref="doctypeResearchDataSet" />
+            <Set ref="doctypeOtherSet" />
+            <Set ref="doctypeTextSet" />
+
+            <!-- DINI-Zertifikat -->
+			<!-- Sets fuer DDC Sachgruppen -->
+			<!-- Based on: DDC-Sachgruppen ab Bibliografie-Jahrgang 2004 für den Neuerscheinungsdienst und die Reihen A, B, C, H und O der Deutschen Nationalbibliografie mit enthaltenen DDC-Klassen (auf Grundlage der 23. Ausgabe der DDC) Stand: 01.01.2013 
+			without the non DDC Groups B, K, S -->
+			
+			<Set ref="ddc000Set" />
+			<Set ref="ddc004Set" />
+			<Set ref="ddc010Set" />
+			<Set ref="ddc020Set" />
+			<Set ref="ddc030Set" />
+			<Set ref="ddc050Set" />
+			<Set ref="ddc060Set" />
+			<Set ref="ddc070Set" />
+			<Set ref="ddc080Set" />
+			<Set ref="ddc090Set" />
+			<Set ref="ddc100Set" />
+			<Set ref="ddc130Set" />
+			<Set ref="ddc150Set" />
+			<Set ref="ddc200Set" />
+			<Set ref="ddc220Set" />
+			<Set ref="ddc230Set" />
+			<Set ref="ddc290Set" />
+			<Set ref="ddc300Set" />
+			<Set ref="ddc310Set" />
+			<Set ref="ddc320Set" />	
+			<Set ref="ddc330Set" />
+			<Set ref="ddc333.7Set" />
+			<Set ref="ddc340Set" />
+			<Set ref="ddc350Set" />
+			<Set ref="ddc355Set" />
+			<Set ref="ddc360Set" />
+			<Set ref="ddc370Set" />
+			<Set ref="ddc380Set" />
+			<Set ref="ddc390Set" />
+			<Set ref="ddc400Set" />	
+			<Set ref="ddc420Set" />
+			<Set ref="ddc430Set" />
+			<Set ref="ddc439Set" />
+			<Set ref="ddc440Set" />
+			<Set ref="ddc450Set" />
+			<Set ref="ddc460Set" />
+			<Set ref="ddc470Set" />
+			<Set ref="ddc480Set" />
+			<Set ref="ddc490Set" />
+			<Set ref="ddc491.8Set" />	
+			<Set ref="ddc500Set" />
+			<Set ref="ddc510Set" />
+			<Set ref="ddc520Set" />
+			<Set ref="ddc530Set" />
+			<Set ref="ddc540Set" />
+			<Set ref="ddc550Set" />
+			<Set ref="ddc560Set" />
+			<Set ref="ddc570Set" />
+			<Set ref="ddc580Set" />
+			<Set ref="ddc590Set" />	
+			<Set ref="ddc600Set" />
+			<Set ref="ddc610Set" />
+			<Set ref="ddc620Set" />
+			<Set ref="ddc621.3Set" />
+			<Set ref="ddc624Set" />
+			<Set ref="ddc630Set" />
+			<Set ref="ddc640Set" />
+			<Set ref="ddc650Set" />
+			<Set ref="ddc660Set" />
+			<Set ref="ddc670Set" />	
+			<Set ref="ddc690Set" />
+			<Set ref="ddc700Set" />
+			<Set ref="ddc710Set" />
+			<Set ref="ddc720Set" />
+			<Set ref="ddc730Set" />
+			<Set ref="ddc740Set" />
+			<Set ref="ddc741.5Set" />
+			<Set ref="ddc750Set" />
+			<Set ref="ddc760Set" />
+			<Set ref="ddc770Set" />	
+			<Set ref="ddc780Set" />
+			<Set ref="ddc790Set" />
+			<Set ref="ddc791Set" />
+			<Set ref="ddc792Set" />
+			<Set ref="ddc793Set" />
+			<Set ref="ddc796Set" />
+			<Set ref="ddc800Set" />
+			<Set ref="ddc810Set" />
+			<Set ref="ddc820Set" />
+			<Set ref="ddc830Set" />	
+			<Set ref="ddc839Set" />
+			<Set ref="ddc840Set" />
+			<Set ref="ddc850Set" />
+			<Set ref="ddc860Set" />
+			<Set ref="ddc870Set" />
+			<Set ref="ddc880Set" />
+			<Set ref="ddc890Set" />
+			<Set ref="ddc891.8Set" />
+			<Set ref="ddc900Set" />
+			<Set ref="ddc910Set" />	
+			<Set ref="ddc914.3Set" />
+			<Set ref="ddc920Set" />
+			<Set ref="ddc930Set" />
+			<Set ref="ddc940Set" />
+			<Set ref="ddc943Set" />
+			<Set ref="ddc950Set" />
+			<Set ref="ddc960Set" />
+			<Set ref="ddc970Set" />
+			<Set ref="ddc980Set" />
+			<Set ref="ddc990Set" />
+
+            <!-- formats to expose on default context -->
             <Format ref="oaidc"/>
-            <Format ref="mets"/>
-            <Format ref="xoai"/>
-            <Format ref="didl"/>
-            <Format ref="dim"/>
-            <Format ref="ore"/>
-            <Format ref="rdf"/>
-            <Format ref="etdms"/>
-            <Format ref="mods"/>
-            <Format ref="qdc"/>
-            <Format ref="marc"/>
-            <Format ref="uketd_dc"/>
-            <!--<Format ref="junii2" />-->            
+            <Format ref="xmetadissplus" />
+            <Format ref="epicur" />
+            <Format ref="rdf" />
+            <Format ref="marc" />
+            <Format ref="xmetadissplus13" />
+            <!--<Format ref="dim" />-->
+            <Format ref="datacite41_openaire"/>
+            <Format ref="qdc" />
+            <Format ref="ore" />
+
             <Description>
                 This is the default context of the DSpace OAI-PMH data provider.
+            </Description>
+        </Context>
+
+        <Context baseurl="urn" name="URN Harvesting for DNB">
+            <Filter ref="urnexistsFilter"/>
+
+            <Format ref="epicur"/>
+            <Format ref="xmetadissplus"/>
+            <Description>
+                Context for the DNB to harvest records with URN only
+            </Description>
+        </Context>
+
+        <Context baseurl="hdl" name="Only records without URN">
+            <!-- Output in OAI? -->
+            <Filter ref="hasNoUrnFilter" />
+
+            <Format ref="xmetadissplus" />
+            <Description>
+                Context for the DNB to harvest records without URN only
+            </Description>
+        </Context>
+
+        <Context baseurl="cbs" name="WinIBW list with PPNs">
+            <Filter ref="ppnexistsFilter" />
+            <Format ref="xmetadissplus13" />
+            <Description>
+                Context for use with the macro from WinIBW
+            </Description>
+        </Context>
+
+        <Context baseurl="cbsnoppn" name="WinIBW list without PPNs">
+            <Filter ref="hasNoPPNFilter" />
+            <Format ref="xmetadissplus13" />
+            <Description>
+                Context to use with the macro from WinIBW
             </Description>
         </Context>
 
@@ -47,7 +224,7 @@
             <!-- Date format, field prefixes, etc are ensured by the transformer -->
             <Transformer ref="driverTransformer"/>
             <!-- The driver filter -->
-            <Filter ref="driverFilter"/>
+            <Filter red="driverFilter"/>
             <!-- Just an alias, in fact it returns all items within the driver context -->
             <Set ref="driverSet"/>
             <!-- Metadata Formats -->
@@ -62,7 +239,7 @@
         <!--
             OpenAIRE Guidelines 1.1:
 
-            - https://guidelines.openaire.eu/en/latest/
+            - http://www.openaire.eu/en/component/attachments/download/79%E2%8C%A9=en
 
             There is a limitation over the embargoedEndDate parameter:
 
@@ -71,10 +248,14 @@
         <Context baseurl="openaire" name="OpenAIRE Context">
             <!-- Date format, field prefixes, etc are ensured by the transformer -->
             <Transformer ref="openaireTransformer"/>
+            <!-- The driver filter -->
+            <Filter red="driverFilter"/>
             <!-- OpenAIRE filter -->
-            <Filter ref="openAireFilter"/>
+<!--            <Filter ref="openAireFilter"/>       -->
             <!-- Just an alias, in fact it returns all items within the driver context -->
+            <Set ref="driverSet"/>
             <Set ref="openaireSet"/>
+            <Set ref="ecSet"/>
             <!-- Metadata Formats -->
             <Format ref="oaidc"/>
             <Format ref="mets"/>
@@ -82,7 +263,7 @@
                 This contexts complies with OpenAIRE rules.
             </Description>
         </Context>
-        
+
         <Context baseurl="openairedata" name="OpenAIRE Data Repository Context">
             <!-- OpenAIRE filter -->
             <Filter ref="openaireDataFilter"/>
@@ -96,10 +277,28 @@
                 This contexts complies with Data Archive OpenAIRE rules.
             </Description>
         </Context>
+
     </Contexts>
 
-
     <Formats>
+        <Format id="xmetadissplus">
+            <Prefix>xMetaDissPlus</Prefix>
+            <XSLT>metadataFormats/xMetaDissPlus.xsl</XSLT>
+            <Namespace>http://www.d-nb.de/standards/xmetadissplus/</Namespace>
+            <SchemaLocation>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</SchemaLocation>
+        </Format>
+        <Format id="xmetadissplus13">
+            <Prefix>xMetaDissPlus13</Prefix>
+            <XSLT>metadataFormats/xMetaDissPlus13.xsl</XSLT>
+            <Namespace>http://www.bsz-bw.de/xmetadissplus/1.3</Namespace>
+            <SchemaLocation>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</SchemaLocation>
+        </Format>
+        <Format id="epicur">
+            <Prefix>epicur</Prefix>
+            <XSLT>metadataFormats/epicur.xsl</XSLT>
+            <Namespace>urn:nbn:de:1111-2004033116</Namespace>
+            <SchemaLocation>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</SchemaLocation>
+        </Format>
         <Format id="oaidc">
             <Prefix>oai_dc</Prefix>
             <XSLT>metadataFormats/oai_dc.xsl</XSLT>
@@ -199,8 +398,1712 @@
         </Transformer>
     </Transformers>
 
-
     <Filters>
+
+		<!-- DINI Zertifikat -->
+		<!-- Filter fuer DDC-Sachgruppen -->
+		<!-- Based on: DDC-Sachgruppen ab Bibliografie-Jahrgang 2004 für den Neuerscheinungsdienst und die Reihen A, B, C, H und O der Deutschen Nationalbibliografie mit enthaltenen DDC-Klassen (auf Grundlage der 23. Ausgabe der DDC) Stand: 01.01.2013 
+			without the non DDC Groups B, K, S -->
+		<Filter id="ddc000Filter">
+            <Definition>
+                <Custom ref="ddc000Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc004Filter">
+            <Definition>
+                <Custom ref="ddc004Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc010Filter">
+            <Definition>
+                <Custom ref="ddc010Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc020Filter">
+            <Definition>
+                <Custom ref="ddc020Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc030Filter">
+            <Definition>
+                <Custom ref="ddc030Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc050Filter">
+            <Definition>
+                <Custom ref="ddc050Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc060Filter">
+            <Definition>
+                <Custom ref="ddc060Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc070Filter">
+            <Definition>
+                <Custom ref="ddc070Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc080Filter">
+            <Definition>
+                <Custom ref="ddc080Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc090Filter">
+            <Definition>
+                <Custom ref="ddc090Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc100Filter">
+            <Definition>
+                <Custom ref="ddc100Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc130Filter">
+            <Definition>
+                <Custom ref="ddc130Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc150Filter">
+            <Definition>
+                <Custom ref="ddc150Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc200Filter">
+            <Definition>
+                <Custom ref="ddc200Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc220Filter">
+            <Definition>
+                <Custom ref="ddc220Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc230Filter">
+            <Definition>
+                <Custom ref="ddc230Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc290Filter">
+            <Definition>
+                <Custom ref="ddc290Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc300Filter">
+            <Definition>
+                <Custom ref="ddc300Condition"/>
+            </Definition>
+        </Filter>
+		<Filter id="ddc310Filter">
+			<Definition>
+				<Custom ref="ddc310Condition"/>
+			</Definition>
+        </Filter>
+        <Filter id="ddc320Filter">
+            <Definition>
+                <Custom ref="ddc320Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc330Filter">
+            <Definition>
+                <Custom ref="ddc330Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc333.7Filter">
+            <Definition>
+                <Custom ref="ddc333.7Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc340Filter">
+            <Definition>
+                <Custom ref="ddc340Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc350Filter">
+            <Definition>
+                <Custom ref="ddc350Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc355Filter">
+            <Definition>
+                <Custom ref="ddc355Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc360Filter">
+            <Definition>
+                <Custom ref="ddc360Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc370Filter">
+            <Definition>
+                <Custom ref="ddc370Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc380Filter">
+            <Definition>
+                <Custom ref="ddc380Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc390Filter">
+            <Definition>
+                <Custom ref="ddc390Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc400Filter">
+            <Definition>
+                <Custom ref="ddc400Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc420Filter">
+            <Definition>
+                <Custom ref="ddc420Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc430Filter">
+            <Definition>
+                <Custom ref="ddc430Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc439Filter">
+            <Definition>
+                <Custom ref="ddc439Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc440Filter">
+            <Definition>
+                <Custom ref="ddc440Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc450Filter">
+            <Definition>
+                <Custom ref="ddc450Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc460Filter">
+            <Definition>
+                <Custom ref="ddc460Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc470Filter">
+            <Definition>
+                <Custom ref="ddc470Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc480Filter">
+            <Definition>
+                <Custom ref="ddc480Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc490Filter">
+            <Definition>
+                <Custom ref="ddc490Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc491.8Filter">
+            <Definition>
+                <Custom ref="ddc491.8Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc500Filter">
+            <Definition>
+                <Custom ref="ddc500Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc510Filter">
+            <Definition>
+                <Custom ref="ddc510Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc520Filter">
+            <Definition>
+                <Custom ref="ddc520Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc530Filter">
+            <Definition>
+                <Custom ref="ddc530Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc540Filter">
+            <Definition>
+                <Custom ref="ddc540Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc550Filter">
+            <Definition>
+                <Custom ref="ddc550Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc560Filter">
+            <Definition>
+                <Custom ref="ddc560Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc570Filter">
+            <Definition>
+                <Custom ref="ddc570Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc580Filter">
+            <Definition>
+                <Custom ref="ddc580Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc590Filter">
+            <Definition>
+                <Custom ref="ddc590Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc600Filter">
+            <Definition>
+                <Custom ref="ddc600Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc610Filter">
+            <Definition>
+                <Custom ref="ddc610Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc621.3Filter">
+            <Definition>
+                <Custom ref="ddc621.3Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc624Filter">
+            <Definition>
+                <Custom ref="ddc624Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc630Filter">
+            <Definition>
+                <Custom ref="ddc630Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc640Filter">
+            <Definition>
+                <Custom ref="ddc640Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc650Filter">
+            <Definition>
+                <Custom ref="ddc650Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc660Filter">
+            <Definition>
+                <Custom ref="ddc660Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc670Filter">
+            <Definition>
+                <Custom ref="ddc670Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc690Filter">
+            <Definition>
+                <Custom ref="ddc690Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc700Filter">
+            <Definition>
+                <Custom ref="ddc700Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc710Filter">
+            <Definition>
+                <Custom ref="ddc710Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc720Filter">
+            <Definition>
+                <Custom ref="ddc720Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc730Filter">
+            <Definition>
+                <Custom ref="ddc730Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc740Filter">
+            <Definition>
+                <Custom ref="ddc740Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc741.5Filter">
+            <Definition>
+                <Custom ref="ddc741.5Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc750Filter">
+            <Definition>
+                <Custom ref="ddc750Condition"/>
+            </Definition>
+        </Filter>		
+        <Filter id="ddc760Filter">
+            <Definition>
+                <Custom ref="ddc760Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc770Filter">
+            <Definition>
+                <Custom ref="ddc770Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc780Filter">
+            <Definition>
+                <Custom ref="ddc780Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc790Filter">
+            <Definition>
+                <Custom ref="ddc790Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc791Filter">
+            <Definition>
+                <Custom ref="ddc791Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc792Filter">
+            <Definition>
+                <Custom ref="ddc792Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc793Filter">
+            <Definition>
+                <Custom ref="ddc793Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc796Filter">
+            <Definition>
+                <Custom ref="ddc796Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc800Filter">
+            <Definition>
+                <Custom ref="ddc800Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc810Filter">
+            <Definition>
+                <Custom ref="ddc810Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc820Filter">
+            <Definition>
+                <Custom ref="ddc820Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc830Filter">
+            <Definition>
+                <Custom ref="ddc830Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc839Filter">
+            <Definition>
+                <Custom ref="ddc839Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc840Filter">
+            <Definition>
+                <Custom ref="ddc840Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc850Filter">
+            <Definition>
+                <Custom ref="ddc850Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc860Filter">
+            <Definition>
+                <Custom ref="ddc860Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc870Filter">
+            <Definition>
+                <Custom ref="ddc870Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc880Filter">
+            <Definition>
+                <Custom ref="ddc880Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc890Filter">
+            <Definition>
+                <Custom ref="ddc890Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc891.8Filter">
+            <Definition>
+                <Custom ref="ddc891.8Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc900Filter">
+            <Definition>
+                <Custom ref="ddc900Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc910Filter">
+            <Definition>
+                <Custom ref="ddc910Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc914.3Filter">
+            <Definition>
+                <Custom ref="ddc914.3Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc920Filter">
+            <Definition>
+                <Custom ref="ddc920Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc930Filter">
+            <Definition>
+                <Custom ref="ddc930Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc940Filter">
+            <Definition>
+                <Custom ref="ddc940Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc943Filter">
+            <Definition>
+                <Custom ref="ddc943Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc950Filter">
+            <Definition>
+                <Custom ref="ddc950Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc960Filter">
+            <Definition>
+                <Custom ref="ddc960Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc970Filter">
+            <Definition>
+                <Custom ref="ddc970Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc980Filter">
+            <Definition>
+                <Custom ref="ddc980Condition"/>
+            </Definition>
+        </Filter>
+        <Filter id="ddc990Filter">
+            <Definition>
+                <Custom ref="ddc990Condition"/>
+            </Definition>
+        </Filter>
+		<!-- Eldorado Anpassung - DINI Zertifikat -->
+		<!-- Filter fuer Publikationstypen -->
+        <Filter id="doctypepreprintFilter">
+            <Definition>
+                <Custom ref="doctypepreprintCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeworkingPaperFilter">
+            <Definition>
+                <Custom ref="doctypeworkingPaperCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypearticleFilter">
+            <Definition>
+                <Custom ref="doctypearticleCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypecontributionToPeriodicalFilter">
+            <Definition>
+                <Custom ref="doctypecontributionToPeriodicalCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypePeriodicalPartFilter">
+            <Definition>
+                <Custom ref="doctypePeriodicalPartCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypePeriodicalFilter">
+            <Definition>
+                <Custom ref="doctypePeriodicalCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypebookFilter">
+            <Definition>
+                <Custom ref="doctypebookCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypebookPartFilter">
+            <Definition>
+                <Custom ref="doctypebookPartCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeManuscriptFilter">
+            <Definition>
+                <Custom ref="doctypeManuscriptCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeStudyThesisFilter">
+            <Definition>
+                <Custom ref="doctypeStudyThesisCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypemasterThesisFilter">
+            <Definition>
+                <Custom ref="doctypemasterThesisCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypebachelorThesisFilter">
+            <Definition>
+                <Custom ref="doctypebachelorThesisCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypedoctoralThesisFilter">
+            <Definition>
+                <Custom ref="doctypedoctoralThesisCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeconferenceObjectFilter">
+            <Definition>
+                <Custom ref="doctypeconferenceObjectCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypelectureFilter">
+            <Definition>
+                <Custom ref="doctypelectureCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypereviewFilter">
+            <Definition>
+                <Custom ref="doctypereviewCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeannotationFilter">
+            <Definition>
+                <Custom ref="doctypeannotationCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypepatentFilter">
+            <Definition>
+                <Custom ref="doctypepatentCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypereportFilter">
+            <Definition>
+                <Custom ref="doctypereportCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeMusicalNotationFilter">
+            <Definition>
+                <Custom ref="doctypeMusicalNotationCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeSoundFilter">
+            <Definition>
+                <Custom ref="doctypeSoundCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeImageFilter">
+            <Definition>
+                <Custom ref="doctypeImageCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeMovingImageFilter">
+            <Definition>
+                <Custom ref="doctypeMovingImageCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeStillImageFilter">
+            <Definition>
+                <Custom ref="doctypeStillImageCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeCourseMaterialFilter">
+            <Definition>
+                <Custom ref="doctypeCourseMaterialCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeWebsiteFilter">
+            <Definition>
+                <Custom ref="doctypeWebsiteCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeSoftwareFilter">
+            <Definition>
+                <Custom ref="doctypeSoftwareCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeCarthographicMaterialFilter">
+            <Definition>
+                <Custom ref="doctypeCarthographicMaterialCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeResearchDataFilterFilter">
+            <Definition>
+                <Custom ref="doctypeResearchDataCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeOtherFilter">
+            <Definition>
+                <Custom ref="doctypeOtherCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="doctypeTextFilter">
+            <Definition>
+                <Custom ref="doctypeTextCondition"/>
+            </Definition>
+        </Filter>
+ 
+		<!-- Eldorado Anpassung - DINI Zertifikat -->
+		<!-- customConditions fuer Publikationstypen -->
+		<CustomCondition id="doctypepreprintCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.publicationtype</string>
+				<string name="operator">equal</string>
+				<string name="value">preprint</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeworkingPaperCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.publicationtype</string>
+				<string name="operator">equal</string>
+				<string name="value">workingPaper</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypearticleCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.publicationtype</string>
+				<string name="operator">equal</string>
+				<string name="value">article</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypecontributionToPeriodicalCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.publicationtype</string>
+				<string name="operator">equal</string>
+				<string name="value">contributionToPeriodical</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypePeriodicalPartCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">PeriodicalPart</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypePeriodicalCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">Periodical</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypebookCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">book</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypebookPartCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">bookPart</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeManuscriptCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">Manuscript</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeStudyThesisCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">StudyThesis</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypemasterThesisCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">masterThesis</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypebachelorThesisCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">bachelorThesis</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypedoctoralThesisCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">doctoralThesis</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeconferenceObjectCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">conferenceObject</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypelectureCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">lecture</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypereviewCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">review</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeannotationCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">annotation</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypepatentCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">patent</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypereportCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">report</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeMusicalNotationCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">MusicalNotation</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeSoundCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">Sound</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeImageCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">Image</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeMovingImageCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">MovingImage</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeStillImageCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">StillImage</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeCourseMaterialCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">CourseMaterial</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeWebsiteCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">Website</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeSoftwareCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">Software</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeCarthographicMaterialCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">CarthographicMaterial</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeResearchDataCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">ResearchData</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeOtherCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">Other</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="doctypeTextCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type.dini</string>
+				<string name="operator">equal</string>
+				<string name="value">Text</string>
+            </Configuration>
+        </CustomCondition>
+
+		
+		<!-- Eldorado Anpassung - DINI Zertifikat -->
+		<!-- customConditions fuer DDC-Sachgruppen -->
+		<CustomCondition id="ddc000Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">equal</string>
+				<string name="value">000</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc004Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">004</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc010Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">010</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc020Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">020</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc030Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">030</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc050Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">050</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc060Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">060</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc070Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">070</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc080Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">080</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc090Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">090</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc100Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">100</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc130Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">130</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc150Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">150</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc200Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">200</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc220Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">220</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc230Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">230</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc290Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">290</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc300Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">300</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc310Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">310</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc320Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">320</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc330Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">330</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc333.7Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">333.7</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc340Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">340</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc350Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">350</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc355Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">355</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc360Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">360</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc370Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">370</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc380Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">380</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc390Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">390</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc400Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">400</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc420Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">420</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc430Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">430</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc439Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">439</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc440Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">440</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc450Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">450</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc460Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">460</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc470Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">470</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc480Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">ddc480Condition</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc490Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">490</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc491.8Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">491.8</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc500Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">500</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc510Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">510</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc520Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">520</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc530Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">530</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc540Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">540</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc550Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">550</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc560Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">560</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc570Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">570</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc580Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">580</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc590Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">590</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc600Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">600</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc610Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">610</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc621.3Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">621.3</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc624Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">624</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc630Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">630</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc640Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">640</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc650Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">650</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc660Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">660</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc670Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">670</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc690Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">690</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc700Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">700</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc710Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">710</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc720Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">720</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc730Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">730</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc740Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">740</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc741.5Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">741.5</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc750Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">750</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc760Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">760</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc770Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">770</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc780Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">780</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc790Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">790</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc791Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">791</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc792Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">792</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc793Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">793</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc796Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">796</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc800Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">800</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc810Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">810</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc820Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">820</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc830Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">830</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc839Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">839</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc840Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">840</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc850Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">850</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc860Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">860</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc870Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">870</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc880Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">880</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc890Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">890</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc891.8Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">891.8</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc900Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">900</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc910Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">910</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc914.3Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">914.3</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc920Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">920</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc930Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">930</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc940Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">940</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc943Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">943</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc950Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">950</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc960Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">960</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc970Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">970</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc980Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">980</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc990Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddccode</string>
+				<string name="operator">equal</string>
+				<string name="value">990</string>
+            </Configuration>
+        </CustomCondition>
+
         <!-- DRIVER filter for records returned by OAI-PMH.
              By default, return an Item record:
                * If a Title & Author field both exist
@@ -230,14 +2133,7 @@
                             <RightCondition>
                                 <And>
                                     <LeftCondition>
-                                        <Or>
-                                            <LeftCondition>
-                                                <Custom ref="itemAccessCondition"/>
-                                            </LeftCondition>
-                                            <RightCondition>
-                                                <Custom ref="itemWithdrawnCondition"/>
-                                            </RightCondition>
-                                        </Or>
+                                        <Custom ref="bitstreamAccessCondition"/>
                                     </LeftCondition>
                                     <RightCondition>
                                         <Custom ref="driverAccessCondition"/>
@@ -250,14 +2146,6 @@
             </Definition>
         </Filter>
 
-        <!-- OpenAIRE filter for records returned by OAI-PMH.
-             By default, return an Item record:
-               * If a Title & Author field both exist
-               * AND a valid DRIVER Document Type exists
-               * AND Item is either publicly accessible OR Withdrawn (for tombstones)
-               * AND the OpenAIRE "dc.relation" is specified
-             This filter is only used in the OpenAIRE context ([oai]/openaire).
-        -->
         <Filter id="openAireFilter">
             <Definition>
                 <And>
@@ -277,56 +2165,7 @@
                                 <Custom ref="driverDocumentTypeCondition"/>
                             </LeftCondition>
                             <RightCondition>
-                                <And>
-                                    <LeftCondition>
-                                        <Or>
-                                            <LeftCondition>
-                                                <Custom ref="itemAccessCondition"/>
-                                            </LeftCondition>
-                                            <RightCondition>
-                                                <Custom ref="itemWithdrawnCondition"/>
-                                            </RightCondition>
-                                        </Or>
-                                    </LeftCondition>
-                                    <RightCondition>
-                                        <Custom ref="openaireRelationCondition"/>
-                                    </RightCondition>
-                                </And>
-                            </RightCondition>
-                        </And>
-                    </RightCondition>
-                </And>
-            </Definition>
-        </Filter>
-        
-        <!-- create a new filter for the openairedata Context -->
-        <Filter id="openaireDataFilter">
-            <Definition>
-                <And>
-                    <LeftCondition>
-                        <And>
-                            <LeftCondition>
-                                <Custom ref="titleExistsCondition"/>
-                            </LeftCondition>
-                            <RightCondition>
-                                <Custom ref="authorExistsCondition"/>
-                            </RightCondition>
-                        </And>
-                    </LeftCondition>
-                    <RightCondition>
-                        <And>
-                            <LeftCondition>
-                                <Custom ref="identifierExistsCondition"/>
-                            </LeftCondition>
-                            <RightCondition>
-                                <And>
-                                    <LeftCondition>
-                                        <Custom ref="dateExistsCondition"/> 
-                                    </LeftCondition>
-                                    <RightCondition>
-                                        <Custom ref="publisherExistsCondition"/>
-                                    </RightCondition>
-                                </And>
+                                <Custom ref="openaireRelationCondition"/>
                             </RightCondition>
                         </And>
                     </RightCondition>
@@ -334,40 +2173,118 @@
             </Definition>
         </Filter>
 
-        <!-- UKETD Filter for records returned by OAI-PMH.
-             By default, return an Item record:
-                * If it is a "thesis"
-
-             This filter is appended to any existing filter
-             when "metadataPrefix=uketd_dc" is specified.
-        -->
         <Filter id="uketdDcFilter">
             <Definition>
                 <Custom ref="thesisDocumentTypeCondition"/>
             </Definition>
         </Filter>
 
-        <!-- Default filter for records returned by OAI-PMH. 
-             By default, return an Item record:
-                * If it is publicly accessible
-                * OR it has been withdrawn (in order to display a tombstone record).
-             This filter is used by the default context ([oai]/request).
-        -->
         <Filter id="defaultFilter">
             <Definition>
-                <Or>
+                <And>
                     <LeftCondition>
-                        <Custom ref="itemAccessCondition"/>
+                        <Custom ref="oaioutputCondition"/>
                     </LeftCondition>
                     <RightCondition>
-                        <Custom ref="itemWithdrawnCondition"/>
+                        <Custom ref="bitstreamAccessCondition"/>
                     </RightCondition>
-                </Or>
+                </And>
             </Definition>
         </Filter>
 
-        <!-- This condition determines if an Item has a "dc.type" field
-             which contains "Thesis". -->
+        <Filter id="ppnexistsFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <Custom ref="oaioutputCondition"/>
+                    </LeftCondition>
+                    <RightCondition>
+                        <Custom ref="ppnCondition"/>
+                    </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+
+        <Filter id="hasNoUrnFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <Custom ref="oaioutputCondition"/>
+                    </LeftCondition>
+                    <RightCondition>
+                        <Custom ref="noUrnCondition"/>
+                    </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+
+        <Filter id="hasNoPPNFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <Custom ref="oaioutputCondition"/>
+                    </LeftCondition>
+                    <RightCondition>
+                        <Custom ref="noPPNCondition"/>
+                    </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+
+        <Filter id="urnexistsFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <Custom ref="oaioutputCondition"/>
+                    </LeftCondition>
+                    <RightCondition>
+                        <Custom ref="urnCondition"/>
+                    </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+
+        <CustomCondition id="ppnCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.gvk.ppn</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="noUrnCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.hasurn</string>
+                <string name="operator">ends_with</string>
+                <string name="value">false</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="noPPNCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.gvk.hasppn</string>
+                <string name="operator">ends_with</string>
+                <string name="value">false</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="urnCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.identifier.urn</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="oaioutputCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.oai.show</string>
+                <string name="operator">ends_with</string>
+                <string name="value">true</string>
+            </Configuration>
+        </CustomCondition>
+
         <CustomCondition id="thesisDocumentTypeCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
@@ -377,7 +2294,6 @@
             </Configuration>
         </CustomCondition>
 
-        <!-- This condition determines if an Item has a "dc.contributor.author" -->
         <CustomCondition id="authorExistsCondition">
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Configuration>
@@ -385,52 +2301,17 @@
             </Configuration>
         </CustomCondition>
 
-        <!-- This condition determines if an Item has a "dc.title" -->
         <CustomCondition id="titleExistsCondition">
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Configuration>
                 <string name="field">dc.title</string>
             </Configuration>
         </CustomCondition>
-        
-        <!-- This condition determines if an Item has a "dc.identifier.doi" or a "dc.identifier.uri" or a "dc.identifier.url" -->
-        <CustomCondition id="identifierExistsCondition">
-            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
-            <Configuration>
-                <list name="fields">
-                	<string>dc.identifier.doi</string>
-                	<string>dc.identifier.uri</string>
-                	<string>dc.identifier.url</string>
-               	</list>
-            </Configuration>
-        </CustomCondition>
-        
-        <!-- This condition determines if an Item has a "dc.date.issued" or a "dc.date.available" or a "dc.date.accessioned" -->
-        <CustomCondition id="dateExistsCondition">
-            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
-            <Configuration>
-                <list name="fields">
-                	<string>dc.date.issued</string>
-                	<string>dc.date.available</string>
-                	<string>dc.date.accessioned</string>
-               	</list>
-            </Configuration>
-        </CustomCondition>
-        
-        <!-- This condition determines if an Item has a "dc.publisher" -->
-        <CustomCondition id="publisherExistsCondition">
-            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
-            <Configuration>
-                <string name="field">dc.publisher</string>
-            </Configuration>
-        </CustomCondition>
 
-        <!-- This condition determines if an Item has a "dc.type" field
-             specifying one of the valid DRIVER document types. -->
         <CustomCondition id="driverDocumentTypeCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.type</string>
+                <string name="field">dc.type.driver</string>
                 <string name="operator">ends_with</string>
                 <list name="values">
                     <string>article</string>
@@ -453,9 +2334,6 @@
             </Configuration>
         </CustomCondition>
 
-        <!-- This condition determines if an Item has a "dc.rights" field
-             specifying "open access", which is required for DRIVER
-             OR "openAccess", which is required by OpenAIRE. -->
         <CustomCondition id="driverAccessCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
@@ -468,25 +2346,14 @@
             </Configuration>
         </CustomCondition>
 
-        <!-- This condition determines if an Item is publicly accessible. -->
-        <CustomCondition id="itemAccessCondition">
+        <CustomCondition id="bitstreamAccessCondition">
             <Class>org.dspace.xoai.filter.DSpaceAuthorizationFilter</Class>
         </CustomCondition>
 
-        <!-- This condition determines if an Item is withdrawn. This condition
-             ensures a basic "tombstone" record is shown for withdrawn items,
-             as recommended by OAI-PMH spec. This "tombstone" doesn't display
-             any metadata or content files.  -->
-        <CustomCondition id="itemWithdrawnCondition">
-            <Class>org.dspace.xoai.filter.DSpaceWithdrawnFilter</Class>
-        </CustomCondition>
-
-        <!-- This condition determines if an Item has a "dc.relation" field
-             which specifies the openAIRE project ID. -->
         <CustomCondition id="openaireRelationCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">item.project.openaire</string>
+                <string name="field">dc.relation</string>
                 <string name="operator">starts_with</string>
                 <string name="value">info:eu-repo/grantAgreement/</string>
             </Configuration>
@@ -494,15 +2361,687 @@
     </Filters>
 
     <Sets>
+		
+		<!-- Sets fuer DINI-Zertifikat -->
+		<!-- Gemeinsames Vokabular fuer Publikations- und Dokumentationstypen -->
+			
+		<Set id="doctypepreprintSet">
+			<Spec>doc-type:preprint</Spec>
+			<Name>Preprint</Name>
+			<Filter ref="doctypepreprintFilter"/>
+		</Set>
+		<Set id="doctypeworkingPaperSet">
+			<Spec>doc-type:workingPaper</Spec>
+			<Name>WorkingPaper</Name>
+			<Filter ref="doctypeworkingPaperFilter"/>
+		</Set>
+		<Set id="doctypearticleSet">
+			<Spec>doc-type:article</Spec>
+			<Name>Article</Name>
+			<Filter ref="doctypearticleFilter"/>
+		</Set>
+		<Set id="doctypecontributionToPeriodicalSet">
+			<Spec>doc-type:contributionToPeriodical</Spec>
+			<Name>ContributionToPeriodical</Name>
+			<Filter ref="doctypecontributionToPeriodicalFilter"/>
+		</Set>
+		<Set id="doctypePeriodicalPartSet">
+			<Spec>doc-type:PeriodicalPart</Spec>
+			<Name>PeriodicalPart</Name>
+			<Filter ref="doctypePeriodicalPartFilter"/>
+		</Set>
+		<Set id="doctypePeriodicalSet">
+			<Spec>doc-type:Periodical</Spec>
+			<Name>Periodical</Name>
+			<Filter ref="doctypePeriodicalFilter"/>
+		</Set>
+		<Set id="doctypebookSet">
+			<Spec>doc-type:book</Spec>
+			<Name>Book</Name>
+			<Filter ref="doctypebookFilter"/>
+		</Set>
+		<Set id="doctypebookPartSet">
+			<Spec>doc-type:bookPart</Spec>
+			<Name>BookPart</Name>
+			<Filter ref="doctypebookPartFilter"/>
+		</Set>
+		<Set id="doctypeManuscriptSet">
+			<Spec>doc-type:Manuscript</Spec>
+			<Name>Manuscript</Name>
+			<Filter ref="doctypeManuscriptFilter"/>
+		</Set>
+		<Set id="doctypeStudyThesisSet">
+			<Spec>doc-type:StudyThesis</Spec>
+			<Name>StudyThesis</Name>
+			<Filter ref="doctypeStudyThesisFilter"/>
+		</Set>
+		<Set id="doctypemasterThesisSet">
+			<Spec>doc-type:masterThesis</Spec>
+			<Name>MasterThesis</Name>
+			<Filter ref="doctypemasterThesisFilter"/>
+		</Set>
+		<Set id="doctypebachelorThesisSet">
+			<Spec>doc-type:bachelorThesis</Spec>
+			<Name>BachelorThesis</Name>
+			<Filter ref="doctypebachelorThesisFilter"/>
+		</Set>
+		<Set id="doctypedoctoralThesisSet">
+			<Spec>doc-type:doctoralThesis</Spec>
+			<Name>DoctoralThesis</Name>
+			<Filter ref="doctypedoctoralThesisFilter"/>
+		</Set>
+		<Set id="doctypeconferenceObjectSet">
+			<Spec>doc-type:conferenceObject</Spec>
+			<Name>ConferenceObject</Name>
+			<Filter ref="doctypeconferenceObjectFilter"/>
+		</Set>
+		<Set id="doctypelectureSet">
+			<Spec>doc-type:lecture</Spec>
+			<Name>Lecture</Name>
+			<Filter ref="doctypelectureFilter"/>
+		</Set>
+		<Set id="doctypereviewSet">
+			<Spec>doc-type:review</Spec>
+			<Name>Review</Name>
+			<Filter ref="doctypereviewFilter"/>
+		</Set>
+		<Set id="doctypeannotationSet">
+			<Spec>doc-type:annotation</Spec>
+			<Name>Annotation</Name>
+			<Filter ref="doctypeannotationFilter"/>
+		</Set>
+		<Set id="doctypepatentSet">
+			<Spec>doc-type:patent</Spec>
+			<Name>Patent</Name>
+			<Filter ref="doctypepatentFilter"/>
+		</Set>
+		<Set id="doctypereportSet">
+			<Spec>doc-type:report</Spec>
+			<Name>Report</Name>
+			<Filter ref="doctypereportFilter"/>
+		</Set>
+		<Set id="doctypeMusicalNotationSet">
+			<Spec>doc-type:MusicalNotation</Spec>
+			<Name>MusicalNotation</Name>
+			<Filter ref="doctypeMusicalNotationFilter"/>
+		</Set>
+		<Set id="doctypeSoundSet">
+			<Spec>doc-type:Sound</Spec>
+			<Name>Sound</Name>
+			<Filter ref="doctypeSoundFilter"/>
+		</Set>
+		<Set id="doctypeImageSet">
+			<Spec>doc-type:Image</Spec>
+			<Name>Image</Name>
+			<Filter ref="doctypeImageFilter"/>
+		</Set>
+		<Set id="doctypeMovingImageSet">
+			<Spec>doc-type:MovingImage</Spec>
+			<Name>MovingImage</Name>
+			<Filter ref="doctypeMovingImageFilter"/>
+		</Set>
+		<Set id="doctypeStillImageSet">
+			<Spec>doc-type:StillImage</Spec>
+			<Name>StillImage</Name>
+			<Filter ref="doctypeStillImageFilter"/>
+		</Set>
+		<Set id="doctypeCourseMaterialSet">
+			<Spec>doc-type:CourseMaterial</Spec>
+			<Name>CourseMaterial</Name>
+			<Filter ref="doctypeCourseMaterialFilter"/>
+		</Set>
+		<Set id="doctypeWebsiteSet">
+			<Spec>doc-type:Website</Spec>
+			<Name>Website</Name>
+			<Filter ref="doctypeWebsiteFilter"/>
+		</Set>
+		<Set id="doctypeSoftwareSet">
+			<Spec>doc-type:Software</Spec>
+			<Name>Software</Name>
+			<Filter ref="doctypeSoftwareFilter"/>
+		</Set>
+		<Set id="doctypeCarthographicMaterialSet">
+			<Spec>doc-type:CarthographicMaterial</Spec>
+			<Name>CarthographicMaterial</Name>
+			<Filter ref="doctypeCarthographicMaterialFilter"/>
+		</Set>
+	
+		<Set id="doctypeResearchDataSet">
+			<Spec>doc-type:ResearchData</Spec>
+			<Name>ResearchData</Name>
+			<Filter ref="doctypeResearchDataFilter"/>
+		</Set>
+		<Set id="doctypeOtherSet">
+			<Spec>doc-type:Other</Spec>
+			<Name>Other</Name>
+			<Filter ref="doctypeOtherFilter"/>
+		</Set>
+		<Set id="doctypeTextSet">
+			<Spec>doc-type:Text</Spec>
+			<Name>Text</Name>
+			<Filter ref="doctypeTextFilter"/>
+		</Set>
+
+		<!-- DINI Zertifikat -->		
+		<!-- DDC Sachgruppen -->
+		<Set id="ddc000Set">
+			<Spec>ddc:000</Spec>
+			<Name>Generalities, science</Name>
+			<Filter ref="ddc000Filter"/>
+		</Set>
+		<Set id="ddc004Set">
+			<Spec>ddc:004</Spec>
+			<Name>Data processing, computer science</Name>
+			<Filter ref="ddc004Filter"/>
+		</Set>
+		<Set id="ddc010Set">
+			<Spec>ddc:010</Spec>
+			<Name>Bibliography</Name>
+			<Filter ref="ddc010Filter"/>
+		</Set>
+		<Set id="ddc020Set">
+			<Spec>ddc:020</Spec>
+			<Name>Library &amp; information sciences</Name>
+			<Filter ref="ddc020Filter"/>
+		</Set>
+		<Set id="ddc030Set">
+			<Spec>ddc:030</Spec>
+			<Name>General encyclopedic works</Name>
+			<Filter ref="ddc030Filter"/>
+		</Set>
+		<Set id="ddc050Set">
+			<Spec>ddc:050</Spec>
+			<Name>General serials &amp; their indexes</Name>
+			<Filter ref="ddc050Filter"/>
+		</Set>
+		<Set id="ddc060Set">
+			<Spec>ddc:060</Spec>
+			<Name>General organization &amp; museology</Name>
+			<Filter ref="ddc060Filter"/>
+		</Set>
+		<Set id="ddc070Set">
+			<Spec>ddc:070</Spec>
+			<Name>News media, journalism, publishing</Name>
+			<Filter ref="ddc070Filter"/>
+		</Set>
+		<Set id="ddc080Set">
+			<Spec>ddc:080</Spec>
+			<Name>General collections</Name>
+			<Filter ref="ddc080Filter"/>
+		</Set>
+		<Set id="ddc090Set">
+			<Spec>ddc:090</Spec>
+			<Name>Manuscripts &amp; rare books</Name>
+			<Filter ref="ddc090Filter"/>
+		</Set>
+		<Set id="ddc100Set">
+			<Spec>ddc:100</Spec>
+			<Name>Philosophy</Name>
+			<Filter ref="ddc100Filter"/>
+		</Set>
+		<Set id="ddc130Set">
+			<Spec>ddc:130</Spec>
+			<Name>Paranormal phenomena</Name>
+			<Filter ref="ddc130Filter"/>
+		</Set>
+		<Set id="ddc150Set">
+			<Spec>ddc:150</Spec>
+			<Name>Psychology</Name>
+			<Filter ref="ddc150Filter"/>
+		</Set>
+		<Set id="ddc200Set">
+			<Spec>ddc:200</Spec>
+			<Name>Religion</Name>
+			<Filter ref="ddc200Filter"/>
+		</Set>
+		<Set id="ddc220Set">
+			<Spec>ddc:220</Spec>
+			<Name>Bible</Name>
+			<Filter ref="ddc220Filter"/>
+		</Set>
+		<Set id="ddc230Set">
+			<Spec>ddc:230</Spec>
+			<Name>Christian theology</Name>
+			<Filter ref="ddc230Filter"/>
+		</Set>
+		<Set id="ddc290Set">
+			<Spec>ddc:290</Spec>
+			<Name>Other &amp; comparative religions</Name>
+			<Filter ref="ddc290Filter"/>
+		</Set>
+		<Set id="ddc300Set">
+			<Spec>ddc:300</Spec>
+			<Name>Social sciences</Name>
+			<Filter ref="ddc300Filter"/>
+		</Set>
+		<Set id="ddc310Set">
+			<Spec>ddc:310</Spec>
+			<Name>General statistics</Name>
+			<Filter ref="ddc310Filter"/>
+		</Set>		
+		<Set id="ddc320Set">
+			<Spec>ddc:320</Spec>
+			<Name>Political science</Name>
+			<Filter ref="ddc320Filter"/>
+		</Set>
+		<Set id="ddc330Set">
+			<Spec>ddc:330</Spec>
+			<Name>Economics</Name>
+			<Filter ref="ddc330Filter"/>
+		</Set>
+		<Set id="ddc333.7Set">
+			<Spec>ddc:333.7</Spec>
+			<Name>Natural resources, energy and environment</Name>
+			<Filter ref="ddc333.7Filter"/>
+		</Set>
+		<Set id="ddc340Set">
+			<Spec>ddc:340</Spec>
+			<Name>Law</Name>
+			<Filter ref="ddc340Filter"/>
+		</Set>
+		<Set id="ddc350Set">
+			<Spec>ddc:350</Spec>
+			<Name>Public administration</Name>
+			<Filter ref="ddc350Filter"/>
+		</Set>
+		<Set id="ddc355Set">
+			<Spec>ddc:355</Spec>
+			<Name>Military science</Name>
+			<Filter ref="ddc355Filter"/>
+		</Set>
+		<Set id="ddc360Set">
+			<Spec>ddc:360</Spec>
+			<Name>Social services, association</Name>
+			<Filter ref="ddc360Filter"/>
+		</Set>
+		<Set id="ddc370Set">
+			<Spec>ddc:370</Spec>
+			<Name>Education</Name>
+			<Filter ref="ddc370Filter"/>
+		</Set>
+		<Set id="ddc380Set">
+			<Spec>ddc:380</Spec>
+			<Name>Commerce, communications, transport</Name>
+			<Filter ref="ddc380Filter"/>
+		</Set>
+		<Set id="ddc390Set">
+			<Spec>ddc:390</Spec>
+			<Name>Customs, etiquette, folklore</Name>
+			<Filter ref="ddc390Filter"/>
+		</Set>		
+		<Set id="ddc400Set">
+			<Spec>ddc:400</Spec>
+			<Name>Language, linguistics</Name>
+			<Filter ref="ddc400Filter"/>
+		</Set>
+		<Set id="ddc420Set">
+			<Spec>ddc:420</Spec>
+			<Name>English</Name>
+			<Filter ref="ddc420Filter"/>
+		</Set>
+		<Set id="ddc430Set">
+			<Spec>ddc:430</Spec>
+			<Name>Germanic</Name>
+			<Filter ref="ddc430Filter"/>
+		</Set>
+		<Set id="ddc439Set">
+			<Spec>ddc:439</Spec>
+			<Name>Other Germanic languages</Name>
+			<Filter ref="ddc439Filter"/>
+		</Set>
+		<Set id="ddc440Set">
+			<Spec>ddc:440</Spec>
+			<Name>Romance languages French</Name>
+			<Filter ref="ddc440Filter"/>
+		</Set>
+		<Set id="ddc450Set">
+			<Spec>ddc:450</Spec>
+			<Name>Italian, Romanian, Rhaeto-Romantic</Name>
+			<Filter ref="ddc450Filter"/>
+		</Set>
+		<Set id="ddc460Set">
+			<Spec>ddc:460</Spec>
+			<Name>Spanish &amp; Portugese languages</Name>
+			<Filter ref="ddc460Filter"/>
+		</Set>
+		<Set id="ddc470Set">
+			<Spec>ddc:470</Spec>
+			<Name>Italic Latin</Name>
+			<Filter ref="ddc470Filter"/>
+		</Set>
+		<Set id="ddc480Set">
+			<Spec>ddc:480</Spec>
+			<Name>Hellenic languages Classical Greek</Name>
+			<Filter ref="ddc480Filter"/>
+		</Set>
+		<Set id="ddc490Set">
+			<Spec>ddc:490</Spec>
+			<Name>Other languages</Name>
+			<Filter ref="ddc490Filter"/>
+		</Set>		
+		<Set id="ddc491.8Set">
+			<Spec>ddc:491.8</Spec>
+			<Name>Slavic languages</Name>
+			<Filter ref="ddc491.8Filter"/>
+		</Set>
+		<Set id="ddc500Set">
+			<Spec>ddc:500</Spec>
+			<Name>Natural sciences &amp; mathematics</Name>
+			<Filter ref="ddc500Filter"/>
+		</Set>
+		<Set id="ddc510Set">
+			<Spec>ddc:510</Spec>
+			<Name>Mathematics</Name>
+			<Filter ref="ddc510Filter"/>
+		</Set>
+		<Set id="ddc520Set">
+			<Spec>ddc:520</Spec>
+			<Name>Astronomy &amp; allied sciences</Name>
+			<Filter ref="ddc520Filter"/>
+		</Set>
+		<Set id="ddc530Set">
+			<Spec>ddc:530</Spec>
+			<Name>Physics</Name>
+			<Filter ref="ddc530Filter"/>
+		</Set>
+		<Set id="ddc540Set">
+			<Spec>ddc:540</Spec>
+			<Name>Chemistry &amp; allied sciences</Name>
+			<Filter ref="ddc540Filter"/>
+		</Set>
+		<Set id="ddc550Set">
+			<Spec>ddc:550</Spec>
+			<Name>Earth sciences</Name>
+			<Filter ref="ddc550Filter"/>
+		</Set>
+		<Set id="ddc560Set">
+			<Spec>ddc:560</Spec>
+			<Name>Paleontology, paleozoology</Name>
+			<Filter ref="ddc560Filter"/>
+		</Set>
+		<Set id="ddc570Set">
+			<Spec>ddc:570</Spec>
+			<Name>Life sciences</Name>
+			<Filter ref="ddc570Filter"/>
+		</Set>		
+		<Set id="ddc580Set">
+			<Spec>ddc:580</Spec>
+			<Name>Botanical sciences</Name>
+			<Filter ref="ddc580Filter"/>
+		</Set>
+		<Set id="ddc590Set">
+			<Spec>ddc:590</Spec>
+			<Name>Zoological sciences</Name>
+			<Filter ref="ddc590Filter"/>
+		</Set>
+		<Set id="ddc600Set">
+			<Spec>ddc:600</Spec>
+			<Name>Technology (Applied sciences)</Name>
+			<Filter ref="ddc600Filter"/>
+		</Set>
+		<Set id="ddc610Set">
+			<Spec>ddc:610</Spec>
+			<Name>Medical sciences, medicine</Name>
+			<Filter ref="ddc610Filter"/>
+		</Set>
+		<Set id="ddc620Set">
+			<Spec>ddc:620</Spec>
+			<Name>Engineering &amp; allied operations</Name>
+			<Filter ref="ddc620Filter"/>
+		</Set>
+		<Set id="ddc621.3Set">
+			<Spec>ddc:621.3</Spec>
+			<Name>Electric engineering</Name>
+			<Filter ref="ddc621.3Filter"/>
+		</Set>
+		<Set id="ddc624Set">
+			<Spec>ddc:624</Spec>
+			<Name>Civil engineering</Name>
+			<Filter ref="ddc624Filter"/>
+		</Set>
+		<Set id="ddc630Set">
+			<Spec>ddc:630</Spec>
+			<Name>Agriculture</Name>
+			<Filter ref="ddc630Filter"/>
+		</Set>
+		<Set id="ddc640Set">
+			<Spec>ddc:640</Spec>
+			<Name>Home economics &amp; family living</Name>
+			<Filter ref="ddc640Filter"/>
+		</Set>
+		<Set id="ddc650Set">
+			<Spec>ddc:650</Spec>
+			<Name>Management &amp; auxiliary services</Name>
+			<Filter ref="ddc650Filter"/>
+		</Set>		
+		<Set id="ddc660Set">
+			<Spec>ddc:660</Spec>
+			<Name>Chemical engineering</Name>
+			<Filter ref="ddc660Filter"/>
+		</Set>
+		<Set id="ddc670Set">
+			<Spec>ddc:670</Spec>
+			<Name>Manufacturing</Name>
+			<Filter ref="ddc670Filter"/>
+		</Set>
+		<Set id="ddc690Set">
+			<Spec>ddc:690</Spec>
+			<Name>Buildings</Name>
+			<Filter ref="ddc690Filter"/>
+		</Set>
+		<Set id="ddc700Set">
+			<Spec>ddc:700</Spec>
+			<Name>The arts</Name>
+			<Filter ref="ddc700Filter"/>
+		</Set>
+		<Set id="ddc710Set">
+			<Spec>ddc:710</Spec>
+			<Name>Civic &amp; landscape art</Name>
+			<Filter ref="ddc710Filter"/>
+		</Set>
+		<Set id="ddc720Set">
+			<Spec>ddc:720</Spec>
+			<Name>Architecture</Name>
+			<Filter ref="ddc720Filter"/>
+		</Set>
+		<Set id="ddc730Set">
+			<Spec>ddc:730</Spec>
+			<Name>Plastic arts, sculpture</Name>
+			<Filter ref="ddc730Filter"/>
+		</Set>
+		<Set id="ddc740Set">
+			<Spec>ddc:740</Spec>
+			<Name>Drawing &amp; decorative arts</Name>
+			<Filter ref="ddc740Filter"/>
+		</Set>
+		<Set id="ddc741.5Set">
+			<Spec>ddc:741.5</Spec>
+			<Name>Comics, cartoons</Name>
+			<Filter ref="ddc741.5Filter"/>
+		</Set>
+		<Set id="ddc750Set">
+			<Spec>ddc:750</Spec>
+			<Name>Painting &amp; paintings</Name>
+			<Filter ref="ddc750Filter"/>
+		</Set>		
+		<Set id="ddc760Set">
+			<Spec>ddc:760</Spec>
+			<Name>Graphic arts, printmaking &amp; prints</Name>
+			<Filter ref="ddc760Filter"/>
+		</Set>
+		<Set id="ddc770Set">
+			<Spec>ddc:770</Spec>
+			<Name>Photography &amp; photographs</Name>
+			<Filter ref="ddc770Filter"/>
+		</Set>
+		<Set id="ddc780Set">
+			<Spec>ddc:780</Spec>
+			<Name>Music</Name>
+			<Filter ref="ddc780Filter"/>
+		</Set>
+		<Set id="ddc790Set">
+			<Spec>ddc:790</Spec>
+			<Name>Recreational &amp; performing arts</Name>
+			<Filter ref="ddc790Filter"/>
+		</Set>
+		<Set id="ddc791Set">
+			<Spec>ddc:791</Spec>
+			<Name>Public performances</Name>
+			<Filter ref="ddc791Filter"/>
+		</Set>
+		<Set id="ddc792Set">
+			<Spec>ddc:792</Spec>
+			<Name>Stage presentations</Name>
+			<Filter ref="ddc792Filter"/>
+		</Set>
+		<Set id="ddc793Set">
+			<Spec>ddc:793</Spec>
+			<Name>Indoor games &amp; amusements</Name>
+			<Filter ref="ddc793Filter"/>
+		</Set>
+		<Set id="ddc796Set">
+			<Spec>ddc:796</Spec>
+			<Name>Athletic &amp; outdoor sports &amp; games</Name>
+			<Filter ref="ddc796Filter"/>
+		</Set>
+		<Set id="ddc800Set">
+			<Spec>ddc:800</Spec>
+			<Name>Literature &amp; rhetoric</Name>
+			<Filter ref="ddc800Filter"/>
+		</Set>
+		<Set id="ddc810Set">
+			<Spec>ddc:810</Spec>
+			<Name>American literature in English</Name>
+			<Filter ref="ddc810Filter"/>
+		</Set>		
+		<Set id="ddc820Set">
+			<Spec>ddc:820</Spec>
+			<Name>English &amp; Old English literatures</Name>
+			<Filter ref="ddc820Filter"/>
+		</Set>
+		<Set id="ddc830Set">
+			<Spec>ddc:830</Spec>
+			<Name>Literatures of Germanic languages</Name>
+			<Filter ref="ddc830Filter"/>
+		</Set>
+		<Set id="ddc839Set">
+			<Spec>ddc:839</Spec>
+			<Name>Other Germanic literatures</Name>
+			<Filter ref="ddc839Filter"/>
+		</Set>
+		<Set id="ddc840Set">
+			<Spec>ddc:840</Spec>
+			<Name>Literatures of Romance languages</Name>
+			<Filter ref="ddc840Filter"/>
+		</Set>
+		<Set id="ddc850Set">
+			<Spec>ddc:850</Spec>
+			<Name>Italian, Romanian, Rhaeto-Romanic literatures</Name>
+			<Filter ref="ddc850Filter"/>
+		</Set>
+		<Set id="ddc860Set">
+			<Spec>ddc:860</Spec>
+			<Name>Spanish &amp; Portuguese literatures</Name>
+			<Filter ref="ddc860Filter"/>
+		</Set>
+		<Set id="ddc870Set">
+			<Spec>ddc:870</Spec>
+			<Name>Italic literatures Latin</Name>
+			<Filter ref="ddc870Filter"/>
+		</Set>
+		<Set id="ddc880Set">
+			<Spec>ddc:880</Spec>
+			<Name>Hellenic literatures Classical Greek</Name>
+			<Filter ref="ddc880Filter"/>
+		</Set>
+		<Set id="ddc890Set">
+			<Spec>ddc:890</Spec>
+			<Name>Literatures of other languages</Name>
+			<Filter ref="ddc890Filter"/>
+		</Set>
+		<Set id="ddc891.8Set">
+			<Spec>ddc:891.8</Spec>
+			<Name>Slavic literatures</Name>
+			<Filter ref="ddc891.8Filter"/>
+		</Set>		
+		<Set id="ddc900Set">
+			<Spec>ddc:900</Spec>
+			<Name>Geography &amp; history</Name>
+			<Filter ref="ddc900Filter"/>
+		</Set>
+		<Set id="ddc910Set">
+			<Spec>ddc:910</Spec>
+			<Name>Geography &amp; travel</Name>
+			<Filter ref="ddc910Filter"/>
+		</Set>
+		<Set id="ddc914.3Set">
+			<Spec>ddc:914.3</Spec>
+			<Name>Geography &amp; travel Germany</Name>
+			<Filter ref="ddc914.3Filter"/>
+		</Set>
+		<Set id="ddc920Set">
+			<Spec>ddc:920</Spec>
+			<Name>Biography, genealogy, insignia</Name>
+			<Filter ref="ddc920Filter"/>
+		</Set>
+		<Set id="ddc930Set">
+			<Spec>ddc:930</Spec>
+			<Name>History of the ancient world</Name>
+			<Filter ref="ddc930Filter"/>
+		</Set>
+		<Set id="ddc940Set">
+			<Spec>ddc:940</Spec>
+			<Name>General history of Europe</Name>
+			<Filter ref="ddc940Filter"/>
+		</Set>
+		<Set id="ddc943Set">
+			<Spec>ddc:943</Spec>
+			<Name>General history of Europe Central Europe Germany</Name>
+			<Filter ref="ddc943Filter"/>
+		</Set>
+		<Set id="ddc950Set">
+			<Spec>ddc:950</Spec>
+			<Name>General history of Asia Far East</Name>
+			<Filter ref="ddc950Filter"/>
+		</Set>
+		<Set id="ddc960Set">
+			<Spec>ddc:960</Spec>
+			<Name>General history of Africa</Name>
+			<Filter ref="ddc960Filter"/>
+		</Set>
+		<Set id="ddc970Set">
+			<Spec>ddc:970</Spec>
+			<Name>General history of North America</Name>
+			<Filter ref="ddc970Filter"/>
+		</Set>
+		<Set id="ddc980Set">
+			<Spec>ddc:980</Spec>
+			<Name>General history of South America</Name>
+			<Filter ref="ddc980Filter"/>
+		</Set>
+		<Set id="ddc990Set">
+			<Spec>ddc:990</Spec>
+			<Name>General history of other areas</Name>
+			<Filter ref="ddc990Filter"/>
+		</Set>	
         <Set id="driverSet">
             <Spec>driver</Spec>
             <Name>Open Access DRIVERset</Name>
             <!-- Just an alias -->
         </Set>
-        <Set id="openaireSet">
+        <Set id="ecSet">
             <Spec>ec_fundedresources</Spec>
             <Name>EC_fundedresources set</Name>
             <!-- Just an alias -->
+        </Set>
+        <Set id="openaireSet">
+            <Spec>openaire</Spec>
+            <Name>openaire set</Name>
+            <!-- Just an alias -->
+        </Set>
+        <Set id="openaccessSet">
+            <Spec>open_access</Spec>
+            <Name>OpenAccess Documents</Name>
         </Set>
         <!-- set the OpenAIRE Data Archive OAI Set. See: https://guidelines.openaire.eu/en/latest/data/use_of_oai_pmh.html -->
         <Set id="openaireDataSet">

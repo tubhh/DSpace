@@ -369,28 +369,34 @@
 
                         <!-- new series handling: take TUHH series ID from CRIS entity -->
                         <xsl:choose>
-                            <xsl:when test="doc:metadata/doc:element[@name='item']/doc:element[@name='tuhhseriesid']/doc:element/doc:field[@name='authority']!=''">
+                            <xsl:when test="doc:metadata/doc:element[@name='item']/doc:element[@name='tuhhseriesid']/doc:element/doc:field[@name='authority']!='' and doc:metadata/doc:element[@name='item']/doc:element[@name='tuhhseriesid']/doc:element/doc:field[@name='authority']!='x'">
                                 <dcterms:isPartOf xsi:type="ddb:ZSTitelID">
                                     <xsl:value-of select="doc:metadata/doc:element[@name='item']/doc:element[@name='tuhhseriesid']/doc:element/doc:field[@name='authority']"/>
                                 </dcterms:isPartOf>
                                 <dcterms:isPartOf xsi:type="ddb:ZS-Ausgabe">
-                                    <xsl:value-of select="substring-after(doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='ispartofseries']/doc:element/doc:field[@name='value'], ';')"/>
+                                    <xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='relation']/doc:element[@name='ispartofseriesnumber']/doc:element/doc:field[@name='value']"/>
                                 </dcterms:isPartOf>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='ispartofseries']/doc:element/doc:field[@name='value']">
-                                    <xsl:choose>
-                                        <xsl:when test="contains(., ' ; ')">
-                                            <dcterms:isPartOf xsi:type="ddb:noScheme">
-                                                <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='ispartofseries']/doc:element/doc:field[@name='value']"/>
-                                            </dcterms:isPartOf>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <dcterms:isPartOf xsi:type="ddb:noScheme">
-                                                <xsl:value-of select="substring-before(doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='ispartofseries']/doc:element/doc:field[@name='value'], ';')"/><xsl:text> ; </xsl:text><xsl:value-of select="substring-after(doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='ispartofseries']/doc:element/doc:field[@name='value'], ';')"/>
-                                            </dcterms:isPartOf>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
+                                <xsl:if test="doc:metadata/doc:element[@name='item']/doc:element[@name='tuhhseriesid']/doc:element/doc:field[@name='authority']!='' and doc:metadata/doc:element[@name='item']/doc:element[@name='tuhhseriesid']/doc:element/doc:field[@name='authority']='x'">
+                                <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='relation']/doc:element[@name='ispartofseries']/doc:element/doc:field[@name='value']">
+                                    <dcterms:isPartOf xsi:type="ddb:noScheme">
+                                        <xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='relation']/doc:element[@name='ispartofseries']/doc:element/doc:field[@name='value']"/><xsl:text> ; </xsl:text><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='relation']/doc:element[@name='ispartofseriesnumber']/doc:element/doc:field[@name='value']"/>
+                                    </dcterms:isPartOf>
+                                </xsl:if>
+                                <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='ispartof']/doc:element/doc:field[@name='value']">
+                                    <dcterms:isPartOf xsi:type="ddb:noScheme">
+                                        <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='ispartof']/doc:element/doc:field[@name='value']"/>
+                                        <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='container']/doc:element[@name='volume']/doc:element/doc:field[@name='value']">
+                                            <xsl:text> ; </xsl:text>
+                                            Volume <xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='container']/doc:element[@name='volume']/doc:element/doc:field[@name='value']"/>
+                                            <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='container']/doc:element[@name='issue']/doc:element/doc:field[@name='value']">
+                                                <xsl:text>, </xsl:text>
+                                                Issue <xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='container']/doc:element[@name='issue']/doc:element/doc:field[@name='value']"/>
+                                            </xsl:if>
+                                        </xsl:if>
+                                    </dcterms:isPartOf>
+                                </xsl:if>
                                 </xsl:if>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -471,33 +477,41 @@
 				</xsl:for-each>
 			</xsl:variable>
 			<ddb:fileNumber><xsl:value-of select="$fileNumber"/></ddb:fileNumber>
-			<xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']">
-				<xsl:if test="(doc:field/text() = 'ORIGINAL')">
-					<xsl:for-each select="doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
-						<ddb:fileProperties>					
-							<xsl:attribute name="ddb:fileName"><xsl:value-of select="doc:field[@name='name']"/></xsl:attribute>
-						</ddb:fileProperties>
-					</xsl:for-each>
-				</xsl:if>			
-			</xsl:for-each>
-			<xsl:choose>
-				<xsl:when test="$fileNumber = 1"> 
-					<ddb:transfer ddb:type="dcterms:URI">
-						<xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']">
-							<xsl:if test="(doc:field/text() = 'ORIGINAL')">
-								<xsl:value-of select="str:replaceAll(str:new(doc:element[@name='bitstreams']/doc:element[@name='bitstream']/doc:field[@name='url']/text()), '\+', '\%20')" />
-							</xsl:if>
-						</xsl:for-each>
-					</ddb:transfer>
-				</xsl:when>
-				<xsl:otherwise>
-                                    <xsl:variable name="download-prefix">
-                                        <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='hdl']/doc:element/doc:field[@name='value']"/>
-                                    </xsl:variable>
-				    <xsl:variable name="baseUrl"><xsl:value-of select="substring-before(//doc:element[@name='bitstream'][1]/doc:field[@name='url']/text(), '/bitstream')" /></xsl:variable>
-				    <ddb:transfer ddb:type="dcterms:URI"><xsl:value-of select="concat('http://doku.b.tu-harburg.de/download/', substring-after($download-prefix, $handle-prefix-pure), '-files.zip')"/></ddb:transfer>
-				</xsl:otherwise> 
-			</xsl:choose>	
+                        <!-- 44. File properties -->
+                        <xsl:for-each 
+                            select="/doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']/doc:field[@name='name' and text()='ORIGINAL']/../doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
+                            <ddb:fileProperties>
+                                <xsl:attribute name="ddb:fileName">
+                                    <xsl:value-of select="./doc:field[@name='name']"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="ddb:fileSize">
+                                    <xsl:value-of select="./doc:field[@name='size']"/>
+                                </xsl:attribute>
+                            </ddb:fileProperties>
+                        </xsl:for-each>
+                        <!-- ddb:transfer - normal bitstream link if 1 or special retrieve link > 1 -->
+                        <!-- the "url" in xoai assumes that dspace is deployed as root application -->
+                        <xsl:variable name="bundleName">
+                            <!-- If there is more than only one file, get the archive, otherwise the original bundle -->
+                            <xsl:choose>
+                                <xsl:when test="$fileNumber > '1'">ARCHIVE</xsl:when>
+                                <xsl:otherwise>ORIGINAL</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']/doc:field[@name='name' and text()=$bundleName]/../doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
+                            <!-- 45. Checksum -->
+                            <ddb:checksum>
+                                <xsl:attribute name="ddb:type">
+                                    <xsl:value-of select="./doc:field[@name='checksumAlgorithm']"/>
+                                </xsl:attribute>
+                                <xsl:value-of select="./doc:field[@name='checksum']"/>
+                            </ddb:checksum>
+
+                            <!-- 46. Transfer-URL -->
+                            <ddb:transfer ddb:type="dcterms:URI">
+                                <xsl:value-of select="str:replaceAll(str:new(./doc:field[@name='url']/text()), '\+', '\%20')"/>
+                            </ddb:transfer>
+                        </xsl:for-each>
 			<ddb:identifier ddb:type="URL"><xsl:value-of select="$handle"/></ddb:identifier>
 			<ddb:rights>
 				<xsl:attribute name="ddb:kind">
