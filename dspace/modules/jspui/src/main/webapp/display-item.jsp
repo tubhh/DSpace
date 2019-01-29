@@ -696,13 +696,12 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
-<%-- if(submitter_button || StringUtils.isNotBlank(crisID)) { --%>
-<% if(submitter_button) { %>
+<% if(submitter_button || StringUtils.isNotBlank(crisID)) { %>
+<%-- if(submitter_button) { --%>
        <div class="col-sm-5 col-md-4 col-lg-3">
             <div class="panel panel-warning">
             	<div class="panel-heading"><fmt:message key="jsp.usertools"/></div>
 
-<%--
             <% if(StringUtils.isNotBlank(crisID)) { %>
             	<div class="panel-body">
         			<a class="btn btn-primary col-md-12" href="<%= request.getContextPath() %>/tools/claim?handle=<%= handle %>">
@@ -710,7 +709,6 @@ if (dedupEnabled && admin_button) { %>
         			</a>    	
             	</div>
     <% } %>
---%>
 <%
 //        if (submitter_button && hasVersionButton) {
         if (submitter_button) {
