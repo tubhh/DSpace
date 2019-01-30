@@ -105,7 +105,7 @@ public class ResolverDisplayStrategy extends AUniformDisplayStrategy
 
                 if (value.startsWith(foundUrn + ":"))
                 {
-                    value = value.substring(foundUrn.length() + 1);
+                    value = value.substring(foundUrn.length() + 1).trim();
                 }
 
                 url = urn2baseurl.get(foundUrn);
