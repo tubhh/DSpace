@@ -68,7 +68,7 @@
          <required>Enter a contact email address!</required>
        </field>
 -->
-
+<!--
       <field>
           <dc-element>contributor</dc-element>
           <dc-qualifier>department</dc-qualifier>
@@ -79,7 +79,7 @@
           <required></required>
           <hint>Enter an affiliation for each author.</hint>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
@@ -90,7 +90,7 @@
          <hint>Enter the names of the author(s) of this item below.</hint>
          <required></required>
        </field>
-
+<!--
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
@@ -112,18 +112,28 @@
          <hint>Enter the names of the contributing persons (last name, first name) or corporates here.</hint>
          <required></required>
        </field>
-<!--
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
          <dc-qualifier></dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Contributors</label>
+         <label>Contributors (persons)</label>
          <input-type value-pairs-name="common_roles_en">qualdrop_value</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) or corporates here and select their role</hint>
+         <hint>Enter the names of contributing persons (last name, first name) here and select their role</hint>
          <required></required>
        </field>
--->
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributorCorporate</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Contributors (corporates)</label>
+         <input-type value-pairs-name="common_roles_en">qualdrop_value</input-type>
+         <hint>Enter the names of contributing corporates here and select their role</hint>
+         <required></required>
+       </field>
 
        <field>
          <dc-schema>dc</dc-schema>
@@ -135,7 +145,7 @@
          <hint>Select the language of the main content of the item.  If the language does not appear in the list below, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>
          <required></required>
        </field>
-
+<!--
        <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>identifier</dc-element>
@@ -146,7 +156,7 @@
          <hint>The URN can get used to identify your work permanently and independently from the URL. It may be helpful to put the URN (as the resolved URL) into your document. You can call the URN by appending it to the URL http://nbn-resolving.de/. This document will get the following URN:</hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>type</dc-element>

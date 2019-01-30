@@ -68,6 +68,7 @@
          <required>Bitte geben Sie eine e-Mail-Kontaktadresse an!</required>
        </field>
 -->
+<!--
       <field>
           <dc-element>contributor</dc-element>
           <dc-qualifier>department</dc-qualifier>
@@ -78,7 +79,7 @@
           <required></required>
           <hint>Enter an affiliation for each author.</hint>
       </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
@@ -89,7 +90,7 @@
          <hint>Tragen Sie hier die Namen der Autoren bzw. der Autorinnen ein.</hint>
          <required></required>
        </field>
-
+<!--
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
@@ -111,19 +112,29 @@
          <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) und/oder Institutionen ein.</hint>
          <required></required>
        </field>
+-->
 
-<!--
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
          <dc-qualifier></dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Weitere Beteiligte</label>
+         <label>Weitere Beteiligte Personen</label>
          <input-type value-pairs-name="common_roles_de">qualdrop_value</input-type>
-         <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) und/oder Institutionen ein und wählen Sie die Rolle aus.</hint>
+         <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) ein und wählen Sie die Rolle aus.</hint>
          <required></required>
        </field>
--->
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributorCorporate</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Weitere Beteiligte Institutionen</label>
+         <input-type value-pairs-name="common_roles_de">qualdrop_value</input-type>
+         <hint>Tragen Sie hier die Namen weiterer beteiligter Institutionen ein und wählen Sie die Rolle aus.</hint>
+         <required></required>
+       </field>
 
        <field>
          <dc-schema>dc</dc-schema>
@@ -135,7 +146,7 @@
          <hint>Wählen Sie hier die Sprache aus, in der die Publikation hauptsächlich verfasst ist. Taucht die Sprache nicht in der Liste auf, wählen Sie "Sonstige". Wenn keine Sprache angegeben werden kann (zum Beispiel bei Datenbanken oder Bildern), wählen Sie "Keine Angabe".</hint>
          <required></required>
        </field>
-
+<!--
        <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>identifier</dc-element>
@@ -146,7 +157,7 @@
          <hint>Mit dem URN kann Ihre Arbeit dauerhaft und unabhängig von der URL referenziert und identifiziert werden. Es kann hilfreich sein, den URN mit seiner URL in Ihr Dokument aufzunehmen. Sie können den URN aufrufen, indem Sie ihn an die URL http://nbn-resolving.de/ anhängen. Diesem Dokument wird der folgende URN zugewiesen:</hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>type</dc-element>
