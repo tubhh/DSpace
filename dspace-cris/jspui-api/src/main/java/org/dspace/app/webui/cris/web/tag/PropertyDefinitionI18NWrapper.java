@@ -14,13 +14,13 @@ import it.cilea.osd.jdyna.model.AWidget;
 import it.cilea.osd.jdyna.model.IPropertiesDefinition;
 import it.cilea.osd.jdyna.widget.WidgetCheckRadio;
 
-public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
+public final class PropertyDefinitionI18NWrapper implements MethodInterceptor {
 	private Locale locale = null;
 	private String localeString = null;
 	private String simpleName = null;
 	private String shortName = null;
 
-	public PropertyDefintionI18NWrapper(String simpleName, String shortName, String localeString) {
+	public PropertyDefinitionI18NWrapper(String simpleName, String shortName, String localeString) {
 		this.locale = Locale.forLanguageTag(localeString);
 		this.localeString = localeString;
 		this.simpleName = simpleName;
@@ -71,7 +71,7 @@ public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
         AspectJProxyFactory pf = new AspectJProxyFactory(pd);
         pf.setProxyTargetClass(true);
         pf.addAdvice(
-                new PropertyDefintionI18NWrapper(pd.getAnagraficaHolderClass().getSimpleName(), pd.getShortName(), locale));
+                new PropertyDefinitionI18NWrapper(pd.getAnagraficaHolderClass().getSimpleName(), pd.getShortName(), locale));
         return pf.getProxy();
     }
     
