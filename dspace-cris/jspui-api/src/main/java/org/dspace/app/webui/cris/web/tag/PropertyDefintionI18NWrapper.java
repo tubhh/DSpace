@@ -7,6 +7,8 @@
  */
 package org.dspace.app.webui.cris.web.tag;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -15,7 +17,9 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.dspace.core.I18nUtil;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
+import it.cilea.osd.jdyna.model.AWidget;
 import it.cilea.osd.jdyna.model.IPropertiesDefinition;
+import it.cilea.osd.jdyna.widget.WidgetCheckRadio;
 
 public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
 	private Locale locale = null;
@@ -36,15 +40,20 @@ public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 		if (locale != null) {
 			String name = invocation.getMethod().getName();
-			if ("getLabel".equals(name)) {
+			if (name.equals("getLabel")) {
 				return getLabel(invocation);
-			} else if ("getReal".equals(name)) {
+			} else if (name.equals("getReal") || name.equals("getObject")) {
 				return getWrapper((IPropertiesDefinition) invocation.proceed(), localeString);
-			} else if ("getMask".equals(name)) {
+			} else if (name.equals("getMask")) {
 				return getMask(invocation);
-			} else if ("getPriority".equals(name)) {
-                return priority;
-            }
+			} else if (name.equals("getRendering")) {
+				AWidget widget = (AWidget) invocation.proceed();
+				if (widget instanceof WidgetCheckRadio) {
+					WidgetCheckRadio wCheck = (WidgetCheckRadio) widget;
+					return getWidgetCheckRadioWrapper(wCheck, simpleName, shortName, locale);
+				}
+				return widget;
+			}
 			
 		}
 		return invocation.proceed();
@@ -58,11 +67,28 @@ public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
 		}
 	}
 
+	private Object getMask(MethodInvocation invocation) throws Throwable {
+		List wrappedList = new ArrayList<>();
+		List origList = (List) invocation.proceed();
+		for (Object o : origList) {
+			wrappedList.add(getWrapper((IPropertiesDefinition) o, localeString));
+		}
+		return wrappedList;
+	}
+
     public static IPropertiesDefinition getWrapper(IPropertiesDefinition pd, String locale) {
         AspectJProxyFactory pf = new AspectJProxyFactory(pd);
         pf.setProxyTargetClass(true);
         pf.addAdvice(
                 new PropertyDefintionI18NWrapper(pd.getAnagraficaHolderClass().getSimpleName(), pd.getShortName(), locale, pd.getPriority()));
+        return pf.getProxy();
+    }
+    
+    public static WidgetCheckRadio getWidgetCheckRadioWrapper(WidgetCheckRadio widget, String simpleName, String shortName, Locale locale) {
+        AspectJProxyFactory pf = new AspectJProxyFactory(widget);
+        pf.setProxyTargetClass(true);
+        pf.addAdvice(
+                new WidgetCheckRadioI18NWrapper(simpleName, shortName, locale));
         return pf.getProxy();
     }	
 	
