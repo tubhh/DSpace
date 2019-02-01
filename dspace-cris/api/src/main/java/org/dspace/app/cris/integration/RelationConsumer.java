@@ -224,6 +224,11 @@ public class RelationConsumer implements Consumer
         return q;
     }
 
+    /**
+     * Built in reciprocal field list
+     *
+     * @return Map of reciprocal fields
+     */
     private static Map<String, String> getReciprocalRelationsList() {
         Map<String, String> ret = new HashMap<String, String>();
         ret.put("Cites","IsCitedBy");
