@@ -95,28 +95,27 @@ public class RelationConsumer implements Consumer
             Metadatum[] relations = item.getMetadata("datacite", "relation", Item.ANY, Item.ANY);
             // Walk through datacite relations and check contents
             if (relations.length > 0) {
-                try {
                 for (Metadatum relation : relations) {
-                    // Cut unwanted identifier type prefix
-                    if (relation.value.substring(0,3).equals("doi") || relation.value.substring(0,3).equals("hdl")) {
-                        String identifier = relation.value.substring(4).trim();
-                        log.info("Checking local items for ID "+identifier);
-                        Item relatedItem = null;
-                        //Item relatedSolrItem = null;
-                        // Search for identifier
-                        SolrQuery solrQuery = new SolrQuery()
-                            .setQuery("dc.identifier.doi:"+identifier+" OR handle:"+identifier);
-                        solrQuery.setFields("search.resourceid");
-                        QueryResponse resp = getSolr().query(solrQuery);
-                        log.info("Looking for identifier "+identifier+" in Solr... Got "+Long.toString(resp.getResults().getNumFound())+" results.");
-                        if (resp.getResults().getNumFound() > 0) {
-                            SolrDocumentList resultList = resp.getResults();
-                            for (SolrDocument result : resultList) {
-                                int internalId = (int)result.getFieldValue("search.resourceid");
-                                relatedItem = Item.find(ctx,internalId);
-                                log.info("Found related item for "+getItemHandle(item)+" while looking for identifier "+identifier+": "+getItemHandle(relatedSolrItem));
-                            }
-                        }
+                    try {
+                        // Cut unwanted identifier type prefix
+                        if (relation.value.substring(0,3).equals("doi") || relation.value.substring(0,3).equals("hdl")) {
+                            String identifier = relation.value.substring(4).trim();
+                            log.info("Checking local items for ID "+identifier);
+                            Item relatedItem = null;
+                            //Item relatedSolrItem = null;
+                            // Search for identifier
+                            SolrQuery solrQuery = new SolrQuery()
+                                .setQuery("dc.identifier.doi:"+identifier+" OR handle:"+identifier);
+                            solrQuery.setFields("search.resourceid");
+                            QueryResponse resp = getSolr().query(solrQuery);
+                            log.info("Looking for identifier "+identifier+" in Solr... Got "+Long.toString(resp.getResults().getNumFound())+" results.");
+                            if (resp.getResults().getNumFound() > 0) {
+                                SolrDocumentList resultList = resp.getResults();
+                                for (SolrDocument result : resultList) {
+                                    int internalId = (int)result.getFieldValue("search.resourceid");
+                                    relatedItem = Item.find(ctx,internalId);
+                                    log.info("Found related item for "+getItemHandle(item)+" while looking for identifier "+identifier+": "+getItemHandle(relatedItem));
+                                }
                         // TODO: What we are doing here is absolutely not performant. Improve performance!
                         /*
                         ItemIterator itemList = Item.findAll(ctx);
@@ -138,48 +137,48 @@ public class RelationConsumer implements Consumer
                             break;
                         }
                         */
-                    }
-//                    }
-                    if (relatedItem != null) {
-                        log.info("Found related item for "+getItemHandle(item)+": "+getItemHandle(relatedItem));
-                    // Check, if local metadata field is available (necessary?)
-                    Metadatum[] titleMd = relatedItem.getMetadata("dc", "title", Item.ANY, Item.ANY);
-                    String title = getItemHandle(relatedItem);
-                    if (titleMd.length > 0) {
-                        title = titleMd[0].value;
-                    }
-                    Metadatum[] languageMd = relatedItem.getMetadata("dc", "language", "iso", Item.ANY);
-                    String lang = null;
-                    if (languageMd.length > 0) {
-                        lang = languageMd[0].value;
-                    }
-                    Metadatum[] identifierMd = item.getMetadata("dc", "identifier", "doi", Item.ANY);
-                    String id = "hdl:"+getItemHandle(item);
-                    if (identifierMd.length > 0) {
-                        id = "doi:"+identifierMd[0].value;
-                    }
-                    // Clear local metadata field
-                    item.clearMetadata("local", "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
-                    // transfer content to a corresponding field in local schema
-                    item.addMetadata("local", "relation", reciprocalRelations.get(relation.qualifier), lang, title, getItemHandle(relatedItem), 600);
-                    // build corresponding datacite field in related item
-                    relatedItem.clearMetadata("datacite", "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
-                    relatedItem.addMetadata("datacite", "relation", reciprocalRelations.get(relation.qualifier), null, id, null, -1);
-                    relatedItem.updateMetadata();
-                    relatedItem.update();
-                    }
-                    }
-                }
-                item.updateMetadata();
-                item.update();
-                ctx.getDBConnection().commit();
-                } catch (AuthorizeException ae) {
+                    //}
+                                if (relatedItem != null) {
+                                    log.info("Found related item for "+getItemHandle(item)+": "+getItemHandle(relatedItem));
+                                    // Check, if local metadata field is available (necessary?)
+                                    Metadatum[] titleMd = relatedItem.getMetadata("dc", "title", Item.ANY, Item.ANY);
+                                    String title = getItemHandle(relatedItem);
+                                    if (titleMd.length > 0) {
+                                        title = titleMd[0].value;
+                                    }
+                                    Metadatum[] languageMd = relatedItem.getMetadata("dc", "language", "iso", Item.ANY);
+                                    String lang = null;
+                                    if (languageMd.length > 0) {
+                                        lang = languageMd[0].value;
+                                    }
+                                    Metadatum[] identifierMd = item.getMetadata("dc", "identifier", "doi", Item.ANY);
+                                    String id = "hdl:"+getItemHandle(item);
+                                    if (identifierMd.length > 0) {
+                                        id = "doi:"+identifierMd[0].value;
+                                    }
+                                    // Clear local metadata field
+                                    item.clearMetadata("local", "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
+                                    // transfer content to a corresponding field in local schema
+                                    item.addMetadata("local", "relation", reciprocalRelations.get(relation.qualifier), lang, title, getItemHandle(relatedItem), 600);
+                                    // build corresponding datacite field in related item
+                                    relatedItem.clearMetadata("datacite", "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
+                                    relatedItem.addMetadata("datacite", "relation", reciprocalRelations.get(relation.qualifier), null, id, null, -1);
+                                    relatedItem.updateMetadata();
+                                    relatedItem.update();
+                                }
+                            }
+                        }
+                        item.updateMetadata();
+                        item.update();
+                        ctx.getDBConnection().commit();
+                    } catch (AuthorizeException ae) {
                         // Something went wrong
                         logDebugMessage(ae.getMessage());
                     } catch (SQLException sqle) {
                         // Something went wrong
                         logDebugMessage(sqle.getMessage());
                     }
+                }
             }
         }
     }
