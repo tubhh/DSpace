@@ -80,9 +80,9 @@ public class RelationConsumer implements Consumer
             return;
         }
 
-        String doiprefix = ConfigurationManager.getProperty("identifier.doi.prefix");
-        String urnprefix = ConfigurationManager.getProperty("identifier.urn.prefix");
-        String hdlprefix = ConfigurationManager.getProperty("handle.prefix");
+        String targetschema = ConfigurationManager.getProperty("cris", "relationsetter.localschema");
+        String sourceschema = ConfigurationManager.getProperty("cris", "relationsetter.sourceschema");
+//# Reciprocal field definitions are taken from dspace.cfg option ItemAuthority.reciprocalMetadata.<fieldName>
 
         DSpaceObject dso = event.getSubject(ctx);
         //MetadataValue.PARENT_PLACEHOLDER_VALUE
@@ -92,54 +92,31 @@ public class RelationConsumer implements Consumer
         {
             Item item = (Item)dso;
             Map<String, String> reciprocalRelations = getReciprocalRelationsList();
-            Metadatum[] relations = item.getMetadata("datacite", "relation", Item.ANY, Item.ANY);
+            Metadatum[] relations = item.getMetadata(sourceschema, "relation", Item.ANY, Item.ANY);
             // Walk through datacite relations and check contents
             if (relations.length > 0) {
                 for (Metadatum relation : relations) {
                     try {
                         // Cut unwanted identifier type prefix
-                        if (relation.value.substring(0,3).equals("doi") || relation.value.substring(0,3).equals("hdl")) {
+                        if (prefixIsSupported(relation.value.substring(0,3))) {
                             String identifier = relation.value.substring(4).trim();
                             log.info("Checking local items for ID "+identifier);
                             Item relatedItem = null;
-                            //Item relatedSolrItem = null;
                             // Search for identifier
+                            String query = buildQuery(identifier);
                             SolrQuery solrQuery = new SolrQuery()
-                                .setQuery("dc.identifier.doi:"+identifier+" OR handle:"+identifier);
+                                .setQuery(query);
                             solrQuery.setFields("search.resourceid");
                             QueryResponse resp = getSolr().query(solrQuery);
-                            log.info("Looking for identifier "+identifier+" in Solr... Got "+Long.toString(resp.getResults().getNumFound())+" results.");
+                            logDebugMessage("Looking for identifier "+identifier+" in Solr... Query was: "+query+". Got "+Long.toString(resp.getResults().getNumFound())+" results.");
                             if (resp.getResults().getNumFound() > 0) {
                                 SolrDocumentList resultList = resp.getResults();
                                 for (SolrDocument result : resultList) {
                                     int internalId = (int)result.getFieldValue("search.resourceid");
                                     relatedItem = Item.find(ctx,internalId);
-                                    log.info("Found related item for "+getItemHandle(item)+" while looking for identifier "+identifier+": "+getItemHandle(relatedItem));
+                                    logDebugMessage("Found related item for "+getItemHandle(item)+" while looking for identifier "+identifier+": "+getItemHandle(relatedItem));
                                 }
-                        // TODO: What we are doing here is absolutely not performant. Improve performance!
-                        /*
-                        ItemIterator itemList = Item.findAll(ctx);
-                        while (itemList.hasNext()) {
-                            String doi = null;
-                            String urn = null;
-                            Item it = itemList.next();
-                            Metadatum[] doiMd = it.getMetadata("dc", "identifier", "doi", Item.ANY);
-                            if (doiMd.length > 0) {
-                                doi = doiMd[0].value;
-                            }
-                            Metadatum[] urnMd = it.getMetadata("dc", "identifier", "urn", Item.ANY);
-                            if (urnMd.length > 0) {
-                                urn = urnMd[0].value;
-                            }
-                        String hdl = getItemHandle(it);
-                        if ((doi != null && doi.equals(identifier)) || (urn != null && urn.equals(identifier)) || hdl.equals(identifier)) {
-                            relatedItem = it;
-                            break;
-                        }
-                        */
-                    //}
                                 if (relatedItem != null) {
-                                    log.info("Found related item for "+getItemHandle(item)+": "+getItemHandle(relatedItem));
                                     // Check, if local metadata field is available (necessary?)
                                     Metadatum[] titleMd = relatedItem.getMetadata("dc", "title", Item.ANY, Item.ANY);
                                     String title = getItemHandle(relatedItem);
@@ -157,12 +134,12 @@ public class RelationConsumer implements Consumer
                                         id = "doi:"+identifierMd[0].value;
                                     }
                                     // Clear local metadata field
-                                    item.clearMetadata("local", "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
+                                    item.clearMetadata(targetschema, "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
                                     // transfer content to a corresponding field in local schema
-                                    item.addMetadata("local", "relation", reciprocalRelations.get(relation.qualifier), lang, title, getItemHandle(relatedItem), 600);
+                                    item.addMetadata(targetschema, "relation", reciprocalRelations.get(relation.qualifier), lang, title, getItemHandle(relatedItem), 600);
                                     // build corresponding datacite field in related item
-                                    relatedItem.clearMetadata("datacite", "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
-                                    relatedItem.addMetadata("datacite", "relation", reciprocalRelations.get(relation.qualifier), null, id, null, -1);
+                                    relatedItem.clearMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
+                                    relatedItem.addMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), null, id, null, -1);
                                     relatedItem.updateMetadata();
                                     relatedItem.update();
                                 }
@@ -181,6 +158,17 @@ public class RelationConsumer implements Consumer
                 }
             }
         }
+    }
+
+    protected static boolean prefixIsSupported(String item) {
+        String prefixesToCheck = ConfigurationManager.getProperty("cris", "relationsetter.identifier.prefixes");
+        String[] supportedPrefixes = prefixesToCheck.split(",");
+        for (String n : supportedPrefixes) {
+            if (item.equals(n)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -208,7 +196,56 @@ public class RelationConsumer implements Consumer
         return (handle != null) ? handle: " in workflow";
     }
 
+    /**
+     * Internal utitity method to get a description of the handle
+     *
+     * @param item The item to get a description of
+     * @return The handle, or in workflow
+     */
+    private static String buildQuery(String identifier)
+    {
+        //relationsetter.indexfields = dc.identifier.doi;handle;dc.identifier.urn.-
+        String indexfields = ConfigurationManager.getProperty("cris", "relationsetter.indexfields");
+        String q = null;
+        int ind = 0;
+        String[] fieldsToQuery = indexfields.split(";");
+        for (String f : fieldsToQuery) {
+            if (q == null) {
+                q = f+":"+identifier;
+            }
+            else {
+                q = q+f+":"+identifier;
+            }
+            ind++;
+            if (ind < fieldsToQuery.length) {
+                q = q+" OR ";
+            }
+        }
+        return q;
+    }
+
     private static Map<String, String> getReciprocalRelationsList() {
+        Map<String, String> ret = new HashMap<String, String>();
+        ret.put("Cites","IsCitedBy");
+        ret.put("Compiles","IsCompiledBy");
+        ret.put("Documents","IsDocumentedBy");
+        ret.put("HasPart","IsPartOf");
+        ret.put("IsIdenticalTo","IsIdenticalTo");
+        ret.put("IsNewVersionOf","IsPreviousVersionOf");
+        ret.put("IsReferencedBy","References");
+        ret.put("IsSupplementTo","IsSupplementedBy");
+        ret.put("IsCitedBy","Cites");
+        ret.put("IsCompiledBy","Compiles");
+        ret.put("IsDocumentedBy","Documents");
+        ret.put("IsPartOf","HasPart");
+        ret.put("IsPreviousVersionOf","IsNewVersionOf");
+        ret.put("References","IsReferencedBy");
+        ret.put("IsSupplementedBy","IsSupplementTo");
+        return ret;
+    }
+
+    private static Map<String, String> getReciprocalRelationsListFromConfig() {
+//# Reciprocal field definitions are taken from dspace.cfg option ItemAuthority.reciprocalMetadata.<fieldName>
         Map<String, String> ret = new HashMap<String, String>();
         ret.put("Cites","IsCitedBy");
         ret.put("Compiles","IsCompiledBy");
@@ -241,10 +278,7 @@ public class RelationConsumer implements Consumer
     {
         if (solr == null)
         {
-            String solrService = "http://localhost:8081/solr/search";
-            String solrServiceFromConfig = ConfigurationManager.getProperty("discovery", "search.server");
-
-            log.debug("Got Solr URL from config: " + solrServiceFromConfig);
+            String solrService = ConfigurationManager.getProperty("discovery", "search.server");
 
             UrlValidator urlValidator = new UrlValidator(
                     UrlValidator.ALLOW_LOCAL_URLS);
@@ -264,7 +298,7 @@ public class RelationConsumer implements Consumer
                     //solrQuery.setFields(RESOURCE_RESOURCETYPE_FIELD,
                     //        RESOURCE_ID_FIELD);
                     QueryResponse resp = solr.query(solrQuery);
-                    log.debug("Solr test query done - got "+Long.toString(resp.getResults().getNumFound())+" results!");
+                    logDebugMessage("Solr test query done - got "+Long.toString(resp.getResults().getNumFound())+" results!");
                 }
                 catch (SolrServerException e)
                 {
