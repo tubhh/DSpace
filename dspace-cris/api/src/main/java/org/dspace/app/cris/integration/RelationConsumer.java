@@ -138,10 +138,13 @@ public class RelationConsumer implements Consumer
                                     // transfer content to a corresponding field in local schema
                                     item.addMetadata(targetschema, "relation", reciprocalRelations.get(relation.qualifier), lang, title, getItemHandle(relatedItem), 600);
                                     // build corresponding datacite field in related item
-                                    relatedItem.clearMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
-                                    relatedItem.addMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), null, id, null, -1);
-                                    relatedItem.updateMetadata();
-                                    relatedItem.update();
+                                    // only set this field if the item is already approved and not in workflow
+                                    if (item.isArchived()) {
+                                        relatedItem.clearMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
+                                        relatedItem.addMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), null, id, null, -1);
+                                        relatedItem.updateMetadata();
+                                        relatedItem.update();
+                                    }
                                 }
                             }
                         }
