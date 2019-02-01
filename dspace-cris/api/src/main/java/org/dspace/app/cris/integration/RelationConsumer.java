@@ -25,6 +25,14 @@ import org.apache.commons.lang.StringUtils;
 import org.dspace.utils.DSpace;
 import org.dspace.workflow.WorkflowItem;
 
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.commons.validator.routines.UrlValidator;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -54,6 +62,7 @@ public class RelationConsumer implements Consumer
     // The log4j logger for this class
     private static Logger log = Logger.getLogger(RelationConsumer.class);
 
+    private HttpSolrServer solr = null;
 
     @Override
     public void initialize() throws Exception {
@@ -90,31 +99,45 @@ public class RelationConsumer implements Consumer
                 for (Metadatum relation : relations) {
                     // Cut unwanted identifier type prefix
                     if (relation.value.substring(0,3).equals("doi") || relation.value.substring(0,3).equals("hdl")) {
-                        // TODO: What we are doing here is absolutely not performant. Improve performance!
                         String identifier = relation.value.substring(4).trim();
                         log.info("Checking local items for ID "+identifier);
-                    Item relatedItem = null;
-                    // Check, if content is a local identifier
-//                    if (relation.value.equals(doiprefix)) {
-                        // If it is, load the item identified by that identifier
-                    ItemIterator itemList = Item.findAll(ctx);
-                    while (itemList.hasNext()) {
-                        String doi = null;
-                        String urn = null;
-                        Item it = itemList.next();
-                        Metadatum[] doiMd = it.getMetadata("dc", "identifier", "doi", Item.ANY);
-                        if (doiMd.length > 0) {
-                            doi = doiMd[0].value;
+                        Item relatedItem = null;
+                        //Item relatedSolrItem = null;
+                        // Search for identifier
+                        SolrQuery solrQuery = new SolrQuery()
+                            .setQuery("dc.identifier.doi:"+identifier+" OR handle:"+identifier);
+                        solrQuery.setFields("search.resourceid");
+                        QueryResponse resp = getSolr().query(solrQuery);
+                        log.info("Looking for identifier "+identifier+" in Solr... Got "+Long.toString(resp.getResults().getNumFound())+" results.");
+                        if (resp.getResults().getNumFound() > 0) {
+                            SolrDocumentList resultList = resp.getResults();
+                            for (SolrDocument result : resultList) {
+                                int internalId = (int)result.getFieldValue("search.resourceid");
+                                relatedItem = Item.find(ctx,internalId);
+                                log.info("Found related item for "+getItemHandle(item)+" while looking for identifier "+identifier+": "+getItemHandle(relatedSolrItem));
+                            }
                         }
-                        Metadatum[] urnMd = it.getMetadata("dc", "identifier", "urn", Item.ANY);
-                        if (urnMd.length > 0) {
-                            urn = it.getMetadata("dc", "identifier", "urn", Item.ANY)[0].value;
-                        }
+                        // TODO: What we are doing here is absolutely not performant. Improve performance!
+                        /*
+                        ItemIterator itemList = Item.findAll(ctx);
+                        while (itemList.hasNext()) {
+                            String doi = null;
+                            String urn = null;
+                            Item it = itemList.next();
+                            Metadatum[] doiMd = it.getMetadata("dc", "identifier", "doi", Item.ANY);
+                            if (doiMd.length > 0) {
+                                doi = doiMd[0].value;
+                            }
+                            Metadatum[] urnMd = it.getMetadata("dc", "identifier", "urn", Item.ANY);
+                            if (urnMd.length > 0) {
+                                urn = urnMd[0].value;
+                            }
                         String hdl = getItemHandle(it);
                         if ((doi != null && doi.equals(identifier)) || (urn != null && urn.equals(identifier)) || hdl.equals(identifier)) {
                             relatedItem = it;
                             break;
                         }
+                        */
                     }
 //                    }
                     if (relatedItem != null) {
@@ -213,6 +236,50 @@ public class RelationConsumer implements Consumer
     @Override
     public void finish(Context ctx) throws Exception {
         // nothing to do
+    }
+
+    protected HttpSolrServer getSolr()
+    {
+        if (solr == null)
+        {
+            String solrService = "http://localhost:8081/solr/search";
+            String solrServiceFromConfig = ConfigurationManager.getProperty("discovery", "search.server");
+
+            log.debug("Got Solr URL from config: " + solrServiceFromConfig);
+
+            UrlValidator urlValidator = new UrlValidator(
+                    UrlValidator.ALLOW_LOCAL_URLS);
+            if (urlValidator.isValid(solrService))
+            {
+                try
+                {
+                    log.debug("Solr URL: " + solrService);
+                    solr = new HttpSolrServer(solrService);
+
+                    solr.setBaseURL(solrService);
+                    solr.setUseMultiPartPost(true);
+                    // Dummy/test query to search for Item (type=2) of ID=1
+                    SolrQuery solrQuery = new SolrQuery()
+                            .setQuery("*:*");
+                    // Only return obj identifier fields in result doc
+                    //solrQuery.setFields(RESOURCE_RESOURCETYPE_FIELD,
+                    //        RESOURCE_ID_FIELD);
+                    QueryResponse resp = solr.query(solrQuery);
+                    log.debug("Solr test query done - got "+Long.toString(resp.getResults().getNumFound())+" results!");
+                }
+                catch (SolrServerException e)
+                {
+                    log.error("Error while initializing solr server", e);
+                }
+            }
+            else
+            {
+                log.error("Error while initializing solr, invalid url: "
+                        + solrService);
+            }
+        }
+
+        return solr;
     }
 
 }
