@@ -135,6 +135,7 @@
            </c:set>
            <li id="<%= mlink.trim() %>-top-menu" class="hidden-xs hidden-sm <c:if test="${exploremlink == location}">active</c:if>"><a href="<%= request.getContextPath() %>/cris/explore/<%= mlink.trim() %>"><fmt:message key="${fmtkey}"/></a></li>
            <% } %>
+<%--
            <li class="dropdown hidden-md hidden-lg">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="jsp.layout.navbar-default.explore"/> <b class="caret"></b></a>
              <ul class="dropdown-menu">
@@ -149,6 +150,7 @@
            <% } %>
            </ul>
            </li>
+--%>
  <%
  if (extraNavbarData != null)
  {
