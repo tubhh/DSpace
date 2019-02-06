@@ -18,7 +18,7 @@ SET row_security = off;
 -- Data for Name: metadataschemaregistry; Type: TABLE DATA; Schema: public; Owner: dspace
 --
 
-INSERT INTO public.metadataschemaregistry (namespace, short_id) VALUES ('http://doku.b.tu-harburg.de/terms', 'tuhh'), ('http://doku.b.tu-harburg.de/thesis/', 'thesis'),('http://openaire.eu', 'openaire'), ('https://schema.datacite.org', 'datacite');
+INSERT INTO public.metadataschemaregistry (namespace, short_id) VALUES ('http://doku.b.tu-harburg.de/terms', 'tuhh'), ('http://doku.b.tu-harburg.de/thesis/', 'thesis'),('http://openaire.eu', 'openaire'), ('https://schema.datacite.org', 'datacite'), ('https://dspace-cris.4science.it', 'local');
 --INSERT INTO public.metadataschemaregistry (namespace, short_id) VALUES ('http://dspace.org/bundle', 'bundle'), ('http://dspace.org/bitstream', 'bitstream');
 
 
@@ -113,7 +113,7 @@ INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='tuhh'), 'relation', 'ispartofseries', '');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='tuhh'), 'subject', 'fieldofcompetence', '');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='tuhh'), 'subject', 'researchfocus', '');
-INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='tuhh'), 'type', 'rdm', 'Bollean value if this is research data or not');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='tuhh'), 'type', 'rdm', 'Boolean value if this is research data or not');
 
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='thesis'), 'grantor', NULL, 'Information about the grantor of a thesis.');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='thesis'), 'grantor', 'universityOrInstitution', 'Name of the granting university or institution');
@@ -148,6 +148,25 @@ INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='datacite'), 'contributor', 'DataCurator', 'Person tasked with reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use, and maintenance within a data centre or repository');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='datacite'), 'contributor', 'Other', 'Any person or institution making a significant contribution to the development and/or maintenance of the resource, but whose contribution does not “fit” other controlled vocabulary for contributorType.');
 
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'message', 'claim', 'Message about claiming action');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (1, 'identifier', 'external', NULL);
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (1, 'contributorCorporate', 'editor', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (1, 'contributorCorporate', 'other', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsCitedBy', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsCompiledBy', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsDocumentedBy', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsIdenticalTo', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsNewVersionOf', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsPartOf', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsPreviousVersionOf', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsReferencedBy', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsSupplementedBy', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsSupplementTo', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'References', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'Cites', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'Compiles', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'Documents', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'HasPart', '');
 
 
 --INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (226, 8, 'viewer', 'provider', 'Metadata field used to register custom viewer');
@@ -164,4 +183,3 @@ INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier
 --
 -- PostgreSQL database dump complete
 --
-
