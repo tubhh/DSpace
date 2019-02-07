@@ -68,7 +68,7 @@
         if ((url = am.loginPageURL(context, request, response)) != null)
         {
 %>
-            <li style="font-size:20pt;"><p><a href="<%= url %>">
+            <li style="font-size:16pt;"><p><a href="<%= url %>">
 		<%-- This kludge is necessary because fmt:message won't
                      evaluate its attributes, so we can't use it on java expr --%>
                 <%= javax.servlet.jsp.jstl.fmt.LocaleSupport.getLocalizedMessage(pageContext, am.loginPageTitle(context)) %>
