@@ -44,11 +44,21 @@
 		</property>
 	</bean>
 
+	<bean id="relationSponsoringVSItemConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">    										
+		<property name="relationName" value="crisou.publications" />		
+		<property name="relationClass" value="org.dspace.content.Item" />		
+		<property name="query">
+			<value>dc.description.sponsorship_authority:{0}</value>
+		</property>
+	</bean>
+
 	<bean id="relationOUVSPJConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">    										
 		<property name="relationName" value="crisou.projects" />		
 		<property name="relationClass" value="org.dspace.app.cris.model.Project" />		
 		<property name="query">
-			<value>crisproject.organization_authority:{0}</value>
+			<!---<value>crisproject.grant.agencies_authority:{0}</value>-->
+                        <value>crisproject.organization_authority:{0} OR crisproject.funder_authority:{0}</value>
+                        <!-- <value>dc.relation.project_authority:{0}</value> -->
 		</property>
 	</bean>
 
@@ -84,14 +94,6 @@
 		</property>
 	</bean>
 
-	<bean id="relationJOURNALVSItemConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">    										
-		<property name="relationName" value="crisjournals.publications" />		
-		<property name="relationClass" value="org.dspace.content.Item" />		
-		<property name="query">
-			<value>dc.relation.ispartof_authority:{0}</value>
-		</property>
-	</bean>
-
         <bean id="relationPJVSPJConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">
             <property name="relationName" value="crispj.subprojects" />
             <property name="relationClass" value="org.dspace.app.cris.model.Project" />
@@ -99,6 +101,22 @@
                 <value>crisproject.superproject_authority:{0}</value>
             </property>
         </bean>
+
+	<bean id="relationJOURNALVSItemConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">    										
+		<property name="relationName" value="crisjournals.publications" />		
+		<property name="relationClass" value="org.dspace.content.Item" />		
+		<property name="query">
+			<value>dc.relation.ispartof_authority:{0} OR tuhh.relation.ispartofseries_authority:{0}</value>
+		</property>
+	</bean>
+
+	<bean id="relationEVENTVSItemConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">    										
+		<property name="relationName" value="crisevents.publications" />		
+		<property name="relationClass" value="org.dspace.content.Item" />		
+		<property name="query">
+			<value>dc.relation.conference_authority:{0}</value>
+		</property>
+	</bean>
 
 	<bean
 		class="org.dspace.app.cris.configuration.RelationPreferenceServiceConfiguration">
