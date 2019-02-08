@@ -100,14 +100,17 @@
            <li class="pull-<%= isRtl ? "right":"left"%>"><a class="navbar-brand" href="<%= request.getContextPath() %>/"><img height="25" src="<%= request.getContextPath() %>/image/dspace-logo-only.png" alt="DSpace logo" /></a></li>
 
 	    <!-- Home/Start -->
+<!--
 	    <li id="home-top-menu" class="pull-<%= isRtl ? "right":"left"%>   <%= currentPage.endsWith("/home.jsp")? 
         	   "active" : "" %>"><a href="<%= request.getContextPath() %>/">
 		    <img src=/image/navicons/Uni.svg class="navicon"/></br>
 		    <fmt:message key="jsp.layout.navbar-default.home"/></a>
 	    </li>
+-->
 		  <% if(showCommList){ %>
 
 	    <!-- Stöbern -->
+<!--
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Dataset.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.browse"/> <b class="caret"></b></a>
              <ul class="dropdown-menu">
@@ -128,7 +131,7 @@
                    <%-- End of dynamic browse indices --%>
             </ul>
           </li>
-
+-->
 <!-- CRIS Community List
 		   <li id="communitylist-top-menu" class="<%= currentPage.endsWith("/community-list")? 
         		   "active" : "" %>"><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
@@ -169,6 +172,24 @@
 %>
           <%-- <li id="help-top-menu" class="<%= ( currentPage.endsWith( "/help" ) ? "active" : "" ) %>"><dspace:popup page="<%= LocaleSupport.getLocalizedMessage(pageContext, \"help.index\") %>"><fmt:message key="jsp.layout.navbar-default.help"/></dspace:popup></li> --%>
 
+	<!-- Publikationen -->
+          <li class="dropdown <%= (currentPage.endsWith("/browse") && (request.getParameter("type").equals("dateissued") || request.getParameter("type").equals("documenttype") || request.getParameter("type").equals("journals") || request.getParameter("type").equals("crisseries") || request.getParameter("type").equals("tuhhseries"))) ? "active" : "" %>">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Publikation.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.publications"/> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                  <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("dateissued")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=dateissued&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.dateissued"/></a></li>
+                  <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("documenttype")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=documenttype&rpp=100"><fmt:message key="jsp.layout.navbar-default.tuhh.doctype"/></a></li>
+                  <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("journals")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=journals&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.journals"/></a></li>
+                  <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("crisseries")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=crisseries&rpp=100"><fmt:message key="jsp.layout.navbar-default.tuhh.crisseries"/></a></li>
+                  <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("tuhhseries")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=tuhhseries&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.tuhhseries"/></a></li>
+              </ul>
+          </li>
+
+	<!-- Projekte -->
+          <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("pjtitle")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=pjtitle&rpp=50"><img src=/image/navicons/Projekt.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.projects"/></a></li>
+
+	<!-- Forschungsdaten -->
+          <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("researchdata")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=researchdata&rpp=50"><img src=/image/navicons/Dataset.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.researchdata"/></a></li>
+
 	<!-- TUHH-Mitarbeiter/Institute -->
           <li class="dropdown <%= (currentPage.endsWith("/browse") && (request.getParameter("type").equals("rpname") || request.getParameter("type").equals("rpdept"))) ? "active" : "" %>">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Gruppe.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.researcherprofiles"/> <b class="caret"></b></a>
@@ -180,10 +201,6 @@
 	
 	<!-- TUHH Institute -->
           <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("ouname")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=ouname&rpp=100"><img src=/image/navicons/Department.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.orgunits"/></a></li>
-
-	<!-- Projekte -->
-          <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("pjtitle")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=pjtitle&rpp=50"><img src=/image/navicons/Projekt.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.projects"/></a></li>
-
 
           <!-- Hilfe? -->
           <li class="dropdown">
