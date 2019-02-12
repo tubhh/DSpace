@@ -130,7 +130,7 @@ public class ArchiveOriginalBitstreams extends AbstractCurationTask {
                 String createMessage = createArchiveBitstream(archiveBundle, originalBitstreams);
                 item.update();
                 item.updateLastModified();
-
+                Curator.curationContext().getDBConnection().commit();
                 String message = "The item with handle " + item.getHandle() + " has " + originalBitstreams.size()
                         + " bitstreams, new zip archive created. ";
                 if (createMessage != null) {
@@ -168,6 +168,7 @@ public class ArchiveOriginalBitstreams extends AbstractCurationTask {
                         String createMessage = createArchiveBitstream(archiveBundle, originalBitstreams);
                         item.update();
                         item.updateLastModified();
+                        Curator.curationContext().getDBConnection().commit();
                         String message = "Checksums don't match; zip archive replaced for item with handle " + item.getHandle();
                         if (createMessage != null) {
                             message += "; " + createMessage;
