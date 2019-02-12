@@ -57,7 +57,7 @@
 		<property name="relationClass" value="org.dspace.app.cris.model.Project" />		
 		<property name="query">
 			<!---<value>crisproject.grant.agencies_authority:{0}</value>-->
-                        <value>crisproject.organization_authority:{0}</value>
+                        <value>crisproject.organization_authority:{0} OR crisproject.funder_authority:{0}</value>
                         <!-- <value>dc.relation.project_authority:{0}</value> -->
 		</property>
 	</bean>
