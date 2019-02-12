@@ -74,6 +74,7 @@
 		<%-- <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/bootstrap/dspace-theme.css" type="text/css" /> --%>
 		<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/bootstrap-datetimepicker.min.css" />
             <link rel="stylesheet" href="<%= request.getContextPath() %>/css/tubhh.css" type="text/css" />
+            <link rel="stylesheet" href="<%= request.getContextPath() %>/css/tor.css" type="text/css" />
 <%
     if (!"NONE".equals(feedRef))
     {
@@ -164,6 +165,7 @@
     <%-- HACK: marginwidth, marginheight: for non-CSS compliant Netscape browser --%>
     <body class="undernavigation">
 <a class="sr-only" href="#content">Skip navigation</a>
+
 <div id="page">
 <header id="branding">
 

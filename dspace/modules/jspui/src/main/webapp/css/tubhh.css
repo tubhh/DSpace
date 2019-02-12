@@ -17,12 +17,6 @@ table {
 /*body.undernavigation { padding-top: 56px; }*/
 #content .banner { display: none; }
 .btn-success { background-image: linear-gradient(to bottom, #5CB8CC 0px, #33B4DD 100%); border-color: #33B4DD; }
-@media screen and (min-width: 768px){
-    .jumbotron { padding-top: 10px; padding-bottom: 10px }
-    .container .jumbotron { margin-left: 430px; margin-top:20px; }
-    .container .nopadding { margin-left: 0px; padding-left: 60px; }
-    .container .jumbotron .smaller { font-size: 14px; }
-}
 
 footer {
     clear:both;
@@ -45,11 +39,6 @@ footer {
     color: gray;
 }
 
-@media (max-width: 991px) {
-    .clearing-992 {
-        clear:both;
-    }
-}
 
 .col-md-1 .col-md-2 .col-md-3 .col-md-4 .col-md-5 .col-md-6 .col-md-7 .col-md-8 .col-md-9 .col-md-10 .col-md-11 {
     background-color: white;
@@ -373,7 +362,8 @@ input#s {
 
 body {
 /*    background: url("https://katalog.tub.tu-harburg.de/interface/themes/blueprint-tubhh/images/bg/bg-tile.jpg") repeat fixed 50% 0 rgb(221, 221, 221); */
-    background: rgb(193, 233, 249);
+/*    background: rgb(193, 233, 249); */
+    background: #b8b8b8;
 }
 
 .clear {
@@ -407,169 +397,5 @@ a:hover, a:focus {
 }
 .tubdoklogosmall {
     display: none;
-}
-
-
-
-@media (max-width: 1075px) {
-
-#apbranding-box {
-    width: 60% !important;
-}
-.msls {
-    float: left;
-    font-size: 100%;
-    padding-left: 5px;
-    padding-right: 45px;
-    padding-top: 8px;
-}
-.tubdoksearch {
-    float: left;
-    padding-left: 2em;
-    padding-top: 0;
-    width: 25%;
-}
-#main #content {
-    background: #ffffff none repeat scroll 0 0;
-    margin: 0 7.6%;
-    width: auto;
-}
-}
-
-@media (min-width:870px and max-width: 1000px) {
-.tubdoklogo {
-    float: right;
-    margin-top:-120px;
-    padding-right: 10px;
-    height: 50px;
-}
-}
-
-@media (max-width: 800px) {
-#apbranding-box {
-    width: 55% !important;
-}
-.msls {
-    float: left;
-    font-size: 100%;
-    padding-left: 5px;
-    padding-right: 10px;
-    padding-top: 8px;
-}
-.tubdoksearch {
-    padding-left: 40px;
-    padding-right: 5px;
-}
-.tubdoklogo {
-    display: none !important;
-}
-.tubdoklogosmall {
-    display: block !important;
-    background-color: #ffffff;
-    background-image: url("/image/tub_dok_logo.png");
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: auto 40px;
-    height: 40px;
-}
-#main #content {
-    background: #ffffff none repeat scroll 0 0;
-    margin: 0 7.6%;
-    width: auto;
-}
-}
-
-@media (min-width: 200px) and (max-width: 680px) {
-.t1 {
-    display:block;
-    max-width:50px;
-    word-wrap:break-word;
-}
-#t1,#t2,#t3,#t4 {
-    word-wrap:break-word;
-    font-size:10px;
-}
-.standard {
-    word-wrap:break-word;
-    max-width:100px;
-    font-size:10px;
-}
-.metadataFieldValue {
-    display:block;
-    max-width:200px;
-    word-wrap:break-word;
-}
-.evenRowEvenCol,.evenRowOddCol,.oddRowEvenCol,.oddRowOddCol{
-    word-wrap:break-word;
-    font-size:10px;
-}
-
-#page {
-    margin: 0em auto;
-    max-width: 1000px;
-}
-.msls {
-    padding-left: 30px !important;
-    padding-right: 5px !important;
-}
-.tubdoksearch {
-    float: left;
-    padding-top: 0;
-    width: 25%;
-}
-#main {
-    padding: 0;
-}
-#tulogo {
-    display: none !important;
-}
-.tubdoklogo {
-    display: none !important;
-}
-#tubdoklogomobile {
-    display: block !important;
-    background-color: #ffffff;
-    background-image: url("/image/tub_dok_logo.png");
-    background-position: right center;
-    background-repeat: no-repeat;
-    background-size: auto 30px;
-    height: 80px;
-    float: right;
-    width: 50%;
-    padding-right: 1.5em !important;
-}
-.tubdoklogosmall {
-    display: none !important;
-}
-#tulogosmall {
-    background-color: #ffffff;
-    background-image: url("/image/TUHH-Logo.png");
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: auto 60px;
-    display: block !important;
-    height: 80px;
-    padding-left: 1.5em !important;
-    width: 50%;
-    float: left;
-}
-#apbranding-box {
-    clear: both !important;
-    display: block;
-    float: none !important;
-    margin-top: -25px;
-    padding: 0;
-    width: 100% !important;
-}
-.sitename {
-    padding-bottom: 10px;
-    text-align: center;
-}
-#tequery {
-    width: 100px;
-}
-.img-container {
-    float: auto;
-}
 }
 

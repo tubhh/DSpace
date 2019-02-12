@@ -2,11 +2,15 @@
 /* TU Tuerkis #2dc6c6 oder 33cccc */
 
 
-/* /mydspace h2 war 30px */
+/* Login */
+h1 {
+    font-size:24px;
+    }
 
+/* /mydspace h2 war 30px */
 h2 {
     font-size:18px;
-}
+    }
 
 
 /* nur um das Top_menu herum. */
@@ -145,13 +149,19 @@ body {background-color: #ffffff}
 	border:none;
 }
 
+/* dspace-Logo im Menu aka Home */
 li.pull-left:nth-child(1) {
-	display: none;
-}
+    display: none;
+    }
+
+/* extra Home-Button einsparen und auf sitename legen */
+
+#home-top-menu {
+    display:none;
+    }
+
 
 /* top menu */ 
-
-
 .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a,
 .navbar-brand, .navbar-nav > li > a {
 	text-shadow: none;
@@ -163,8 +173,6 @@ li.pull-left:nth-child(1) {
 	text-decoration: none;
 	background-color:#ddd;
 }
-
-# link war nach deselection weiß https://redmine.tub.tuhh.de/issues/1254
 .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a:any-link,
 .navbar-brand, .navbar-nav > li > a:any-link {
 	color:#428bca;
@@ -184,12 +192,35 @@ li.pull-left:nth-child(1) {
     background-color: #ddd;
 }
 
-/* dropdown caret bleibt beim hover weiss? */
-.navbar-inverse .navbar-nav > .open > a .caret, .navbar-inverse .navbar-nav > .open > a:hover .caret, .navbar-inverse .navbar-nav > .open > a:focus .caret {
-    border-top-color: #428bca;
-    border-bottom-color: #428bca;
+/* weisse Schrift bei doppelklick im dropdown verhindern */
+.navbar-inverse .navbar-nav>li>a:focus { color: #428bca; } 
 
-}
+/* caret immer in tuerkis */
+.navbar-default .navbar-nav>.dropdown>a:hover .caret,
+.navbar-default .navbar-nav>.dropdown>a:focus .caret {
+    border-top-color:#2dc6c6;
+    border-bottom-color:#2dc6c6;
+    }
+.navbar-default .navbar-nav>.open>a .caret,
+.navbar-default .navbar-nav>.open>a:hover .caret,
+.navbar-default .navbar-nav>.open>a:focus .caret {
+    border-top-color:#2dc6c6;
+    border-bottom-color:#2dc6c6;
+    }
+.navbar-default .navbar-nav>.dropdown>a .caret {
+    border-top-color:#2dc6c6;
+    border-bottom-color:#2dc6c6;
+    }
+.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+    border-top-color: #2dc6c6;
+    border-bottom-color: #2dc6c6;
+    }
+.navbar-inverse .navbar-nav > .dropdown > a .caret {
+    border-top-color: #2dc6c6;
+    border-bottom-color: #2dc6c6;
+    }
+
+
 /* nach dem login sonst zu hoch */
 #communitylist-top-menu a, #userloggedin-top-menu a {
     padding-top: 12px;
@@ -265,7 +296,14 @@ td > ul {
 /* login user ico */
 .glyphicon {
     color: #039c9c;
+    font-size:12pt;
 }
+/* Hilfe ? */
+.glyphicon-question-sign {
+    color: #039c9c;
+    font-size:24pt;
+}
+
 /* usericons diverse -> researcher-profile */
 
 .fa-globe, .fa-bar-chart-o, .fa-bell, .fa-rss, .fa-user, .fa-edit, .fa-cog, .fa-caret-down, .fa-stop{
@@ -576,9 +614,47 @@ footer.navbar-inverse {
 #designedby > a:hover, #designedby > a:focus, 
 p.text-muted > a:hover, p.text-muted > a:focus {
 	text-decoration: none;
+    }
+
+/* Vorbelegung in Formularen dunkler */
+.form-control::-webkit-input-placeholder {
+    color: #333;
+    }
+.form-control::-moz-placeholder {
+    color: #333;
+    }
+.form-control::-ms-input-placeholder {
+    color: #333;
+    }
+
+
+/* Autorennamen */
+.text-muted {
+    color: #333;
+    }
+
+
+
+/* HD  */
+@media (max-width: 1980px) {
+    /* Institute + Projekte Liste */
+   .t1 {
+    max-width:40em; !important;
+    }
+   .t2 {
+    max-width:40em; !important;
+    }
+   #t1 {
+    max-width:40em; !important;
+    }
+   #t2 {
+    max-width:40em; !important;
+    }
+
 }
 
 
+/* Sitename wird 2-Spaltig neben Searchbox */
 @media (max-width: 1208px) {
     
     #apbranding-box {
@@ -611,8 +687,45 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     margin: 0 7.6%;
     width: auto;
     }
+   .t1 {
+    max-width:40em; !important;
+    }
+   .t2 {
+    max-width:40em; !important;
+    }
+   #t1 {
+    max-width:40em; !important;
+    }
+   #t2 {
+    max-width:40em; !important;
+    }
+
 }
 
+/* Einspaltig, Panel-Info rutscht nach unten */.
+@media (max-width: 991px) {
+    .clearing-992 {
+        clear:both;
+    }
+   .t1 {
+    max-width:30em; !important;
+    }
+   .t1 {
+    max-width:30em; !important;
+    }
+   .t2 {
+    max-width:30em; !important;
+    }
+   #t1 {
+    max-width:30em; !important;
+    }
+   #t2 {
+    max-width:30em; !important;
+    }
+
+}
+
+/* Sitename wandert über Searchbox  */
 @media (max-width: 830px) {
     
     #apbranding-box {
@@ -645,18 +758,38 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     margin: 0 7.6%;
     width: auto;
     }
+
+   .t1 {
+    max-width:30em; !important;
+    }
+   .t2 {
+    max-width:30em; !important;
+    }
+   #t1 {
+    max-width:30em; !important;
+    }
+   #t2 {
+    max-width:30em; !important;
+    }
+
 }
 
+
+
+/* bei < 768px klappt das Menu zusammen. Besser bei schon bei 991px  */
+@media (max-width: 768px) {
+    #home-top-menu {
+    display:none;
+    }
+}
+
+/* Mini-Logo Sitename Searchbox links untereinander, Sprache rechts */
 @media (min-width: 200px) and (max-width: 680px) {
-    .t1 {
-    display:block;
-    max-width:50px;
-    word-wrap:break-word;
+#tulogo {
+    float: left;
+    margin-left:-20px;
     }
-    #t1,#t2,#t3,#t4 {
-    word-wrap:break-word;
-    font-size:10px;
-    }
+
     .standard {
     word-wrap:break-word;
     max-width:100px;
@@ -692,24 +825,9 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     float: auto;
     }
     #tequery {
-    width: 100px;
+    width: 12em;
     }
 
-    #tulogo {
-    display: none !important;
-    }
-    #tulogosmall {
-    background-color: #ffffff;
-    background-image: url("/image/TUHH-Logo.png");
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: auto 60px;
-    display: block !important;
-    height: 80px;
-    padding-left: 1.5em !important;
-    width: 50%;
-    float: left;
-    }
     #apbranding-box {
     clear: both !important;
     display: block;
@@ -720,13 +838,14 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     height: auto;
     }
     .sitename {
-    margin-top: -2em;
-    margin-left 2em;
+    margin-top: -5em;
+    padding-right: 1em;
+    float:right;
     }
     .tubdoksearch {
     float: left;
     padding-top: 1em;
-    margin-left:-8em;
+    margin-left: 1em;
     width: auto;
     }
     .msls {
@@ -736,4 +855,24 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     .navicon {
     display:none !important;
     }
+    #home-top-menu {
+    display:none;
+    }
+    .t1 {
+    max-width:20em; !important;
+    }
+    .t2 {
+    max-width:20em; !important;
+    }
+   #t1 {
+    max-width:20em; !important;
+    }
+   #t2 {
+    max-width:20em; !important;
+    }
+    #t1,#t2,#t3,#t4 {
+    word-wrap:break-word;
+    font-size:10px;
+    }
+
 }
