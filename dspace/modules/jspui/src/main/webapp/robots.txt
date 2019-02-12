@@ -15,11 +15,11 @@ Disallow: /simple-search
 #
 # Optionally uncomment the following line ONLY if sitemaps are working
 # and you have verified that your site is being indexed correctly.
-# Disallow: /browse
+Disallow: /browse
 #
 # If you have configured DSpace (Solr-based) Statistics to be publicly 
 # accessible, then you may not want this content to be indexed
-# Disallow: /statistics
+Disallow: /statistics
 #
 # You also may wish to disallow access to the following paths, in order
 # to stop web spiders from accessing user-based content
@@ -28,13 +28,20 @@ Disallow: /feedback
 Disallow: /forgot
 Disallow: /login
 Disallow: /register
+Disallow: /password-login
 Disallow: /Shibboleth.sso
-
+Disallow: */simple-search*
 
 ##############################
 # Section for misbehaving bots
 # The following directives to block specific robots were borrowed from Wikipedia's robots.txt
 ##############################
+
+# Turnitinbot should not crawl researcher profiles and cris specific stuff, as this is probably no needed for plagiarism detection
+#User-agent: TurnitinBot
+# At the moment nobody should index the cris directory
+Disallow: /cris
+Disallow: /dspace-cris
 
 # advertising-related bots:
 User-agent: Mediapartners-Google*
