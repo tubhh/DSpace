@@ -16,7 +16,7 @@
  <form-map>
 <!--   <name-map collection-handle="default" form-name="traditional" /> -->
    <name-map collection-handle="default" form-name="tubdokwitheu" />
-<!--   <name-map collection-handle="11420/2" form-name="tubdokwitheu" /> -->
+   <name-map collection-handle="11420/2023" form-name="fdm" />
  </form-map>
 
 
@@ -117,7 +117,7 @@
          <hint>Wählen Sie hier die Sprache aus, in der die Publikation hauptsächlich verfasst ist. Taucht die Sprache nicht in der Liste auf, wählen Sie "Sonstige". Wenn keine Sprache angegeben werden kann (zum Beispiel bei Datenbanken oder Bildern), wählen Sie "Keine Angabe".</hint>
          <required></required>
        </field>
-
+<!--
        <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>identifier</dc-element>
@@ -128,7 +128,7 @@
          <hint>Mit dem URN kann Ihre Arbeit dauerhaft und unabhängig von der URL referenziert und identifiziert werden. Es kann hilfreich sein, den URN mit seiner URL in Ihr Dokument aufzunehmen. Sie können den URN aufrufen, indem Sie ihn an die URL http://nbn-resolving.de/ anhängen. Diesem Dokument wird der folgende URN zugewiesen:</hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>type</dc-element>
@@ -193,8 +193,8 @@
          <repeatable>true</repeatable>
          <label>TUHH-Institut(e) / Arbeitsgruppe(n)</label>
          <input-type>onebox</input-type>
-         <hint>Wählen Sie hier das Institut bzw. die Arbeitsgruppe aus, an dem die Arbeit angefertigt wurde, indem Sie den Namen oder das Kürzel des Instituts hier eingeben (z.B. E-4 Kommunikationsnetze)..</hint>
-         <required>Bitte geben Sie das Institut an, an dem die Arbeit entstanden ist! Sie erhalten Vorschläge bei der Eingabe.</required>
+         <hint>Wählen Sie hier das Institut bzw. die Arbeitsgruppe aus, an dem die Arbeit angefertigt wurde, indem Sie den Namen oder das Kürzel des Instituts hier eingeben (z.B. E-4 Kommunikationsnetze) und den Lupenbutton benutzen.</hint>
+         <required>Bitte geben Sie das Institut an, an dem die Arbeit entstanden ist!</required>
        </field>
 <!--
        <field>
@@ -629,7 +629,7 @@
 
    <form name="fdm">
      <page number="1">
-         
+
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>type</dc-element>
@@ -651,17 +651,6 @@
        <!--  <hint>Haupttitel des Dokuments.</hint>-->
          <required>Es muss ein Titel eingegeben werden.</required>
        </field>
-
-      <field>
-          <dc-element>contributor</dc-element>
-          <dc-qualifier>department</dc-qualifier>
-          <label>Author Department</label>
-          <input-type>onebox</input-type>
-          <repeatable>true</repeatable>
-          <parent>dc_contributor_author</parent>
-          <required></required>
-          <hint>Enter an affiliation for each author.</hint>
-      </field>
 
        <field>
          <dc-schema>dc</dc-schema>
@@ -717,7 +706,8 @@
          <hint>Hinweise zu Inhalt, Entstehung und Kontext sowie Nachnutzung der Daten. </hint>
          <required>Bitte ergänzen Sie die Beschreibung.</required>
        </field>
-         
+
+       <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>abstract</dc-element>
          <dc-qualifier>german</dc-qualifier>
@@ -794,7 +784,7 @@
          <repeatable>false</repeatable>
          <label>CreativeCommons Lizenz</label>
          <input-type value-pairs-name="license_fdm_de">dropdown</input-type>
-         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn S
+         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
          <required></required>
        </field>
          
@@ -872,23 +862,23 @@
          <repeatable>true</repeatable>
          <label>TUHH-Institut(e) / Arbeitsgruppe(n)</label>
          <input-type>onebox</input-type>
-         <hint>Technische Universität Hamburg (TUHH):</hint>
-         <required></required>
+         <hint>Wählen Sie hier das Institut bzw. die Arbeitsgruppe aus, an dem die Arbeit angefertigt wurde, indem Sie den Namen oder das Kürzel des Instituts hier eingeben (z.B. E-4 Kommunikationsnetze) und den Lupenbutton benutzen.</hint>
+         <required>Bitte geben Sie das Institut an, an dem die Arbeit entstanden ist!</required>
        </field>
 
        <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>urn</dc-qualifier>
+         <dc-schema>local</dc-schema>
+         <dc-element>researchdata</dc-element>
+         <dc-qualifier>deleteaftertenyears</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>URN</label>
-         <input-type>onebox</input-type>
+         <label>Automatische Löschung</label>
+         <input-type value-pairs-name="oai_flag_de">dropdown</input-type>
+         <hint>Sollen die Daten in 10 Jahren gelöscht werden?</hint>
          <required></required>
        </field>
-     </page>
+      </page>
 
    </form>
-
  </form-definitions>
 
 
@@ -907,22 +897,27 @@
 
  <form-value-pairs>
    <value-pairs value-pairs-name="relation_types_de" dc-term="datacite_relation">
+<!--
      <pair>
        <displayed-value>zitiert</displayed-value>
        <stored-value>Cites</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>wird zitiert von</displayed-value>
        <stored-value>IsCitedBy</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>ergaenzt</displayed-value>
        <stored-value>IsSupplementedBy</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>ist eine Ergaenzung zu</displayed-value>
        <stored-value>IsSupplementTo</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>ist verwendet in</displayed-value>
        <stored-value>IsReferencedBy</stored-value>
@@ -943,10 +938,12 @@
        <displayed-value>enthaelt</displayed-value>
        <stored-value>HasPart</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>ist Teil von</displayed-value>
        <stored-value>IsPartOf</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>dokumentiert</displayed-value>
        <stored-value>Documents</stored-value>
@@ -967,6 +964,7 @@
        <displayed-value>ist identisch mit</displayed-value>
        <stored-value>IsIdenticalTo</stored-value>
      </pair>
+-->
 <!--
      <pair>
        <displayed-value>is an alternate identifier of this upload</displayed-value>
@@ -975,104 +973,7 @@
 -->
    </value-pairs>
 
-   <value-pairs value-pairs-name="license_fdm_de" dc-term="dc_rights_uri">
-     <pair>
-       <displayed-value>No CC license</displayed-value>
-       <stored-value></stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
-       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
-       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
-     </pair>
-   </value-pairs>
-     
-   <value-pairs value-pairs-name="fdm_types_de" dc-term="type">
-     <pair>
-       <displayed-value>Dataset</displayed-value>
-       <stored-value>Dataset</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Audiovisuell</displayed-value>
-       <stored-value>Audiovisual</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>DataPaper</displayed-value>
-       <stored-value>DataPaper</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Bild</displayed-value>
-       <stored-value>Image</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Bild (3D)</displayed-value>
-       <stored-value>Image, 3-D</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Interactive Ressource</displayed-value>
-       <stored-value>InteractiveResource</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Software</displayed-value>
-       <stored-value>Software</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Sound</displayed-value>
-       <stored-value>Sound</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Anderes</displayed-value>
-       <stored-value>Other</stored-value>
-     </pair>
-   </value-pairs>
-     
-   <value-pairs value-pairs-name="contributor_fdm_de" dc-term="datacite_contributor">
-     <pair>
-       <displayed-value>Data Collector</displayed-value>
-       <stored-value>DataCollector</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Data Curator</displayed-value>
-       <stored-value>DataCurator</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Researcher</displayed-value>
-       <stored-value>Researcher</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Kontakt</displayed-value>
-       <stored-value>ContactPerson</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Sonstiges</displayed-value>
-       <stored-value>Other</stored-value>
-     </pair>
-   </value-pairs>
-     
-    <value-pairs value-pairs-name="nl" dc-term="nlrights">
+   <value-pairs value-pairs-name="nl" dc-term="nlrights">
      <pair>
        <displayed-value>Nein</displayed-value>
        <stored-value>false</stored-value>
@@ -1113,6 +1014,41 @@
      </pair>
    </value-pairs>
 
+   <value-pairs value-pairs-name="license_fdm_de" dc-term="dc_rights_uri">
+     <pair>
+       <displayed-value>No CC license</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
+       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+   </value-pairs>
+     
    <value-pairs value-pairs-name="cc_license" dc-term="dc_rights_cc">
      <pair>
        <displayed-value>Keine CC-Lizenz</displayed-value>
@@ -1334,6 +1270,45 @@
      </pair>
    </value-pairs>
 
+   <value-pairs value-pairs-name="fdm_types_de" dc-term="type">
+     <pair>
+       <displayed-value>Dataset</displayed-value>
+       <stored-value>Dataset</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Audiovisuell</displayed-value>
+       <stored-value>Audiovisual</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>DataPaper</displayed-value>
+       <stored-value>DataPaper</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Bild</displayed-value>
+       <stored-value>Image</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Bild (3D)</displayed-value>
+       <stored-value>Image, 3-D</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Interactive Ressource</displayed-value>
+       <stored-value>InteractiveResource</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Software</displayed-value>
+       <stored-value>Software</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Sound</displayed-value>
+       <stored-value>Sound</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Anderes</displayed-value>
+       <stored-value>Other</stored-value>
+     </pair>
+   </value-pairs>
+
    <value-pairs value-pairs-name="hoou_types_de" dc-term="type">
      <pair>
        <displayed-value>Anleitung (Manual)</displayed-value>
@@ -1479,6 +1454,29 @@
      </pair>
    </value-pairs>
 
+   <value-pairs value-pairs-name="contributor_fdm_de" dc-term="datacite_contributor">
+     <pair>
+       <displayed-value>Data Collector</displayed-value>
+       <stored-value>DataCollector</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Data Curator</displayed-value>
+       <stored-value>DataCurator</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Researcher</displayed-value>
+       <stored-value>Researcher</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Kontakt</displayed-value>
+       <stored-value>ContactPerson</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Sonstiges</displayed-value>
+       <stored-value>Other</stored-value>
+     </pair>
+   </value-pairs>
+     
    <value-pairs value-pairs-name="tuhh_institutes_de" dc-term="tuhh_publication_institute">
      <pair>
        <displayed-value>Abwasserwirtschaft und Gewässerschutz B-2</displayed-value>
