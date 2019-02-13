@@ -149,7 +149,6 @@ INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='datacite'), 'contributor', 'Other', 'Any person or institution making a significant contribution to the development and/or maintenance of the resource, but whose contribution does not “fit” other controlled vocabulary for contributorType.');
 
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'message', 'claim', 'Message about claiming action');
-INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (1, 'identifier', 'external', NULL);
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (1, 'contributorCorporate', 'editor', '');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (1, 'contributorCorporate', 'other', '');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'IsCitedBy', '');
@@ -167,6 +166,10 @@ INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'Compiles', '');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'Documents', '');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'relation', 'HasPart', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'contributorCorporate', 'editor', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'contributorCorporate', 'other', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'contributorPerson', 'editor', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'contributorPerson', 'other', '');
 
 
 --INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (226, 8, 'viewer', 'provider', 'Metadata field used to register custom viewer');
