@@ -232,14 +232,23 @@ td > ul {
     list-style-type: none;
 }
 
+
+/* Admin Menu - Footer zu nahe */
+.blank-page {
+    height:20em;
+    }
+
 .panel {
     box-shadow:none;
 }
 
-/* ganze Spalte ~ Meist gesehen */
+/* ganze Spalte ~ Meist gesehen, Lizenz  */
 .panel-primary {
-	  border:none;
-}
+    border:none;
+    overflow-wrap:normal;
+    word-break:normal;
+    word-wrap:normal;
+    }
 
 
 .panel-primary > .panel-heading {
