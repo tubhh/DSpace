@@ -170,6 +170,8 @@ INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'contributorCorporate', 'other', '');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'contributorPerson', 'editor', '');
 INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'contributorPerson', 'other', '');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'researchdata', 'deleteaftertenyears', 'Indicates whether the publication should be deleted in 10 years (true) or not (false)');
+INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES ((SELECT metadata_schema_id FROM public.metadataschemaregistry WHERE short_id='local'), 'researchdata', 'retention-time', '');
 
 
 --INSERT INTO public.metadatafieldregistry (metadata_schema_id, element, qualifier, scope_note) VALUES (226, 8, 'viewer', 'provider', 'Metadata field used to register custom viewer');
