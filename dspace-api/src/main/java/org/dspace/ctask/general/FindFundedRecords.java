@@ -31,17 +31,12 @@ import java.sql.SQLException;
 
 
 /**
- * A basic link checker that is designed to be extended. By default this link checker
- * will check that all links stored in anyschema.anyelement.uri metadata fields return
- * a 20x status code.
- *
- * This link checker can be enhanced by extending this class, and overriding the
- * getURLs and checkURL methods.
+ * Find funded records having a value set for dc.description.sponsorship
  *
  * @author Oliver Goldschmidt
  */
 
-public class FindUncontrolledInstitutes extends AbstractCurationTask
+public class FindFundedRecords extends AbstractCurationTask
 {
 
     // The status of the link checking of this item
@@ -90,6 +85,9 @@ public class FindUncontrolledInstitutes extends AbstractCurationTask
                         }
                         else if (conf < 600) {
                             resultsString.append("Unapproved authority ").append(auth).append(" with confidence level ").append(institute.confidence).append(" for item ").append(getItemHandle(item)).append(" for institute ").append(institute.value).append("!<br/>\n");
+                        }
+                        else {
+                            resultsString.append("Approved authority ").append(auth).append(" for funding ou ").append(institute.value).append(" for item ").append(getItemHandle(item)).append(". Looks all good already - no need to change anything :-).<br/>\n");
                         }
                     }
                 }
