@@ -48,7 +48,7 @@
     List<ACrisObject> rpSubscriptions = (List<ACrisObject>) request
    	 	.getAttribute("crisobject_subscriptions");
 %>
-<dspace:layout style="submission" locbar="link"
+<dspace:layout style="default" locbar="link"
                parentlink="/mydspace"
                parenttitlekey="jsp.mydspace"
                titlekey="jsp.mydspace.subscriptions.title">
