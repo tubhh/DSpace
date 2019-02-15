@@ -232,14 +232,23 @@ td > ul {
     list-style-type: none;
 }
 
+
+/* Admin Menu - Footer zu nahe */
+.blank-page {
+    height:20em;
+    }
+
 .panel {
     box-shadow:none;
 }
 
-/* ganze Spalte ~ Meist gesehen */
+/* ganze Spalte ~ Meist gesehen, Lizenz  */
 .panel-primary {
-	  border:none;
-}
+    border:none;
+    overflow-wrap:normal;
+    word-break:normal;
+    word-wrap:normal;
+    }
 
 
 .panel-primary > .panel-heading {
@@ -444,15 +453,22 @@ td > ul {
 .media.view, .media.view_aggregate, .media.view_count, .media.view a, .media.view_aggregate a, .media.view_count a {
     color: #333;
     background: #fff;
-    border: solid 1px #efefef;
+    border: solid 1px #dcdcdc;
 }
+
 /* google scholar*/
 .media.google, .media.google a {
-
     color: #333;
     background: #fff;
-    border: solid 1px #efefef;
-}
+    border: solid 1px #dcdcdc;
+    }
+
+.media.download, .media.download a {
+    color: #333;
+    background: #fff;
+    border: solid 1px #dcdcdc;
+    }
+
 .metric-counter {
     font-size: 1em;
     font-family: sans-serif;
@@ -538,6 +554,10 @@ td > ul {
     padding-left: 0px;
 }
 
+/* Abstand zum Button Langanzeige */
+.col-lg-3 {
+    padding-top:1.5em;
+    }
 
 table {
     border 1px solid #efefef;
@@ -724,6 +744,21 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     }
 
 }
+
+/* Login im Hamburger-Menu */
+@media (max-width:767px) {
+    .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+    color: #428bca;
+    padding-left:1em;
+    }
+    .navbar-inverse .navbar-nav .open .dropdown-menu >li>a:hover { 
+    color: #428bca; 
+    }
+    #user-top-menu, #userloggedin-top-menu {
+    margin-right: 15px;
+    padding-left: 1em;
+    }
+    }
 
 /* Sitename wandert über Searchbox  */
 @media (max-width: 830px) {
