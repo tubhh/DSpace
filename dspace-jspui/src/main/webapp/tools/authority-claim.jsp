@@ -234,13 +234,13 @@ for (String key : result.keySet())
 				    <textarea class="form-control" name="requestNote_<%= keyID %>" id="requestNote_<%= keyID %>" rows="3" cols="100"></textarea>
 			  </div>
 		</div>
-
-<% 
-	i++;
-} %>
       </div>
     </div>
   </div>
+<% 
+	i++;
+} %>
+
 
         <input type="hidden" name="handle_<%= item.getID() %>" value="<%= handle %>"/>
         <input type="hidden" name="selectedId" value="<%= item.getID() %>"/>
