@@ -449,7 +449,7 @@ td > ul {
 }
 
 
-/* Statistik */
+/* Statistik Boxen */
 .media.view, .media.view_aggregate, .media.view_count, .media.view a, .media.view_aggregate a, .media.view_count a {
     color: #333;
     background: #fff;
@@ -464,6 +464,12 @@ td > ul {
     }
 
 .media.download, .media.download a {
+    color: #333;
+    background: #fff;
+    border: solid 1px #dcdcdc;
+    }
+
+.media.altmetric, .media.altmetric a {
     color: #333;
     background: #fff;
     border: solid 1px #dcdcdc;

@@ -75,7 +75,7 @@ public class FindFundedRecords extends AbstractCurationTask
             if (!getItemHandle(item).equals(NEW_ITEM_HANDLE)) {
             try {
                 Context context = Curator.curationContext();
-                Metadatum[] institutes = item.getMetadata("dc", "desciption", "sponsorship", Item.ANY);
+                Metadatum[] institutes = item.getMetadata("dc", "description", "sponsorship", Item.ANY);
                 if (institutes.length > 0) {
                     for (Metadatum institute : institutes) {
                         String auth = institute.authority;

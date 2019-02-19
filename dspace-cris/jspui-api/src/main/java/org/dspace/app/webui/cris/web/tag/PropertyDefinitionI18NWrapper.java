@@ -21,14 +21,14 @@ import it.cilea.osd.jdyna.model.AWidget;
 import it.cilea.osd.jdyna.model.IPropertiesDefinition;
 import it.cilea.osd.jdyna.widget.WidgetCheckRadio;
 
-public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
+public final class PropertyDefinitionI18NWrapper implements MethodInterceptor {
 	private Locale locale = null;
 	private String localeString = null;
 	private String simpleName = null;
 	private String shortName = null;
 	private int priority = 0;
 
-	public PropertyDefintionI18NWrapper(String simpleName, String shortName, String localeString, int priority) {
+	public PropertyDefinitionI18NWrapper(String simpleName, String shortName, String localeString, int priority) {
 		this.locale = Locale.forLanguageTag(localeString);
 		this.localeString = localeString;
 		this.simpleName = simpleName;
@@ -40,11 +40,11 @@ public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 		if (locale != null) {
 			String name = invocation.getMethod().getName();
-			if (name.equals("getLabel")) {
+			if ("getLabel".equals(name)) {
 				return getLabel(invocation);
 			} else if (name.equals("getReal") || name.equals("getObject")) {
 				return getWrapper((IPropertiesDefinition) invocation.proceed(), localeString);
-			} else if (name.equals("getMask")) {
+			} else if ("getMask".equals(name)) {
 				return getMask(invocation);
 			} else if (name.equals("getRendering")) {
 				AWidget widget = (AWidget) invocation.proceed();
@@ -53,7 +53,9 @@ public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
 					return getWidgetCheckRadioWrapper(wCheck, simpleName, shortName, locale);
 				}
 				return widget;
-			}
+			} else if ("getPriority".equals(name)) {
+                return priority;
+            }
 			
 		}
 		return invocation.proceed();
@@ -80,7 +82,7 @@ public final class PropertyDefintionI18NWrapper implements MethodInterceptor {
         AspectJProxyFactory pf = new AspectJProxyFactory(pd);
         pf.setProxyTargetClass(true);
         pf.addAdvice(
-                new PropertyDefintionI18NWrapper(pd.getAnagraficaHolderClass().getSimpleName(), pd.getShortName(), locale, pd.getPriority()));
+                new PropertyDefinitionI18NWrapper(pd.getAnagraficaHolderClass().getSimpleName(), pd.getShortName(), locale, pd.getPriority()));
         return pf.getProxy();
     }
     

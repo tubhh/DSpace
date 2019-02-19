@@ -27,7 +27,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace" %>
 
 <%@ page import="org.dspace.content.Collection" %>
@@ -46,6 +46,7 @@
 <%@page import="org.dspace.core.Constants"%>
 <%@page import="org.dspace.eperson.EPerson"%>
 <%@page import="org.dspace.versioning.VersionHistory"%>
+<%@page import="org.apache.commons.lang.StringUtils"%>
 <%
     // Attributes
     Boolean displayAllBoolean = (Boolean) request.getAttribute("display.all");
@@ -108,6 +109,8 @@
     
     VersionHistory history = (VersionHistory)request.getAttribute("versioning.history");
     List<Version> historyVersions = (List<Version>)request.getAttribute("versioning.historyversions");
+    
+  	String crisID = (String)request.getAttribute("crisID");
 %>
 
 <%@page import="org.dspace.app.webui.servlet.MyDSpaceServlet"%>
@@ -298,6 +301,15 @@
     }
     }
 %>
+
+	<% if(StringUtils.isNotBlank(crisID)) { %>
+	
+        			<a class="btn btn-primary col-md-12" href="<%= request.getContextPath() %>/tools/claim?handle=<%= handle %>">
+            			<fmt:message key="jsp.display-item.claim-publication"/>
+        			</a>    	
+    <% } %>
+    
+</div>
 </div>
 <br/>
     <%-- Versioning table --%>
