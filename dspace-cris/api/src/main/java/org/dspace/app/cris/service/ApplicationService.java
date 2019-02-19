@@ -120,65 +120,83 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
         orcidQueueDao = (OrcidQueueDao) getDaoByModel(OrcidQueue.class);
         orcidHistoryDao = (OrcidHistoryDao) getDaoByModel(OrcidHistory.class);
         
-		if (configurationService.getPropertyAsType("cris.applicationServiceCache.enabled", true, true)
-        		&& cache == null)
+		if (configurationService.getPropertyAsType("cris.applicationServiceCache.enabled", true, true))
+        {
+            enableCacheManager();
+        }
+    }
+
+    private void enableCacheManager()
+    {
+        if (cache == null)
         {
             try
             {
                 cacheManager = CacheManager.create();
                 if (cacheManager != null)
                 {
-					int maxInMemoryObjects = 100;
-//					ConfigurationManager.getIntProperty("cris",
-//							"applicationServiceCache.max-in-memory-objects", 100);
-					boolean overflowToDisk = true;
-//					ConfigurationManager.getBooleanProperty("cris",
-//							"applicationServiceCache.overflow-to-disk", true);
-					int timeToLive = 0;
-//					ConfigurationManager.getIntProperty("cris",
-//							"applicationServiceCache.time-to-live", 0);
-					int timeToIdle = 0;
-//					ConfigurationManager.getIntProperty("cris",
-//							"applicationServiceCache.time-to-idle", 0);
-					int diskExpireThreadInterval = 600;
-//					ConfigurationManager.getIntProperty("cris",
-//							"applicationServiceCache.disk-expire-thread-interval", 600);
-                	
+                    int maxInMemoryObjects = configurationService.getPropertyAsType("cris.applicationServiceCache.max-in-memory-objects", 1000);
+                    boolean overflowToDisk = configurationService.getPropertyAsType("cris.applicationServiceCache.overflow-to-disk", true);
+                    int timeToLive = configurationService.getPropertyAsType("cris.applicationServiceCache.time-to-live", 0);
+                    int timeToIdle = configurationService.getPropertyAsType("cris.applicationServiceCache.time-to-idle", 0);
+                    int diskExpireThreadInterval = configurationService.getPropertyAsType("cris.applicationServiceCache.disk-expire-thread-interval", 600);
+
                     cache = cacheManager.getCache("applicationServiceCache");
                     if (cache == null)
                     {
-						cache = new Cache("applicationServiceCache", maxInMemoryObjects, overflowToDisk, false,
-								timeToLive, timeToIdle, false, diskExpireThreadInterval);
+                        cache = new Cache("applicationServiceCache",
+                                maxInMemoryObjects, overflowToDisk, false,
+                                timeToLive, timeToIdle, false,
+                                diskExpireThreadInterval);
 
                         cacheManager.addCache(cache);
                     }
-					cacheRpByEPerson = cacheManager.getCache("applicationServiceCacheRpByEPerson");
-					if (cacheRpByEPerson == null) {
-						cacheRpByEPerson = new Cache("applicationServiceCacheRpByEPerson", maxInMemoryObjects,
-								overflowToDisk, false, timeToLive, timeToIdle, false, diskExpireThreadInterval);
-						cacheManager.addCache(cacheRpByEPerson);
-					}
+                    cacheRpByEPerson = cacheManager
+                            .getCache("applicationServiceCacheRpByEPerson");
+                    if (cacheRpByEPerson == null)
+                    {
+                        cacheRpByEPerson = new Cache(
+                                "applicationServiceCacheRpByEPerson",
+                                maxInMemoryObjects, overflowToDisk, false,
+                                timeToLive, timeToIdle, false,
+                                diskExpireThreadInterval);
+                        cacheManager.addCache(cacheRpByEPerson);
+                    }
 
-					cacheByCrisID = cacheManager.getCache("applicationServicecacheByCrisID");
-					if (cacheByCrisID == null) {
-						cacheByCrisID = new Cache("applicationServicecacheByCrisID", maxInMemoryObjects,
-								overflowToDisk, false, timeToLive, timeToIdle, false, diskExpireThreadInterval);
-						cacheManager.addCache(cacheByCrisID);
-					}
+                    cacheByCrisID = cacheManager
+                            .getCache("applicationServicecacheByCrisID");
+                    if (cacheByCrisID == null)
+                    {
+                        cacheByCrisID = new Cache(
+                                "applicationServicecacheByCrisID",
+                                maxInMemoryObjects, overflowToDisk, false,
+                                timeToLive, timeToIdle, false,
+                                diskExpireThreadInterval);
+                        cacheManager.addCache(cacheByCrisID);
+                    }
 
-					cacheBySource = cacheManager.getCache("applicationServiceCacheBySource");
-					if (cacheBySource == null) {
-						cacheBySource = new Cache("applicationServiceCacheBySource", maxInMemoryObjects,
-								overflowToDisk, false, timeToLive, timeToIdle, false, diskExpireThreadInterval);
-						cacheManager.addCache(cacheBySource);
-					}
+                    cacheBySource = cacheManager
+                            .getCache("applicationServiceCacheBySource");
+                    if (cacheBySource == null)
+                    {
+                        cacheBySource = new Cache(
+                                "applicationServiceCacheBySource",
+                                maxInMemoryObjects, overflowToDisk, false,
+                                timeToLive, timeToIdle, false,
+                                diskExpireThreadInterval);
+                        cacheManager.addCache(cacheBySource);
+                    }
 
-					cacheByUUID = cacheManager.getCache("applicationServiceCacheBySource");
-					if (cacheByUUID == null) {
-						cacheByUUID = new Cache("applicationServiceCacheByUUID", maxInMemoryObjects, overflowToDisk,
-								false, timeToLive, timeToIdle, false, diskExpireThreadInterval);
-						cacheManager.addCache(cacheByUUID);
-					}                    
+                    cacheByUUID = cacheManager
+                            .getCache("applicationServiceCacheBySource");
+                    if (cacheByUUID == null)
+                    {
+                        cacheByUUID = new Cache("applicationServiceCacheByUUID",
+                                maxInMemoryObjects, overflowToDisk, false,
+                                timeToLive, timeToIdle, false,
+                                diskExpireThreadInterval);
+                        cacheManager.addCache(cacheByUUID);
+                    }
                 }
             }
             catch (Exception ex)
@@ -190,15 +208,7 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
 
     public void destroy()
     {
-        if (cacheManager != null)
-        {
-            cache = null;
-			cacheRpByEPerson = null;
-			cacheBySource = null;
-			cacheByCrisID = null;
-			cacheByUUID = null;            
-            cacheManager.shutdown();
-        }
+        disableCacheManager();
     }
 
     /**
@@ -1078,7 +1088,20 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
 	}
 	
 	VolatileObjects cachedObjects = new VolatileObjects();
-	
+
+    public void disableCacheManager()
+    {
+        if (cacheManager != null)
+        {
+            cache = null;
+            cacheRpByEPerson = null;
+            cacheBySource = null;
+            cacheByCrisID = null;
+            cacheByUUID = null;            
+            cacheManager.shutdown();
+        }   
+    }
+
 	/***
 	 * Cache a candidate of a new Object
 	 * 
