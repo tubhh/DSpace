@@ -47,6 +47,7 @@
 <%@page import="org.dspace.eperson.EPerson"%>
 <%@page import="org.dspace.versioning.VersionHistory"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="org.dspace.app.webui.servlet.MyDSpaceServlet"%>
 <%
     // Attributes
     Boolean displayAllBoolean = (Boolean) request.getAttribute("display.all");
@@ -113,8 +114,31 @@
   	String crisID = (String)request.getAttribute("crisID");
 %>
 
-<%@page import="org.dspace.app.webui.servlet.MyDSpaceServlet"%>
-<%@ page import="org.apache.commons.lang.StringUtils" %>
+<script type="text/javascript"><!--
+j(document).ready(function() {
+
+	<% 
+		if(StringUtils.isNotBlank(crisID)) {
+	%>
+		j.ajax({
+			url : "<%=request.getContextPath()%>/json/checkclaimpublicationmetadata",
+			data : {																			
+				"item" : "<%= item.getID()%>",
+				"crisid": "<%= crisID %>"
+			},
+			success : function(data) {
+					j.each(data, function( index, value ) {
+						j('#claim-usertools').append("<a class=\"btn btn-primary col-md-12\" href=\"<%= request.getContextPath() %>/tools/claim?action=" + value.action + "&metadata=" + value.metadata + "&handle=<%= handle %>\">" + value.message + "</a>");	
+					});				
+			},
+			error : function(data) {
+			}
+		});	
+	<%
+		}
+	%>
+});
+--></script>
 <dspace:layout title="<%= title %>">
 <%
     if (handle != null)
@@ -304,9 +328,15 @@
 
 	<% if(StringUtils.isNotBlank(crisID)) { %>
 	
-        			<a class="btn btn-primary col-md-12" href="<%= request.getContextPath() %>/tools/claim?handle=<%= handle %>">
-            			<fmt:message key="jsp.display-item.claim-publication"/>
-        			</a>    	
+	       <div class="col-sm-5 col-md-4 col-lg-3">
+            <div class="panel panel-warning">
+            	<div class="panel-heading"><fmt:message key="jsp.usertools"/></div>
+            	<div class="panel-body">
+			    	<div id="claim-usertools">
+			    	</div>
+            	</div>
+            </div>
+            </div>
     <% } %>
     
 </div>
