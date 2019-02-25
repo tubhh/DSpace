@@ -156,10 +156,10 @@ li.pull-left:nth-child(1) {
 
 /* extra Home-Button einsparen und auf sitename legen */
 
-#home-top-menu {
+/*#home-top-menu {
     display:none;
     }
-
+*/
 
 /* top menu */ 
 .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a,
