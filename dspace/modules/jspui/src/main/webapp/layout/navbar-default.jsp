@@ -100,13 +100,11 @@
            <li class="pull-<%= isRtl ? "right":"left"%>"><a class="navbar-brand" href="<%= request.getContextPath() %>/"><img height="25" src="<%= request.getContextPath() %>/image/dspace-logo-only.png" alt="DSpace logo" /></a></li>
 
 	    <!-- Home/Start -->
-<!--
 	    <li id="home-top-menu" class="pull-<%= isRtl ? "right":"left"%>   <%= currentPage.endsWith("/home.jsp")? 
         	   "active" : "" %>"><a href="<%= request.getContextPath() %>/">
 		    <img src=/image/navicons/Uni.svg class="navicon"/></br>
 		    <fmt:message key="jsp.layout.navbar-default.home"/></a>
 	    </li>
--->
 		  <% if(showCommList){ %>
 
 	    <!-- Stöbern -->
