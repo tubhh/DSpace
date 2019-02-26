@@ -222,7 +222,7 @@
         <heading>submit.progressbar.showidentifiers</heading>
         <processing-class>org.dspace.submit.step.ShowIdentifiersStep</processing-class>
         <jspui-binding>org.dspace.app.webui.submit.step.JSPShowIdentifiersStep</jspui-binding>
-        <workflow-editable>true</workflow-editable>
+        <workflow-editable>false</workflow-editable>
       </step>
 
        <!--Step 3 will be to Manage Item access.
