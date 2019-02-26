@@ -204,7 +204,7 @@
           <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Info.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.help"/>  <b class="caret"></b></a>
              <ul class="dropdown-menu">
-                <li><fmt:message key="jsp.layout.navbar-default.tor.help"/></li>
+<%--                <li><fmt:message key="jsp.layout.navbar-default.tor.help"/></li>            --%>
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-contact"/></li>
                 <li class="divider"></li>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=1"><fmt:message key="jsp.layout.navbar-default.tubdok-policies"/></a></li>               --%>

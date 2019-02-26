@@ -171,23 +171,23 @@
 
             <div id="tulogo">
     <a href="http://www.tuhh.de">
-    <img src="/image/TUHH-Logo.png" alt="TUHH HOME" title="TUHH HOME" />
+    <img class="tulogo" src="/image/TUHH-LOGO.svg" alt="TUHH HOME" title="TUHH HOME" />
                 </a>
             </div><!-- logo -->
 <div id="tulogosmall">
 <a id="box-link" href="http://www.tuhh.de"></a>
 </div>
 <div id="tubdoklogomobile">
-<a id="box-link" href="https://tubdok.tub.tuhh.de"></a>
+<a id="box-link" href="https://tore.tuhh.de"></a>
 </div>
             <div id="apbranding-box">
                 <div class="sitename">
-            <a style="color:#000000;" href="https://tubdok.tub.tuhh.de/"
+            <a style="color:#000000;" href="https://tore.tuhh.de/"
             title="<fmt:message key="tuhh.library.name" />" rel="home">
             <fmt:message key="tuhh.library.dokuservice.description" /></a>
                 </div>
         <div class="tubdoklogosmall">
-    <a id="box-link" href="https://tubdok.tub.tuhh.de"> </a>
+    <a id="box-link" href="https://tore.tuhh.de"> </a>
     </div>
 <div> <!-- 3 Spalten für DE|EN Search Logo -->
                 <div class="msls">
