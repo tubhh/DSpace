@@ -193,7 +193,7 @@
          <repeatable>true</repeatable>
          <label>TUHH-Institut(e) / Arbeitsgruppe(n)</label>
          <input-type>onebox</input-type>
-         <hint>Wählen Sie hier das Institut bzw. die Arbeitsgruppe aus, an dem die Arbeit angefertigt wurde, indem Sie den Namen oder das Kürzel des Instituts hier eingeben (z.B. E-4 Kommunikationsnetze) und den Lupenbutton benutzen.</hint>
+         <hint>Wählen Sie hier das Institut bzw. die Arbeitsgruppe aus, an dem die Arbeit angefertigt wurde, indem Sie den Namen oder das Kürzel des Instituts hier eingeben (z.B. "Kommunikationsnetze" oder "E-4") und den Lupenbutton benutzen.</hint>
          <required>Bitte geben Sie das Institut an, an dem die Arbeit entstanden ist!</required>
        </field>
 <!--
@@ -594,7 +594,7 @@
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>project</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Projekt</label>
          <input-type>onebox</input-type>
          <hint>Für Projekte ohne EU-Förderung:</hint>
@@ -825,7 +825,7 @@
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>project</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Projekt</label>
          <input-type>onebox</input-type>
          <hint>Für Projekte ohne EU-Förderung:</hint>
@@ -1302,6 +1302,10 @@
      <pair>
        <displayed-value>Sound</displayed-value>
        <stored-value>Sound</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Text</displayed-value>
+       <stored-value>Text</stored-value>
      </pair>
      <pair>
        <displayed-value>Anderes</displayed-value>

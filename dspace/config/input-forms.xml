@@ -194,7 +194,7 @@
          <repeatable>true</repeatable>
          <label>TUHH-Institute / Workgroup</label>
          <input-type>onebox</input-type>
-         <hint>Choose the institute(s) or the workgroup(s), at that this work has been produced by typing the name or the code of the institute and using the lookup button.</hint>
+         <hint>Choose the institute(s) or the workgroup(s), at that this work has been produced by typing the name or the code of the institute (for instance "Kommunikationsnetze" or "E-4") and using the lookup button.</hint>
          <required>Please provide the institute of your publication.</required>
        </field>
 <!--
@@ -597,7 +597,7 @@
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>project</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Project</label>
          <input-type>onebox</input-type>
          <hint>For projects without EU funding:</hint>
@@ -828,7 +828,7 @@
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>project</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Project</label>
          <input-type>onebox</input-type>
          <hint>For projects without EU funding</hint>
@@ -1302,6 +1302,10 @@
      <pair>
        <displayed-value>Sound</displayed-value>
        <stored-value>Sound</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Text</displayed-value>
+       <stored-value>Text</stored-value>
      </pair>
      <pair>
        <displayed-value>Other</displayed-value>
