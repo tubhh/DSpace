@@ -35,6 +35,13 @@ if (sessionLocale != null) {
     	</div>
 		<div id="collapseOne${holder.shortName}" class="panel-collapse collapse in">
 			<div class="panel-body">
+                            <c:choose>
+                                            <c:when test="${empty anagraficadto.anagraficaProperties['system-orcid-token-activities-update']}">
+                                                <span class="label label-warning"><fmt:message key="jsp.orcid.custom.push-activities-not-available"/></span>
+                                                <a class="btn btn-default" href="<%= request.getContextPath() %>/cris/rp/rp${researcher.id}/orcid.html"><fmt:message key="jsp.orcid.custom.pushlink"/></a>
+                                            </c:when>
+                                            <c:otherwise>
+
 				<div class="col-md-12">	
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -148,5 +155,7 @@ if (sessionLocale != null) {
 		
    						 </div>							
 						</div>   
+                                        </c:otherwise>
+                                        </c:choose>
 					</div></div></div>
 </div>
