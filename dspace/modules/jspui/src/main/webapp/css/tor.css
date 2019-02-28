@@ -819,9 +819,13 @@ p.text-muted > a:hover, p.text-muted > a:focus {
 
 /* bei < 768px klappt das Menu zusammen. Besser bei schon bei 991px  */
 @media (max-width: 768px) {
+
+/* Home Button */
+/*
     #home-top-menu {
     display:none;
     }
+*/
 }
 
 /* Mini-Logo Sitename Searchbox links untereinander, Sprache rechts */
@@ -896,9 +900,11 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     .navicon {
     display:none !important;
     }
+/*
     #home-top-menu {
     display:none;
     }
+*/
     .t1 {
     max-width:20em; !important;
     }
