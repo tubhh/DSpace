@@ -493,7 +493,7 @@ td > ul {
 }
 
 
-/* Research Profile*/
+/* Research Profile */
 #researcher .image {
     width: 160px;
 }
@@ -529,6 +529,10 @@ td > ul {
     color:#777;
 }
 
+/* Auswahlliste im RP */
+.ui-menu-item.ui-state-focus {
+    font-weight: normal;
+    }
 
 /* Label Success hatte gruene fuellung */
 .label-success {
