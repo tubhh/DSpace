@@ -330,10 +330,21 @@ td > ul {
 }
 
 
-/* veroeffentlichen cancel->next*/
+/* Abstand Text-Buttonrand */
 .btn-default.col-md-6 , .btn-primary.col-md-6 {
     padding-left: 12px;
 }
+.btn-warning.col-md-6 , .btn-primary.col-md-6 {
+    padding-left: 12px;
+}
+.btn-warning:hover {
+    color:#333;
+}
+
+.btn-success.col-md-6 , .btn-primary.col-md-6 {
+    padding-left: 12px;
+}
+
 
 /* Statistik anzeigen, blauer Button -> grau */
 .btn-info {
