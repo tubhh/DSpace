@@ -56,6 +56,14 @@
 %>
 <c:set var="admin" scope="request"><%= isAdmin %></c:set>
 
+<c:set var="dspace.layout.head" scope="request">		
+	<style type="text/css">
+		.nav > .researcher-menu-item-hidden {
+			display:none;
+		}
+	</style>
+</c:set>
+
 <c:set var="dspace.layout.head.last" scope="request">
     <script type="text/javascript"><!--
 
