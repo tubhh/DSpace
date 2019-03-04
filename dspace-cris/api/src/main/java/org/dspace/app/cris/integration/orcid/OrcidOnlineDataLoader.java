@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.ws.rs.NotFoundException;
 
@@ -82,19 +83,21 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
             Map<String, Set<String>> keys) throws HttpException, IOException
     {
         Set<String> orcids = keys != null ? keys.get(ORCID) : null;
+        List<Thread> threads = new ArrayList<Thread>();
+        final ConcurrentLinkedQueue<Record> q = new ConcurrentLinkedQueue<Record>();
         List<Record> results = new ArrayList<Record>();
 
-        OrcidService orcidService = OrcidService.getOrcid();
+        final OrcidService orcidService = OrcidService.getOrcid();
         String sourceName = orcidService.getSourceClientName();
 
         if (orcids != null)
         {
-            for (String orcid : orcids)
+            for (final String orcid : orcids)
             {
 
                 try
                 {
-                    PersonalDetails profile = orcidService
+                    final PersonalDetails profile = orcidService
                             .getPersonalDetails(orcid, null);
                     if (profile != null)
                     {
@@ -102,7 +105,7 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                         workgroup: for (WorkGroup orcidGroup : orcidWorks.getGroup())
                         {
                             int higher = orcidService.higherDisplayIndex(orcidGroup);
-                            worksummary : for (WorkSummary orcidSummary : orcidGroup
+                            worksummary : for (final WorkSummary orcidSummary : orcidGroup
                                     .getWorkSummary())
                             {
                                 if (StringUtils.isNotBlank(orcidSummary.getDisplayIndex()))
@@ -126,13 +129,28 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                                 {
                                     try
                                     {
-                                        results.add(convertOrcidWorkToRecord(
-                                                profile, orcid,
-                                                orcidService.getWork(orcid,
-                                                        null,
-                                                        orcidSummary
-                                                                .getPutCode()
-                                                                .toString())));
+                                    	threads.add(new Thread() {
+                                    		@Override
+                                    		public void run()
+                                    		{
+                                    			int count = 10;
+                                    			while (count-- > 0)
+                                    			{
+                                    				try {
+                                    					q.add(convertOrcidWorkToRecord(
+                                    							profile, orcid,
+                                    							orcidService.getWork(orcid,
+                                    									null,
+                                    									orcidSummary
+                                    									.getPutCode()
+                                    									.toString())));
+                                    					return;
+                                    				} catch (Exception e) {
+                                    					e.printStackTrace();
+                                    				}
+                                    			}
+                                    		}
+                                    	});
                                     }
                                     catch (Exception e)
                                     {
@@ -149,6 +167,34 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                 }
             }
         }
+        
+        List<Thread> threadsStarted = new ArrayList<Thread>();
+        
+        while (!threads.isEmpty() || !threadsStarted.isEmpty())
+        {
+        	if (!threads.isEmpty() && threadsStarted.size() < 64)
+        	{
+        		Thread t = threads.remove(0);
+        		t.start();
+        		threadsStarted.add(t);
+        	}
+        	else
+        	{
+        		Thread t = threadsStarted.remove(0);
+        		try {
+					t.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
+        }
+        
+        while (!q.isEmpty())
+        {
+        	results.add(q.remove());
+        }
+        
         return results;
     }
 

@@ -522,9 +522,23 @@ public class OrcidService extends RestSource
      * @throws IOException
      * @throws JsonProcessingException
      */
+    private String lastCode;
+    private String lastCodeOrScope;
+    private String lastGrantType;
+    private OrcidAccessToken lastAccessToken;
+    
     private OrcidAccessToken getAccessToken(String code, String codeOrScope,
             String grantType) throws IOException, JsonProcessingException
     {
+    	if ((lastCode != null && lastCode.equals(code) || code == null) &&
+    			(lastCodeOrScope != null && lastCodeOrScope.equals(codeOrScope) || codeOrScope == null) &&
+    			(lastGrantType != null && lastGrantType.equals(grantType)) || grantType == null)
+		{
+    		return lastAccessToken;
+		}
+    				
+    			
+    	
         if (StringUtils.isBlank(clientID)
                 || StringUtils.isBlank(clientSecretKey))
         {
@@ -541,8 +555,13 @@ public class OrcidService extends RestSource
         form.param(codeOrScope, code);
         Builder builder = target.request().accept(MediaType.APPLICATION_JSON);
         String response = builder.post(Entity.form(form), String.class);
-        return new ObjectMapper().reader(OrcidAccessToken.class)
+        OrcidAccessToken token = new ObjectMapper().reader(OrcidAccessToken.class)
                 .readValue(response);
+        lastCode = code;
+        lastCodeOrScope = codeOrScope;
+        lastGrantType = grantType;
+        lastAccessToken = token;
+        return token;
     }
 
     /*
