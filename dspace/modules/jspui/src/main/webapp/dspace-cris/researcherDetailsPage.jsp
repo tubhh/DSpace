@@ -87,6 +87,11 @@
 	<meta property="og:title" content="${metaprofilename}" />	
 	<meta property="og:type" content="profile" />
 	<meta property="og:url" content="${baseURL}/cris/uuid/${entity.uuid}" />
+	<style type="text/css">
+		.nav > .researcher-menu-item-hidden {
+			display:none;
+		}
+	</style>
 </c:set>
 <c:set var="dspace.layout.head.last" scope="request">
 	

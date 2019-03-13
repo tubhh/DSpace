@@ -64,3 +64,7 @@ input.ds-authority-lock.is-unlocked
 
 /* field required in submission */
 .label-required:after { content:" *"; }
+
+.nav > .researcher-menu-item-hidden {
+	display:none;
+}
