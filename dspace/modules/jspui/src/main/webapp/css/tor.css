@@ -330,10 +330,21 @@ td > ul {
 }
 
 
-/* veroeffentlichen cancel->next*/
+/* Abstand Text-Buttonrand */
 .btn-default.col-md-6 , .btn-primary.col-md-6 {
     padding-left: 12px;
 }
+.btn-warning.col-md-6 , .btn-primary.col-md-6 {
+    padding-left: 12px;
+}
+.btn-warning:hover {
+    color:#333;
+}
+
+.btn-success.col-md-6 , .btn-primary.col-md-6 {
+    padding-left: 12px;
+}
+
 
 /* Statistik anzeigen, blauer Button -> grau */
 .btn-info {
@@ -482,7 +493,7 @@ td > ul {
 }
 
 
-/* Research Profile*/
+/* Research Profile */
 #researcher .image {
     width: 160px;
 }
@@ -518,6 +529,10 @@ td > ul {
     color:#777;
 }
 
+/* Auswahlliste im RP */
+.ui-menu-item.ui-state-focus {
+    font-weight: normal;
+    }
 
 /* Label Success hatte gruene fuellung */
 .label-success {
@@ -819,9 +834,13 @@ p.text-muted > a:hover, p.text-muted > a:focus {
 
 /* bei < 768px klappt das Menu zusammen. Besser bei schon bei 991px  */
 @media (max-width: 768px) {
+
+/* Home Button */
+/*
     #home-top-menu {
     display:none;
     }
+*/
 }
 
 /* Mini-Logo Sitename Searchbox links untereinander, Sprache rechts */
@@ -896,9 +915,11 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     .navicon {
     display:none !important;
     }
+/*
     #home-top-menu {
     display:none;
     }
+*/
     .t1 {
     max-width:20em; !important;
     }
