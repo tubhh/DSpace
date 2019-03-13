@@ -504,7 +504,7 @@
 		<property name="types">
 			<map>
 				<entry key="selected" value-ref="selectedPublicationForEventComponent" />				
-				<entry key="all" value-ref="allPublicationForEventComponent" />
+				<entry key="journalList" value-ref="allPublicationForEventComponent" />
 			</map>
 		</property>
 	</bean>
@@ -527,7 +527,7 @@
 	</bean>
 
 	<bean id="allPublicationForEventComponent" class="org.dspace.app.webui.cris.components.BeanFacetComponent">
-		<property name="componentIdentifier" value="all" />
+		<property name="componentIdentifier" value="journalList" />
 		<property name="facetQuery">
 			<value>*:*</value>
 		</property>
