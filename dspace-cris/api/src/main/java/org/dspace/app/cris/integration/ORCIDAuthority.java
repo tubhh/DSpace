@@ -8,6 +8,7 @@
 package org.dspace.app.cris.integration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ public class ORCIDAuthority extends RPAuthority {
 
 	private OrcidService source = new DSpace().getServiceManager().getServiceByName("OrcidSource", OrcidService.class);
 
+	private List<OrcidAuthorityExtraMetadataGenerator> generators = new DSpace().getServiceManager().getServicesByType(OrcidAuthorityExtraMetadataGenerator.class);
+	
 	@Override
 	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
 		Choices choices = super.getMatches(field, query, collection, start, limit, locale);		
@@ -49,6 +52,7 @@ public class ORCIDAuthority extends RPAuthority {
 						String orcid = ((OrcidAuthorityValue)val).getOrcid_id();
 						extras.put("insolr", "false");
 						extras.put("link", getLink((OrcidAuthorityValue)val));
+						extras.putAll(buildExtra(val.getValue()));
 						StringBuffer sb = new StringBuffer(val.getValue());
 						if (StringUtils.isNotBlank(inst)) {
 							sb.append(" (").append(inst).append(")");
@@ -68,7 +72,20 @@ public class ORCIDAuthority extends RPAuthority {
 		return choices.values;
 	}
 
-	private String getLink(OrcidAuthorityValue val) {
+	private Map<String, String> buildExtra(String value)
+    {
+        Map<String, String> extras = new HashMap<String,String>();
+        
+        if(generators!=null) {
+            for(OrcidAuthorityExtraMetadataGenerator gg : generators) {
+                Map<String, String> extrasTmp = gg.build(source, value);
+                extras.putAll(extrasTmp);
+            }
+        }
+        return extras;
+    }
+
+    private String getLink(OrcidAuthorityValue val) {
 		return source.getBaseURL() + val.getOrcid_id();
 	}
 
