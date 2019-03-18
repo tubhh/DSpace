@@ -632,9 +632,11 @@ footer.navbar-inverse {
     padding-right: 2em;
 }
 
-/* tubdok nimmt teil an ... */
+/* Logos: dnb datacite openaire worldcat base ...*/
 .navbar-bottom .navbar-bottom {
 	background-color: #fff;	
+	padding-top: 2em;
+	border-top: 1px solid #ddd; 
 }
 
 /* logos */
