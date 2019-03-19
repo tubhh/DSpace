@@ -134,9 +134,9 @@ public class RelationConsumer implements Consumer
                                         id = "doi:"+identifierMd[0].value;
                                     }
                                     // Clear local metadata field
-                                    item.clearMetadata(targetschema, "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
+                                    item.clearMetadata(targetschema, "relation", relation.qualifier, Item.ANY);
                                     // transfer content to a corresponding field in local schema
-                                    item.addMetadata(targetschema, "relation", reciprocalRelations.get(relation.qualifier), lang, title, getItemHandle(relatedItem), 600);
+                                    item.addMetadata(targetschema, "relation", relation.qualifier, lang, title, getItemHandle(relatedItem), 600);
                                     // build corresponding datacite field in related item
                                     // only set this field if the item is already approved and not in workflow
                                     if (item.isArchived()) {
