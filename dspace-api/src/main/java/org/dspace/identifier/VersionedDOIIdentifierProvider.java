@@ -9,6 +9,7 @@
 package org.dspace.identifier;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,7 @@ import org.dspace.versioning.Version;
 import org.dspace.versioning.VersionDAO;
 import org.dspace.versioning.VersionHistory;
 import org.dspace.versioning.VersionHistoryDAO;
+import org.dspace.utils.DSpace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
