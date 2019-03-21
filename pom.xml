@@ -2032,15 +2032,7 @@
        <repository>
 			<id>4science-repo-nexus</id>
 			<name>4Science Maven Repository</name>
-                       <url>https://github.com/4Science/mvn-repo/raw/master/snapshots</url>
-                       <releases>
-                               <enabled>false</enabled>
-                               <checksumPolicy>never</checksumPolicy>
-                       </releases>
-                       <snapshots>
-                               <enabled>true</enabled>
-                               <checksumPolicy>never</checksumPolicy>
-                       </snapshots>
+			<url>https://nexus.4science.it/repository/maven-public/</url>
 		</repository>
 
        <repository>
