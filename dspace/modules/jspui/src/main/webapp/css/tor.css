@@ -12,6 +12,10 @@ h2 {
     font-size:18px;
     }
 
+select[name="tuhh_subject_fieldofcompetence"], select[name="tuhh_subject_researchfocus"] {
+        height: 7em;
+        width: 20em;
+}
 
 /* nur um das Top_menu herum. */
 #page {
