@@ -56,7 +56,7 @@
     <div class="navbar navbar-bottom">
         <%= iconsbar %>
     </div>
-             <div id="designedby" class="container text-muted">
+             <div id="designedby" class="container text-muted"><fmt:message key="jsp.layout.navbar-default.tubdok-impress"/>&nbsp;-
                                 <a target="_blank" href="<%= request.getContextPath() %>/feedback"><fmt:message key="jsp.layout.footer-default.feedback"/></a>&nbsp;-
                                 <fmt:message key="jsp.layout.navbar-default.tubdok-contact"/>
 

@@ -218,8 +218,10 @@
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=4"><fmt:message key="jsp.layout.navbar-default.tubdok-disclaimer"/></a></li>         --%>
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-depositlicense"/></li>
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-orcid"/></li>
+<%--
                 <li class="divider"></li>
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-impress"/></li>
+--%>
              </ul>
           </li>
 
