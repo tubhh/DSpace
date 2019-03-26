@@ -700,13 +700,13 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
-<%-- if(submitter_button || StringUtils.isNotBlank(crisID)) { --%>
-<% if(submitter_button) { %>
+<%-- As there is now only one possible User Tools button (create new version) it can be included
+    in this check so an empty sub-menu will not be displayed --%>
+<% if((submitter_button && hasVersionButton) || StringUtils.isNotBlank(crisID)) { %>
        <div class="col-sm-5 col-md-4 col-lg-3">
             <div class="panel panel-warning">
             	<div class="panel-heading"><fmt:message key="jsp.usertools"/></div>
 
-<%--
             <% if(StringUtils.isNotBlank(crisID)) { %>
             	<div class="panel-body">
         			<a class="btn btn-primary col-md-12" href="<%= request.getContextPath() %>/tools/claim?handle=<%= handle %>">
@@ -714,12 +714,11 @@ if (dedupEnabled && admin_button) { %>
         			</a>    	
             	</div>
     <% } %>
---%>
 <%
-//        if (submitter_button && hasVersionButton) {
-        if (submitter_button) {
+        // Include the hasVersionButton test here as well, in case the user tools menu gains additional buttons
+        if (submitter_button && hasVersionButton) {
 %>
-                <div class="pannel-body">
+                <div class="panel-body">
                     <form method="get" action="<%= request.getContextPath()%>/tools/version">
                         <input type="hidden" name="itemID" value="<%= item.getID()%>" />
                         <input class="btn btn-primary col-md-12" type="submit" name="submit" value="<fmt:message key="jsp.general.version.button"/>" />

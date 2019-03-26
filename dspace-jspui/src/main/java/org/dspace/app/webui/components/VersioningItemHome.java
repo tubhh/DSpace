@@ -7,17 +7,15 @@
  */
 package org.dspace.app.webui.components;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.dspace.app.webui.util.VersionUtil;
 import org.dspace.authorize.AuthorizeException;
-import org.dspace.authorize.AuthorizeManager;
 import org.dspace.content.Item;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
@@ -29,9 +27,7 @@ import org.dspace.plugin.ItemHomeProcessor;
 import org.dspace.plugin.PluginException;
 import org.dspace.utils.DSpace;
 import org.dspace.versioning.Version;
-import org.dspace.versioning.VersionDAO;
 import org.dspace.versioning.VersionHistory;
-import org.dspace.versioning.VersionHistoryDAO;
 
 public class VersioningItemHome implements ItemHomeProcessor {
 
@@ -58,20 +54,19 @@ public class VersioningItemHome implements ItemHomeProcessor {
 
 		if (versioningEnabled) {
 			try {
-				if(item.canEdit()) {
-					if (VersionUtil.isLatest(context, item) && item.isArchived()) {
+
+				// Only show button if this is the latest version of the item, is archived,
+				// not in submission, and a new version is allowed to be created
+				if (VersionUtil.isLatest(context, item)
+					&& item.isArchived()
+					&& item.canCreateNewVersion(context)
+					&& !VersionUtil.isItemInSubmission(context, item)) {
+
+					if(item.canEdit() || submitterCanCreateNewVersion) {
 						hasVersionButton = true;
 					}
 				}
-				else if (submitterCanCreateNewVersion)
-				{
-					if (VersionUtil.isLatest(context, item)
-							&& item.isArchived()
-							&& item.canCreateNewVersion(context))
-					{
-						hasVersionButton = true;
-					}
-				}
+
 			} catch (SQLException e) {
 				throw new PluginException(e.getMessage());
 			}
@@ -79,12 +74,10 @@ public class VersioningItemHome implements ItemHomeProcessor {
 			if (VersionUtil.hasVersionHistory(context, item)) {
 				hasVersionHistory = true;
 				history = VersionUtil.retrieveVersionHistory(context, item);
-				for(Version versRow : history.getVersions()) {  
-					
+				for(Version versRow : history.getVersions()) {
 		            //Skip items currently in submission
 		            try {
-						if(VersionUtil.isItemInSubmission(context, versRow.getItem()))
-						{
+						if(VersionUtil.isItemInSubmission(context, versRow.getItem())) {
 						    continue;
 						}
 						else {
