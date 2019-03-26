@@ -13,9 +13,9 @@
         </xsl:template>
 
         <!-- global variables-->
-        <xsl:variable name="handle-prefix">http://tubdok.tub.tuhh.de/handle/11420/</xsl:variable>
-        <xsl:variable name="gkdnr"></xsl:variable>
-        <xsl:variable name="dnbnr"></xsl:variable>
+        <xsl:variable name="handle-prefix">http://tore.tuhh.de/handle/11420/</xsl:variable>
+        <xsl:variable name="gkdnr">1097763-6</xsl:variable>
+        <xsl:variable name="dnbnr">F6000-0198</xsl:variable>
 
 	<xsl:variable name="lang">
 		<xsl:choose>
@@ -164,7 +164,8 @@
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='abstract']/doc:element/doc:field[@name='value']">
 				<dcterms:abstract xsi:type="ddb:contentISO639-2">
                                         <xsl:attribute name="lang"><xsl:value-of select="../@name"/></xsl:attribute>
-					<xsl:value-of select="."/>
+					<!--<xsl:text><![CDATA[</xsl:text><xsl:value-of select="."/><xsl:text>]]></xsl:text>-->
+                                        <xsl:value-of select="."/>
 				</dcterms:abstract>
 			</xsl:for-each>
 
@@ -400,8 +401,8 @@
 							    <cc:name><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publikation']/doc:element[@name='fachbereich']/doc:element/doc:field[@name='value']"/></cc:name>
                                                         </xsl:if>
 -->
-                                                        <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='institute']/doc:element[@name='german']/doc:element/doc:field[@name='value']">
-							    <cc:name><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='institute']/doc:element[@name='german']/doc:element/doc:field[@name='value']"/></cc:name>
+                                                        <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publication']/doc:element[@name='institute']/doc:element/doc:field[@name='value']">
+							    <cc:name><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publication']/doc:element[@name='institute']/doc:element/doc:field[@name='value']"/></cc:name>
                                                         </xsl:if>
 						</cc:department>
 					</cc:universityOrInstitution>
