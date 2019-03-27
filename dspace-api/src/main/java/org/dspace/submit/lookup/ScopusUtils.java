@@ -34,7 +34,7 @@ import org.w3c.dom.Element;
 public class ScopusUtils
 {
 
-	public final static String PLACEHOLER_NO_DATA="#NODATA#";
+	public final static String PLACEHOLDER_NO_DATA="#NODATA#";
 	
     public static Record convertScopusDomToRecord(Element article)
     {
@@ -186,7 +186,7 @@ public class ScopusUtils
             if (auUrl != null){
                 authUrl.add(new StringValue(auUrl));
             }else{
-            	authUrl.add(new StringValue(PLACEHOLER_NO_DATA));
+            	authUrl.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
 
             String scopusID = XMLUtils.getElementValue(author,
@@ -194,7 +194,7 @@ public class ScopusUtils
             if (scopusID != null){
                 authScopusID.add(new StringValue(scopusID));
             }else{
-            	authScopusID.add(new StringValue(PLACEHOLER_NO_DATA));
+            	authScopusID.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
             
             String orcid = XMLUtils.getElementValue(author,
@@ -202,7 +202,7 @@ public class ScopusUtils
             if (orcid != null){
                 authOrcid.add(new StringValue(orcid));
             }else{
-            	authOrcid.add(new StringValue(PLACEHOLER_NO_DATA));
+            	authOrcid.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
 
             String affiliationIDToSearch = XMLUtils.getElementValue(author,
@@ -240,31 +240,31 @@ public class ScopusUtils
                 affiliationScopusID.add(new StringValue(affiliationIDToSearch));
             }
             else{
-                affiliationScopusID.add(new StringValue(PLACEHOLER_NO_DATA));
+                affiliationScopusID.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
 
             if (affName != null){
                 affiliationNames.add(new StringValue(affName));
             }else{
-                affiliationNames.add(new StringValue(PLACEHOLER_NO_DATA));
+                affiliationNames.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
 
             if (affUrl != null){
                 affiliationUrl.add(new StringValue(affUrl));
             }else{
-                affiliationUrl.add(new StringValue(PLACEHOLER_NO_DATA));
+                affiliationUrl.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
 
             if (affCity != null){
                 affiliationCity.add(new StringValue(affCity));
             }else{
-                affiliationCity.add(new StringValue(PLACEHOLER_NO_DATA));
+                affiliationCity.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
 
             if (affCountry != null){
                 affiliationCountry.add(new StringValue(affCountry));
             }else{
-                affiliationCountry.add(new StringValue(PLACEHOLER_NO_DATA));
+                affiliationCountry.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
         }
         record.addField("authors", authNames);
