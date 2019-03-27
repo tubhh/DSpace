@@ -300,7 +300,7 @@
 			<list>
 				<ref bean="searchFilterObjectPeople" />
 				<ref bean="searchFilterObjectOU" />
-				
+				<ref bean="searchFilterFulltext" />
 			</list>
 		</property>
 		<!--The search filters which can be used on the discovery search page -->
@@ -310,7 +310,8 @@
 				<ref bean="searchFilterObjectPeople" />
 				<ref bean="searchFilterObjectOU" />
 				<ref bean="searchFilterObjectType" />
-				<ref bean="searchFilterSubject" />				
+				<ref bean="searchFilterSubject" />
+                                <ref bean="searchFilterFulltext" />
 			</list>
 		</property>
         <!-- Set TagCloud configuration per discovery configuration -->
