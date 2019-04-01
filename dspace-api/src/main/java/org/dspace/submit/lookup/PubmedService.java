@@ -56,6 +56,10 @@ public class PubmedService
      */
     private String apiKey;
     
+    public PubmedService() {
+    	apiKey = ConfigurationManager.getProperty("entrez.e-utilities.api-key");
+    }
+    
     public void setTimeout(int timeout)
     {
         this.timeout = timeout;
@@ -318,14 +322,4 @@ public class PubmedService
         }
         return search(query.toString());
     }
-
-    public String getApiKey()
-    {
-        if(apiKey == null) {
-            this.apiKey = ConfigurationManager.getProperty("entrez.e-utilities.api-key");
-        }
-        return apiKey;
-    }
-    
-    
 }
