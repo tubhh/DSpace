@@ -33,10 +33,10 @@
 					
 					<!-- select only one identifier -->
 					<xsl:variable name="doi" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']//doc:field[@name='value']"/>
-					<xsl:variable name="handle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='uri']//doc:field[@name='value']"/>
+					<xsl:variable name="handle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='hdl']//doc:field[@name='value']"/>
 					<xsl:variable name="url" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='url']//doc:field[@name='value']"/>
+					<xsl:variable name="urn" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']//doc:field[@name='value']"/>
 					<!-- <xsl:variable name="ark" select=""/> -->
-					<!-- <xsl:variable name="urn" select=""/> -->
 					<!-- <xsl:variable name="purl" select=""/> -->
 					
 					<xsl:choose>
@@ -70,11 +70,11 @@
 						</xsl:when> -->
 						
 						<!-- URN control identifier -->
-						<!-- <xsl:when test="$urn!=''">
+						<xsl:when test="$urn!=''">
 							<identifier identifierType="URN">
 								<xsl:value-of select="$urn"/>
 							</identifier>
-						</xsl:when> -->
+						</xsl:when>
 						
 						<!-- PURL control identifier -->
 						<!-- <xsl:when test="$purl!=''">
@@ -90,6 +90,7 @@
 					<xsl:variable name="author" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='author']//doc:field[@name='value']"/>
 					<xsl:variable name="department" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='department']//doc:field[@name='value']"/>
 					<xsl:variable name="orcid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='author']/doc:element[@name='orcid']//doc:field[@name='value']"/>
+					<xsl:variable name="gndid" select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorGND']//doc:field[@name='authority']"/>
 					
 					<xsl:if test="$author!=''">
 						<creators>
@@ -114,6 +115,12 @@
 										   		<xsl:value-of select="$orcid[$counter]"/>
 										  	</nameIdentifier>
 										</xsl:if>
+									<xsl:if test="$gndid[$counter]!='' and $gndid[$counter]!=$placeholder">
+							        		<nameIdentifier schemeURI="https://d-nb.info/gnd/" nameIdentifierScheme="GND">
+										   		<!-- <xsl:text>https://d-nb.de/</xsl:text> -->
+										   		<xsl:value-of select="$gndid[$counter]"/>
+										  	</nameIdentifier>
+									</xsl:if>
 							        	<xsl:if test="$department[$counter]!=''">
 							        		<affiliation>
 								        		<xsl:value-of select="$department[$counter]"/>
@@ -125,6 +132,8 @@
 				     	</creators>
 				     </xsl:if>
 			     	
+					<!-- select the language -->
+					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']//doc:field[@name='value']"/>
 			     	
 			     	
 			     	<!-- select all titles -->
@@ -152,8 +161,11 @@
 					     				
 					     				<xsl:otherwise>
 					     					<xsl:choose>
-							     				<xsl:when test="../@name!='none' and ../@name!='*' and ../@name!=''">
-				     								<title xml:lang="{../@name}">
+							     				<xsl:when test="$language!=''">
+				     								<title>
+                                                                                                    <xsl:attribute name="xml:lang">
+                                                                                                        <xsl:value-of select="$language" />
+                                                                                                    </xsl:attribute>
 										     			<xsl:value-of select="."/>
 										     		</title>
 										     	</xsl:when>
@@ -265,18 +277,18 @@
 				     	<subjects>
 				     		<xsl:for-each select="$subject">
 				     			<xsl:if test=".!=''">
-				     				<xsl:choose>
-				     					<xsl:when test="../@name!='none' and ../@name!='*' and ../@name!=''">
-				     						<subject xml:lang="{../@name}"> <!-- subjectScheme="" --> <!-- schemeURI="" --> <!-- valueURI="" -->
-							     				<xsl:value-of select="."/>
-						     				</subject>
-				     					</xsl:when>
-				     					<xsl:otherwise>
+				     				<!--<xsl:choose>-->
+				     					<!--<xsl:when test="../@name!='none' and ../@name!='*' and ../@name!=''">-->
+				     						<!--<subject xml:lang="{../@name}">--> <!-- subjectScheme="" --> <!-- schemeURI="" --> <!-- valueURI="" -->
+							     				<!--<xsl:value-of select="."/>-->
+						     				<!--</subject>-->
+				     					<!--</xsl:when>-->
+				     					<!--<xsl:otherwise>-->
 				     						<subject> <!-- subjectScheme="" --> <!-- schemeURI="" --> <!-- valueURI="" -->
 							     				<xsl:value-of select="."/>
 						     				</subject>
-				     					</xsl:otherwise>
-				     				</xsl:choose>
+				     					<!--</xsl:otherwise>
+				     				</xsl:choose>-->
 				     			</xsl:if>
 				     		</xsl:for-each>
 				     	</subjects>
@@ -476,9 +488,7 @@
 			     	</xsl:choose> -->
 					
 					
-					
-					<!-- select the language -->
-					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']//doc:field[@name='value']"/>
+				<!-- language should have been set already -->
 					
 					<xsl:if test="$language!=''">
 						<language>
@@ -708,7 +718,7 @@
 							</xsl:choose>
 							
 							<xsl:if test="$rightsuri!=''">
-								<xsl:choose>
+								<!--<xsl:choose>
 									<xsl:when test="$rights/doc:element/@name!='none' and $rights/doc:element/@name!='*' and $rights/doc:element/@name!=''">
 										<rights xml:lang="{$rights/doc_element/@name}" rightsURI="{$rightsuri}">
 											<xsl:if test="$rights/doc:element//doc:field[@name='value']!=''">
@@ -716,14 +726,14 @@
 											</xsl:if>
 										</rights>
 									</xsl:when>
-									<xsl:otherwise>
+									<xsl:otherwise>-->
 										<rights rightsURI="{$rightsuri}">
 											<xsl:if test="$rights/doc:element//doc:field[@name='value']!=''">
 												<xsl:value-of select="$rights/doc:element//doc:field[@name='value']"/>
 											</xsl:if>
 										</rights>
-									</xsl:otherwise>
-								</xsl:choose>
+									<!--</xsl:otherwise>
+								</xsl:choose>-->
 							</xsl:if>
 						</rightsList>
 					</xsl:if>

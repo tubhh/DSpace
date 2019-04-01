@@ -165,23 +165,6 @@
     <body class="undernavigation">
 <a class="sr-only" href="#content">Skip navigation</a>
 
-<!-- language switch? -->
-<div class="headmenu">
-    <div class="headmenucol">
-	<a href="">Dummy </a>
-    </div>
-    <div class="headmenucol">
-	<a href="">Contact </a>
-    </div>
-    <div class="headmenucol">
-	<a href="">Hilfe </a>
-    </div>
-    <div class="headmenucol">
-	<a href="">Login </a>
-    </div>
-</div>
-<div class="clear"></div>
-
 <div id="page">
 
 <header id="branding">

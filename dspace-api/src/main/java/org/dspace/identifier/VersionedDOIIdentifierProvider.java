@@ -9,6 +9,7 @@
 package org.dspace.identifier;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
@@ -19,12 +20,14 @@ import org.dspace.content.Item;
 import org.dspace.core.Context;
 import org.dspace.identifier.doi.DOIConnector;
 import org.dspace.identifier.doi.DOIIdentifierException;
+import org.dspace.identifier.doi.IdentifierRegisterValidation;
 import org.dspace.storage.rdbms.DatabaseManager;
 import org.dspace.storage.rdbms.TableRow;
 import org.dspace.versioning.Version;
 import org.dspace.versioning.VersionDAO;
 import org.dspace.versioning.VersionHistory;
 import org.dspace.versioning.VersionHistoryDAO;
+import org.dspace.utils.DSpace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,10 +77,20 @@ public class VersionedDOIIdentifierProvider
     public String register(Context context, DSpaceObject dso)
             throws IdentifierException
     {
-        String doi = mint(context, dso);
+        String doi = null;
+        List<IdentifierRegisterValidation> validations = new DSpace().getServiceManager()
+            .getServicesByType(IdentifierRegisterValidation.class);
+
+        for (IdentifierRegisterValidation validation: validations) {
+            if (!validation.canRegister(context,dso)) {
+                return doi;
+            }
+        }
+        doi = mint(context, dso);
+
         // register tries to reserve doi if it's not already.
         // So we don't have to reserve it here.
-        this.register(context, dso, doi);
+        this.registerInternal(context, dso, doi);
         return doi;
     }
 
@@ -178,6 +191,20 @@ public class VersionedDOIIdentifierProvider
 
     @Override
     public void register(Context context, DSpaceObject dso, String identifier)
+            throws IdentifierException
+    {
+        List<IdentifierRegisterValidation> validations = new DSpace().getServiceManager()
+                .getServicesByType(IdentifierRegisterValidation.class);
+
+        for (IdentifierRegisterValidation validation: validations) {
+            if(!validation.canRegister(context,dso)) {
+                return ;
+            }
+        }
+        registerInternal(context, dso, identifier);
+    }
+
+    private void registerInternal(Context context, DSpaceObject dso, String identifier)
             throws IdentifierException
     {
         if (!(dso instanceof Item))

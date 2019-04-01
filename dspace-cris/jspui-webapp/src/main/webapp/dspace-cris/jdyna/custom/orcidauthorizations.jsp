@@ -173,7 +173,7 @@ j(document).ready(function() {
 					<c:when test="${showmissedidicon eq true or showmissedeyesicon eq true or showmissedrepeaticon eq true}">											
 						<div class="col-md-2">
 							<div class="row">
-							<a href="<%= request.getContextPath() %>/oauth-login">
+							<a href="<%= request.getContextPath() %>/oauth-login?from=${requestScope['javax.servlet.forward.request_uri']}">
 		      					<div class="bottomTooltip col-md-offset-3" data-toggle="popover" data-container="body" data-content="<fmt:message key="jsp.orcid.custom.box.label.button.refresh.auth"/>">
 			      					<button class="btn btn-default">		      						
 			      						<img src="<%= request.getContextPath() %>/image/orcid_64x64.png" title="ORCID Authentication"/>

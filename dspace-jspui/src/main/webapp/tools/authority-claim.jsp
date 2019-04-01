@@ -85,6 +85,7 @@
 
 i = 0;
 boolean localMessageFound = false;
+boolean thisIsYourAuthority = false;
 
 for (String key : result.keySet())
 {	
@@ -94,7 +95,6 @@ for (String key : result.keySet())
   <div class="tab-pane <%= i==0?"active":""%>" id="<%= keyID %>" role="tabpanel" aria-labelledby="<%= keyID %>-tab">
     <div class="row">
       <div class="col-md-12">
-      
 		<%	
 
 		//check if the local.message.claim exist... if exist show only a warning
@@ -122,7 +122,7 @@ for (String key : result.keySet())
 		<%
 		int countSimilar = 0;
 	    boolean showFoundYourAuthorityLowConfidence = false;		
-		boolean showFoundYourAuthority = false;
+                boolean showFoundYourAuthority = false;
 		boolean showFoundDifferentAuthority = false;
 		for(String[] record : result.get(key)) { 
 	        
@@ -162,6 +162,7 @@ for (String key : result.keySet())
 				    	countSimilar++;
 				    	if(confidence.equals("600")) {
 			    			showFoundYourAuthority = true;
+                                                thisIsYourAuthority = true;
 				    	}
 				 	} else {
 				 	   if(StringUtils.isNotBlank(value) && StringUtils.isNotBlank(similar)) {
@@ -197,6 +198,7 @@ for (String key : result.keySet())
 				
         	<label for="userchoice_<%= keyID %>"><fmt:message key="jsp.authority-claim.choice.fromdropdown"/></label>
 			<select class="form-check-input" name="userchoice_<%= keyID %>" id="userchoice_<%= keyID %>">
+<option value="New_Name">My name is not listed here</option>
 					<%
 					Integer subCount = new Integer(0);
 					for(String[] record : result.get(key)) { 
@@ -247,7 +249,11 @@ for (String key : result.keySet())
 
         <input type="hidden" name="handle_<%= item.getID() %>" value="<%= handle %>"/>
         <input type="hidden" name="selectedId" value="<%= item.getID() %>"/>
-        <input class="btn btn-primary pull-right col-md-3" type="submit" name="submit_approve" value="<fmt:message key="jsp.tools.general.approve"/>" />
+<% if(thisIsYourAuthority) { %>
+        <input class="btn btn-warning pull-right col-md-3" type="submit" name="submit_unclaim" value="<fmt:message key="jsp.tools.claiming.unclaim"/>" />
+<% } else { %>
+        <input class="btn btn-primary pull-right col-md-3" type="submit" name="submit_approve" value="<fmt:message key="jsp.tools.claiming.claim"/>" />
+<% } %>
 		<input class="btn btn-default pull-right col-md-3" type="submit" name="submit_cancel" value="<fmt:message key="jsp.tools.general.cancel"/>" />
 	<%	
 				if(localMessageFound) {
