@@ -797,7 +797,14 @@
 				<entry value="orcid" key="dc.contributor.orcid" />
 				<entry value="rights" key="dc.rights" />
 				<entry value="note" key="dc.description" />
-				<entry value="externalID" key="dc.identifier.external" />				
+				<entry value="externalID" key="dc.identifier.external" />
+				<entry value="affiliations" key="dc.contributor.department" />
+				<entry value="affiliationUrl" key="dc.contributor.departmenturl" />
+				<entry value="affiliationCity" key="dc.contributor.departmentcity" />
+				<entry value="affiliationCountry" key="dc.contributor.departmentcountry" />
+				<entry value="fundingAcronym" key="dc.relation.acronym" />
+				<entry value="fundingNumber" key="dc.funding.number" />
+				<entry value="fundingSponsor" key="dc.funding.sponsor" />
 				
 				<!-- Not used - new metadata fields need to be declared for them in DSpace registry -->
 				<!-- 
@@ -855,6 +862,14 @@
 					<entry key="authorUrl" value="authorUrl" />
 					<entry key="authorScopusid" value="authorScopusID" />
 					<entry key="orcid" value="orcid" />
+					<entry key="affiliations" value="affiliations" />
+					<entry key="affiliationUrl" value="affiliationUrl" />
+					<entry key="affiliationScopusid" value="affiliationScopusID" />
+					<entry key="affiliationCity" value="affiliationCity" />
+					<entry key="affiliationCountry" value="affiliationCountry" />
+					<entry key="fundingAcronym" value="fundingAcronym" />
+					<entry key="fundingNumber" value="fundingNumber" />
+					<entry key="fundingSponsor" value="fundingSponsor" />
                 </map>
             </constructor-arg>
 	</bean>
