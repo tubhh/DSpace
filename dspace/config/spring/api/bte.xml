@@ -592,7 +592,7 @@
 	</bean>
 
 	<!-- Arxiv Data Loaders -->
-	<bean id="arXivOnlineDataLoader" class="org.dspace.submit.lookup.ArXivOnlineDataLoader">
+	<bean id="arXivOnlineDataLoader" class="org.dspace.submit.lookup.ArXivOnlineDataLoader" scope="prototype">
 		<property name="searchProvider" value="false" />
 		<property name="fieldMap" ref="arxivInputMap" />
 	</bean>
@@ -621,7 +621,7 @@
 	</bean>
 
 	<!-- Orcid Data Loaders -->
-	<bean id="orcidOnlineDataLoader" class="org.dspace.app.cris.integration.orcid.OrcidOnlineDataLoader">
+	<bean id="orcidOnlineDataLoader" class="org.dspace.app.cris.integration.orcid.OrcidOnlineDataLoader" scope="prototype">
 		<property name="fieldMap" ref="orcidInputMap" />
 	</bean>
 
@@ -653,7 +653,7 @@
 	</bean>	
 
 	<!-- CrossRef Data Loaders -->
-	<bean id="crossRefOnlineDataLoader" class="org.dspace.submit.lookup.CrossRefOnlineDataLoader">
+	<bean id="crossRefOnlineDataLoader" class="org.dspace.submit.lookup.CrossRefOnlineDataLoader" scope="prototype">
 		<property name="searchProvider" value="false" />
 		<!-- For CrossRef service you need to obtain an API Key from CrossRef. Once you get it, add it 
 			 to the following configuration value 
@@ -702,7 +702,7 @@
 	</bean>
 
 	<!-- CiNii -->
-	<bean id="ciniiOnlineDataLoader" class="org.dspace.submit.lookup.CiNiiOnlineDataLoader">
+	<bean id="ciniiOnlineDataLoader" class="org.dspace.submit.lookup.CiNiiOnlineDataLoader" scope="prototype">
             <property name="searchProvider" value="false" />
             <!-- For CiNii service you need to obtain an Application ID from NII. 
                  Once you get it, add it to the following configuration value.
@@ -797,7 +797,14 @@
 				<entry value="orcid" key="dc.contributor.orcid" />
 				<entry value="rights" key="dc.rights" />
 				<entry value="note" key="dc.description" />
-				<entry value="externalID" key="dc.identifier.external" />				
+				<entry value="externalID" key="dc.identifier.external" />
+				<entry value="affiliations" key="dc.contributor.department" />
+				<entry value="affiliationUrl" key="dc.contributor.departmenturl" />
+				<entry value="affiliationCity" key="dc.contributor.departmentcity" />
+				<entry value="affiliationCountry" key="dc.contributor.departmentcountry" />
+				<entry value="fundingAcronym" key="dc.relation.acronym" />
+				<entry value="fundingNumber" key="dc.funding.number" />
+				<entry value="fundingSponsor" key="dc.funding.sponsor" />
 				
 				<!-- Not used - new metadata fields need to be declared for them in DSpace registry -->
 				<!-- 
@@ -855,6 +862,14 @@
 					<entry key="authorUrl" value="authorUrl" />
 					<entry key="authorScopusid" value="authorScopusID" />
 					<entry key="orcid" value="orcid" />
+					<entry key="affiliations" value="affiliations" />
+					<entry key="affiliationUrl" value="affiliationUrl" />
+					<entry key="affiliationScopusid" value="affiliationScopusID" />
+					<entry key="affiliationCity" value="affiliationCity" />
+					<entry key="affiliationCountry" value="affiliationCountry" />
+					<entry key="fundingAcronym" value="fundingAcronym" />
+					<entry key="fundingNumber" value="fundingNumber" />
+					<entry key="fundingSponsor" value="fundingSponsor" />
                 </map>
             </constructor-arg>
 	</bean>
@@ -982,7 +997,7 @@
 	</bean>
 
 	<!-- PubMedEurope -->
-	<bean id="pubmedEuropeOnlineDataLoader" class="org.dspace.submit.lookup.PubmedEuropeOnlineDataLoader">
+	<bean id="pubmedEuropeOnlineDataLoader" class="org.dspace.submit.lookup.PubmedEuropeOnlineDataLoader"  scope="prototype">
 		<property name="searchProvider" value="false" />
 		<property name="fieldMap" ref="pubmedEuropeInputMap" />
 	</bean>
@@ -1027,7 +1042,7 @@
 
 
 	<!-- ADS -->
-	<bean id="adsOnlineDataLoader" class="org.dspace.submit.lookup.ADSOnlineDataLoader">
+	<bean id="adsOnlineDataLoader" class="org.dspace.submit.lookup.ADSOnlineDataLoader"  scope="prototype">
 	    	<property name="token" value="" />
 		<property name="searchProvider" value="false" />
 		<property name="fieldMap" ref="adsInputMap" />

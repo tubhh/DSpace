@@ -340,6 +340,14 @@ j(document).ready(function() {
         }
     %>
 
+    <%
+        Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
+        if (hasFulltext[0].value.equals("With Fulltext")) {
+    %>
+                    <div class="well"><fmt:message key="jsp.mydspace.render.fulltextinfo" /> <fmt:message key="jsp.mydspace.render.fulltext" /></div>
+    <%
+        }
+    %>
        </div>         
 <%
         if (admin_button)  // admin edit button

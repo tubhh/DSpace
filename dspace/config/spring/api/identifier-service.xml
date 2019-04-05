@@ -79,16 +79,14 @@
         CollectionValidation permits doi register ONLY to collection in CollectionList if listExcluded is FALSE;
         if listExcluded is TRUE all the handle in collectionList will be excluded;
      -->
-    <!--
     <bean class="org.dspace.identifier.doi.CollectionValidation">
         <property name="listExcluded" value="true"/>
         <property name="collectionList">
             <list>
-                <value>123456789/1</value>
+                <value>123456789/4</value>
             </list>
         </property>
     </bean>
-    -->
 
     <!-- The DOIConnector will handle the API calls to your DOI registration
          agency for the DOIIdentifierProvider. If your registration agency
@@ -103,7 +101,7 @@
         class="org.dspace.identifier.doi.DataCiteConnector"
         scope="singleton">
         <property name='DATACITE_SCHEME' value='https'/>
-        <property name='DATACITE_HOST' value='mds.datacite.org'/>
+        <property name='DATACITE_HOST' value='mds.test.datacite.org'/>
         <property name='DATACITE_DOI_PATH' value='/doi/' />
         <property name='DATACITE_METADATA_PATH' value='/metadata/' />
         <property name='disseminationCrosswalkName' value="DataCite" />

@@ -119,7 +119,7 @@ public class ScopusService
                 while(!lastPageReached){
                         // open session
                 		String view = ConfigurationManager.getProperty("submission.lookup.scopus.view");
-                		if (view == null) {
+                		if (StringUtils.isBlank(view)) {
                 			//view = "COMPLETE";
                 			view = "STANDARD";
                 		}
@@ -226,6 +226,29 @@ public class ScopusService
                 Document inDoc = builder.parse(stream);
 
                 Element xmlRoot = inDoc.getDocumentElement();
+                
+                List<Element> pubArticles = XMLUtils.getElementList(xmlRoot,
+                        "entry");
+
+                for (Element xmlArticle : pubArticles)
+                {
+                    if (XMLUtils.getSingleElement(xmlArticle, "error") != null) {
+                        continue;
+                    }
+                    Record scopusItem = null;
+                    try
+                    {
+                        scopusItem = ScopusUtils
+                                .convertScopusDomToRecord(xmlArticle);
+                        results.add(scopusItem);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new RuntimeException(
+                                "EID is not valid or not exist: "
+                                        + e.getMessage(), e);
+                    }
+                }
             }
             catch (Exception e)
             {

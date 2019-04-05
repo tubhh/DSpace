@@ -34,7 +34,7 @@ import org.w3c.dom.Element;
 public class ScopusUtils
 {
 
-	public final static String PLACEHOLER_NO_DATA="#NODATA#";
+	public final static String PLACEHOLDER_NO_DATA="#NODATA#";
 	
     public static Record convertScopusDomToRecord(Element article)
     {
@@ -147,8 +147,14 @@ public class ScopusUtils
         LinkedList<Value> authUrl = new LinkedList<Value>();
         LinkedList<Value> authScopusID = new LinkedList<Value>();
         LinkedList<Value> authOrcid = new LinkedList<Value>();
-        List<String> sequenceAuthors = new LinkedList<String>(); 
-        //TODO: Manage Author Affiliation
+        List<String> sequenceAuthors = new LinkedList<String>();
+        List<Element> affiliations = XMLUtils.getElementList(article,
+                "affiliation");
+        LinkedList<Value> affiliationNames = new LinkedList<Value>();
+        LinkedList<Value> affiliationUrl = new LinkedList<Value>();
+        LinkedList<Value> affiliationScopusID = new LinkedList<Value>();
+        LinkedList<Value> affiliationCity = new LinkedList<Value>();
+        LinkedList<Value> affiliationCountry = new LinkedList<Value>();
         authors : for(Element author: authors){
             
             //check sequence number
@@ -180,7 +186,7 @@ public class ScopusUtils
             if (auUrl != null){
                 authUrl.add(new StringValue(auUrl));
             }else{
-            	authUrl.add(new StringValue(PLACEHOLER_NO_DATA));
+            	authUrl.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
 
             String scopusID = XMLUtils.getElementValue(author,
@@ -188,7 +194,7 @@ public class ScopusUtils
             if (scopusID != null){
                 authScopusID.add(new StringValue(scopusID));
             }else{
-            	authScopusID.add(new StringValue(PLACEHOLER_NO_DATA));
+            	authScopusID.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
             
             String orcid = XMLUtils.getElementValue(author,
@@ -196,13 +202,96 @@ public class ScopusUtils
             if (orcid != null){
                 authOrcid.add(new StringValue(orcid));
             }else{
-            	authOrcid.add(new StringValue(PLACEHOLER_NO_DATA));
+            	authOrcid.add(new StringValue(PLACEHOLDER_NO_DATA));
+            }
+
+            String affiliationIDToSearch = XMLUtils.getElementValue(author,
+                    "afid");
+            String affName = null;
+            String affUrl = null;
+            String affCity = null;
+            String affCountry = null;
+            boolean affiliationFounded = false;
+            for (Element affiliation : affiliations)
+            {
+                String affiliationID = XMLUtils.getElementValue(affiliation,
+                        "afid");
+
+                if (affiliationIDToSearch.equals(affiliationID))
+                {
+                    affName = XMLUtils.getElementValue(affiliation,
+                            "affilname");
+
+                    affUrl = XMLUtils.getElementValue(affiliation,
+                            "affiliation-url");
+
+                    affCity = XMLUtils.getElementValue(affiliation,
+                            "affiliation-city");
+
+                    affCountry = XMLUtils.getElementValue(affiliation,
+                            "affiliation-country");
+
+                    affiliationFounded = true;
+                    break;
+                }
+            }
+
+            if (affiliationFounded){
+                affiliationScopusID.add(new StringValue(affiliationIDToSearch));
+            }
+            else{
+                affiliationScopusID.add(new StringValue(PLACEHOLDER_NO_DATA));
+            }
+
+            if (affName != null){
+                affiliationNames.add(new StringValue(affName));
+            }else{
+                affiliationNames.add(new StringValue(PLACEHOLDER_NO_DATA));
+            }
+
+            if (affUrl != null){
+                affiliationUrl.add(new StringValue(affUrl));
+            }else{
+                affiliationUrl.add(new StringValue(PLACEHOLDER_NO_DATA));
+            }
+
+            if (affCity != null){
+                affiliationCity.add(new StringValue(affCity));
+            }else{
+                affiliationCity.add(new StringValue(PLACEHOLDER_NO_DATA));
+            }
+
+            if (affCountry != null){
+                affiliationCountry.add(new StringValue(affCountry));
+            }else{
+                affiliationCountry.add(new StringValue(PLACEHOLDER_NO_DATA));
             }
         }
         record.addField("authors", authNames);
         record.addField("authorUrl", authUrl);
         record.addField("authorScopusid", authScopusID);
         record.addField("orcid", authOrcid);
+        record.addField("affiliations", affiliationNames);
+        record.addField("affiliationUrl", affiliationUrl);
+        record.addField("affiliationScopusid", affiliationScopusID);
+        record.addField("affiliationCity", affiliationCity);
+        record.addField("affiliationCountry", affiliationCountry);
+
+        String fundingAcr = XMLUtils.getElementValue(article,
+                "fund-acr");
+        if (fundingAcr != null){
+            record.addValue("fundingAcronym", new StringValue(fundingAcr));
+        }
+        String fundingNo = XMLUtils.getElementValue(article,
+                "fund-no");
+        if (fundingNo != null){
+            record.addValue("fundingNumber", new StringValue(fundingNo));
+        }
+        String fundingSponsor = XMLUtils.getElementValue(article,
+                "fund-sponsor");
+        if (fundingSponsor != null){
+            record.addValue("fundingSponsor", new StringValue(fundingSponsor));
+        }
 
         return record;
     }

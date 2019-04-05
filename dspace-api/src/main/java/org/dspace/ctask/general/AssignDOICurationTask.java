@@ -29,6 +29,7 @@ public class AssignDOICurationTask extends AbstractCurationTask {
         } catch (IdentifierException e) {
             throw new RuntimeException("Can't create an Identifier!", e);
         }
+        context.commit();
 	}
 
 }
