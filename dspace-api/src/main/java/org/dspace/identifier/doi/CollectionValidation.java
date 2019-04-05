@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+import org.dspace.content.Collection;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
 import org.dspace.content.WorkspaceItem;
@@ -41,14 +42,14 @@ public class CollectionValidation implements IdentifierRegisterValidation {
 		if(dso.getType() == Constants.ITEM) {
 			Item item = (Item) dso;
 			try {
-				
-				String collHandle;
+				String collHandle = null;
 				if(!item.isInProgressSubmission()) {
-					collHandle = item.getOwningCollection().getHandle();
-					
+					Collection owningCollection = item.getOwningCollection();
+					if (owningCollection != null) {
+						collHandle = owningCollection.getHandle();
+					}
 				} 
 				else {
-					
 					WorkspaceItem wsi =WorkspaceItem.findByItem(context, item);
 					if(wsi != null) {
 						collHandle =wsi.getCollection().getHandle();

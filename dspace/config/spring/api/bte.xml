@@ -551,7 +551,7 @@
 	</bean>    
 	
 	<!-- PubMed -->
-	<bean id="pubmedOnlineDataLoader" class="org.dspace.submit.lookup.PubmedOnlineDataLoader">
+	<bean id="pubmedOnlineDataLoader" class="org.dspace.submit.lookup.PubmedOnlineDataLoader" scope="prototype">
 		<property name="searchProvider" value="false" />
 		<property name="fieldMap" ref="pubmedInputMap" />
 	</bean>
@@ -592,7 +592,7 @@
 	</bean>
 
 	<!-- Arxiv Data Loaders -->
-	<bean id="arXivOnlineDataLoader" class="org.dspace.submit.lookup.ArXivOnlineDataLoader">
+	<bean id="arXivOnlineDataLoader" class="org.dspace.submit.lookup.ArXivOnlineDataLoader" scope="prototype">
 		<property name="searchProvider" value="false" />
 		<property name="fieldMap" ref="arxivInputMap" />
 	</bean>
@@ -621,7 +621,7 @@
 	</bean>
 
 	<!-- Orcid Data Loaders -->
-	<bean id="orcidOnlineDataLoader" class="org.dspace.app.cris.integration.orcid.OrcidOnlineDataLoader">
+	<bean id="orcidOnlineDataLoader" class="org.dspace.app.cris.integration.orcid.OrcidOnlineDataLoader" scope="prototype">
 		<property name="fieldMap" ref="orcidInputMap" />
 	</bean>
 
@@ -653,7 +653,7 @@
 	</bean>	
 
 	<!-- CrossRef Data Loaders -->
-	<bean id="crossRefOnlineDataLoader" class="org.dspace.submit.lookup.CrossRefOnlineDataLoader">
+	<bean id="crossRefOnlineDataLoader" class="org.dspace.submit.lookup.CrossRefOnlineDataLoader" scope="prototype">
 		<property name="searchProvider" value="false" />
 		<!-- For CrossRef service you need to obtain an API Key from CrossRef. Once you get it, add it 
 			 to the following configuration value 
@@ -702,7 +702,7 @@
 	</bean>
 
 	<!-- CiNii -->
-	<bean id="ciniiOnlineDataLoader" class="org.dspace.submit.lookup.CiNiiOnlineDataLoader">
+	<bean id="ciniiOnlineDataLoader" class="org.dspace.submit.lookup.CiNiiOnlineDataLoader" scope="prototype">
             <property name="searchProvider" value="false" />
             <!-- For CiNii service you need to obtain an Application ID from NII. 
                  Once you get it, add it to the following configuration value.
@@ -997,7 +997,7 @@
 	</bean>
 
 	<!-- PubMedEurope -->
-	<bean id="pubmedEuropeOnlineDataLoader" class="org.dspace.submit.lookup.PubmedEuropeOnlineDataLoader">
+	<bean id="pubmedEuropeOnlineDataLoader" class="org.dspace.submit.lookup.PubmedEuropeOnlineDataLoader"  scope="prototype">
 		<property name="searchProvider" value="false" />
 		<property name="fieldMap" ref="pubmedEuropeInputMap" />
 	</bean>
@@ -1042,7 +1042,7 @@
 
 
 	<!-- ADS -->
-	<bean id="adsOnlineDataLoader" class="org.dspace.submit.lookup.ADSOnlineDataLoader">
+	<bean id="adsOnlineDataLoader" class="org.dspace.submit.lookup.ADSOnlineDataLoader"  scope="prototype">
 	    	<property name="token" value="" />
 		<property name="searchProvider" value="false" />
 		<property name="fieldMap" ref="adsInputMap" />

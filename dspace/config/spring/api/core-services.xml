@@ -19,6 +19,11 @@
 				<value>news-top.html</value>
 				<value>news-side.html</value>
 				<value>news-footer.html</value>
+                <value>news-top_de.html</value>
+                <value>news-side_de.html</value>
+                <value>news-footer_de.html</value>
+                <value>iconsbar_de.html</value>
+                <value>iconsbar.html</value>
 			</list>
 		</property>	
 	</bean>
