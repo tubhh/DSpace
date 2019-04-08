@@ -253,6 +253,7 @@ j(document).ready(function() {
                     <a href="https://doi.org/<%= doiMd %>">https://doi.org/<%= doiMd %></a></div>
                 <%
                     }
+/*
                     else {
                     Metadatum[] dcv = item.getMetadata("dc", "identifier", "urn", Item.ANY);
                     Metadatum[] localdcv = item.getMetadata("tuhh", "identifier", "urn", Item.ANY);
@@ -276,6 +277,7 @@ j(document).ready(function() {
                     <code><%= HandleManager.getCanonicalForm(handle) %></code></div>
                 <%
                     }
+*/
                 %>
     <%
         Metadatum[] cccheck = item.getMetadata("dc", "rights", Item.ANY, Item.ANY);
