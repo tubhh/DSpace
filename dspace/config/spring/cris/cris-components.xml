@@ -290,7 +290,7 @@
 		<property name="componentIdentifier" value="persons" />			
 		<property name="facetQuery"><value>*:*</value></property>
 		<property name="order"><value>asc</value></property>
-		<property name="rpp"><value>5</value></property>
+		<property name="rpp"><value>50</value></property>
 		<property name="sortby"><value>4</value></property>			
 	</bean>
 		
