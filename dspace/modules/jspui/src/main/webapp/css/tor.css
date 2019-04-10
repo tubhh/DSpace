@@ -330,10 +330,10 @@ td > ul {
     color: #229e9e;
 }
 .fa-user.externalstaff {
-    color: #afafaf;
+    color: #999999;
 }
 .fa-user.undefinedstaff {
-    color: #999;
+    color: #afafaf;
 }
 
 
