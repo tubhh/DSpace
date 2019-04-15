@@ -616,20 +616,30 @@ public class SolrDedupServiceImpl implements DedupService
                     Collection<Object> ids = doc
                             .getFieldValues(RESOURCE_IDS_FIELD);
 
-                    for (Object id : ids)
+                    identifier: for (Object id : ids)
                     {
-                        DSpaceObject o = DSpaceObject.find(context, type,
-                                (Integer) id);
-
-                        if (o == null)
+                        Integer idInteger = Integer.valueOf((String)id);
+                        if (type == Constants.ITEM)
                         {
-                            log.info("Deleting: " + id);
-                            /*
-                             * Use IndexWriter to delete, its easier to manage
-                             * write.lock
-                             */
-                            unIndexContent(context, o);
+                            if (DSpaceObject.find(context, type, idInteger) != null)
+                            {
+                                continue identifier;
+                            }
                         }
+                        else
+                        {
+                            if (getApplicationService().getEntityById(idInteger, type) != null)
+                            {
+                                continue identifier;
+                            }
+                        }
+
+                        log.info("Deleting: " + idInteger);
+                        /*
+                         * Use IndexWriter to delete, its easier to manage
+                         * write.lock
+                         */
+                        unIndexContent(context, idInteger, type);
                     }
                 }
             }
