@@ -741,25 +741,25 @@ public class SolrDedupServiceImpl implements DedupService
             case CrisConstants.PROJECT_TYPE_ID:
                 List<Project> pjs = getApplicationService()
                         .getList(Project.class);
-                for (Project rp : pjs)
+                for (Project pj : pjs)
                 {
-                    indexContent(context, rp, force);
+                    indexContent(context, pj, force);
                 }
                 break;
             case CrisConstants.OU_TYPE_ID:
                 List<OrganizationUnit> orgs = getApplicationService()
                         .getList(OrganizationUnit.class);
-                for (OrganizationUnit rp : orgs)
+                for (OrganizationUnit org : orgs)
                 {
-                    indexContent(context, rp, force);
+                    indexContent(context, org, force);
                 }
                 break;
             default:
                 List<ResearchObject> robjs = getApplicationService()
                         .getList(ResearchObject.class);
-                for (ResearchObject rp : robjs)
+                for (ResearchObject robj : robjs)
                 {
-                    indexContent(context, rp, force);
+                    indexContent(context, robj, force);
                 }
             }
 
