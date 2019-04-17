@@ -60,7 +60,7 @@
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
                 <!-- selected component should be sorted by score (-1) -->
-		<property name="sortby"><value>-1</value></property>						
+		<property name="sortby"><value>2</value></property>						
 	</bean>
 	
 	<bean id="journalComponent"
@@ -69,7 +69,8 @@
 		<property name="facetQuery"><value>dc.type.de_DE:Article -relationpreferences.crisrp.publications.selected:{1}</value></property>
 		<property name="order"><value>asc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>	
+                <!-- normal sorting by title (1) or by issue date (2) -->
+		<property name="sortby"><value>2</value></property>	
 	</bean>
 	
 	<bean id="conferenceComponent"
@@ -78,7 +79,7 @@
 		<property name="facetQuery"><value>resourcetype_authority:conferencematerials -relationpreferences.crisrp.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>			
+		<property name="sortby"><value>2</value></property>			
 	</bean>
 	
 	<bean id="bookComponent"
@@ -87,7 +88,7 @@
 		<property name="facetQuery"><value>dc.type.de_DE:Book -relationpreferences.crisrp.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>		
+		<property name="sortby"><value>2</value></property>		
 	</bean>
 	
 	<bean id="datasetComponent"
@@ -96,7 +97,7 @@
 		<property name="facetQuery"><value>dc.type.de_DE:Dataset -relationpreferences.crisrp.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>		
+		<property name="sortby"><value>2</value></property>		
 	</bean>
 	
 	<bean id="patentComponent"
@@ -105,7 +106,7 @@
 		<property name="facetQuery"><value>dc.type.de_DE:Patent -relationpreferences.crisrp.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>
+		<property name="sortby"><value>2</value></property>
 	</bean>
 	
 	<bean id="otherComponent"
@@ -114,7 +115,7 @@
 		<property name="facetQuery"><value>-dc.type.de_DE:Article -dc.type.de_DE:Book -(dc.type.de_DE:Conference_Paper OR dc.type.de_DE:Presentation) -dc.type.de_DE:Patent -relationpreferences.crisrp.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>
+		<property name="sortby"><value>2</value></property>
 	</bean>
 	
 	<!-- Project list for RP entity -->
@@ -198,7 +199,8 @@
 		<property name="facetQuery"><value>relationpreferences.crisou.publications.selected:{1}</value></property>
 		<property name="order"><value>asc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>6</value></property>		
+                <!-- selected component should be sorted by something else (6) -->
+		<property name="sortby"><value>2</value></property>		
 	</bean>
 		
 	
@@ -208,7 +210,7 @@
 		<property name="facetQuery"><value>dc.type.de_DE:Article -relationpreferences.crisou.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>	
+		<property name="sortby"><value>2</value></property>	
 	</bean>
 	
 	<bean id="conferenceForOUComponent"
@@ -217,7 +219,7 @@
 		<property name="facetQuery"><value>dc.type.de_DE:Conference_Paper -relationpreferences.crisou.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>	
+		<property name="sortby"><value>2</value></property>	
 	</bean>
 	
 	<bean id="bookForOUComponent"
@@ -226,7 +228,7 @@
 		<property name="facetQuery"><value>dc.type.de_DE:Book -relationpreferences.crisou.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>		
+		<property name="sortby"><value>2</value></property>		
 	</bean>
 	
 	<bean id="patentForOUComponent"
@@ -235,7 +237,7 @@
 		<property name="facetQuery"><value>dc.type.de_DE:Patent -relationpreferences.crisou.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>		
+		<property name="sortby"><value>2</value></property>		
 	</bean>
 	
 	<bean id="otherForOUComponent"
@@ -244,7 +246,7 @@
 		<property name="facetQuery"><value>-dc.type.de_DE:Article -(dc.type.de_DE:Book OR dc.type.de_DE:Book_Chapter) -(dc.type.de_DE:Conference_Paper OR dc.type.de_DE:Presentation) -dc.type.de_DE:Patent -(dc.type.de_DE:PG_Thesis OR dc.type.de_DE:UG_Thesis) -relationpreferences.crisrp.publications.selected:{1}</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>		
+		<property name="sortby"><value>2</value></property>		
 	</bean>
 	
 	<!-- Publication list for OU entity via RP -->
@@ -268,7 +270,7 @@
 		<property name="facetQuery"><value>*:*</value></property>
 		<property name="order"><value>asc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>		
+		<property name="sortby"><value>2</value></property>		
 	</bean>
 	
 	<!-- Person list for OU entity -->
@@ -424,7 +426,7 @@
 		<property name="facetQuery"><value>relationpreferences.crisproject.publications.selected:{1}</value></property>
 		<property name="order"><value>asc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>		
+		<property name="sortby"><value>2</value></property>		
 	</bean>
 	
 	<bean id="allPublicationForProjectComponent"
@@ -433,7 +435,7 @@
 		<property name="facetQuery"><value>*:*</value></property>
 		<property name="order"><value>asc</value></property>
 		<property name="rpp"><value>20</value></property>
-		<property name="sortby"><value>1</value></property>					
+		<property name="sortby"><value>2</value></property>					
 	</bean>
 	
 	<!-- Dynamic object component -->
@@ -456,7 +458,7 @@
 		<property name="types">
 			<map>
 				<entry key="selected" value-ref="selectedPublicationForJournalComponent" />				
-				<entry key="all" value-ref="allPublicationForJournalComponent" />
+				<entry key="journalList" value-ref="allPublicationForJournalComponent" />
 			</map>
 		</property>
 	</bean>
@@ -474,12 +476,12 @@
 			<value>20</value>
 		</property>
 		<property name="sortby">
-			<value>1</value>
+			<value>2</value>
 		</property>
 	</bean>
 
 	<bean id="allPublicationForJournalComponent" class="org.dspace.app.webui.cris.components.BeanFacetComponent">
-		<property name="componentIdentifier" value="all" />
+		<property name="componentIdentifier" value="journalList" />
 		<property name="facetQuery">
 			<value>*:*</value>
 		</property>
@@ -490,7 +492,7 @@
 			<value>20</value>
 		</property>
 		<property name="sortby">
-			<value>1</value>
+			<value>2</value>
 		</property>
 	</bean>
 
@@ -522,7 +524,7 @@
 			<value>20</value>
 		</property>
 		<property name="sortby">
-			<value>1</value>
+			<value>2</value>
 		</property>
 	</bean>
 
@@ -538,7 +540,7 @@
 			<value>20</value>
 		</property>
 		<property name="sortby">
-			<value>1</value>
+			<value>2</value>
 		</property>
 	</bean>
 </beans>
