@@ -286,6 +286,8 @@ j(document).ready(function() {
                 String[] creativecommonsArray = cc.value.split("/");
                 if (creativecommonsArray[creativecommonsArray.length-1].equals("deed.de")) {
                     creativecommons = creativecommonsArray[creativecommonsArray.length-4]+"/"+creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                } else if (creativecommonsArray[creativecommonsArray.length-1].equals("de")) {
+                    creativecommons = creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
                 } else {
                     creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1];
                 }
