@@ -458,6 +458,17 @@
        </field>
 
        <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Verlagsversion</label>
+         <input-type value-pairs-name="qualdrop_publication_version_de">qualdrop_value</input-type>
+         <hint>Bitte wählen Sie die Version dieser Publikation, falls sie bei einem Verlag eingereicht wurde, und geben Sie den Identifier an (wenn möglich doi).</hint>
+         <required></required>
+       </field>
+
+       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>citation</dc-qualifier>
@@ -1935,6 +1946,29 @@
      <pair>
        <displayed-value>Veröffentlichte Version</displayed-value>
        <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Erneuerte Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+
+   <value-pairs value-pairs-name="qualdrop_publication_version_de" dc-term="publication_version">
+     <pair>
+       <displayed-value>Veröffentlichte Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Entwurf</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Eingereichte Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Angenommene Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
      </pair>
      <pair>
        <displayed-value>Erneuerte Version</displayed-value>

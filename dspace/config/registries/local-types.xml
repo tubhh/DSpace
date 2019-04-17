@@ -48,4 +48,40 @@ acceptedVersion
 publishedVersion
 updatedVersion</scope_note>
   </dc-type>
+
+  <dc-type>
+    <schema>local</schema>
+    <element>publisher</element>
+    <qualifier>draft</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+    <schema>local</schema>
+    <element>publisher</element>
+    <qualifier>submittedVersion</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+    <schema>local</schema>
+    <element>publisher</element>
+    <qualifier>acceptedVersion</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+    <schema>local</schema>
+    <element>publisher</element>
+    <qualifier>publishedVersion</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+    <schema>local</schema>
+    <element>publisher</element>
+    <qualifier>updatedVersion</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
 </dspace-dc-types>

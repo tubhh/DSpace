@@ -474,9 +474,21 @@
          <repeatable>true</repeatable>
          <label>Publisher's version</label>
          <input-type value-pairs-name="common_uritypes_en">qualdrop_value</input-type>
-         <hint>Enter the link to the publisher's version of this document.</hint>
+         <hint>Enter the identifier of the publisher's version of this document.</hint>
          <required></required>
        </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Publisher's version</label>
+         <input-type value-pairs-name="qualdrop_publication_version">qualdrop_value</input-type>
+         <hint>Enter the identifier of the publisher's version (DOI preferred) of this document and select the relationship.</hint>
+         <required></required>
+       </field>
+
 <!--
        <field>
          <dc-schema>tuhh</dc-schema>
@@ -1409,6 +1421,7 @@
          <hint>Enter the link to the publisher's version of this document.</hint>
          <required></required>
        </field>
+
 <!--
        <field>
          <dc-schema>tuhh</dc-schema>
@@ -1891,6 +1904,29 @@
      <pair>
        <displayed-value>Published Version</displayed-value>
        <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Updated Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+
+   <value-pairs value-pairs-name="qualdrop_publication_version" dc-term="publication_version">
+     <pair>
+       <displayed-value>Published Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Draft</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Submitted Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Accepted Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
      </pair>
      <pair>
        <displayed-value>Updated Version</displayed-value>
