@@ -37,4 +37,15 @@
     <scope_note>Enable the user to add notes about his claiming request</scope_note>
   </dc-type>
 
+  <dc-type>
+    <schema>local</schema>
+    <element>type</element>
+    <qualifier>version</qualifier>
+    <scope_note>Version of the item in relation to a publication at a publisher. May be one of the following values:
+draft
+submittedVersion
+acceptedVersion
+publishedVersion
+updatedVersion</scope_note>
+  </dc-type>
 </dspace-dc-types>

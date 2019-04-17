@@ -17,7 +17,7 @@
 <!--   <name-map collection-handle="default" form-name="traditional" /> -->
    <name-map collection-handle="default" form-name="tubdokwitheu" />
 <!--   <name-map collection-handle="11420/2" form-name="tubdokwitheu" /> -->
-   <name-map collection-handle="123456789/5" form-name="fdm" />
+   <name-map collection-handle="123456789/1513" form-name="fdm" />
    <name-map collection-handle="123456789/4" form-name="metadata" />
    <name-map collection-handle="123456789/35" form-name="fdm-nontuhh" />
    <name-map collection-handle="123456789/40" form-name="fdm-nontuhh" />
@@ -307,16 +307,27 @@
        </field>
 
        <field>
-         <dc-schema>tuhh</dc-schema>
+         <dc-schema>datacite</dc-schema>
          <dc-element>relation</dc-element>
-         <dc-qualifier>issupplementedby</dc-qualifier>
+         <dc-qualifier>IsSupplementedBy</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Supplemented By</label>
          <input-type>onebox</input-type>
          <hint>This item is supplemented by research data. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
          <required></required>
        </field>
-
+<!--
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>issupplementedby</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Supplemented By a TOR record</label>
+         <input-type>onebox</input-type>
+         <hint>This item is supplemented by research data, which is published on the same server as this publication. Please provide the title of the research data record here. You can use the lookup function (the button with the magnifiing glass) to search for the title.</hint>
+         <required></required>
+       </field>
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
@@ -563,6 +574,17 @@
      </page>
 
      <page number="3">
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier>version</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publication Version (status for this item at a publisher)</label>
+         <input-type value-pairs-name="publication_version">dropdown</input-type>
+         <hint>Select the version of this publication, if it has been submitted or published at another publisher.</hint>
+         <required></required>
+        </field>
+
        <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>rights</dc-element>
@@ -1848,8 +1870,34 @@
  <!-- Each pair contains a 'displayed-value' element and a 'stored-value'   -->
  <!-- element. A UI list displays the displayed-values, but the program     -->
  <!-- stores the associated stored-values in the database.                  -->
-
  <form-value-pairs>
+   <value-pairs value-pairs-name="publication_version" dc-term="publication_version">
+     <pair>
+       <displayed-value>not submitted to a publisher</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Draft</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Submitted Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Accepted Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Published Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Updated Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+
    <value-pairs value-pairs-name="relation_types_en" dc-term="datacite_relation">
      <pair>
        <displayed-value>cites</displayed-value>
