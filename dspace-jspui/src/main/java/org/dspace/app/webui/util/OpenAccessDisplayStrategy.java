@@ -26,7 +26,7 @@ public class OpenAccessDisplayStrategy extends ASimpleDisplayStrategy
             boolean viewFull, String browseType, int colIdx, int itemid, String field,
             Metadatum[] metadataArray, boolean disableCrossLinks, boolean emph)
     {
-        String metadata = null;
+        String metadata = I18nUtil.getMessage("jsp.mydspace.render.nonoa", hrq.getLocale());
         if (metadataArray.length > 0)
         {
             String value = metadataArray[0].value;
