@@ -352,6 +352,14 @@ j(document).ready(function() {
     <%
         }
     %>
+    <%
+        Metadatum[] isOA = item.getMetadata("openaire", "rights", Item.ANY, Item.ANY);
+        if (isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+    %>
+                    <div class="well"><fmt:message key="jsp.mydspace.render.oainfo" /> <fmt:message key="jsp.mydspace.render.oa" /></div>
+    <%
+        }
+    %>
        </div>         
 <%
         if (admin_button)  // admin edit button
