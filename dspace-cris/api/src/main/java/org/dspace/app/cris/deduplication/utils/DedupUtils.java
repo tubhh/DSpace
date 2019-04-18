@@ -437,52 +437,56 @@ public class DedupUtils
                     "select * from dedup_reject where first_item_id = ? and second_item_id = ?",
                     sortedIds[0], sortedIds[1]);
 
-            Item firstItem = Item.find(context, firstId);
-            Item secondItem = Item.find(context, secondId);
-            if (AuthorizeManager.authorizeActionBoolean(context, firstItem,
-                    Constants.WRITE)
-                    || AuthorizeManager.authorizeActionBoolean(context,
-                            secondItem, Constants.WRITE))
+            if (type == Constants.ITEM)
             {
-
-                if(row!=null) {                
-                    int identifierRow = row.getIntColumn("dedup_reject_id");
-                    String submitterDecision = row.getStringColumn("submitter_decision");
-                    row = DatabaseManager.row("dedup_reject");
-                    row.setColumn("dedup_reject_id", identifierRow);
-                    if(check && StringUtils.isNotBlank(submitterDecision)) {
-                        row.setColumn(SolrDedupServiceImpl.COLUMN_SUBMITTER_DECISION, submitterDecision);
-                    }                
-                }
-                else {
-                    row = DatabaseManager.create(context, "dedup_reject");
-                }
-                
-                row.setColumn("first_item_id", sortedIds[0]);
-                row.setColumn("second_item_id", sortedIds[1]);
-                row.setColumn("eperson_id", context.getCurrentUser().getID());
-                row.setColumn("reject_time", new Date());
-                row.setColumn("note", note);
-                row.setColumn("fake", notDupl);
-                row.setColumn("resource_type_id", type);
-                if (check)
+                Item firstItem = Item.find(context, firstId);
+                Item secondItem = Item.find(context, secondId);
+                if (!AuthorizeManager.authorizeActionBoolean(context, firstItem,
+                        Constants.WRITE)
+                        && !AuthorizeManager.authorizeActionBoolean(context,
+                                secondItem, Constants.WRITE))
                 {
-                    row.setColumn(SolrDedupServiceImpl.COLUMN_WORKFLOW_DECISION,
-                            DeduplicationFlag.REJECTWF.getDescription());
+                    return false;
                 }
-                else
-                {
-                    row.setColumn(
-                            SolrDedupServiceImpl.COLUMN_SUBMITTER_DECISION,
-                            DeduplicationFlag.REJECTWS.getDescription());
-                }
-                DatabaseManager.update(context, row);
-                dedupService.buildReject(context, firstId, secondId, type,
-                        check ? DeduplicationFlag.REJECTWF
-                                : DeduplicationFlag.REJECTWS,
-                        note);
-                return true;
             }
+
+            if(row!=null) {
+                int identifierRow = row.getIntColumn("dedup_reject_id");
+                String submitterDecision = row.getStringColumn("submitter_decision");
+                row = DatabaseManager.row("dedup_reject");
+                row.setColumn("dedup_reject_id", identifierRow);
+                if(check && StringUtils.isNotBlank(submitterDecision)) {
+                    row.setColumn(SolrDedupServiceImpl.COLUMN_SUBMITTER_DECISION, submitterDecision);
+                }
+            }
+            else {
+                row = DatabaseManager.create(context, "dedup_reject");
+            }
+
+            row.setColumn("first_item_id", sortedIds[0]);
+            row.setColumn("second_item_id", sortedIds[1]);
+            row.setColumn("eperson_id", context.getCurrentUser().getID());
+            row.setColumn("reject_time", new Date());
+            row.setColumn("note", note);
+            row.setColumn("fake", notDupl);
+            row.setColumn("resource_type_id", type);
+            if (check)
+            {
+                row.setColumn(SolrDedupServiceImpl.COLUMN_WORKFLOW_DECISION,
+                        DeduplicationFlag.REJECTWF.getDescription());
+            }
+            else
+            {
+                row.setColumn(
+                        SolrDedupServiceImpl.COLUMN_SUBMITTER_DECISION,
+                        DeduplicationFlag.REJECTWS.getDescription());
+            }
+            DatabaseManager.update(context, row);
+            dedupService.buildReject(context, firstId, secondId, type,
+                    check ? DeduplicationFlag.REJECTWF
+                            : DeduplicationFlag.REJECTWS,
+                    note);
+            return true;
         }
         catch (Exception ex)
         {
