@@ -142,9 +142,14 @@ public class DedupUtils
     {
         SolrQuery findDuplicateBySignature = new SolrQuery();
         findDuplicateBySignature.setQuery((isInWorkflow == null?SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED:(isInWorkflow?SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED_OR_VERIFYWF:SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED_OR_VERIFY)));
-        findDuplicateBySignature
-            .addFilterQuery(SolrDedupServiceImpl.RESOURCE_IDS_FIELD + ":"
-                    + id);
+
+        if (id != -1)
+        {
+            findDuplicateBySignature
+                .addFilterQuery(SolrDedupServiceImpl.RESOURCE_IDS_FIELD + ":"
+                        + id);
+        }
+
         findDuplicateBySignature.addFilterQuery(SolrDedupServiceImpl.RESOURCE_RESOURCETYPE_FIELD + ":"
                 + resourceType);
         String filter = "";
@@ -171,6 +176,29 @@ public class DedupUtils
             findDuplicateBySignature.addFilterQuery("-"+SolrDedupServiceImpl.RESOURCE_WITHDRAWN_FIELD+":true");
         }
         return findDuplicateBySignature;
+    }
+
+    public Map<Integer, List<DuplicateItemInfo>> findAllDuplicates(Context context,
+            Integer resourceType, String signatureType, Boolean isInWorkflow) throws SQLException, SearchServiceException
+    {
+        Map<Integer, List<DuplicateItemInfo>> allDupsInfo = new HashMap<>();
+        SolrQuery solrQuery = buildDuplicateQuery(context, -1, resourceType, signatureType, isInWorkflow);
+        solrQuery.addFacetField("dedup.ids");
+        solrQuery.setRows(0);
+
+        QueryResponse response = dedupService.search(solrQuery);
+        FacetField facetField = response.getFacetField("dedup.ids");
+        List<Count> counts = facetField.getValues();
+        for (Count count : counts)
+        {
+            if (count.getCount() > 0)
+            {
+                int id = Integer.parseInt(count.getName());
+                allDupsInfo.put(id, findDuplicate(context, id, resourceType, signatureType, isInWorkflow));
+            }
+        }
+
+        return allDupsInfo;
     }
 
     /**
