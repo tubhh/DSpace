@@ -137,6 +137,42 @@ public class DedupUtils
         return results;
     }
     
+    private SolrQuery buildDuplicateQuery(Context context, Integer id,
+            Integer resourceType, String signatureType, Boolean isInWorkflow)
+    {
+        SolrQuery findDuplicateBySignature = new SolrQuery();
+        findDuplicateBySignature.setQuery((isInWorkflow == null?SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED:(isInWorkflow?SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED_OR_VERIFYWF:SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED_OR_VERIFY)));
+        findDuplicateBySignature
+            .addFilterQuery(SolrDedupServiceImpl.RESOURCE_IDS_FIELD + ":"
+                    + id);
+        findDuplicateBySignature.addFilterQuery(SolrDedupServiceImpl.RESOURCE_RESOURCETYPE_FIELD + ":"
+                + resourceType);
+        String filter = "";
+        if(isInWorkflow==null) {
+            filter = SolrDedupServiceImpl.RESOURCE_FLAG_FIELD + ":"
+                    + SolrDedupServiceImpl.DeduplicationFlag.MATCH.getDescription();            }
+        else if(isInWorkflow) {
+            filter = SolrDedupServiceImpl.RESOURCE_FLAG_FIELD + ":("
+                + SolrDedupServiceImpl.DeduplicationFlag.MATCH.getDescription() +" OR "+ SolrDedupServiceImpl.DeduplicationFlag.VERIFYWS.getDescription() + ")";
+        }
+        else {
+            filter = SolrDedupServiceImpl.RESOURCE_FLAG_FIELD + ":"
+                    + SolrDedupServiceImpl.DeduplicationFlag.MATCH.getDescription();
+        }
+
+        findDuplicateBySignature.addFilterQuery(filter);
+
+        findDuplicateBySignature
+                .setFields("dedup.ids", "dedup.note", "dedup.flag");
+
+        if (ConfigurationManager.getBooleanProperty("deduplication",
+                "tool.duplicatechecker.ignorewithdrawn"))
+        {
+            findDuplicateBySignature.addFilterQuery("-"+SolrDedupServiceImpl.RESOURCE_WITHDRAWN_FIELD+":true");
+        }
+        return findDuplicateBySignature;
+    }
+
     /**
      * @param context
      * @param id
@@ -156,36 +192,7 @@ public class DedupUtils
             List<Integer> result = new ArrayList<Integer>();
             Map<Integer, String> verify = new HashMap<Integer,String>();
 
-            SolrQuery findDuplicateBySignature = new SolrQuery();
-            findDuplicateBySignature.setQuery((isInWorkflow == null?SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED:(isInWorkflow?SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED_OR_VERIFYWF:SolrDedupServiceImpl.SUBQUERY_NOT_IN_REJECTED_OR_VERIFY)));
-            findDuplicateBySignature
-                    .addFilterQuery(SolrDedupServiceImpl.RESOURCE_IDS_FIELD + ":"
-                            + id);
-            findDuplicateBySignature.addFilterQuery(SolrDedupServiceImpl.RESOURCE_RESOURCETYPE_FIELD + ":"
-                    + resourceType);
-            String filter = "";
-            if(isInWorkflow==null) {            
-                filter = SolrDedupServiceImpl.RESOURCE_FLAG_FIELD + ":"
-                        + SolrDedupServiceImpl.DeduplicationFlag.MATCH.getDescription();            }
-            else if(isInWorkflow) {
-                filter = SolrDedupServiceImpl.RESOURCE_FLAG_FIELD + ":("
-                    + SolrDedupServiceImpl.DeduplicationFlag.MATCH.getDescription() +" OR "+ SolrDedupServiceImpl.DeduplicationFlag.VERIFYWS.getDescription() + ")";
-            }
-            else {
-                filter = SolrDedupServiceImpl.RESOURCE_FLAG_FIELD + ":"
-                        + SolrDedupServiceImpl.DeduplicationFlag.MATCH.getDescription();
-            }
-
-            findDuplicateBySignature.addFilterQuery(filter);
-
-            findDuplicateBySignature
-                    .setFields("dedup.ids", "dedup.note", "dedup.flag");
-
-            if (ConfigurationManager.getBooleanProperty("deduplication",
-                    "tool.duplicatechecker.ignorewithdrawn"))
-            {
-                findDuplicateBySignature.addFilterQuery("-"+SolrDedupServiceImpl.RESOURCE_WITHDRAWN_FIELD+":true");
-            }
+            SolrQuery findDuplicateBySignature = buildDuplicateQuery(context, id, resourceType, signatureType, isInWorkflow);
 
             QueryResponse response2 = dedupService
                     .search(findDuplicateBySignature);
