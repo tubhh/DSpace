@@ -391,8 +391,21 @@ public class TypeSettingConsumer implements Consumer
             ret.put("dcmi", "InteractiveResource");
             break;
         case "Other":
-        default:
             ret.put("opus", "Sonstiges");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            break;
+        case "Text":
+            ret.put("opus", "Text");
+            ret.put("dini", "ResearchData");
+            ret.put("driver", "other");
+            ret.put("casrai", "Online Resource");
+            ret.put("dcmi", "Text");
+            break;
+        default:
+            ret.put("opus", mainType);
             ret.put("dini", "Other");
             ret.put("driver", "other");
             ret.put("casrai", "Other");
