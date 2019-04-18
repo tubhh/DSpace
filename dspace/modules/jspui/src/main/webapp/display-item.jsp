@@ -346,7 +346,7 @@ j(document).ready(function() {
 
     <%
         Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
-        if (hasFulltext[0].value.equals("With Fulltext")) {
+        if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
     %>
                     <div class="well"><fmt:message key="jsp.mydspace.render.fulltextinfo" /> <fmt:message key="jsp.mydspace.render.fulltext" /></div>
     <%
@@ -354,7 +354,7 @@ j(document).ready(function() {
     %>
     <%
         Metadatum[] isOA = item.getMetadata("openaire", "rights", Item.ANY, Item.ANY);
-        if (isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+        if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
     %>
                     <div class="well"><fmt:message key="jsp.mydspace.render.oainfo" /> <fmt:message key="jsp.mydspace.render.oa" /></div>
     <%
