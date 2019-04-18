@@ -146,5 +146,54 @@
 	</bean>
 	
 	<bean class="org.dspace.app.cris.configuration.SimpleItemViewResolver" id="itemViewResolverDefaultPlugin"/>
+
+	<bean class="org.dspace.app.cris.configuration.ViewResolver" name="crisrpViewResolver">
+		<property name="metadata">
+			<list>
+				<value>dept</value>
+				<value>email</value>
+				<value>fullName</value>
+				<value>preferredName</value>
+				<value>scopusid</value>
+				<value>translatedName</value>
+				<value>variants</value>
+			</list>
+		</property>
+		<property name="plugins">
+			<list>
+				<ref bean="crisrpViewResolverDefaultPlugin"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.dspace.app.cris.configuration.CrisRPViewResolver" id="crisrpViewResolverDefaultPlugin"/>
+
+	<bean class="org.dspace.app.cris.configuration.ViewResolver" name="crispjViewResolver">
+		<property name="metadata">
+			<list>
+				<value>awardURL</value>
+				<value>funder</value>
+				<value>fundingProgram</value>
+				<value>organization</value>
+				<value>principalinvestigator</value>
+				<value>projectURL</value>
+				<value>startdate</value>
+				<value>status</value>
+				<value>title</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.dspace.app.cris.configuration.ViewResolver" name="crisouViewResolver">
+		<property name="metadata">
+			<list>
+				<value>city</value>
+				<value>date</value>
+				<value>description</value>
+				<value>director</value>
+				<value>name</value>
+			</list>
+		</property>
+	</bean>
 	
 </beans>
