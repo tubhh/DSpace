@@ -35,6 +35,7 @@ import org.dspace.content.MetadataField;
 import org.dspace.content.MetadataSchema;
 import org.dspace.content.NonUniqueMetadataException;
 import org.dspace.core.Context;
+import org.dspace.core.LogManager;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.authenticate.AuthenticationManager;
 import org.dspace.authenticate.AuthenticationMethod;
@@ -240,6 +241,13 @@ public class ShibAuthentication implements AuthenticationMethod
                 }
             }
 			log.debug(message);
+			if(writeLogA) {
+			    log.debug(messageAttribute);
+			}
+            if (writeLogB)
+            {
+                log.debug(messageSession);
+            }
 		}
 
 		// Should we auto register new users.
@@ -262,7 +270,6 @@ public class ShibAuthentication implements AuthenticationMethod
 
 			// Step 4: Log the user in.
 			context.setCurrentUser(eperson);
-                        log.info("Setting shib.authenticated to true for Session "+request.getSession().getId());
 			request.getSession().setAttribute("shib.authenticated", true);
 			AuthenticationManager.initEPerson(context, request, eperson);
 
@@ -324,47 +331,9 @@ public class ShibAuthentication implements AuthenticationMethod
 			if ( request == null || 
 					context.getCurrentUser() == null || 
 					request.getSession().getAttribute("shib.authenticated") == null ) {
-                                if (log.isDebugEnabled()) {
-                                        log.warn("Warning: User has not successfuly authenticated via shibboleth. Figuring out what failed:");
-                                        if (request == null) {
-                                                log.info("Warning: Request is NOT set!");
-                                        }
-                                        else {
-                                                log.info("Request is set!");
-                                        }
-                                        Enumeration<java.lang.String> requestAttribs = request.getAttributeNames();
-                                        log.info("Got the following Request attributes:");
-                                        while ( requestAttribs.hasMoreElements() ) {
-                                                String reqAttribute = requestAttribs.nextElement();
-                                                log.info("Request Attribute " + reqAttribute + ": " + request.getAttribute(reqAttribute));
-                                        }
-                                        if (context.getCurrentUser() == null) {
-                                                log.info("Warning: no current user found!");
-                                        }
-                                        else {
-                                                log.info("User is set correctly!");
-                                        }
-                                        if (request.getSession().getAttribute("shib.authenticated") == null) {
-                                                log.info("shib.authenticated attribute is NOT available");
-                                        }
-                                        else {
-                                                log.info("shib.authenticated attribute is available");
-                                        }
-                                        if (request.getSession() == null) {
-                                                log.info("Warning: Session is NOT set!");
-                                        }
-                                        else {
-                                                log.info("Session is set! Session-ID "+request.getSession().getId());
-                                                log.info("Got the following Session attributes:");
-                                                Enumeration<java.lang.String> attribs = request.getSession().getAttributeNames();
-                                                while ( attribs.hasMoreElements() ) {
-                                                    String attribute = attribs.nextElement();
-                                                    log.info("Session Attribute " + attribute + ": " + request.getSession().getAttribute(attribute));
-                                                }
-                                        }
-                                }
 				return new int[0];
 			}
+
 			// If we have already calculated the special groups then return them.
 			if (request.getSession().getAttribute("shib.specialgroup") != null)
 			{
@@ -385,14 +354,6 @@ public class ShibAuthentication implements AuthenticationMethod
 
 			// Get the Shib supplied affiliation or use the default affiliation
 			List<String> affiliations = findMultipleAttributes(request, roleHeader);
-                        // Use EPerson Metadata as a fallback
-                        String metadataRoleAttribute = ConfigurationManager.getProperty("authentication-shibboleth","metadataRoleAttribute");
-                        if ( metadataRoleAttribute != null && (affiliations == null || (affiliations != null && affiliations.isEmpty())) ) {
-                                affiliations = new ArrayList<String>();
-                                if (context.getCurrentUser().getMetadata(metadataRoleAttribute) != null) {
-                                        affiliations.add(context.getCurrentUser().getMetadata(metadataRoleAttribute));
-                                }
-                        }
 			if (affiliations == null) {
 				if (defaultRoles != null)
 					affiliations = Arrays.asList(defaultRoles.split(","));
@@ -797,6 +758,24 @@ public class ShibAuthentication implements AuthenticationMethod
 		// Set the minimum attributes for the new eperson
 		if (netid != null)
 			eperson.setNetid(netid);
+		
+        // Check if we were able to determine an email address from Shibboleth
+        if (StringUtils.isEmpty(email))
+        {
+            // If no email, check if we have a "netid_email_domain". If so, append it to the netid to create email
+            if (StringUtils.isNotEmpty(ConfigurationManager.getProperty("authentication-shibboleth", "netid_email_domain")))
+            {
+                email = netid + ConfigurationManager.getProperty("authentication-shibboleth", "netid_email_domain");
+            }
+            else
+            {
+                // We don't have a valid email address. We'll default it to 'netid' but log a warning
+                log.warn(LogManager.getHeader(context, "autoregister",
+                        "Unable to locate email address for account '" + netid + "', so it has been set to '" + netid + "'. " +
+                        "Please check the Shibboleth 'email-header' OR consider configuring 'netid_email_domain'."));
+                email = netid;
+            }
+        }
 		eperson.setEmail(email.toLowerCase());
 		if ( fname != null )
 			eperson.setFirstName(fname);
@@ -873,7 +852,7 @@ public class ShibAuthentication implements AuthenticationMethod
 			// to netid based authentication. The current users do not have netids and fall back to email-based
 			// identification but once they login we update their record and lock the account to a particular netid.
 			eperson.setNetid(netid);
-		if (email != null)
+		if (StringUtils.isNotBlank(email))
 			// The email could have changed if using netid based lookup.
 			eperson.setEmail(email.toLowerCase());
 		if (fname != null)

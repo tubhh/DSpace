@@ -12,6 +12,10 @@ h2 {
     font-size:18px;
     }
 
+select[name="tuhh_subject_fieldofcompetence"], select[name="tuhh_subject_researchfocus"] {
+        height: 7em;
+        width: 20em;
+}
 
 /* nur um das Top_menu herum. */
 #page {
@@ -323,13 +327,13 @@ td > ul {
     color: #2dc6c6;
 }
 .fa-user.exstaff {
-    color: #b791ae;
+    color: #229e9e;
 }
 .fa-user.externalstaff {
-    color: #333;
+    color: #999999;
 }
 .fa-user.undefinedstaff {
-    color: #999;
+    color: #afafaf;
 }
 
 
@@ -635,9 +639,11 @@ footer.navbar-inverse {
     padding-right: 2em;
 }
 
-/* tubdok nimmt teil an ... */
+/* Logos: dnb datacite openaire worldcat base ...*/
 .navbar-bottom .navbar-bottom {
 	background-color: #fff;	
+	padding-top: 2em;
+	border-top: 1px solid #ddd; 
 }
 
 /* logos */

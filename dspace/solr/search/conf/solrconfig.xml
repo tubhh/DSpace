@@ -1066,6 +1066,7 @@
       <str name="captureAttr">false</str>
       <!--<str name="fmap.a">links</str>-->
       <!--<str name="fmap.div">ignored_</str>-->
+      <str name="stream.type">text/plain</str>
       <str name="update.chain">clones_except_private</str>
     </lst>
   </requestHandler>

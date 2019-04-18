@@ -19,7 +19,6 @@ public class AssignDOIConsumer implements Consumer {
     
 	@Override
 	public void initialize() throws Exception {
-		
 	}
 
 	@Override
@@ -64,11 +63,11 @@ public class AssignDOIConsumer implements Consumer {
 			// browse updates wrote to the DB, so we have to commit.
 			ctx.getDBConnection().commit();
 		}
+		itemIDs = null;
 	}
 
 	@Override
 	public void finish(Context ctx) throws Exception {
-		
 	}
 
 }

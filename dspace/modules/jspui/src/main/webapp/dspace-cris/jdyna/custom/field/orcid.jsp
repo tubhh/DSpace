@@ -3,7 +3,7 @@
 <c:if test="${!empty anagraficaObject.anagrafica4view['orcid']}">
 <div class="dynaClear">&nbsp;</div>
 <div class="dynaField" style="min-width:5em;">
-<span class="dynaLabel" style="width:10em;">ORCID</span>
+<span class="dynaLabel" style="width:15em;">ORCID</span>
 
 <div id="orcidDiv" class="dynaFieldValue">
 <c:choose>

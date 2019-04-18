@@ -286,6 +286,8 @@ j(document).ready(function() {
                 String[] creativecommonsArray = cc.value.split("/");
                 if (creativecommonsArray[creativecommonsArray.length-1].equals("deed.de")) {
                     creativecommons = creativecommonsArray[creativecommonsArray.length-4]+"/"+creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                } else if (creativecommonsArray[creativecommonsArray.length-1].equals("de")) {
+                    creativecommons = creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
                 } else {
                     creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1];
                 }
@@ -342,6 +344,22 @@ j(document).ready(function() {
         }
     %>
 
+    <%
+        Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
+        if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
+    %>
+                    <div class="well"><fmt:message key="jsp.mydspace.render.fulltextinfo" /> <fmt:message key="jsp.mydspace.render.fulltext" /></div>
+    <%
+        }
+    %>
+    <%
+        Metadatum[] isOA = item.getMetadata("openaire", "rights", Item.ANY, Item.ANY);
+        if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+    %>
+                    <div class="well"><fmt:message key="jsp.mydspace.render.oainfo" /> <fmt:message key="jsp.mydspace.render.oa" /></div>
+    <%
+        }
+    %>
        </div>         
 <%
         if (admin_button)  // admin edit button
@@ -702,8 +720,10 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
-<%-- if(submitter_button || StringUtils.isNotBlank(crisID)) { --%>
-<% if(submitter_button) { %>
+<%-- As there is now only one possible User Tools button (create new version) it can be included
+    in this check so an empty sub-menu will not be displayed --%>
+<%-- if((submitter_button && hasVersionButton) || StringUtils.isNotBlank(crisID)) { --%>
+<% if((submitter_button && hasVersionButton)) { %>
        <div class="col-sm-5 col-md-4 col-lg-3">
             <div class="panel panel-warning">
             	<div class="panel-heading"><fmt:message key="jsp.usertools"/></div>
@@ -718,10 +738,10 @@ if (dedupEnabled && admin_button) { %>
     <% } %>
 --%>
 <%
-//        if (submitter_button && hasVersionButton) {
-        if (submitter_button) {
+        // Include the hasVersionButton test here as well, in case the user tools menu gains additional buttons
+        if (submitter_button && hasVersionButton) {
 %>
-                <div class="pannel-body">
+                <div class="panel-body">
                     <form method="get" action="<%= request.getContextPath()%>/tools/version">
                         <input type="hidden" name="itemID" value="<%= item.getID()%>" />
                         <input class="btn btn-primary col-md-12" type="submit" name="submit" value="<fmt:message key="jsp.general.version.button"/>" />

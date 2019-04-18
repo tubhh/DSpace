@@ -79,16 +79,14 @@
         CollectionValidation permits doi register ONLY to collection in CollectionList if listExcluded is FALSE;
         if listExcluded is TRUE all the handle in collectionList will be excluded;
      -->
-    <!--
     <bean class="org.dspace.identifier.doi.CollectionValidation">
         <property name="listExcluded" value="true"/>
         <property name="collectionList">
             <list>
-                <value>123456789/1</value>
+                <value>11420/2093</value>
             </list>
         </property>
     </bean>
-    -->
 
     <!-- The DOIConnector will handle the API calls to your DOI registration
          agency for the DOIIdentifierProvider. If your registration agency
