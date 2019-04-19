@@ -119,7 +119,33 @@
 		</property>
 		<property name="field" value="dc.identifier_s"/>
 	</bean>
-	
+
+	<bean class="org.dspace.app.cris.deduplication.service.SearchDeduplication" name="CRISRPSearchDeduplication">
+		<property name="solrIndexPlugin">
+			<list>
+				<ref bean="CrisObjectInactiveDedupServiceIndexPlugin"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.dspace.app.cris.deduplication.service.SearchDeduplication" name="CRISPJSearchDeduplication">
+		<property name="solrIndexPlugin">
+			<list>
+				<ref bean="CrisObjectInactiveDedupServiceIndexPlugin"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.dspace.app.cris.deduplication.service.SearchDeduplication" name="CRISOUSearchDeduplication">
+		<property name="solrIndexPlugin">
+			<list>
+				<ref bean="CrisObjectInactiveDedupServiceIndexPlugin"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.dspace.app.cris.deduplication.service.impl.CrisObjectInactiveDedupServiceIndexPlugin" id="CrisObjectInactiveDedupServiceIndexPlugin"/>
+
 		<bean class="org.dspace.app.cris.configuration.ViewResolver" name="itemViewResolver">
 		<property name="metadata">
 			<list>
