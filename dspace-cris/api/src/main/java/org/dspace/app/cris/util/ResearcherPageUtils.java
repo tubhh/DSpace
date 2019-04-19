@@ -397,7 +397,7 @@ return decorator.generateDisplayValue(alternativeName, rp);
 			ResearcherPage rp = (ResearcherPage) dso;
 			Map<String, String> extras = buildExtra(rp);
 
-			choiceList.add(new Choice(getPersistentIdentifier(rp), rp.getFullName(),getLabel(rp.getFullName(), rp), extras));
+			choiceList.add(new Choice(getPersistentIdentifier(rp),getLabel(rp.getFullName(), rp), rp.getFullName(), extras));
 			if (rp.getTranslatedName() != null
 					&& rp.getTranslatedName().getVisibility() == VisibilityConstants.PUBLIC
 					&& rp.getTranslatedName().getValue() != null) {
