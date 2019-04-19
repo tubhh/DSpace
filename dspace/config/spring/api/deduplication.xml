@@ -22,6 +22,42 @@
 		<property name="resourceTypeID" value="2" />
 	</bean>
  	
+	<bean class="org.dspace.app.cris.deduplication.utils.MD5ValueSignature" name="RPOrcidSignature">
+		<property name="signatureType" value="identifier" />
+		<property name="metadata" value="orcid" />
+		<property name="resourceTypeID" value="9" />
+	</bean>
+
+	<bean class="org.dspace.app.cris.deduplication.utils.MD5ValueSignature" name="RPFullNameSignature">
+		<property name="signatureType" value="fullName" />
+		<property name="metadata" value="fullName" />
+		<property name="resourceTypeID" value="9" />
+	</bean>
+
+	<bean class="org.dspace.app.cris.deduplication.utils.MD5ValueSignature" name="RPVariantsSignature">
+		<property name="signatureType" value="fullName" />
+		<property name="metadata" value="variants" />
+		<property name="resourceTypeID" value="9" />
+	</bean>
+
+	<bean class="org.dspace.app.cris.deduplication.utils.MD5ValueSignature" name="RPEmailSignature">
+		<property name="signatureType" value="email" />
+		<property name="metadata" value="email" />
+		<property name="resourceTypeID" value="9" />
+	</bean>
+
+	<bean class="org.dspace.app.cris.deduplication.utils.MD5ValueSignature" name="PJNameSignature">
+		<property name="signatureType" value="name" />
+		<property name="metadata" value="name" />
+		<property name="resourceTypeID" value="10" />
+	</bean>
+
+	<bean class="org.dspace.app.cris.deduplication.utils.MD5ValueSignature" name="OUNameSignature">
+		<property name="signatureType" value="name" />
+		<property name="metadata" value="name" />
+		<property name="resourceTypeID" value="11" />
+	</bean>
+
  	<bean class="org.dspace.app.cris.deduplication.utils.MD5ValueSignature" name="ArXivSignature">
  		<property name="signatureType" value="identifier" />
 		<property name="metadata" value="dc.identifier.arxiv" />
