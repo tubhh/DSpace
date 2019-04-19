@@ -35,6 +35,8 @@ public class AffiliationIDResearcherPageLabelDecorator implements IResearcherPag
 			 		sb.append(" (").append(dept).append(")");
 			 	}
 			 	
+			 	sb.append(" - ").append(rp.getCrisID());
+
 			 	if (StringUtils.isNotBlank(gndid)) {
 			 		sb.append(" - ").append(gndid);
 			 	}
