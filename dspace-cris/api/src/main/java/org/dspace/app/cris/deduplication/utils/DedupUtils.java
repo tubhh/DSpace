@@ -465,7 +465,10 @@ public class DedupUtils
 
             row.setColumn("first_item_id", sortedIds[0]);
             row.setColumn("second_item_id", sortedIds[1]);
-            row.setColumn("eperson_id", context.getCurrentUser().getID());
+            if (type == Constants.ITEM)
+            {
+                row.setColumn("eperson_id", context.getCurrentUser().getID());
+            }
             row.setColumn("reject_time", new Date());
             row.setColumn("note", note);
             row.setColumn("fake", notDupl);
