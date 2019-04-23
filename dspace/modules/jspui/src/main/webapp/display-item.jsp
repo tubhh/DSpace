@@ -253,6 +253,7 @@ j(document).ready(function() {
                     <a href="https://doi.org/<%= doiMd %>">https://doi.org/<%= doiMd %></a></div>
                 <%
                     }
+/*
                     else {
                     Metadatum[] dcv = item.getMetadata("dc", "identifier", "urn", Item.ANY);
                     Metadatum[] localdcv = item.getMetadata("tuhh", "identifier", "urn", Item.ANY);
@@ -276,6 +277,7 @@ j(document).ready(function() {
                     <code><%= HandleManager.getCanonicalForm(handle) %></code></div>
                 <%
                     }
+*/
                 %>
     <%
         Metadatum[] cccheck = item.getMetadata("dc", "rights", Item.ANY, Item.ANY);
@@ -284,6 +286,8 @@ j(document).ready(function() {
                 String[] creativecommonsArray = cc.value.split("/");
                 if (creativecommonsArray[creativecommonsArray.length-1].equals("deed.de")) {
                     creativecommons = creativecommonsArray[creativecommonsArray.length-4]+"/"+creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                } else if (creativecommonsArray[creativecommonsArray.length-1].equals("de")) {
+                    creativecommons = creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
                 } else {
                     creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1];
                 }
@@ -342,9 +346,17 @@ j(document).ready(function() {
 
     <%
         Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
-        if (hasFulltext[0].value.equals("With Fulltext")) {
+        if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
     %>
                     <div class="well"><fmt:message key="jsp.mydspace.render.fulltextinfo" /> <fmt:message key="jsp.mydspace.render.fulltext" /></div>
+    <%
+        }
+    %>
+    <%
+        Metadatum[] isOA = item.getMetadata("openaire", "rights", Item.ANY, Item.ANY);
+        if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+    %>
+                    <div class="well"><fmt:message key="jsp.mydspace.render.oainfo" /> <fmt:message key="jsp.mydspace.render.oa" /></div>
     <%
         }
     %>

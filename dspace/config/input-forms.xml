@@ -17,7 +17,7 @@
 <!--   <name-map collection-handle="default" form-name="traditional" /> -->
    <name-map collection-handle="default" form-name="tubdokwitheu" />
 <!--   <name-map collection-handle="11420/2" form-name="tubdokwitheu" /> -->
-   <name-map collection-handle="123456789/5" form-name="fdm" />
+   <name-map collection-handle="123456789/1513" form-name="fdm" />
    <name-map collection-handle="123456789/4" form-name="metadata" />
    <name-map collection-handle="123456789/35" form-name="fdm-nontuhh" />
    <name-map collection-handle="123456789/40" form-name="fdm-nontuhh" />
@@ -260,9 +260,9 @@
 
 <!--
        <field>
-         <dc-schema>tuhh</dc-schema>
+         <dc-schema>datacite</dc-schema>
          <dc-element>relation</dc-element>
-         <dc-qualifier>ispartof</dc-qualifier>
+         <dc-qualifier>IsSupplementedBy</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Part of another tub.dok publication</label>
          <input-type>onebox</input-type>
@@ -271,6 +271,17 @@
        </field>
 -->
 <!--
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>issupplementedby</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Supplemented By a TOR record</label>
+         <input-type>onebox</input-type>
+         <hint>This item is supplemented by research data, which is published on the same server as this publication. Please provide the title of the research data record here. You can use the lookup function (the button with the magnifiing glass) to search for the title.</hint>
+         <required></required>
+       </field>
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
@@ -394,7 +405,7 @@
          <repeatable>true</repeatable>
          <label>Publisher's version</label>
          <input-type value-pairs-name="common_uritypes_en">qualdrop_value</input-type>
-         <hint>Enter the link to the publisher's version of this document.</hint>
+         <hint>Enter the identifier of the publisher's version of this document.</hint>
          <required></required>
        </field>
 
@@ -1414,6 +1425,7 @@
          <hint>Enter the link to the publisher's version of this document.</hint>
          <required></required>
        </field>
+
 <!--
        <field>
          <dc-schema>tuhh</dc-schema>
@@ -1876,8 +1888,57 @@
  <!-- Each pair contains a 'displayed-value' element and a 'stored-value'   -->
  <!-- element. A UI list displays the displayed-values, but the program     -->
  <!-- stores the associated stored-values in the database.                  -->
-
  <form-value-pairs>
+   <value-pairs value-pairs-name="publication_version" dc-term="publication_version">
+     <pair>
+       <displayed-value>not submitted to a publisher</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Draft</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Submitted Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Accepted Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Published Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Updated Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+
+   <value-pairs value-pairs-name="qualdrop_publication_version" dc-term="publication_version">
+     <pair>
+       <displayed-value>Published Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Draft</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Submitted Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Accepted Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Updated Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+
    <value-pairs value-pairs-name="relation_types_en" dc-term="datacite_relation">
      <pair>
        <displayed-value>cites</displayed-value>

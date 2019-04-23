@@ -327,13 +327,13 @@ td > ul {
     color: #2dc6c6;
 }
 .fa-user.exstaff {
-    color: #b791ae;
+    color: #229e9e;
 }
 .fa-user.externalstaff {
-    color: #333;
+    color: #999999;
 }
 .fa-user.undefinedstaff {
-    color: #999;
+    color: #afafaf;
 }
 
 
