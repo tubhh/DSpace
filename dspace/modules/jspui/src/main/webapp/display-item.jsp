@@ -720,6 +720,22 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
+<%--------- Feedback Box from Bamberg University -------------%>
+      <div class="col-lg-12 col-md-4 col-sm-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title larger-panel-title">
+              <fmt:message key="jsp.display-item.info.links" />
+            </h3>
+          </div>
+          <div class="panel-list">
+            <%@ include file="layout/fragenmodal.html" %>
+          </div>
+        </div>
+      </div>
+<%--------- End Feedback Box from Bamberg University -------------%>
+
+
 <%-- As there is now only one possible User Tools button (create new version) it can be included
     in this check so an empty sub-menu will not be displayed --%>
 <% if((submitter_button && hasVersionButton) || StringUtils.isNotBlank(crisID)) { %>
