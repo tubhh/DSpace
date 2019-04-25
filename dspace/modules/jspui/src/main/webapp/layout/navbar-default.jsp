@@ -206,7 +206,9 @@
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Info.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.help"/>  <b class="caret"></b></a>
              <ul class="dropdown-menu">
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-contact"/></li>
+                <li><fmt:message key="jsp.layout.navbar-default.tubdok-depositlicense"/></li>
                 <li class="divider"></li>
+                <li><fmt:message key="jsp.layout.navbar-default.tore-help"/></li>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=1"><fmt:message key="jsp.layout.navbar-default.tubdok-policies"/></a></li>               --%>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=6"><fmt:message key="jsp.layout.navbar-default.tubdok-usage"/></a></li>          --%>
 <%--                <li class="divider"></li>                                                                                --%>
@@ -216,7 +218,6 @@
 <%--                <li class="divider"></li> --%>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=3"><fmt:message key="jsp.layout.navbar-default.tubdok-documentation"/></a></li>         --%>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=4"><fmt:message key="jsp.layout.navbar-default.tubdok-disclaimer"/></a></li>         --%>
-                <li><fmt:message key="jsp.layout.navbar-default.tubdok-depositlicense"/></li>
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-orcid"/></li>
 <%--
                 <li class="divider"></li>
