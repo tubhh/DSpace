@@ -1,0 +1,71 @@
+
+<link rel="stylesheet" href="/jspui/css/fragenmodal.css" type="text/css">
+<input type="button" class="btn btn-sm btn-lnk" data-toggle="modal" data-target="#FragenModal" value="<fmt:message key="jsp.display-item.question-modal.button" />" />
+
+<!-- Modal -->
+<div id="FragenModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <script>
+      function display()
+      {
+        var a = $("#question").val();
+        var b = $("#name").val();
+        var c = $("#email").val();
+
+        j.ajax({
+          type: "post",
+          url: "<%=request.getContextPath()%>/pubquestion",
+          data: "item_id=<%= item.getID()%>&q="+a+"&name="+b+"&mail="+c,
+          success: function(msg){}
+        });
+      }
+    </script>
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><fmt:message key="jsp.display-item.question-modal.title"/></h4>
+      </div>
+      <form>
+        <div class="modal-body">
+          <div class="question-div">
+            <label class="question-title"><fmt:message key="metadata.dc.title"/></label>
+            <br />
+            <label class="question-value"><%= title %></label>
+          </div>
+          <div class="question-div">
+            <label class="question-title"><fmt:message key="metadata.dc.contributor.author"/></label>
+            <br />
+            <label class="question-value"><%= authors %></label>
+          </div>
+          <div class="question-div">
+            <label class="question-title"><fmt:message key="metadata.dc.date.issued"/></label>
+            <br />
+            <label class="question-value"><%= issued %></label>
+          </div>
+          <div class="question-div">
+            <label class="question-title" for="question"><fmt:message key="jsp.display-item.question-modal.question"/></label>
+            <br />
+            <textarea class="question-value" id="question" rows="3"></textarea>
+          </div>
+          <div class="question-div">
+            <label class="question-title" for="name"><fmt:message key="jsp.display-item.question-modal.name"/></label>
+            <br />
+            <input class="question-value" id="name" value="<%= user == null ? "" : user.getFullName() %>" />
+          </div>
+          <div class="question-div">
+            <label class="question-title" for="email"><fmt:message key="jsp.display-item.question-modal.email"/></label>
+            <br />
+            <input class="question-value" id="email" value="<%= user == null ? "" : user.getEmail() %>" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><fmt:message key="jsp.display-item.question-modal.close"/></button>
+          <input type="button" class="btn btn-default" value="<fmt:message key="jsp.display-item.question-modal.send"/>" onclick="display();" />
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+<!--  -->

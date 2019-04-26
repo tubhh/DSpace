@@ -280,6 +280,8 @@ j(document).ready(function() {
 */
                 %>
     <%
+        Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
+        Metadatum[] isOA = item.getMetadata("openaire", "rights", Item.ANY, Item.ANY);
         Metadatum[] cccheck = item.getMetadata("dc", "rights", Item.ANY, Item.ANY);
         for (Metadatum cc : cccheck) {
             if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
@@ -296,7 +298,21 @@ j(document).ready(function() {
         }
         if (creativecommons != "") {
 %>
-                    <div class="well"><fmt:message key="jsp.display-item.creativecommons"/>
+                    <div class="well"><%-- <fmt:message key="jsp.display-item.creativecommons"/> --%>
+                        <%
+                            if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.fulltext" /><span style="padding-left:10px;">
+                        <%
+                            }
+                        %>
+                        <%
+                            if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.oa" /><span style="padding-left:10px;">
+                        <%
+                            }
+                        %>
                         <% if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/cc0/") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">
                                 <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" />
@@ -324,7 +340,21 @@ j(document).ready(function() {
         }
         if (creativecommons != "") {
     %>
-                    <div class="well"><fmt:message key="jsp.display-item.creativecommons"/>
+                    <div class="well"><%-- <fmt:message key="jsp.display-item.creativecommons"/> --%>
+                        <%
+                            if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.fulltext" /><span style="padding-left:10px;"></span>
+                        <%
+                            }
+                        %>
+                        <%
+                            if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.oa" /><span style="padding-left:10px;"></span>
+                        <%
+                            }
+                        %>
                         <% if (creativecommons == "cc-null") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">
                                 <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" />
@@ -340,26 +370,29 @@ j(document).ready(function() {
                         <% } %>
                     </div>
     <%
+        } else {
+    %>
+                    <div class="well">
+                        <%
+                            if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.fulltext" /><span style="padding-left:10px;">
+                        <%
+                            }
+                        %>
+                        <%
+                            if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.oa" />
+                        <%
+                            }
+                        %>
+                    </div>
+    <%
         }
         }
     %>
 
-    <%
-        Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
-        if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
-    %>
-                    <div class="well"><fmt:message key="jsp.mydspace.render.fulltextinfo" /> <fmt:message key="jsp.mydspace.render.fulltext" /></div>
-    <%
-        }
-    %>
-    <%
-        Metadatum[] isOA = item.getMetadata("openaire", "rights", Item.ANY, Item.ANY);
-        if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
-    %>
-                    <div class="well"><fmt:message key="jsp.mydspace.render.oainfo" /> <fmt:message key="jsp.mydspace.render.oa" /></div>
-    <%
-        }
-    %>
        </div>         
 <%
         if (admin_button)  // admin edit button
@@ -719,6 +752,22 @@ if (dedupEnabled && admin_button) { %>
 <%
     }
 %>
+
+<%--------- Feedback Box from Bamberg University -------------%>
+      <div class="col-lg-12 col-md-4 col-sm-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title larger-panel-title">
+              <fmt:message key="jsp.display-item.info.links" />
+            </h3>
+          </div>
+          <div class="panel-list">
+            <%@ include file="layout/fragenmodal.html" %>
+          </div>
+        </div>
+      </div>
+<%--------- End Feedback Box from Bamberg University -------------%>
+
 
 <%-- As there is now only one possible User Tools button (create new version) it can be included
     in this check so an empty sub-menu will not be displayed --%>
