@@ -31,6 +31,7 @@ Disallow: /register
 Disallow: /password-login
 Disallow: /Shibboleth.sso
 Disallow: */simple-search*
+Disallow: */browse*
 
 ##############################
 # Section for misbehaving bots

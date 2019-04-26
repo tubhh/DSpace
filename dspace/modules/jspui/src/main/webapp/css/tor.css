@@ -327,7 +327,8 @@ td > ul {
     color: #2dc6c6;
 }
 .fa-user.exstaff {
-    color: #229e9e;
+/*     color: #229e9e; */
+    color: #2edcdc;
 }
 .fa-user.externalstaff {
     color: #999999;
