@@ -457,15 +457,16 @@ return decorator.generateDisplayValue(alternativeName, rp);
 		                        .getFirstNames().trim()) + "*";
 		    }
 		    luceneQuery = luceneQuery.replaceAll("\\\\ ", " ");
+		    String cleanedQuery = luceneQuery.replaceAll("(?:\\\\-|-)|(?:\\\\\\+|\\+)", " ");
 		    DiscoverQuery discoverQuery = new DiscoverQuery();
 		    applyCustomFilter(field, discoverQuery,_configurationService);
 		    discoverQuery.setSortField("crisrp.fullName_sort", SORT_ORDER.asc);		    
 		    discoverQuery.setDSpaceObjectFilter(CrisConstants.RP_TYPE_ID);
 		    String surnameQuery = "{!lucene q.op=AND df=rpsurnames}("
-    			    + luceneQuery
+    			    + cleanedQuery
     			    + ") OR ("
     			    // no need for a phrase search, the default operator is now AND and we want to match surnames in any order
-    			    + luceneQuery.substring(0,luceneQuery.length() - 1) + ")";
+    			    + cleanedQuery.substring(0,cleanedQuery.length() - 1) + ")";
 		    
 		    discoverQuery.setQuery(surnameQuery);
 		    discoverQuery.setMaxResults(MAX_RESULTS);
@@ -479,13 +480,13 @@ return decorator.generateDisplayValue(alternativeName, rp);
 		    	int difference = MAX_RESULTS - surnamesResult;
 		    	discoverQuery.setMaxResults(difference);
 		    	String crisauthoritylookup = "{!lucene q.op=AND df=crisauthoritylookup}("
-		    								 + luceneQuery
+		    								 + cleanedQuery
 		    								 + ") OR (\""
 		    								 + luceneQuery.substring(0,luceneQuery.length() - 1) + "\")";
 		    	
 		    	discoverQuery.setQuery(crisauthoritylookup);
-				String negativeFilters = "-rpsurnames:(" + luceneQuery.substring(0,luceneQuery.length() - 1) + ")";
-				String negativeFiltersStar = "-rpsurnames:(" + luceneQuery + ")";
+				String negativeFilters = "-rpsurnames:(" + cleanedQuery.substring(0,cleanedQuery.length() - 1) + ")";
+				String negativeFiltersStar = "-rpsurnames:(" + cleanedQuery + ")";
 				discoverQuery.addFilterQueries(negativeFilters);
 				discoverQuery.addFilterQueries(negativeFiltersStar);
 		    	result = _searchService.search(null, discoverQuery, true);
