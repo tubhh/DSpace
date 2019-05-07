@@ -74,6 +74,7 @@ public class DOIConsumer implements Consumer
         {
             log.warn("DOIConsumer cannot handles items without DOIs, skipping: "
                     + event.toString());
+            return;
         }
         try
         {
