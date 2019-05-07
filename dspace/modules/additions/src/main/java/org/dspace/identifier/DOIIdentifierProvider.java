@@ -8,6 +8,7 @@
 
 package org.dspace.identifier;
 
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,17 +17,18 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.Collection;
+import org.dspace.content.Metadatum;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.FormatIdentifier;
 import org.dspace.content.Item;
-import org.dspace.content.Metadatum;
 import org.dspace.content.WorkspaceItem;
+import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.identifier.doi.DOIConnector;
 import org.dspace.identifier.doi.DOIIdentifierException;
-import org.dspace.identifier.doi.IdentifierRegisterValidation;
 import org.dspace.services.ConfigurationService;
+import org.dspace.identifier.doi.IdentifierRegisterValidation;
 import org.dspace.storage.rdbms.DatabaseManager;
 import org.dspace.storage.rdbms.TableRow;
 import org.dspace.utils.DSpace;
@@ -109,6 +111,19 @@ public class DOIIdentifierProvider
         return prefix;
     }
 
+    protected static List<String> getAllowedTypes() {
+        String allowedTypeValue =
+            ConfigurationManager.getProperty("identifier.doi.objects");
+        List<String> allowedTypeList = new ArrayList<>();
+        if(!StringUtils.isBlank(allowedTypeValue)) {
+            String[] allowedTypes = allowedTypeValue.split(",");
+            for (String allowedType : allowedTypes) {
+                allowedTypeList.add(allowedType.trim());
+            }
+        }
+        return(allowedTypeList);
+    }
+
     @Required
     public void setDOIConnector(DOIConnector connector)
     {
@@ -117,7 +132,7 @@ public class DOIIdentifierProvider
     
     /**
      * This identifier provider supports identifiers of type
-     * {@link DOI}.
+     * {@link org.dspace.identifier.DOI}.
      * @param identifier to check if it will be supported by this provider.
      * @return 
      */
@@ -522,6 +537,16 @@ public class DOIIdentifierProvider
         
         if (null == doi)
         {
+            List<String> allowedTypeList = getAllowedTypes();
+            // Safe checking of type to avoid index errors, type errors
+            if(Constants.typeText.length > dso.getType()) {
+                String dsoType = Constants.typeText[dso.getType()];
+                if(!allowedTypeList.contains(dsoType)) {
+                    // We never expect DOIs for this type anyway, return null
+                    return null;
+                }
+            }
+            // If the previous tests don't apply, thrown an exception
             throw new IdentifierNotFoundException("No DOI for DSpaceObject of type "
                     + dso.getTypeText() + " with ID " + dso.getID() + " found.");
         }
