@@ -539,13 +539,12 @@ public class DOIIdentifierProvider
         {
             List<String> allowedTypeList = getAllowedTypes();
             // Safe checking of type to avoid index errors, type errors
-            if(Constants.typeText.length > dso.getType()) {
-                String dsoType = Constants.typeText[dso.getType()];
-                if(!allowedTypeList.contains(dsoType)) {
-                    // We never expect DOIs for this type anyway, return null
-                    return null;
-                }
+            String dsoType = dso.getTypeText();
+            if(!allowedTypeList.contains(dsoType)) {
+                // We never expect DOIs for this type anyway, return null
+                return null;
             }
+
             // If the previous tests don't apply, thrown an exception
             throw new IdentifierNotFoundException("No DOI for DSpaceObject of type "
                     + dso.getTypeText() + " with ID " + dso.getID() + " found.");
