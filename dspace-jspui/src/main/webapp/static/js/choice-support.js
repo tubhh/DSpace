@@ -92,8 +92,8 @@ function DSpaceSetupAutocomplete(formID, args)
 				//manage extra information to copy value::authority into related field (boxed into the key map)
 				jQuery.each(extra, function( key, row ) {
 					//'key' example: dc_related_example
-					//'row' example: Test::rp00001
-		            var re = /(.*)::(.*)/;
+					//'row' example1: Test::rp00001, example2: Test::will be generated::authType::serviceID
+		            var re = /(.*?)::(.*)/;
 		            var valsubst = '$1';
 		            var authsubst = '$2';		            
 		            		         
@@ -480,8 +480,8 @@ function DSpaceChoicesAcceptOnClick ()
 			//manage extra information to copy value::authority into related field (boxed into the key map)
 			jQuery.each(extra, function( key, row ) {
 				//'key' example: dc_related_example
-				//'row' example: Test::rp00001
-	            var re = /(.*)::(.*)/;
+				//'row' example1: Test::rp00001, example2: Test::will be generated::authType::serviceID
+	            var re = /(.*?)::(.*)/;
 	            var valsubst = '$1';
 	            var authsubst = '$2';		            
 
