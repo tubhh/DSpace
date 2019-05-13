@@ -62,4 +62,32 @@
      	<property name="singleResultOnAggregate" value="false"/>
     </bean> 
 
+    <!-- ZDB CONFIGURATION -->
+    <bean id="ZDBExtraTitleMetadataGenerator"
+        class="org.dspace.app.cris.integration.ZDBExtraTitleMetadataGenerator">
+        <property name="relatedInputformMetadata" value="dc_relation_ispartof"/>
+    </bean>
+
+    <bean id="ZDBExtraIssnMetadataGenerator"
+        class="org.dspace.app.cris.integration.ZDBExtraIssnMetadataGenerator">
+        <property name="relatedInputformMetadata" value="dc_identifier_issn"/>
+    </bean>
+
+    <bean id="ZDBExtraConfiguration" class="org.dspace.app.cris.integration.ZDBExtraConfiguration">
+        <property name="extraMap">
+            <map value-type="java.util.List">
+                <entry key="dc_relation_ispartof">
+                    <list>
+                        <ref bean="ZDBExtraIssnMetadataGenerator"/>
+                    </list>
+                </entry>
+                <entry key="dc_identifier_issn">
+                    <list>
+                        <ref bean="ZDBExtraTitleMetadataGenerator"/>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
 </beans>
