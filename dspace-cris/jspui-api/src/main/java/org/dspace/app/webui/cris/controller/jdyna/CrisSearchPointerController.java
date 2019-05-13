@@ -10,6 +10,7 @@ package org.dspace.app.webui.cris.controller.jdyna;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.dspace.app.cris.discovery.CrisSearchService;
 import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.cris.model.CrisConstants;
@@ -48,7 +49,8 @@ public class CrisSearchPointerController extends
             boolean searchValueFound = false;
             
             List<DSpaceObject> objects = getSearchService().search(context,
-                    query + "*", null, true, 0, Integer.MAX_VALUE, filtro);
+                    "(\"" + ClientUtils.escapeQueryChars(query) + "\") OR (" + query.replaceAll("(?:\\+|-)", " ") + "*)",
+                    null, true, 0, Integer.MAX_VALUE, filtro);
             for (DSpaceObject obj : objects)
             {
                 ACrisObject real = (ACrisObject) obj;

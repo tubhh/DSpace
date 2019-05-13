@@ -140,7 +140,7 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
 	                luceneQuery = luceneQuery.replaceAll("\\\\ "," ");
 	                discoverQuery
 	                        .setQuery("{!lucene q.op=AND df=crisauthoritylookup}("
-	                                + luceneQuery
+	                                + luceneQuery.replaceAll("(?:\\\\-|-)|(?:\\\\\\+|\\+)", " ")
 	                                + ") OR (\""
 	                                + luceneQuery.substring(0,
 	                                        luceneQuery.length() - 1) + "\")");
