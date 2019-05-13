@@ -12,7 +12,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -140,7 +139,11 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                 	String luceneQuery = ClientUtils.escapeQueryChars(query.toLowerCase()) + "*";
 	                luceneQuery = luceneQuery.replaceAll("\\\\ "," ");
 	                discoverQuery
-	                        .setQuery(buildQuery(field, luceneQuery));
+	                        .setQuery("{!lucene q.op=AND df=crisauthoritylookup}("
+	                                + luceneQuery
+	                                + ") OR (\""
+	                                + luceneQuery.substring(0,
+	                                        luceneQuery.length() - 1) + "\")");
 	                discoverQuery.setMaxResults(50);
                 }
                 discoverQuery.setSortField("crisauthoritylookup_sort", SORT_ORDER.asc);
@@ -153,20 +156,9 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                 for (DSpaceObject dso : result.getDspaceObjects())
                 {
                     T cris = (T) dso;
-
-                    Map<String, String> extras = getExtra(cris, field);
-                    if (extras != null && !extras.isEmpty())
-                    {
-                        choiceList.add(new Choice(ResearcherPageUtils
-                                .getPersistentIdentifier(cris), cris.getName(),
-                                getDisplayEntry(cris, field), extras));
-                    }
-                    else
-                    {
-                        choiceList.add(new Choice(ResearcherPageUtils
-                                .getPersistentIdentifier(cris), cris.getName(),
-                                getDisplayEntry(cris, field)));
-                    }
+                    choiceList.add(new Choice(ResearcherPageUtils
+                            .getPersistentIdentifier(cris), cris.getName(),
+                            getDisplayEntry(cris)));
                 }
 
                 Choice[] results = new Choice[choiceList.size()];
@@ -183,7 +175,7 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
         }
     }
 
-	protected String getDisplayEntry(T cris, String field) {
+	protected String getDisplayEntry(T cris) {
 		return cris.getName();
 	}    
     
@@ -264,7 +256,7 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                     T cris = (T) dso;
                     choiceList.add(new Choice(ResearcherPageUtils
                             .getPersistentIdentifier(cris), cris.getName(),
-                            getDisplayEntry(cris, field)));
+                            getDisplayEntry(cris)));
                 }
             }
 
@@ -362,18 +354,4 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
     }
     
     public abstract T getNewCrisObject();
-
-    protected String buildQuery(String field, String luceneQuery)
-    {
-        return "{!lucene q.op=AND df=crisauthoritylookup}("
-                + luceneQuery
-                + ") OR (\""
-                + luceneQuery.substring(0,
-                        luceneQuery.length() - 1) + "\")";
-    }
-
-    protected Map<String, String> getExtra(T crisObject, String field)
-    {
-        return null;
-    }
 }
