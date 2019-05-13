@@ -180,7 +180,7 @@ public class ZDBService {
 		return null;
 	}
 
-	public List<ZDBAuthorityValue> list(String query, int page, int pagesize) throws IOException {
+	public List<ZDBAuthorityValue> list(String field, String query, int page, int pagesize) throws IOException {
 		if (query == null || query.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
@@ -193,7 +193,7 @@ public class ZDBService {
 		// searchURL += "&numberOfRecords=" + Integer.toString(pagesize);
 		// }
 
-		queryURL += "&query=tit=" + URLEncoder.encode(query);
+		queryURL += "&query=" + field + "=" + URLEncoder.encode(query);
 		return search(queryURL);
 	}
 
