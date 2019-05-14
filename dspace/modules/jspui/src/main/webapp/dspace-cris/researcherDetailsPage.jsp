@@ -348,7 +348,7 @@
 				</c:if>
 
 				
-				<c:if test="${claim && !researcher_page_menu && empty researcher.epersonID && !userHasRP}" >
+				<c:if test="${isLoggedIn && claim && !researcher_page_menu && empty researcher.epersonID && !userHasRP}" >
 				<div class="btn-group">				
 				<c:choose>				
 					<c:when test="${selfClaimRP}">
