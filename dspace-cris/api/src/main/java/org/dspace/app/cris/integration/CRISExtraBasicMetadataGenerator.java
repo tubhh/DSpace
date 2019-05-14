@@ -22,7 +22,7 @@ public class CRISExtraBasicMetadataGenerator
     private String relatedMetadata;
     private String relatedInputformMetadata;
 
-    public Map<String, String> buildExtra(ACrisObject crisObject)
+    public Map<String, String> build(ACrisObject crisObject)
     {
         Map<String, String> extras = new HashMap<String, String>();
 

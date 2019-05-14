@@ -365,15 +365,18 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
 
     protected String buildQuery(String field, String luceneQuery)
     {
-        return "{!lucene q.op=AND df=crisauthoritylookup}("
+        return "{!lucene q.op=AND df=" + getDefaultField()+ "}("
                 + luceneQuery
                 + ") OR (\""
                 + luceneQuery.substring(0,
                         luceneQuery.length() - 1) + "\")";
     }
 
-    protected Map<String, String> getExtra(T crisObject, String field)
-    {
+    protected String getDefaultField() {
+        return "crisauthoritylookup";
+    }
+    
+    protected Map<String, String> getExtra(T crisObject, String field) {
         return null;
     }
 }

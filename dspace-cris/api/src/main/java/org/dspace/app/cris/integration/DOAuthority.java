@@ -7,9 +7,15 @@
  */
 package org.dspace.app.cris.integration;
 
-import org.dspace.app.cris.model.ResearchObject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class DOAuthority extends CRISAuthority
+import org.dspace.app.cris.model.ResearchObject;
+import org.dspace.core.ConfigurationManager;
+import org.dspace.utils.DSpace;
+
+public class DOAuthority extends CRISAuthority<ResearchObject>
 {
 
     @Override
@@ -32,6 +38,21 @@ public class DOAuthority extends CRISAuthority
 	@Override
 	public ResearchObject getNewCrisObject() {
 		return new ResearchObject();
-	}  
+	}
+	
+    protected Map<String, String> getExtra(ResearchObject crisObject, String field) {
+        Map<String, String> extras = new HashMap<String,String>();
+        List<DOExtraMetadataGenerator> generators = new DSpace().getServiceManager().getServicesByType(DOExtraMetadataGenerator.class);
+        if(generators!=null) {
+            for(DOExtraMetadataGenerator gg : generators) {
+                String anObject = ConfigurationManager.getProperty("cris.DOAuthority." +field+ ".new-instances");
+                if(gg.getType().equals(anObject)) {
+                    Map<String, String> extrasTmp = gg.build(crisObject);
+                    extras.putAll(extrasTmp);
+                }
+            }
+        }
+        return extras;
+    }
 
 }

@@ -19,7 +19,7 @@ public class ZDBExtraTitleMetadataGenerator
     private String relatedInputformMetadata;
 
     @Override
-    public Map<String, String> buildExtra(AuthorityValue val)
+    public Map<String, String> build(AuthorityValue val)
     {
         Map<String, String> extras = new HashMap<String, String>();
 

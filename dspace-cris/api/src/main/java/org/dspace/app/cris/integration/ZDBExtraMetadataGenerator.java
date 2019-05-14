@@ -13,5 +13,5 @@ import org.dspace.authority.AuthorityValue;
 
 public interface ZDBExtraMetadataGenerator
 {
-    public Map<String, String> buildExtra(AuthorityValue val);
+    public Map<String, String> build(AuthorityValue val);
 }

@@ -13,5 +13,5 @@ import org.dspace.app.cris.model.ACrisObject;
 
 public interface CRISExtraMetadataGenerator
 {
-    Map<String, String> buildExtra(ACrisObject crisObject);
+    Map<String, String> build(ACrisObject crisObject);
 }

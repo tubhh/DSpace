@@ -16,6 +16,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.app.cris.model.ACrisObject;
+import org.dspace.app.cris.model.ResearchObject;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.zdb.ZDBAuthorityValue;
 import org.dspace.authority.zdb.ZDBService;
@@ -32,9 +33,6 @@ public class ZDBAuthority extends DOAuthority {
 	private static Logger log = Logger.getLogger(ZDBAuthority.class);
 
 	private ZDBService source = new DSpace().getServiceManager().getServiceByName("ZDBSource", ZDBService.class);
-
-	private ZDBExtraConfiguration zdbExtraConfiguration = new DSpace().getServiceManager().getServiceByName("ZDBExtraConfiguration", ZDBExtraConfiguration.class);
-	private CRISExtraConfiguration crisExtraConfiguration = new DSpace().getServiceManager().getServiceByName("JournalExtraConfiguration", CRISExtraConfiguration.class);
 
 	private static final String JOURNALS_NAME = "crisjournals.journalsname";
 	private static final String JOURNALS_ISSN = "crisjournals.journalsissn";
@@ -95,17 +93,15 @@ public class ZDBAuthority extends DOAuthority {
 
 	private Map<String, String> getZDBExtra(String field, AuthorityValue val)
 	{
-		Map<String, String> extras = new HashMap<String,String>();
-
-		if (zdbExtraConfiguration != null)
-		{
-			for (ZDBExtraMetadataGenerator gg : zdbExtraConfiguration.getExtraMap().get(field))
-			{
-				extras.putAll(gg.buildExtra(val));
-			}
-		}
-
-		return extras;
+        Map<String, String> extras = new HashMap<String,String>();
+        List<ZDBExtraMetadataGenerator> generators = new DSpace().getServiceManager().getServicesByType(ZDBExtraMetadataGenerator.class);
+        if(generators!=null) {
+            for(ZDBExtraMetadataGenerator gg : generators) {
+                Map<String, String> extrasTmp = gg.build(val);
+                extras.putAll(extrasTmp);
+            }
+        }
+        return extras;
 	}
 
 	private String getZDBValue(String searchField, AuthorityValue val)
@@ -132,43 +128,16 @@ public class ZDBAuthority extends DOAuthority {
 		{
 			return JOURNALS_ISSN;
 		}
-		return null;
+		return "crisauthoritylookup";
 	}
 
-    @Override
-    protected String buildQuery(String field, String luceneQuery)
-    {
+    protected String getTemplateMethod(String field) {
         String searchField = getSearchField(field);
-        if (StringUtils.isNotBlank(searchField))
-        {
-            return "{!lucene q.op=AND df=" + searchField + "}("
-                    + luceneQuery
-                    + ") OR (\""
-                    + luceneQuery.substring(0,
-                            luceneQuery.length() - 1) + "\")";
-        }
-
-        return super.buildQuery(searchField, luceneQuery);
+        return searchField;
     }
-
+    
 	@Override
-	protected Map<String, String> getExtra(ACrisObject crisObject, String field)
-	{
-		Map<String, String> extras = new HashMap<String,String>();
-
-		if (crisExtraConfiguration != null)
-		{
-			for (CRISExtraMetadataGenerator gg : crisExtraConfiguration.getExtraMap().get(field))
-			{
-				extras.putAll(gg.buildExtra(crisObject));
-			}
-		}
-
-		return extras;
-	}
-
-	@Override
-	protected String getDisplayEntry(ACrisObject cris, String field)
+	protected String getDisplayEntry(ResearchObject cris, String field)
 	{
 		String searchField = getSearchField(field);
 		if (StringUtils.isNotBlank(searchField))
