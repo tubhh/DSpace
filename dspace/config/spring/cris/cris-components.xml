@@ -29,10 +29,54 @@
 			<map>
 				<entry key="dspaceitems" value-ref="publicationlist" />
 				<entry key="projects" value-ref="projectlist" />
+				<entry key="advisedtheses" value-ref="advisedtheseslist" />
+                                <entry key="publicationseditored" value-ref="editoredpublicationslist" />
 			</map>
 		</property>
 	</bean>
 		
+	<!-- Publication component for RP -->
+	<bean id="advisedtheseslist"
+		class="org.dspace.app.webui.cris.components.ItemsConfigurerComponent">
+		<property name="relationConfiguration" ref="relationRPVSAdvisedItemConfiguration" />
+		<property name="commonFilter"><util:constant static-field="org.dspace.app.webui.cris.util.RelationPreferenceUtil.HIDDEN_FILTER" /></property>				
+		<property name="target" value="org.dspace.app.cris.model.ResearcherPage" />
+		<property name="facets" ref="facetsItemConfiguration" />
+		<property name="types">
+			<map>
+				<entry key="all" value-ref="allComponent" />
+				<entry key="selected" value-ref="selectedComponent" />
+				<entry key="journal" value-ref="journalComponent" />
+				<entry key="conference" value-ref="conferenceComponent" />
+				<entry key="book" value-ref="bookComponent" />
+				<entry key="patent" value-ref="patentComponent" />
+				<entry key="dataset" value-ref="datasetComponent" />
+				<entry key="other" value-ref="otherComponent" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- Publication component for RP -->
+	<bean id="editoredpublicationslist"
+		class="org.dspace.app.webui.cris.components.ItemsConfigurerComponent">
+		<property name="relationConfiguration" ref="relationRPVSEditedItemConfiguration" />
+		<property name="commonFilter"><util:constant static-field="org.dspace.app.webui.cris.util.RelationPreferenceUtil.HIDDEN_FILTER" /></property>				
+		<property name="target" value="org.dspace.app.cris.model.ResearcherPage" />
+		<property name="facets" ref="facetsItemConfiguration" />
+		<property name="types">
+			<map>
+				<entry key="all" value-ref="allComponent" />
+				<entry key="selected" value-ref="selectedComponent" />
+				<entry key="journal" value-ref="journalComponent" />
+				<entry key="conference" value-ref="conferenceComponent" />
+				<entry key="book" value-ref="bookComponent" />
+				<entry key="patent" value-ref="patentComponent" />
+				<entry key="dataset" value-ref="datasetComponent" />
+				<entry key="other" value-ref="otherComponent" />
+			</map>
+		</property>
+	</bean>
+
 	<!-- Publication component for RP -->
 	<bean id="publicationlist"
 		class="org.dspace.app.webui.cris.components.ItemsConfigurerComponent">
@@ -42,6 +86,7 @@
 		<property name="facets" ref="facetsItemConfiguration" />
 		<property name="types">
 			<map>
+				<entry key="all" value-ref="allComponent" />
 				<entry key="selected" value-ref="selectedComponent" />
 				<entry key="journal" value-ref="journalComponent" />
 				<entry key="conference" value-ref="conferenceComponent" />
@@ -67,6 +112,16 @@
 		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
 		<property name="componentIdentifier" value="journal" />
 		<property name="facetQuery"><value>dc.type.de_DE:Article -relationpreferences.crisrp.publications.selected:{1}</value></property>
+		<property name="order"><value>desc</value></property>
+		<property name="rpp"><value>20</value></property>
+                <!-- normal sorting by title (1) or by issue date (2) -->
+		<property name="sortby"><value>2</value></property>	
+	</bean>
+
+	<bean id="allComponent"
+		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
+		<property name="componentIdentifier" value="all" />
+		<property name="facetQuery"><value>*:*</value></property>
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
                 <!-- normal sorting by title (1) or by issue date (2) -->
