@@ -370,7 +370,7 @@ j(document).ready(function() {
                         <% } %>
                     </div>
     <%
-        } else {
+        } else  if ((hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) || (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess"))) {
     %>
                     <div class="well">
                         <%
