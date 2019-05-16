@@ -315,15 +315,15 @@ j(document).ready(function() {
                         %>
                         <% if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/cc0/") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">
-                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" />
+                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" title="CC Null" />
                             </a>
                         <% } else if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/pdm/") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/pdm/">
-                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" />
+                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" title="Public Domain" />
                             </a>
                         <% } else { %>
                             <a href="<%= creativecommonslink %>">
-                                <img src="https://licensebuttons.net/l/<%= creativecommons %>/88x31.png" alt="<%= creativecommonslink %>" />
+                                <img src="https://licensebuttons.net/l/<%= creativecommons %>/88x31.png" alt="<%= creativecommonslink %>" title="<%= creativecommonslink %>" />
                             </a>
                         <% } %>
                     </div>
@@ -357,20 +357,20 @@ j(document).ready(function() {
                         %>
                         <% if (creativecommons == "cc-null") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">
-                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" />
+                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" title="CC Null" />
                             </a>
                         <% } else if (creativecommons == "pd") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/pdm/">
-                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" />
+                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" title="Public Domain" />
                             </a>
                         <% } else { %>
                             <a href="https://creativecommons.org/licenses/<%= creativecommonslink %>">
-                                <img src="https://licensebuttons.net/l/<%= creativecommonslink %>/88x31.png" alt="<%= creativecommonslink %>" />
+                                <img src="https://licensebuttons.net/l/<%= creativecommonslink %>/88x31.png" alt="<%= creativecommonslink %>" title="<%= creativecommonslink %> "/>
                             </a>
                         <% } %>
                     </div>
     <%
-        } else {
+        } else if ((hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) || (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess"))) {
     %>
                     <div class="well">
                         <%
