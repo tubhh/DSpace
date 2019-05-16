@@ -450,11 +450,16 @@ return decorator.generateDisplayValue(alternativeName, rp);
 		                        .getFirstNames()) ? "" : "*");
 		    }
 	
-		    if (StringUtils.isNotBlank(tmpPersonName.getFirstNames()))
+		    String firstName = tmpPersonName.getFirstNames();
+		    if (StringUtils.isNotBlank(firstName))
 		    {
+		        firstName = firstName.trim();
+		        if (firstName.endsWith("."))
+		        {
+		            firstName = firstName.substring(0, firstName.length()-1);
+		        }
 		        luceneQuery += (luceneQuery.length() > 0 ? " " : "")
-		                + ClientUtils.escapeQueryChars(tmpPersonName
-		                        .getFirstNames().trim()) + "*";
+		                + ClientUtils.escapeQueryChars(firstName) + "*";
 		    }
 		    luceneQuery = luceneQuery.replaceAll("\\\\ ", " ");
 		    DiscoverQuery discoverQuery = new DiscoverQuery();
