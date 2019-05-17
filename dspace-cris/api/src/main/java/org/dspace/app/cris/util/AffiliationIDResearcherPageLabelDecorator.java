@@ -28,7 +28,7 @@ public class AffiliationIDResearcherPageLabelDecorator implements IResearcherPag
                         && translatedName.getValue() != null
                         && !translatedName.getValue().isEmpty()
                         && translatedName.getVisibility() == VisibilityConstants.PUBLIC) {
-			 		sb.append(translatedName.getValue());
+			 		sb.append(" " + translatedName.getValue());
 			 	}
 
 			 	sb.append(" (").append(rp.getCrisID()).append(")");
