@@ -40,9 +40,6 @@ public class BrowseItem extends DSpaceObject
 	/** Logger */
     private static Logger log = Logger.getLogger(BrowseItem.class);
     
-	/** a List of all the metadata */
-	private List<Metadatum> metadata = new ArrayList<Metadatum>();
-	
 	/** database id of the item */
 	private int id = -1;
 
