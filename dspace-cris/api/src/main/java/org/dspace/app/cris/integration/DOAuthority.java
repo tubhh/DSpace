@@ -45,7 +45,7 @@ public class DOAuthority extends CRISAuthority<ResearchObject>
         List<DOExtraMetadataGenerator> generators = new DSpace().getServiceManager().getServicesByType(DOExtraMetadataGenerator.class);
         if(generators!=null) {
             for(DOExtraMetadataGenerator gg : generators) {
-                String anObject = ConfigurationManager.getProperty("cris.DOAuthority." +field+ ".new-instances");
+                String anObject = ConfigurationManager.getProperty("cris.DOAuthority." +field.replaceAll("_", ".") + ".new-instances");
                 if(gg.getType().equals(anObject)) {
                     Map<String, String> extrasTmp = gg.build(crisObject);
                     extras.putAll(extrasTmp);

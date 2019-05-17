@@ -32,7 +32,7 @@ public class CRISExtraBasicMetadataGenerator
             Metadatum m = mm[0];
             if (m != null)
             {
-                if (ConfigurationManager.getBooleanProperty("authority.controlled." + getRelatedInputformMetadata().replaceAll("_", "\\."), false))
+                if (ConfigurationManager.getBooleanProperty("authority.controlled." + getRelatedInputformMetadata().replaceAll("_", "."), false))
                 {
                     if (StringUtils.isNotBlank(m.authority))
                     {
