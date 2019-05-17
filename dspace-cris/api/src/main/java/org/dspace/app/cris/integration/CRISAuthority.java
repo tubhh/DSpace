@@ -158,8 +158,8 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                     if (extras != null && !extras.isEmpty())
                     {
                         choiceList.add(new Choice(ResearcherPageUtils
-                                .getPersistentIdentifier(cris), cris.getName(),
-                                getDisplayEntry(cris, field), extras));
+                                .getPersistentIdentifier(cris), getDisplayEntry(cris, field),
+                                cris.getName(), extras));
                     }
                     else
                     {
