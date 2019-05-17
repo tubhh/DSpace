@@ -32,6 +32,10 @@ public abstract class ZDBAuthority extends DOAuthority {
 
 	private ZDBService source = new DSpace().getServiceManager().getServiceByName("ZDBSource", ZDBService.class);
 
+	private static final String ZDB_IDENTIFIER_FIELD = "journalIssn";
+	private static final String JOURNALS_IDENTIFIER_FIELD = "crisjournals.journalsissn";
+	private static final String IDENTIFIER_NOT_FOUND = "N/D";
+
 	@Override
 	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
 		Choices choices = super.getMatches(field, query, collection, start, limit, locale);		
@@ -54,7 +58,7 @@ public abstract class ZDBAuthority extends DOAuthority {
 							extras.put("insolr", "false");
 							extras.put("link", getLink(val));
 							extras.putAll(getZDBExtra(field, val));
-							results.add(new Choice(val.generateString(), val.getValue(), getZDBValue(searchField, val), extras));
+							results.add(new Choice(val.generateString(), getIssn(val) + val.getValue(), getZDBValue(searchField, val), extras));
 							added++;
 						}
 					}
@@ -91,6 +95,13 @@ public abstract class ZDBAuthority extends DOAuthority {
 	protected abstract String getZDBValue(String searchField, AuthorityValue val);
 
 	@Override
+	protected String getDisplayEntry(ResearchObject cris)
+	{
+		return getIssn(cris)
+				+ super.getDisplayEntry(cris);
+	}
+
+	@Override
 	protected String getValue(ResearchObject cris)
 	{
 		String searchField = getDefaultField();
@@ -105,4 +116,33 @@ public abstract class ZDBAuthority extends DOAuthority {
 
 		return super.getValue(cris);
 	}
+
+    private String getIssn(AuthorityValue val)
+    {
+        String issn = null;
+        List<String> issns = val.getOtherMetadata().get(ZDB_IDENTIFIER_FIELD);
+        if (issns != null && !issns.isEmpty())
+        {
+            issn = issns.get(0);
+        }
+        return getIssnOrDefault(issn);
+    }
+
+    private String getIssn(ResearchObject cris)
+    {
+        String issn = null;
+        Metadatum[] mm = cris.getMetadataByMetadataString(JOURNALS_IDENTIFIER_FIELD);
+        if (mm != null && mm.length > 0)
+        {
+            issn = mm[0].value;
+        }
+        return getIssnOrDefault(issn);
+    }
+
+    private String getIssnOrDefault(String issn)
+    {
+        return "["
+                + (StringUtils.isNotBlank(issn) ? issn : IDENTIFIER_NOT_FOUND)
+                + "] ";
+    }
 }
