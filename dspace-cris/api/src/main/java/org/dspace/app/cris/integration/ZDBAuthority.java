@@ -22,19 +22,15 @@ import org.dspace.authority.zdb.ZDBService;
 import org.dspace.content.Metadatum;
 import org.dspace.content.authority.Choice;
 import org.dspace.content.authority.Choices;
-import org.dspace.core.ConfigurationManager;
 import org.dspace.utils.DSpace;
 
-public class ZDBAuthority extends DOAuthority {
+public abstract class ZDBAuthority extends DOAuthority {
 
 	private static final int DEFAULT_MAX_ROWS = 10;
 
 	private static Logger log = Logger.getLogger(ZDBAuthority.class);
 
 	private ZDBService source = new DSpace().getServiceManager().getServiceByName("ZDBSource", ZDBService.class);
-
-	private static final String JOURNALS_NAME = "crisjournals.journalsname";
-	private static final String JOURNALS_ISSN = "crisjournals.journalsissn";
 
 	@Override
 	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
@@ -77,18 +73,7 @@ public class ZDBAuthority extends DOAuthority {
 		return source.buildDetailsURL(val.getServiceId());
 	}
 
-	protected String getZDBSearchField(String field)
-	{
-		if (ConfigurationManager.getBooleanProperty(field + ".search.title", false))
-		{
-			return "tit";
-		}
-		else if (ConfigurationManager.getBooleanProperty(field + ".search.issn", false))
-		{
-			return "iss";
-		}
-		return null;
-	}
+	protected abstract String getZDBSearchField(String field);
 
 	private Map<String, String> getZDBExtra(String field, AuthorityValue val)
 	{
@@ -103,32 +88,9 @@ public class ZDBAuthority extends DOAuthority {
         return extras;
 	}
 
-	protected String getZDBValue(String searchField, AuthorityValue val)
-	{
-		if (searchField.equals("iss"))
-		{
-			List<String> issns = val.getOtherMetadata().get("journalIssn");
-			if (issns != null && !issns.isEmpty())
-			{
-				return issns.get(0);
-			}
-		}
-		// default get title
-		return val.getValue();
-	}
+	protected abstract String getZDBValue(String searchField, AuthorityValue val);
 
-	protected String getSearchField(String field)
-	{
-		if (ConfigurationManager.getBooleanProperty(field + ".search.title", false))
-		{
-			return JOURNALS_NAME;
-		}
-		else if (ConfigurationManager.getBooleanProperty(field + ".search.issn", false))
-		{
-			return JOURNALS_ISSN;
-		}
-		return "crisauthoritylookup";
-	}
+	protected abstract String getSearchField(String field);
 
     protected String getTemplateMethod(String field) {
         String searchField = getSearchField(field);
