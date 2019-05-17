@@ -15,7 +15,6 @@ import java.util.Map;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.cris.model.ResearchObject;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.zdb.ZDBAuthorityValue;
@@ -78,7 +77,7 @@ public class ZDBAuthority extends DOAuthority {
 		return source.buildDetailsURL(val.getServiceId());
 	}
 
-	private String getZDBSearchField(String field)
+	protected String getZDBSearchField(String field)
 	{
 		if (ConfigurationManager.getBooleanProperty(field + ".search.title", false))
 		{
@@ -104,7 +103,7 @@ public class ZDBAuthority extends DOAuthority {
         return extras;
 	}
 
-	private String getZDBValue(String searchField, AuthorityValue val)
+	protected String getZDBValue(String searchField, AuthorityValue val)
 	{
 		if (searchField.equals("iss"))
 		{
@@ -118,7 +117,7 @@ public class ZDBAuthority extends DOAuthority {
 		return val.getValue();
 	}
 
-	private String getSearchField(String field)
+	protected String getSearchField(String field)
 	{
 		if (ConfigurationManager.getBooleanProperty(field + ".search.title", false))
 		{
