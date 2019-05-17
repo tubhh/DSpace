@@ -27,7 +27,7 @@ public class ZDBTitleAuthority extends ZDBAuthority
     }
 
     @Override
-    protected String getSearchField(String field)
+    protected String getDefaultField()
     {
         return JOURNALS_TITLE_FIELD;
     }

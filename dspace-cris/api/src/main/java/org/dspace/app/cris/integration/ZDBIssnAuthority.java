@@ -35,7 +35,8 @@ public class ZDBIssnAuthority extends ZDBAuthority
         return val.getValue();
     }
 
-    protected String getSearchField(String field)
+    @Override
+    protected String getDefaultField()
     {
         return JOURNALS_ISSN_FIELD;
     }

@@ -158,14 +158,14 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                     if (extras != null && !extras.isEmpty())
                     {
                         choiceList.add(new Choice(ResearcherPageUtils
-                                .getPersistentIdentifier(cris), getDisplayEntry(cris, field),
-                                cris.getName(), extras));
+                                .getPersistentIdentifier(cris), getDisplayEntry(cris),
+                                getValue(cris), extras));
                     }
                     else
                     {
                         choiceList.add(new Choice(ResearcherPageUtils
-                                .getPersistentIdentifier(cris), cris.getName(),
-                                getDisplayEntry(cris, field)));
+                                .getPersistentIdentifier(cris), getValue(cris),
+                                getDisplayEntry(cris)));
                     }
                 }
 
@@ -183,7 +183,7 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
         }
     }
 
-	protected String getDisplayEntry(T cris, String field) {
+	protected String getDisplayEntry(T cris) {
 		return cris.getName();
 	}    
     
@@ -264,7 +264,7 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                     T cris = (T) dso;
                     choiceList.add(new Choice(ResearcherPageUtils
                             .getPersistentIdentifier(cris), cris.getName(),
-                            getDisplayEntry(cris, field)));
+                            getDisplayEntry(cris)));
                 }
             }
 
@@ -378,5 +378,10 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
     
     protected Map<String, String> getExtra(T crisObject, String field) {
         return null;
+    }
+
+    protected String getValue(T cris)
+    {
+		return cris.getName();
     }
 }

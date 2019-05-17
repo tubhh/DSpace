@@ -90,17 +90,10 @@ public abstract class ZDBAuthority extends DOAuthority {
 
 	protected abstract String getZDBValue(String searchField, AuthorityValue val);
 
-	protected abstract String getSearchField(String field);
-
-    protected String getTemplateMethod(String field) {
-        String searchField = getSearchField(field);
-        return searchField;
-    }
-    
 	@Override
-	protected String getDisplayEntry(ResearchObject cris, String field)
+	protected String getValue(ResearchObject cris)
 	{
-		String searchField = getSearchField(field);
+		String searchField = getDefaultField();
 		if (StringUtils.isNotBlank(searchField))
 		{
 			Metadatum[] mm = cris.getMetadataByMetadataString(searchField);
@@ -110,6 +103,6 @@ public abstract class ZDBAuthority extends DOAuthority {
 			}
 		}
 
-		return super.getDisplayEntry(cris, searchField);
+		return super.getValue(cris);
 	}
 }
