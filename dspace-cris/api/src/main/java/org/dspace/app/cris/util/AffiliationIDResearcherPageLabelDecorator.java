@@ -28,14 +28,14 @@ public class AffiliationIDResearcherPageLabelDecorator implements IResearcherPag
                         && translatedName.getValue() != null
                         && !translatedName.getValue().isEmpty()
                         && translatedName.getVisibility() == VisibilityConstants.PUBLIC) {
-			 		sb.append(translatedName.getValue());
+			 		sb.append(" " + translatedName.getValue());
 			 	}
-			 	
+
+			 	sb.append(" (").append(rp.getCrisID()).append(")");
+
 			 	if (StringUtils.isNotBlank(dept)) {
-			 		sb.append(" (").append(dept).append(")");
+			 		sb.append(" - ").append(dept);
 			 	}
-			 	
-			 	sb.append(" - ").append(rp.getCrisID());
 
 			 	if (StringUtils.isNotBlank(gndid)) {
 			 		sb.append(" - ").append(gndid);
@@ -49,7 +49,7 @@ public class AffiliationIDResearcherPageLabelDecorator implements IResearcherPag
 	        }
 	        else
 	        {
-	            return alternativeName + " See \"" + rp.getFullName() + "\"";
+	            return alternativeName + " See \"" + rp.getFullName() + "\" (" + rp.getCrisID() + ")";
 	        }
 	}
 
