@@ -1816,6 +1816,7 @@ public class SolrServiceImpl implements SearchService, IndexingService {
             solrQuery.setRows(discoveryQuery.getMaxResults());
         }
 
+        solrQuery.addSortField("objectposition_sort", SolrQuery.ORDER.asc);
         if(discoveryQuery.getSortField() != null)
         {
             SolrQuery.ORDER order = SolrQuery.ORDER.asc;
