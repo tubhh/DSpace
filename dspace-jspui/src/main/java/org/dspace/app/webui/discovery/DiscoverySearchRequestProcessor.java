@@ -12,9 +12,11 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -299,6 +301,8 @@ public class DiscoverySearchRequestProcessor implements SearchRequestProcessor {
 
 			Map<Integer, List<DSpaceObject>> resultsListOther = new HashMap<Integer, List<DSpaceObject>>();
 
+			Set<Integer> resultsSortedSetObjectsType = new LinkedHashSet<Integer>();
+
 			for (DSpaceObject dso : qResults.getDspaceObjects()) {
 				if (dso instanceof Item) {
 					resultsListItem.add((Item) dso);
@@ -317,6 +321,8 @@ public class DiscoverySearchRequestProcessor implements SearchRequestProcessor {
 						newlist.add(new BrowseDSpaceObject(context, (BrowsableDSpaceObject) dso));
 					}
 				}
+
+				resultsSortedSetObjectsType.add(dso.getType());
 			}
 
 			// Make objects from the handles - make arrays, fill them out
@@ -332,6 +338,9 @@ public class DiscoverySearchRequestProcessor implements SearchRequestProcessor {
 			resultsCommunities = resultsListComm.toArray(resultsCommunities);
 			resultsCollections = resultsListColl.toArray(resultsCollections);
 			resultsItems = resultsListItem.toArray(resultsItems);
+
+			Integer[] resultsSortedObjectsType = new Integer[resultsSortedSetObjectsType.size()];
+			resultsSortedObjectsType = resultsSortedSetObjectsType.toArray(resultsSortedObjectsType);
 
 			// Log
 			log.info(LogManager.getHeader(context, "search", "scope=" + scope + ",query=\"" + query + "\",results=("
@@ -355,6 +364,7 @@ public class DiscoverySearchRequestProcessor implements SearchRequestProcessor {
 			request.setAttribute("communities", resultsCommunities);
 			request.setAttribute("collections", resultsCollections);
 			request.setAttribute("resultsMapOthers", resultsMapOthers);
+			request.setAttribute("sortedObjectsType", resultsSortedObjectsType);
 			request.setAttribute("pagetotal", new Long(pageTotal));
 			request.setAttribute("pagecurrent", new Long(pageCurrent));
 			request.setAttribute("pagelast", new Long(pageLast));
