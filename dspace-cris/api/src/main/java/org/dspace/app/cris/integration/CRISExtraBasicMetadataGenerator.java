@@ -21,6 +21,7 @@ public class CRISExtraBasicMetadataGenerator
 {
     private String relatedMetadata;
     private String relatedInputformMetadata;
+    private String type;
 
     public Map<String, String> build(ACrisObject crisObject)
     {
@@ -73,5 +74,15 @@ public class CRISExtraBasicMetadataGenerator
     public String getRelatedMetadata()
     {
         return relatedMetadata;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String newType)
+    {
+        this.type = newType;
     }
 }
