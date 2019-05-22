@@ -39,20 +39,11 @@ public class DOAuthority extends CRISAuthority<ResearchObject>
 	public ResearchObject getNewCrisObject() {
 		return new ResearchObject();
 	}
-	
-    protected Map<String, String> getExtra(ResearchObject crisObject, String field) {
-        Map<String, String> extras = new HashMap<String,String>();
-        List<DOExtraMetadataGenerator> generators = new DSpace().getServiceManager().getServicesByType(DOExtraMetadataGenerator.class);
-        if(generators!=null) {
-            for(DOExtraMetadataGenerator gg : generators) {
-                String anObject = ConfigurationManager.getProperty("cris.DOAuthority." +field.replaceAll("_", ".") + ".new-instances");
-                if(gg.getType().equals(anObject)) {
-                    Map<String, String> extrasTmp = gg.build(crisObject);
-                    extras.putAll(extrasTmp);
-                }
-            }
-        }
-        return extras;
+
+    @Override
+    protected String getInstanceType(String field)
+    {
+        return ConfigurationManager.getProperty("cris.DOAuthority." +field.replaceAll("_", ".") + ".new-instances");
     }
 
 }
