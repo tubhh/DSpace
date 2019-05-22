@@ -7,13 +7,8 @@
  */
 package org.dspace.app.cris.integration;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.dspace.app.cris.model.ResearchObject;
 import org.dspace.core.ConfigurationManager;
-import org.dspace.utils.DSpace;
 
 public class DOAuthority extends CRISAuthority<ResearchObject>
 {

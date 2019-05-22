@@ -10,7 +10,6 @@ package org.dspace.app.cris.integration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -36,8 +35,13 @@ public abstract class ZDBAuthority extends DOAuthority {
 	private ZDBService source = new DSpace().getServiceManager().getServiceByName("ZDBSource", ZDBService.class);
 
 	private static final String ZDB_IDENTIFIER_FIELD = "journalIssn";
+	private static final String ZDB_RELATION_FIELD = "journalRelation";
+	private static final String ZDB_TYPE_FIELD = "journalType";
 	private static final String JOURNALS_IDENTIFIER_FIELD = "crisjournals.journalsissn";
-	private static final String IDENTIFIER_NOT_FOUND_KEY = "zdbauthority.identifier.notfound";
+	private static final String MESSAGE_IDENTIFIER_NOT_FOUND_KEY = "zdbauthority.identifier.notfound";
+	private static final String MESSAGE_TYPE_KEY = "zdbauthority.type";
+	private static final String MESSAGE_RELATION_KEY = "zdbauthority.relation";
+	
 
 	@Override
 	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
@@ -61,7 +65,7 @@ public abstract class ZDBAuthority extends DOAuthority {
 							extras.put("insolr", "false");
 							extras.put("link", getLink(val));
 							extras.putAll(getZDBExtra(field, val));
-							results.add(new Choice(val.generateString(), getIssn(val, locale) + val.getValue(), getZDBValue(searchField, val), extras));
+							results.add(new Choice(val.generateString(), getLabel(val, locale), getZDBValue(searchField, val), extras));
 							added++;
 						}
 					}
@@ -76,7 +80,35 @@ public abstract class ZDBAuthority extends DOAuthority {
 		return choices.values;
 	}
 
-	private String getLink(AuthorityValue val) {
+    private String getLabel(AuthorityValue val, String locale)
+    {
+        return getIssn(val, locale) + val.getValue() + getOtherInformation(val, locale);
+    }
+
+	private String getOtherInformation(AuthorityValue val, String locale)
+    {
+        String result = "(";
+        
+        result += val.getServiceId();
+        
+        List<String> types = val.getOtherMetadata().get(ZDB_TYPE_FIELD);
+        if (types != null && !types.isEmpty())
+        {
+            result += I18nUtil.getMessage(MESSAGE_TYPE_KEY, new String[] {types.get(0)}, LocaleUtils.toLocale(locale));
+        }
+        
+        List<String> relations = val.getOtherMetadata().get(ZDB_RELATION_FIELD);
+        if (relations != null && !relations.isEmpty())
+        {
+            int index = 1;
+            for(String relation : relations) {
+                result += I18nUtil.getMessage(MESSAGE_RELATION_KEY, new String[] {relation, ""+index}, LocaleUtils.toLocale(locale));
+            }
+        }
+        return result + ")";
+    }
+
+    private String getLink(AuthorityValue val) {
 		return source.buildDetailsURL(val.getServiceId());
 	}
 
@@ -144,6 +176,6 @@ public abstract class ZDBAuthority extends DOAuthority {
 
     private String getIssnOrDefault(String issn, String locale)
     {
-        return "[" + (StringUtils.isNotBlank(issn) ? issn : I18nUtil.getMessage(ZDB_IDENTIFIER_FIELD, LocaleUtils.toLocale(locale))) + "] ";
+        return "[" + (StringUtils.isNotBlank(issn) ? issn : I18nUtil.getMessage(MESSAGE_IDENTIFIER_NOT_FOUND_KEY, LocaleUtils.toLocale(locale))) + "] ";
     }
 }
