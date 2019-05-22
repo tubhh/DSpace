@@ -12,6 +12,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -139,11 +140,7 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                 	String luceneQuery = ClientUtils.escapeQueryChars(query.toLowerCase()) + "*";
 	                luceneQuery = luceneQuery.replaceAll("\\\\ "," ");
 	                discoverQuery
-	                        .setQuery("{!lucene q.op=AND df=crisauthoritylookup}("
-	                                + luceneQuery.replaceAll("(?:\\\\-|-)|(?:\\\\\\+|\\+)", " ")
-	                                + ") OR (\""
-	                                + luceneQuery.substring(0,
-	                                        luceneQuery.length() - 1) + "\")");
+	                        .setQuery(buildQuery(field, luceneQuery));
 	                discoverQuery.setMaxResults(50);
                 }
                 discoverQuery.setSortField("crisauthoritylookup_sort", SORT_ORDER.asc);
@@ -156,9 +153,20 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                 for (DSpaceObject dso : result.getDspaceObjects())
                 {
                     T cris = (T) dso;
-                    choiceList.add(new Choice(ResearcherPageUtils
-                            .getPersistentIdentifier(cris), cris.getName(),
-                            getDisplayEntry(cris)));
+
+                    Map<String, String> extras = getExtra(cris, field);
+                    if (extras != null && !extras.isEmpty())
+                    {
+                        choiceList.add(new Choice(ResearcherPageUtils
+                                .getPersistentIdentifier(cris), getDisplayEntry(cris, locale),
+                                getValue(cris), extras));
+                    }
+                    else
+                    {
+                        choiceList.add(new Choice(ResearcherPageUtils
+                                .getPersistentIdentifier(cris), getValue(cris),
+                                getDisplayEntry(cris, locale)));
+                    }
                 }
 
                 Choice[] results = new Choice[choiceList.size()];
@@ -175,8 +183,8 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
         }
     }
 
-	protected String getDisplayEntry(T cris) {
-		return getLabel(cris);
+	protected String getDisplayEntry(T cris, String locale) {
+		return getLabel(cris, locale);
 	}    
     
     public abstract int getCRISTargetTypeID();
@@ -256,7 +264,7 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                     T cris = (T) dso;
                     choiceList.add(new Choice(ResearcherPageUtils
                             .getPersistentIdentifier(cris), cris.getName(),
-                            getDisplayEntry(cris)));
+                            getDisplayEntry(cris, locale)));
                 }
             }
 
@@ -355,9 +363,31 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
     
     public abstract T getNewCrisObject();
 
-    public String getLabel(T cris)
+    public String getLabel(T cris, String locale)
     {
         return cris.getName()
                 + " (" + cris.getCrisID() + ")";
+    }
+    
+    protected String buildQuery(String field, String luceneQuery)
+    {
+        return "{!lucene q.op=AND df=" + getDefaultField()+ "}("
+                + luceneQuery.replaceAll("(?:\\\\-|-)|(?:\\\\\\+|\\+)", " ")
+                + ") OR (\""
+                + luceneQuery.substring(0,
+                        luceneQuery.length() - 1) + "\")";
+    }
+
+    protected String getDefaultField() {
+        return "crisauthoritylookup";
+    }
+    
+    protected Map<String, String> getExtra(T crisObject, String field) {
+        return null;
+    }
+
+    protected String getValue(T cris)
+    {
+		return cris.getName();
     }
 }
