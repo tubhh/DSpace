@@ -91,7 +91,10 @@ public class TypeSettingConsumer implements Consumer
                             thesistype = thesistypes[0].value;
                         }
 
+                        item.clearMetadata("dc", "type", "driver", Item.ANY);
+                        item.clearMetadata("dc", "type", "dini", Item.ANY);
                         item.clearMetadata("dc", "type", "casrai", Item.ANY);
+                        item.clearMetadata("tuhh", "type", "opus", Item.ANY);
                         item.clearMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
 
                         Map<String, String> typeset = mapTypeArray(type, thesistype);
