@@ -78,10 +78,10 @@ public class TypeSettingConsumer implements Consumer
         if (dso.getType() == Constants.ITEM)
         {
             Item item = (Item)dso;
-            Metadatum[] casrai = item.getMetadata("dc", "type", "casrai", Item.ANY);
-            Metadatum[] dcmitype = item.getMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
+            //Metadatum[] casrai = item.getMetadata("dc", "type", "casrai", Item.ANY);
+            //Metadatum[] dcmitype = item.getMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
             Metadatum[] types = item.getMetadata("dc", "type", null, Item.ANY);
-            if (casrai.length == 0 && dcmitype.length == 0 && types.length > 0) {
+            if (types.length > 0) {
                 String type = types[0].value;
                 Metadatum[] thesistypes = item.getMetadata("dc", "type", "thesis", Item.ANY);
                 if (type != "Thesis" || (type == "Thesis" && thesistypes.length > 0)) {
