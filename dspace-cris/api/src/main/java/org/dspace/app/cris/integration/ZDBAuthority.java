@@ -46,7 +46,9 @@ public class ZDBAuthority extends DOAuthority {
 						Map<String, String> extras = val.choiceSelectMap();
 						extras.put("insolr", "false");
 						extras.put("link", getLink(val));
-						results.add(new Choice(val.generateString(), val.getValue(), val.getValue(), extras));
+						StringBuffer sb = new StringBuffer(val.getValue());
+						sb.append(" (").append(val.getServiceId()).append(")");
+						results.add(new Choice(val.generateString(), sb.toString(), val.getValue(), extras));
 						added++;
 					}
 				}

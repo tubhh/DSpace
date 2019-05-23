@@ -31,6 +31,7 @@ public class FulltextAvailableDisplayStrategy extends ASimpleDisplayStrategy
             Metadatum[] metadataArray, boolean disableCrossLinks, boolean emph) throws JspException
     {
         String metadata = I18nUtil.getMessage("jsp.mydspace.render.nofulltext", hrq.getLocale());
+/*
         if (metadataArray.length == 0) {
             try {
                 // Virtual metadata is not in the metadataArray, so we have to obtain it newly
@@ -54,6 +55,7 @@ public class FulltextAvailableDisplayStrategy extends ASimpleDisplayStrategy
                 throw new JspException(e);
             }
         }
+*/
         if (metadataArray.length > 0)
         {
             String value = metadataArray[0].value;
