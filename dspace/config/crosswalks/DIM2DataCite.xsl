@@ -688,10 +688,16 @@
                     <xsl:text>CC-0</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
+<!--
                     <xsl:attribute name="rightsURI">
                         <xsl:text>https://creativecommons.org/licenses/</xsl:text><xsl:value-of select="." /><xsl:text>/</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
                     </xsl:attribute>
                     <xsl:text>CC-</xsl:text><xsl:value-of select="." /><xsl:text>-</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
+-->
+                    <xsl:attribute name="rightsURI">
+                        <xsl:value-of select="." />
+                    </xsl:attribute>
+                    <xsl:value-of select="." />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>

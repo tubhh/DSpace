@@ -680,7 +680,7 @@
          <hint></hint>
          <required>Please enter the main title for this item.</required>
        </field>
-
+<!--
       <field>
           <dc-element>contributor</dc-element>
           <dc-qualifier>department</dc-qualifier>
@@ -691,7 +691,7 @@
           <required></required>
           <hint>Enter an affiliation for each author.</hint>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>

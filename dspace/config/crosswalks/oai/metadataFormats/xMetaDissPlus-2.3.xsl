@@ -8,7 +8,7 @@
         <xsl:output omit-xml-declaration="yes" method="xml" indent="yes" />
 
         <!-- global variables-->
-        <xsl:variable name="handle-prefix">http://tubdok.tub.tuhh.de/handle/11420/</xsl:variable>
+        <xsl:variable name="handle-prefix">http://tore.tuhh.de/handle/11420/</xsl:variable>
         <xsl:variable name="handle-prefix-pure">11420/</xsl:variable>
         <xsl:variable name="gkdnr">1097763-6</xsl:variable>
         <xsl:variable name="dnbnr">F6000-0198</xsl:variable>
