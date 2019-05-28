@@ -141,6 +141,8 @@
 	Collection[] collections = (Collection[])request.getAttribute("collections");
 	Map<Integer, BrowseDSpaceObject[]> mapOthers = (Map<Integer, BrowseDSpaceObject[]>) request.getAttribute("resultsMapOthers");
 	
+	Integer[] sortedObjectsType = (Integer[]) request.getAttribute("sortedObjectsType");
+
 	boolean brefine = false;
 	
 	List<DiscoverySearchFilterFacet> facetsConf = (List<DiscoverySearchFilterFacet>) request.getAttribute("facetsConfig");
@@ -628,74 +630,102 @@ else if( qResults != null)
 </div>
 <div class="discovery-result-results">
 <%
-       Set<Integer> otherTypes = mapOthers.keySet();
-       if (otherTypes != null && otherTypes.size() > 0)
-       {
-           for (Integer otype : otherTypes)
-           {
-               %>
-               <c:set var="typeName"><%= ((ACrisObject) mapOthers.get(otype)[0].getBrowsableDSpaceObject()).getPublicPath() %></c:set>
-               <div class="panel panel-info">
-               <div class="panel-heading"><h6><fmt:message key="jsp.search.results.cris.${typeName}"/></h6></div>
-               <dspace:browselist config="cris${typeName}" items="<%= mapOthers.get(otype) %>"  order="<%= order %>" sortBy="<%= sortIdx %>" />
-               </div>
-           <%
-           }
-       }
-%>
-<% if (communities.length > 0 ) { %>
-    <div class="panel panel-info">
-    <div class="panel-heading"><fmt:message key="jsp.search.results.comhits"/></div>
-    <dspace:communitylist  communities="<%= communities %>" />
-    </div>
-<% } %>
-
-<% if (collections.length > 0 ) { %>
-    <div class="panel panel-info">
-    <div class="panel-heading"><fmt:message key="jsp.search.results.colhits"/></div>
-    <dspace:collectionlist collections="<%= collections %>" />
-    </div>
-<% } %>
-
-<% if (items.length > 0) { %>
-    <div class="panel panel-info">
-    <div class="panel-heading"><h6><fmt:message key="jsp.search.results.itemhits"/></h6></div>
-    
-    <%  
-	if (exportBiblioEnabled && ( exportBiblioAll || user!=null ) ) {
-%>
-
-		<form target="blank" class="form-inline"  id="exportform" action="<%= request.getContextPath() %>/references">
-
-		<div id="export-biblio-panel">
-	<%		
-		if (cfg == null)
+	for (int objectType : sortedObjectsType)
+	{
+		switch(objectType)
 		{
-			cfg = "refman, endnote, bibtex, refworks";
+		case 2:
+			// manage item
+			if (items.length > 0)
+			{
+			%>
+				<div class="panel panel-info">
+					<div class="panel-heading"><h6><fmt:message key="jsp.search.results.itemhits"/></h6></div>
+					<%
+					if (exportBiblioEnabled && ( exportBiblioAll || user!=null ) )
+					{
+					%>
+						<form target="blank" class="form-inline"  id="exportform" action="<%= request.getContextPath() %>/references">
+							<div id="export-biblio-panel">
+								<%
+								if (cfg == null)
+								{
+									cfg = "refman, endnote, bibtex, refworks";
+								}
+								String[] cfgSplit = cfg.split("\\s*,\\s*");
+								for (String format : cfgSplit)
+								{
+								%>
+									<c:set var="format"><%= format %></c:set>
+									<label class="radio-inline">
+										<input id="${format}" type="radio" name="format" value="${format}" <c:if test="${format=='bibtex'}"> checked="checked"</c:if>/><fmt:message key="exportcitation.option.${format}" />
+									</label>
+								<%
+								}
+								%>
+								<label class="checkbox-inline">
+									<input type="checkbox" id="email" name="email" value="true"/><fmt:message key="exportcitation.option.email" />
+								</label>
+								<input id="export-submit-button" class="btn btn-default" type="submit" name="submit_export" value="<fmt:message key="exportcitation.option.submitexport" />" disabled/>
+							</div>
+							<dspace:itemlist items="<%= items %>" authorLimit="<%= etAl %>" radioButton="false" inputName="item_id" order="<%= order %>" sortOption="<%= sortOption %>"/>
+						</form>
+					<%
+					}
+					else
+					{
+					%>
+						<dspace:itemlist items="<%= items %>" authorLimit="<%= etAl %>" order="<%= order %>" sortOption="<%= sortOption %>"/>
+					<%
+					}
+					%>
+				</div>
+			<%
+			}
+			break;
+		case 3:
+			// manage collection
+			if (collections.length > 0 )
+			{
+			%>
+				<div class="panel panel-info">
+					<div class="panel-heading"><fmt:message key="jsp.search.results.colhits"/></div>
+					<dspace:collectionlist collections="<%= collections %>" />
+				</div>
+			<%
+			}
+			break;
+		case 4:
+			// manage community
+			if (communities.length > 0 )
+			{
+			%>
+				<div class="panel panel-info">
+				<div class="panel-heading"><fmt:message key="jsp.search.results.comhits"/></div>
+					<dspace:communitylist  communities="<%= communities %>" />
+				</div>
+			<%
+			}
+			break;
+		default:
+			// manage crisObjects
+			Set<Integer> otherTypes = mapOthers.keySet();
+			if (otherTypes != null && otherTypes.size() > 0)
+			{
+			%>
+				<c:set var="typeName"><%= ((ACrisObject) mapOthers.get(objectType)[0].getBrowsableDSpaceObject()).getPublicPath() %></c:set>
+				<div class="panel panel-info">
+					<div class="panel-heading"><h6><fmt:message key="jsp.search.results.cris.${typeName}"/></h6></div>
+					<dspace:browselist config="cris${typeName}" items="<%= mapOthers.get(objectType) %>"  order="<%= order %>" sortBy="<%= sortIdx %>" />
+				</div>
+			<%
+			}
+			break;
 		}
-		String[] cfgSplit = cfg.split("\\s*,\\s*");
-		for (String format : cfgSplit) {
-	%>
-		<c:set var="format"><%= format %></c:set>	    
-		<label class="radio-inline">
-    		  <input id="${format}" type="radio" name="format" value="${format}" <c:if test="${format=='bibtex'}"> checked="checked"</c:if>/><fmt:message key="exportcitation.option.${format}" />
-	    </label>
+	}
+%>
 
-		
-	<% } %>
-		<label class="checkbox-inline">
-			<input type="checkbox" id="email" name="email" value="true"/><fmt:message key="exportcitation.option.email" />
-		</label>
-			<input id="export-submit-button" class="btn btn-default" type="submit" name="submit_export" value="<fmt:message key="exportcitation.option.submitexport" />" disabled/>
-		</div>	
-		<dspace:itemlist items="<%= items %>" authorLimit="<%= etAl %>" radioButton="false" inputName="item_id" order="<%= order %>" sortOption="<%= sortOption %>"/>
-		</form>
-<% } else { %>
-	<dspace:itemlist items="<%= items %>" authorLimit="<%= etAl %>" order="<%= order %>" sortOption="<%= sortOption %>"/>
-<% } %>
-   
-    </div>
-<% } %>
+
 </div>
 <%-- if the result page is enought long... --%>
 <% if ((communities.length + collections.length + items.length) > 10) {%>

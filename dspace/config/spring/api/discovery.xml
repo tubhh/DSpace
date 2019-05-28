@@ -78,6 +78,10 @@
 	<bean id="crisSubscribeSolrIndexer" class="org.dspace.app.cris.discovery.CrisSubscribeSolrIndexer">
 	</bean>
 	
+	<!-- Additional indexing plugin to add object position field -->
+	<bean id="positionSolrIndexer" class="org.dspace.app.cris.discovery.PositionSolrIndexer">
+	</bean>
+
 	<!--  Additional indexing plugin to show if the publications have a doi-->
 	<bean id="hasDoiIndexer" class="org.dspace.app.cris.discovery.HasDoiSolrIndexer">
 	</bean>	
