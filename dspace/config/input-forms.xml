@@ -273,12 +273,12 @@
        </field>
 
        <field>
-         <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>issn</dc-qualifier>
          <repeatable>false</repeatable>
          <label>ISSN</label>
          <input-type>onebox</input-type>
+         <parent>dc_relation_ispartof</parent>
          <hint>Enter the ISSN of the journal, where this article has been published.</hint>
          <required></required>
        </field>

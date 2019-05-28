@@ -9,8 +9,6 @@ package org.dspace.authority.zdb;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -33,16 +31,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import com.google.gson.JsonParser;
-
-import gr.ekt.bte.core.StringValue;
-
 public class ZDBService {
 
 	private static Logger log = Logger.getLogger(ZDBService.class);
 
 	public String detailURL;
 	public String searchURL;
+	public String filter;
 
 	public ZDBService(String searchURL, String detailsURL) {
 		this.searchURL = searchURL;
@@ -167,6 +162,15 @@ public class ZDBService {
 		for (String alternativeTitle : alternativeTitles) {
 			zdbItem.addOtherMetadata("journalAlternativeTitle", alternativeTitle);
 		}
+		
+		String type = XMLUtils.getElementAttribute(rdfDescElementRoot, "rdau:P60050", "rdf:resource");
+		zdbItem.addOtherMetadata("journalType", type);
+		
+		List<Element> relations = XMLUtils.getElementList(rdfDescElementRoot, "dcterms:relation");
+        for (Element relation : relations) {
+            zdbItem.addOtherMetadata("journalRelation", relation.getAttribute("rdf:resource"));
+        }
+        
 		return zdbItem;
 	}
 
@@ -180,7 +184,7 @@ public class ZDBService {
 		return null;
 	}
 
-	public List<ZDBAuthorityValue> list(String query, int page, int pagesize) throws IOException {
+	public List<ZDBAuthorityValue> list(String field, String query, int page, int pagesize) throws IOException {
 		if (query == null || query.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
@@ -193,7 +197,7 @@ public class ZDBService {
 		// searchURL += "&numberOfRecords=" + Integer.toString(pagesize);
 		// }
 
-		queryURL += "&query=tit=" + URLEncoder.encode(query);
+		queryURL += "&query=" + field + "=" + URLEncoder.encode(query);
 		return search(queryURL);
 	}
 
