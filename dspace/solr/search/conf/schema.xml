@@ -655,6 +655,9 @@
    <dynamicField name="random_*" type="random" />
    
    <dynamicField name="crismetrics_*" type="crismetrics_t" indexed="true" stored="true"/>
+
+   <dynamicField name="*_sortint" type="sint" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+   
  </fields>
 
  <!-- Field to use to determine and enforce document uniqueness.

@@ -36,18 +36,18 @@ public class PositionSolrIndexer implements SolrServiceIndexPlugin, CrisServiceI
     public void additionalIndex(Context context, DSpaceObject dso,
             SolrInputDocument document, Map<String, List<DiscoverySearchFilter>> searchFilters)
     {
-        int objectPosition = 0;
+        int objectPosition = dso.getType();
 
         String objectsOrder = ConfigurationManager.getProperty("search.objects.order.list");
         if (StringUtils.isNotBlank(objectsOrder))
         {
             List<String> objectsOrderList = Arrays.asList(objectsOrder.split(","));
             int retrieveObjectPosition = objectsOrderList.indexOf(String.valueOf(dso.getType()));
-            objectPosition = retrieveObjectPosition == -1 ? objectsOrderList.size() : retrieveObjectPosition;
+            objectPosition = retrieveObjectPosition == -1 ? objectsOrderList.size() + dso.getType() : retrieveObjectPosition;
         }
 
         document.addField("objectposition", objectPosition);
-        document.addField("objectposition_sort", objectPosition);
+        document.addField("objectposition_sortint", objectPosition);
     }
 
     @Override
