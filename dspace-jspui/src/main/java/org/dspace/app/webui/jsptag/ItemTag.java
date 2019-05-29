@@ -491,10 +491,10 @@ public class ItemTag extends TagSupport {
 						out.println("</th><th style=\"text-align: center;\">");
 						out.print(LocaleSupport.getLocalizedMessage(pageContext,
 								"org.dspace.app.webui.jsptag.ItemTag.login-existent-user"));
-						out.print(" <a class=\" btn btn-primary\" ");
-						out.print("href=\"" +request.getContextPath()+"/login-in-page?url="+request.getContextPath()+"/handle/" + handle+"\"");
-						out.print(LocaleSupport.getLocalizedMessage(pageContext, "org.dspace.app.webui.jsptag.ItemTag.login"));
-						out.print("</a>");
+						//out.print(" <a class=\" btn btn-primary\" ");
+						//out.print("href=\"" +request.getContextPath()+"/login-in-page?url="+request.getContextPath()+"/handle/" + handle+"\"");
+						//out.print(LocaleSupport.getLocalizedMessage(pageContext, "org.dspace.app.webui.jsptag.ItemTag.login"));
+						//out.print("</a>");
 						out.println("</th></tr>");
 					}
 				}else { */
