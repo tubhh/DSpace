@@ -65,8 +65,8 @@
 		<property name="facets" ref="facetsItemConfiguration" />
 		<property name="types">
 			<map>
-				<entry key="all" value-ref="allComponent" />
 				<entry key="selected" value-ref="selectedComponent" />
+				<entry key="all" value-ref="allComponent" />
 				<entry key="journal" value-ref="journalComponent" />
 				<entry key="conference" value-ref="conferenceComponent" />
 				<entry key="book" value-ref="bookComponent" />
@@ -86,8 +86,8 @@
 		<property name="facets" ref="facetsItemConfiguration" />
 		<property name="types">
 			<map>
-				<entry key="all" value-ref="allComponent" />
 				<entry key="selected" value-ref="selectedComponent" />
+				<entry key="all" value-ref="allComponent" />
 				<entry key="journal" value-ref="journalComponent" />
 				<entry key="conference" value-ref="conferenceComponent" />
 				<entry key="book" value-ref="bookComponent" />
