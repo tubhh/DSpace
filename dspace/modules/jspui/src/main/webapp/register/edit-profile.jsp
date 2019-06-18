@@ -44,6 +44,8 @@
     boolean ldap_eperson = (ldap_enabled && (eperson.getNetid() != null) && (eperson.getNetid().equals("") == false));
 
     Boolean shibbolethAuthenticated = (Boolean) session.getAttribute("shib.authenticated");
+    boolean shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
+            "authentication-shibboleth","password.allow_change", false);
 %>
 
 <dspace:layout style="default" titlekey="jsp.register.edit-profile.title" nocache="true">
@@ -80,8 +82,9 @@
 
 <%
     // Only show password update section if the user doesn't use
-    // certificates, LDAP, or Shibboleth authentication
-    if ((eperson.getRequireCertificate() == false) && (ldap_eperson == false) && !shibbolethAuthenticated)
+    // certificates, LDAP, or Shibboleth authentication (the last can be overriden with password.allow_change=true)
+    if ((eperson.getRequireCertificate() == false) && (ldap_eperson == false) &&
+            (!shibbolethAuthenticated || shibbolethUsersCanChangePassword))
     {
 %>
         <%-- <p><strong>Optionally</strong>, you can choose a new password and enter it into the box below, and confirm it by typing it
