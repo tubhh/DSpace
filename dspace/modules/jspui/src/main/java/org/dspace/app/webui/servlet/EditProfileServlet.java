@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.app.webui.util.JSPManager;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
 import org.dspace.eperson.EPerson;
@@ -55,14 +56,17 @@ public class EditProfileServlet extends DSpaceServlet
 
         // Find out if this user is shibboleth authenticated
         Boolean shibbolethAuthenticated = (Boolean) request.getSession().getAttribute("shib.authenticated");
+        boolean shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
+                "authentication-shibboleth","password.allow_change", false);
 
         // Find out if they're trying to set a new password
         boolean settingPassword = false;
 
         // If the eperson isn't authenticated with certificate or shibboleth, allow the password change request
         if (!eperson.getRequireCertificate()
-            && !shibbolethAuthenticated
-            && !StringUtils.isEmpty(request.getParameter("password")))
+            && (!shibbolethAuthenticated || shibbolethUsersCanChangePassword)
+            && !StringUtils.isEmpty(request.getParameter("password"))
+            )
         {
             settingPassword = true;
         }
