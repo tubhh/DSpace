@@ -370,8 +370,8 @@ public class RegisterServlet extends DSpaceServlet
                     JSPManager.showJSP(request, response,
                             "/error/require-certificate.jsp");
                 }
-                else if (eperson.getPasswordHash().getHashString().length() == 0
-                    && !shibbolethUsersCanChangePassword) {
+                else if ((eperson.getPasswordHash() == null
+                    || eperson.getPasswordHash().getHashString() == null) && !shibbolethUsersCanChangePassword) {
                     // User with no password hash, salt, digest algorithm is being auth'd
                     // externally and shouldn't be able to set a new password
                     // Invalid email address
