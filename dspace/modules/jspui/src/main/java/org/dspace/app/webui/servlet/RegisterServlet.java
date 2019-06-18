@@ -70,10 +70,15 @@ public class RegisterServlet extends DSpaceServlet
     /** ldap is enabled */
     private boolean ldap_enabled;
 
+    /** shibboleth users can change local passwords */
+    private boolean shibbolethUsersCanChangePassword;
+
     public void init()
     {
         registering = getInitParameter("register").equalsIgnoreCase("true");
         ldap_enabled = ConfigurationManager.getBooleanProperty("authentication-ldap", "enable");
+        shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
+            "authentication-shibboleth","password.allow_change", false);
     }
 
     protected void doDSGet(Context context, HttpServletRequest request,
@@ -364,6 +369,19 @@ public class RegisterServlet extends DSpaceServlet
 
                     JSPManager.showJSP(request, response,
                             "/error/require-certificate.jsp");
+                }
+                else if (eperson.getPasswordHash().getHashString().length() == 0
+                    && !shibbolethUsersCanChangePassword) {
+                    // User with no password hash, salt, digest algorithm is being auth'd
+                    // externally and shouldn't be able to set a new password
+                    // Invalid email address
+                    log.info(LogManager.getHeader(context, "shibboleth_password_reset_attempt",
+                        "email=" + email));
+
+                    request.setAttribute("shib", Boolean.TRUE);
+
+                    JSPManager.showJSP(request, response,
+                        "/register/forgot-password.jsp");
                 }
                 else
                 {
