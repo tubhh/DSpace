@@ -7,11 +7,12 @@
  */
 package org.dspace.app.webui.servlet;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -23,7 +24,7 @@ import org.dspace.eperson.EPerson;
 
 /**
  * Servlet for handling editing user profiles
- * 
+ *
  * @author Robert Tansley
  * @version $Revision$
  */
@@ -33,8 +34,8 @@ public class EditProfileServlet extends DSpaceServlet
     private static Logger log = Logger.getLogger(EditProfileServlet.class);
 
     protected void doDSGet(Context context, HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException,
-            SQLException, AuthorizeException
+                           HttpServletResponse response) throws ServletException, IOException,
+        SQLException, AuthorizeException
     {
         // A GET displays the edit profile form. We assume the authentication
         // filter means we have a user.
@@ -46,16 +47,22 @@ public class EditProfileServlet extends DSpaceServlet
     }
 
     protected void doDSPost(Context context, HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException,
-            SQLException, AuthorizeException
+                            HttpServletResponse response) throws ServletException, IOException,
+        SQLException, AuthorizeException
     {
         // Get the user - authentication should have happened
         EPerson eperson = context.getCurrentUser();
 
+        // Find out if this user is shibboleth authenticated
+        Boolean shibbolethAuthenticated = (Boolean) request.getSession().getAttribute("shib.authenticated");
+
         // Find out if they're trying to set a new password
         boolean settingPassword = false;
 
-        if (!eperson.getRequireCertificate() && !StringUtils.isEmpty(request.getParameter("password")))
+        // If the eperson isn't authenticated with certificate or shibboleth, allow the password change request
+        if (!eperson.getRequireCertificate()
+            && !shibbolethAuthenticated
+            && !StringUtils.isEmpty(request.getParameter("password")))
         {
             settingPassword = true;
         }
@@ -83,20 +90,20 @@ public class EditProfileServlet extends DSpaceServlet
         {
             // Update the DB
             log.info(LogManager.getHeader(context, "edit_profile",
-                    "password_changed=" + settingPassword));
+                "password_changed=" + settingPassword));
             eperson.update();
 
             // Show confirmation
             request.setAttribute("password.updated", Boolean.valueOf(settingPassword));
             JSPManager.showJSP(request, response,
-                    "/register/profile-updated.jsp");
+                "/register/profile-updated.jsp");
 
             context.complete();
         }
         else
         {
             log.info(LogManager.getHeader(context, "view_profile",
-                    "problem=true"));
+                "problem=true"));
 
             request.setAttribute("eperson", eperson);
 
@@ -108,17 +115,17 @@ public class EditProfileServlet extends DSpaceServlet
      * Update a user's profile information with the information in the given
      * request. This assumes that authentication has occurred. This method
      * doesn't write the changes to the database (i.e. doesn't call update.)
-     * 
+     *
      * @param eperson
      *            the e-person
      * @param request
      *            the request to get values from
-     * 
+     *
      * @return true if the user supplied all the required information, false if
      *         they left something out.
      */
     public static boolean updateUserProfile(EPerson eperson,
-            HttpServletRequest request)
+                                            HttpServletRequest request)
     {
         // Get the parameters from the form
         String lastName = request.getParameter("last_name");
@@ -140,16 +147,16 @@ public class EditProfileServlet extends DSpaceServlet
      * Set an eperson's password, if the passwords they typed match and are
      * acceptible. If all goes well and the password is set, null is returned.
      * Otherwise the problem is returned as a String.
-     * 
+     *
      * @param eperson
      *            the eperson to set the new password for
      * @param request
      *            the request containing the new password
-     * 
+     *
      * @return true if everything went OK, or false
      */
     public static boolean confirmAndSetPassword(EPerson eperson,
-            HttpServletRequest request)
+                                                HttpServletRequest request)
     {
         // Get the passwords
         String password = request.getParameter("password");
