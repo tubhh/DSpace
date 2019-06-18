@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import javax.servlet.ServletException;
@@ -37,7 +38,7 @@ import org.dspace.utils.DSpace;
  * Methods for authenticating the user. This is DSpace platform code, as opposed
  * to the site-specific authentication code, that resides in implementations of
  * the <code>org.dspace.eperson.AuthenticationMethod</code> interface.
- * 
+ *
  * @author Robert Tansley
  * @version $Revision$
  */
@@ -52,7 +53,7 @@ public class Authenticate
      * redirect resulting from successful authentication, a request object
      * corresponding to the original request that prompted authentication is
      * returned. Otherwise, the request passed in is returned.
-     * 
+     *
      * @param request
      *            the incoming HTTP request
      * @return the HTTP request the DSpace system should deal with
@@ -65,7 +66,7 @@ public class Authenticate
         {
             // Get info about the interrupted request
             RequestInfo requestInfo = (RequestInfo) session
-                    .getAttribute("interrupted.request.info");
+                .getAttribute("interrupted.request.info");
 
             HttpServletRequest actualRequest;
 
@@ -102,18 +103,18 @@ public class Authenticate
      * Resume a previously interrupted request. This is invoked when a user has
      * been successfully authenticated. The request which led to authentication
      * will be resumed.
-     * 
+     *
      * @param request
      *            <em>current</em> HTTP request
      * @param response
      *            HTTP response
      */
     public static void resumeInterruptedRequest(HttpServletRequest request,
-            HttpServletResponse response) throws IOException
+                                                HttpServletResponse response) throws IOException
     {
         HttpSession session = request.getSession();
         String originalURL = (String) session
-                .getAttribute("interrupted.request.url");
+            .getAttribute("interrupted.request.url");
 
         if (originalURL == null)
         {
@@ -136,7 +137,7 @@ public class Authenticate
      * Start the authentication process. This packages up the request that led
      * to authentication being required, and then invokes the site-specific
      * authentication method.
-     * 
+     *
      * If it returns true, the user was authenticated without any
      * redirection (e.g. by an X.509 certificate or other implicit method) so
      * the process that called this can continue and send its own response.
@@ -152,8 +153,8 @@ public class Authenticate
      * @return true if authentication is already finished (implicit method)
      */
     public static boolean startAuthentication(Context context,
-            HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+                                              HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException
     {
         HttpSession session = request.getSession();
 
@@ -165,7 +166,7 @@ public class Authenticate
          *    return false.
          */
         if (AuthenticationManager.authenticateImplicit(context, null, null,
-                null, request) == AuthenticationMethod.SUCCESS)
+            null, request) == AuthenticationMethod.SUCCESS)
         {
             try {
                 // the AuthenticationManager updates the last_active field of the
@@ -173,10 +174,10 @@ public class Authenticate
                 // the updated field in the database.
                 context.commit();
             } catch (SQLException ex) {
-                // We can log the SQLException, but we should not interrupt the 
+                // We can log the SQLException, but we should not interrupt the
                 // users interaction here.
                 log.error("Failed to write an updated last_active field of an "
-                        + "EPerson into the databse.", ex);
+                    + "EPerson into the databse.", ex);
             }
             loggedIn(context, request, context.getCurrentUser());
             log.info(LogManager.getHeader(context, "login", "type=implicit"));
@@ -192,18 +193,18 @@ public class Authenticate
         }
         else
         {
-        // Since we may be doing a redirect, make sure the redirect is not
-        // cached
-        response.addDateHeader("expires", 1);
-        response.addHeader("Pragma", "no-cache");
-        response.addHeader("Cache-control", "no-store");
+            // Since we may be doing a redirect, make sure the redirect is not
+            // cached
+            response.addDateHeader("expires", 1);
+            response.addHeader("Pragma", "no-cache");
+            response.addHeader("Cache-control", "no-store");
 
-        // Store the data from the request that led to authentication
-        RequestInfo info = new RequestInfo(request);
-        session.setAttribute("interrupted.request.info", info);
+            // Store the data from the request that led to authentication
+            RequestInfo info = new RequestInfo(request);
+            session.setAttribute("interrupted.request.info", info);
 
-        // Store the URL of the request that led to authentication
-        session.setAttribute("interrupted.request.url", UIUtil
+            // Store the URL of the request that led to authentication
+            session.setAttribute("interrupted.request.url", UIUtil
                 .getOriginalURL(request));
 
             /*
@@ -240,7 +241,7 @@ public class Authenticate
 
     /**
      * Store information about the current user in the request and context
-     * 
+     *
      * @param context
      *            DSpace context
      * @param request
@@ -266,10 +267,14 @@ public class Authenticate
             // Get the original URL of interrupted request, if set
             String requestUrl = (String) session.getAttribute("interrupted.request.url");
 
+            // Shibboleth stores information about special groups in the session. Preserve these information.
+            Boolean shibbolethAuthenticated = (Boolean) session.getAttribute("shib.authenticated");
+            List<Integer> shibbolethSpecialGroups = (List<Integer>) session.getAttribute("shib.specialgroup");
+
             // Invalidate session unless dspace.cfg says not to
             if(ConfigurationManager.getBooleanProperty("webui.session.invalidate", true))
             {
-               session.invalidate();
+                session.invalidate();
             }
 
             // Give the user a new session
@@ -287,21 +292,29 @@ public class Authenticate
                 session.setAttribute("interrupted.request.url", requestUrl);
             }
 
-			List<PostLoggedInAction> postLoggedInActions = new DSpace().getServiceManager().getServicesByType(
-					PostLoggedInAction.class);
+            // Restore shibboleth special groups
+            if (shibbolethAuthenticated != null) {
+                session.setAttribute("shib.authenticated", shibbolethAuthenticated.booleanValue());
+            }
+            if (shibbolethSpecialGroups != null) {
+                session.setAttribute("shib.specialgroup", shibbolethSpecialGroups);
+            }
 
-			if (postLoggedInActions != null) {
-				for (PostLoggedInAction pAction : postLoggedInActions) {
-					pAction.loggedIn(context, request, context.getCurrentUser());
-				}
+            List<PostLoggedInAction> postLoggedInActions = new DSpace().getServiceManager().getServicesByType(
+                PostLoggedInAction.class);
 
-			}
+            if (postLoggedInActions != null) {
+                for (PostLoggedInAction pAction : postLoggedInActions) {
+                    pAction.loggedIn(context, request, context.getCurrentUser());
+                }
+
+            }
         }
-		
+
         context.setCurrentUser(eperson);
-        
+
         boolean isAdmin = false;
-        
+
         try
         {
             isAdmin = AuthorizeManager.isAdmin(context);
@@ -310,7 +323,7 @@ public class Authenticate
         {
             log.warn("Unable to use AuthorizeManager " + se);
         }
-        finally 
+        finally
         {
             request.setAttribute("is.admin", Boolean.valueOf(isAdmin));
         }
@@ -324,24 +337,24 @@ public class Authenticate
         // and the remote IP address to compare against later requests
         // so we can detect session hijacking.
         session.setAttribute("dspace.current.remote.addr",
-                             request.getRemoteAddr());
+            request.getRemoteAddr());
         List<ExtraLoggedInAction> extraLoggedInActions = new DSpace().getServiceManager().getServicesByType(ExtraLoggedInAction.class);
 
-		if (extraLoggedInActions != null) {				
-			for (ExtraLoggedInAction extraAction : extraLoggedInActions) {
-				extraAction.loggedIn(context, request, context.getCurrentUser());
-			}
-		}
+        if (extraLoggedInActions != null) {
+            for (ExtraLoggedInAction extraAction : extraLoggedInActions) {
+                extraAction.loggedIn(context, request, context.getCurrentUser());
+            }
+        }
     }
 
     /**
      * Log the user out
-     * 
+     *
      * @param context
      *            DSpace context
      * @param request
      *            HTTP request
-     * @throws SQLException 
+     * @throws SQLException
      */
     public static void loggedOut(Context context, HttpServletRequest request) throws SQLException
     {
@@ -353,13 +366,13 @@ public class Authenticate
         session.removeAttribute("dspace.current.user.id");
 
         Integer previousUserID = (Integer) session.getAttribute("dspace.previous.user.id");
-        
+
         // Keep the user's locale setting if set
         Locale sessionLocale = UIUtil.getSessionLocale(request);
 
         // Invalidate session unless dspace.cfg says not to (or it is a loggedOut from a loginAs)
-        if(ConfigurationManager.getBooleanProperty("webui.session.invalidate", true) 
-                && previousUserID != null)
+        if(ConfigurationManager.getBooleanProperty("webui.session.invalidate", true)
+            && previousUserID != null)
         {
             session.invalidate();
         }
@@ -369,16 +382,16 @@ public class Authenticate
         {
             Config.set(request.getSession(), Config.FMT_LOCALE, sessionLocale);
         }
-        
-		// Remove user detail from context
-		List<PostLoggedOutAction> postLoggedOutActions = new DSpace().getServiceManager().getServicesByType(
-				PostLoggedOutAction.class);
 
-		if (postLoggedOutActions != null) {
-			for (PostLoggedOutAction pAction : postLoggedOutActions) {
-				pAction.loggedOut(context, request, context.getCurrentUser());
-			}
-		}
+        // Remove user detail from context
+        List<PostLoggedOutAction> postLoggedOutActions = new DSpace().getServiceManager().getServicesByType(
+            PostLoggedOutAction.class);
+
+        if (postLoggedOutActions != null) {
+            for (PostLoggedOutAction pAction : postLoggedOutActions) {
+                pAction.loggedOut(context, request, context.getCurrentUser());
+            }
+        }
 
         if (previousUserID != null)
         {
