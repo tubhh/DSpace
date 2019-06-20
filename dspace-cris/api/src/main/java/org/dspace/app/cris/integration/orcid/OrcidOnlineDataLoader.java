@@ -106,7 +106,7 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                         {
                             int higher = orcidService.higherDisplayIndex(orcidGroup);
                             // take the Work with highest display index value (the preferred item)
-                            worksummary : for (WorkSummary orcidSummary : orcidGroup
+                            worksummary : for (final WorkSummary orcidSummary : orcidGroup
                                     .getWorkSummary())
                             {
                                 if (StringUtils.isNotBlank(orcidSummary.getDisplayIndex()))
