@@ -22,6 +22,7 @@
     <context:annotation-config /> <!-- allows us to use spring annotations in beans -->
 
 <!-- USE WITH RPAuthority TO RETRIEVE EXTRA METADATA (NESTED AND SIMPLE METADATA) BY CONFIGURATION -->  
+<!-- 
 	<bean id="org.dspace.app.cris.integration.RPExtraAuthorityMetadataGenerator" 
     	class="org.dspace.app.cris.integration.RPExtraAuthorityMetadataGenerator">
     	<property name="relatedInputformMetadata" value="dc_contributor_department"/>
@@ -29,9 +30,10 @@
     	<property name="element" value="affiliationorgunit"/>
 		<property name="qualifier" value="name"/>
 
-		<!-- USE THE FOLLOW PROPERTY WITH RPMultiAuthority implementation (see RPMultiAuthority) --> 
+		USE THE FOLLOW PROPERTY WITH RPMultiAuthority implementation (see RPMultiAuthority) 
 		<property name="singleResultOnAggregate" value="false"/>
      </bean>
+-->    
     
 <!-- OR USE DEDICATED IMPLEMENTATION TO FORCE THE USE OF ResearcherPage.getOrgUnit() LOGIC (see researcherpage.pdef.orgunit parameter on cris.cfg) --> 
 <!-- 
@@ -54,7 +56,6 @@
 -->
 
 <!-- USE WITH ORCIDAuthority TO RETRIEVE EXTRA METADATA FOR EMPLOYMENT -->
-
 	<bean id="org.dspace.app.cris.integration.OrcidExtraEmploymentAuthorityMetadataGenerator" 
     	class="org.dspace.app.cris.integration.OrcidExtraEmploymentAuthorityMetadataGenerator">
     	<property name="relatedInputformMetadata" value="dc_contributor_department"/>
