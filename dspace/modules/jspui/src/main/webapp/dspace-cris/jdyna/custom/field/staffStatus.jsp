@@ -2,6 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="javax.servlet.jsp.jstl.fmt.LocaleSupport"%>
 
+<c:if test="${!empty anagraficaObject.anagrafica4view['staffStatus'][0]}">
 <div class="dynaClear">&nbsp;</div>
 <div class="dynaField" style="min-width:5em;">
 <span class="dynaLabel" style="width:15em;"><fmt:message key="RPAdditionalFieldStorage.staffStatus.label" /></span>
@@ -11,3 +12,4 @@
 </div>
 </div>
 <div class="dynaClear">&nbsp;</div>
+</c:if>
