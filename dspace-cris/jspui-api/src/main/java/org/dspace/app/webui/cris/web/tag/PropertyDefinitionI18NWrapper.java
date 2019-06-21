@@ -55,7 +55,14 @@ public final class PropertyDefinitionI18NWrapper implements MethodInterceptor {
 				return widget;
 			} else if ("getPriority".equals(name)) {
                 return priority;
-            }
+			} else if ("getRendering".equals(name)) {
+				AWidget widget = (AWidget) invocation.proceed();
+				if (widget instanceof WidgetCheckRadio) {
+					WidgetCheckRadio wCheck = (WidgetCheckRadio) widget;
+					return getWidgetCheckRadioWrapper(wCheck, simpleName, shortName, locale);
+				}
+				return widget;
+			}
 			
 		}
 		return invocation.proceed();

@@ -93,7 +93,7 @@ function DSpaceSetupAutocomplete(formID, args)
 				jQuery.each(extra, function( key, row ) {
 					//'key' example: dc_related_example
 					//'row' example1: Test::rp00001, example2: Test::will be generated::authType::serviceID
-		            var re = /(.*?)::(.*)/;
+		            var re = /(.*)::(.*)/;
 		            var valsubst = '$1';
 		            var authsubst = '$2';		            
 		            		         
@@ -476,7 +476,7 @@ function DSpaceChoicesAcceptOnClick ()
 			jQuery.each(extra, function( key, row ) {
 				//'key' example: dc_related_example
 				//'row' example1: Test::rp00001, example2: Test::will be generated::authType::serviceID
-	            var re = /(.*?)::(.*)/;
+	            var re = /(.*)::(.*)/;
 	            var valsubst = '$1';
 	            var authsubst = '$2';		            
 

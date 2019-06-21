@@ -22,14 +22,14 @@ import org.apache.solr.common.SolrInputDocument;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.AuthorityValueGenerator;
 import org.dspace.authority.PersonAuthorityValue;
-import org.dspace.authority.orcid.jaxb.address.AddressCtype;
-import org.dspace.authority.orcid.jaxb.address.Addresses;
-import org.dspace.authority.orcid.jaxb.common.ExternalId;
-import org.dspace.authority.orcid.jaxb.keyword.KeywordCtype;
-import org.dspace.authority.orcid.jaxb.othername.OtherNameCtype;
-import org.dspace.authority.orcid.jaxb.personaldetails.NameCtype;
-import org.dspace.authority.orcid.jaxb.researcherurl.ResearcherUrlCtype;
-import org.orcid.ns.record.Record;
+import org.orcid.jaxb.model.common_v2.ExternalId;
+import org.orcid.jaxb.model.record_v2.AddressType;
+import org.orcid.jaxb.model.record_v2.Addresses;
+import org.orcid.jaxb.model.record_v2.KeywordType;
+import org.orcid.jaxb.model.record_v2.NameType;
+import org.orcid.jaxb.model.record_v2.OtherNameType;
+import org.orcid.jaxb.model.record_v2.Record;
+import org.orcid.jaxb.model.record_v2.ResearcherUrlType;
 
 /**
  *
@@ -136,7 +136,7 @@ public class OrcidAuthorityValue extends PersonAuthorityValue {
 
 		if (profile.getPerson() != null) {
 
-			NameCtype name = profile.getPerson().getName();
+			NameType name = profile.getPerson().getName();
 
 			if (updateValue(name.getFamilyName().getValue(), getLastName())) {
 				setLastName(name.getFamilyName().getValue());
@@ -157,7 +157,7 @@ public class OrcidAuthorityValue extends PersonAuthorityValue {
 			
 			
 			if (profile.getPerson().getOtherNames() != null) {
-				for (OtherNameCtype otherName : profile.getPerson().getOtherNames().getOtherName()) {
+				for (OtherNameType otherName : profile.getPerson().getOtherNames().getOtherName()) {
 					if (!getNameVariants().contains(otherName.getContent())) {
 						addNameVariant(otherName.getContent());
 						update = true;
@@ -167,7 +167,7 @@ public class OrcidAuthorityValue extends PersonAuthorityValue {
 
 			Addresses addresses = profile.getPerson().getAddresses();
             if (addresses != null) {
-                for(AddressCtype address : addresses.getAddress()) {
+                for(AddressType address : addresses.getAddress()) {
                     if (address.getCountry() != null) {
 						if (updateOtherMetadata("country",
 								address.getCountry())) {
@@ -178,7 +178,7 @@ public class OrcidAuthorityValue extends PersonAuthorityValue {
 				}
 			}
 			if (profile.getPerson().getKeywords() != null) {
-				for (KeywordCtype keyword : profile.getPerson().getKeywords().getKeyword()) {
+				for (KeywordType keyword : profile.getPerson().getKeywords().getKeyword()) {
 					if (updateOtherMetadata("keyword", keyword.getContent())) {
 						addOtherMetadata("keyword", keyword.getContent());
 					}
@@ -197,7 +197,7 @@ public class OrcidAuthorityValue extends PersonAuthorityValue {
 			}
 
 			if (profile.getPerson().getResearcherUrls() != null) {
-				for (ResearcherUrlCtype researcherUrl : profile.getPerson().getResearcherUrls().getResearcherUrl()) {
+				for (ResearcherUrlType researcherUrl : profile.getPerson().getResearcherUrls().getResearcherUrl()) {
 					if (updateOtherMetadata("researcher_url", researcherUrl.getUrlName())) {
 						addOtherMetadata("researcher_url", researcherUrl.getUrlName());
 					}
