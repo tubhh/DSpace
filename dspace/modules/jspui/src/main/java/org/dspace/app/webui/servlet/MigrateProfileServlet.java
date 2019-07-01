@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.auth.AUTH;
 import org.apache.log4j.Logger;
 import org.dspace.app.webui.util.JSPManager;
 import org.dspace.authorize.AuthorizeException;
@@ -24,8 +25,9 @@ import org.dspace.eperson.EPerson;
 
 /**
  * Servlet for handling editing user profiles
+ * based on EditProfileServlet
  *
- * @author Robert Tansley
+ * @author Kim Shepherd
  * @version $Revision$
  */
 public class MigrateProfileServlet extends DSpaceServlet
@@ -39,11 +41,11 @@ public class MigrateProfileServlet extends DSpaceServlet
     {
         // A GET displays the edit profile form. We assume the authentication
         // filter means we have a user.
-        log.info(LogManager.getHeader(context, "view_profile", ""));
+        log.info(LogManager.getHeader(context, "view_migrate_profile", ""));
 
         request.setAttribute("eperson", context.getCurrentUser());
 
-        JSPManager.showJSP(request, response, "/register/edit-profile.jsp");
+        JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
     }
 
     protected void doDSPost(Context context, HttpServletRequest request,
@@ -57,66 +59,62 @@ public class MigrateProfileServlet extends DSpaceServlet
         Boolean shibbolethAuthenticated = (Boolean) request.getSession().getAttribute("shib.authenticated");
         boolean shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
                 "authentication-shibboleth","password.allow_change", false);
+        boolean shibbolethUsersCanMigrateAccount = ConfigurationManager.getBooleanProperty(
+            "authentication-shibboleth", "password.allow-migrate-to-local", false);
 
-        // Find out if they're trying to set a new password
-        boolean settingPassword = false;
-
-        // If the eperson isn't authenticated with certificate or shibboleth, allow the password change request
-        if (!eperson.getRequireCertificate()
-            && (!shibbolethAuthenticated || shibbolethUsersCanChangePassword)
-            && !StringUtils.isEmpty(request.getParameter("password"))
-            )
-        {
-            settingPassword = true;
-        }
-
-        // Set the user profile info
-        boolean ok = updateUserProfile(eperson, request);
-
-        if (!ok)
-        {
-            request.setAttribute("missing.fields", Boolean.TRUE);
-        }
-
-        if (ok && settingPassword)
-        {
-            // They want to set a new password.
-            ok = confirmAndSetPassword(eperson, request);
-
-            if (!ok)
-            {
-                request.setAttribute("password.problem", Boolean.TRUE);
-            }
-        }
-
-        if (ok)
-        {
-            // Update the DB
-            log.info(LogManager.getHeader(context, "edit_profile",
-                "password_changed=" + settingPassword));
-            eperson.update();
-
-            // Show confirmation
-            request.setAttribute("password.updated", Boolean.valueOf(settingPassword));
-            JSPManager.showJSP(request, response,
-                "/register/profile-updated.jsp");
-
-            context.complete();
-        }
-        else
-        {
+        // User must be logged in with shibboleth *and* allowed to migrate to local, or we won't process
+        // this request
+        if(!shibbolethAuthenticated || !shibbolethUsersCanMigrateAccount) {
             log.info(LogManager.getHeader(context, "view_profile",
                 "problem=true"));
 
             request.setAttribute("eperson", eperson);
+            request.setAttribute("not_permitted", true );
 
-            JSPManager.showJSP(request, response, "/register/edit-profile.jsp");
+            JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
         }
+
+        // As we are migrating, we will always allow setting of password
+        boolean settingPassword = true;
+
+        try {
+            boolean ok = migrateUserProfile(eperson, request, response, context);
+
+            if (ok) {
+                if(settingPassword) {
+                    // They want to set a new password.
+                    boolean setpw = confirmAndSetPassword(eperson, request);
+                    if (!setpw) {
+                        request.setAttribute("password.problem", Boolean.TRUE);
+                    }
+                }
+
+                // Update the DB
+                log.info(LogManager.getHeader(context, "migrate_profile",
+                    "password_changed=" + settingPassword));
+                eperson.update();
+
+                // Show confirmation
+                request.setAttribute("password.updated", settingPassword);
+                JSPManager.showJSP(request, response,
+                    "/register/profile-migrated.jsp");
+
+                context.complete();
+            } // User-level error response handling is now handled in migrateUserProfile
+
+        } catch(AuthorizeException e) {
+            log.error(e.getMessage());
+            request.setAttribute("eperson", eperson);
+            request.setAttribute("not_permitted", true );
+            JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
+        }
+
     }
 
     /**
-     * Update a user's profile information with the information in the given
-     * request. This assumes that authentication has occurred. This method
+     * Migrate a user's profile information with the information in the given
+     * request, forcing the account to be treated as local (no netID, set email).
+     * This assumes that authentication has occurred. This method
      * doesn't write the changes to the database (i.e. doesn't call update.)
      *
      * @param eperson
@@ -127,23 +125,54 @@ public class MigrateProfileServlet extends DSpaceServlet
      * @return true if the user supplied all the required information, false if
      *         they left something out.
      */
-    public static boolean updateUserProfile(EPerson eperson,
-                                            HttpServletRequest request)
-    {
+    public static boolean migrateUserProfile(EPerson eperson,
+                                             HttpServletRequest request,
+                                             HttpServletResponse response,
+                                             Context context)
+        throws AuthorizeException, SQLException, IOException, ServletException {
+        request.setAttribute("eperson", eperson);
+
         // Get the parameters from the form
         String lastName = request.getParameter("last_name");
         String firstName = request.getParameter("first_name");
         String phone = request.getParameter("phone");
         String language = request.getParameter("language");
+        String email = request.getParameter("email");
+
+        // Check database for other eperson objects with this email address
+        // TODO - test as non-admin, will this throw authorizeexception?
+        EPerson existing = EPerson.findByEmail(context, email);
+        if(null != existing) {
+            // Return error - this email address is already associated with an EPerson
+            // Could make use of the 'already-registered' JSP?
+            request.setAttribute("eperson_exists",true);
+            JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
+            return false;
+        }
 
         // Update the eperson
         eperson.setFirstName(firstName);
         eperson.setLastName(lastName);
         eperson.setMetadata("phone", phone);
         eperson.setLanguage(language);
+        eperson.setEmail(email);
+
+        // Set NetID to NULL
+        eperson.setNetid(null);
 
         // Check all required fields are there
-        return (!StringUtils.isEmpty(lastName) && !StringUtils.isEmpty(firstName));
+        if(!StringUtils.isEmpty(lastName)
+            && !StringUtils.isEmpty(firstName)
+            && !StringUtils.isEmpty(email)) {
+            return true;
+        }
+        else {
+            log.info(LogManager.getHeader(context, "view_migrate_profile",
+                "problem=true"));
+            request.setAttribute("missing.fields", Boolean.TRUE);
+            JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
+            return false;
+        }
     }
 
     /**
