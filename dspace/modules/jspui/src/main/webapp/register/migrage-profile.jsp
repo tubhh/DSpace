@@ -30,6 +30,7 @@
 
 <%@ page import="org.dspace.eperson.EPerson, org.dspace.core.ConfigurationManager" %>
 <%@ page import="org.dspace.core.Utils" %>
+<%@ page import="org.dspace.app.webui.util.UIUtil" %>
 
 <%
     EPerson eperson = (EPerson) request.getAttribute("eperson");
@@ -40,12 +41,18 @@
     attr = (Boolean) request.getAttribute("password.problem");
     boolean passwordProblem = (attr != null && attr.booleanValue());
 
+    boolean epersonMissing = (boolean) request.getAttribute("eperson_exists");
+    boolean notPermitted = (boolean) request.getAttribute("not_permitted");
+
+
     boolean ldap_enabled = ConfigurationManager.getBooleanProperty("authentication-ldap", "enable");
     boolean ldap_eperson = (ldap_enabled && (eperson.getNetid() != null) && (eperson.getNetid().equals("") == false));
 
     Boolean shibbolethAuthenticated = (Boolean) session.getAttribute("shib.authenticated");
     boolean shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
             "authentication-shibboleth","password.allow_change", false);
+    boolean shibbolethMigrationAllowed = ConfigurationManager.getBooleanProperty(
+        "authentication-shibboleth","password.allow-migrate-to-local", false);
 %>
 
 <dspace:layout style="default" titlekey="jsp.register.edit-profile.title" nocache="true">
@@ -72,7 +79,19 @@
 	<p class="alert alert-warning"><fmt:message key="jsp.register.edit-profile.info2"/></p>
 <%
     }
+
+    if (epersonMissing) {
 %>
+    <p class="alert alert-warning"><fmt:message key="jsp.register.migrate-profile.eperson_missing"/></p>
+    <%
+    }
+
+    if (notPermitted) {
+    %>
+    <p class="alert alert-warning"><fmt:message key="jsp.register.migrate-profile.not_permitted"/></p>
+    <%}
+%>
+
 
 	<div class="alert alert-info"><fmt:message key="jsp.register.edit-profile.info3"/></div>
     
@@ -80,36 +99,39 @@
 
         <dspace:include page="/register/profile-form.jsp" />
 
+    <%-- extra form snippet for email address --%>
+    <div class="form-group">
+        <label class="col-md-offset-3 col-md-2 control-label" for="email">
+            <fmt:message key="jsp.register.profile-form.email.field"/>
+        </label>
+        <div class="col-md-3">
+            <input class="form-control" type="text" name="email" id="temail" size="40" value="<%= Utils.addEntities(eperson.getEmail()) %>"/>
+        </div>
+    </div>
+
+    <%-- <p><strong>Optionally</strong>, you can choose a new password and enter it into the box below, and confirm it by typing it
+    again into the second box for verification.  It should be at least six characters long.</p> --%>
+    <p class="alert"><fmt:message key="jsp.register.edit-profile.info5"/></p>
+        <div class="form-group">
+                        <%-- <td align="right" class="standard"><label for="tpassword"><strong>New Password:</strong></label></td> --%>
+                        <label class="col-md-offset-3 col-md-2 control-label" for="tpassword"><fmt:message key="jsp.register.edit-profile.pswd.field"/></label>
+                        <div class="col-md-3">
+                            <input class="form-control" type="password" name="password" id="tpassword" />
+                        </div>
+        </div>
+        <div class="form-group">
+                           <%-- <td align="right" class="standard"><strong>Again to Confirm:</strong></td> --%>
+                        <label class="col-md-offset-3 col-md-2 control-label" for="tpassword_confirm"><fmt:message key="jsp.register.edit-profile.confirm.field"/></label>
+                        <div class="col-md-3">
+                            <input class="form-control" type="password" name="password_confirm" id="tpassword_confirm" /></td>
+                        </div>
+        </div>
 <%
-    // Only show password update section if the user doesn't use
-    // certificates, LDAP, or Shibboleth authentication (the last can be overriden with password.allow_change=true)
-    if ((eperson.getRequireCertificate() == false) && (ldap_eperson == false) &&
-            (!shibbolethAuthenticated || shibbolethUsersCanChangePassword))
-    {
-%>
-        <%-- <p><strong>Optionally</strong>, you can choose a new password and enter it into the box below, and confirm it by typing it
-        again into the second box for verification.  It should be at least six characters long.</p> --%>
-		<p class="alert"><fmt:message key="jsp.register.edit-profile.info5"/></p>
-			<div class="form-group">
-                            <%-- <td align="right" class="standard"><label for="tpassword"><strong>New Password:</strong></label></td> --%>
-							<label class="col-md-offset-3 col-md-2 control-label" for="tpassword"><fmt:message key="jsp.register.edit-profile.pswd.field"/></label>
-							<div class="col-md-3">
-                            	<input class="form-control" type="password" name="password" id="tpassword" />
-                            </div>
-            </div>
-            <div class="form-group">
-	                           <%-- <td align="right" class="standard"><strong>Again to Confirm:</strong></td> --%>
-							<label class="col-md-offset-3 col-md-2 control-label" for="tpassword_confirm"><fmt:message key="jsp.register.edit-profile.confirm.field"/></label>
-							<div class="col-md-3">
-                            	<input class="form-control" type="password" name="password_confirm" id="tpassword_confirm" /></td>
-                            </div>
-            </div>
-<%
-  }
+
 %>
 	<div class="col-md-offset-5">
        <%-- <p align="center"><input type="submit" name="submit" value="Update Profile"></p> --%>
-	   <input class="btn btn-success col-md-4" type="submit" name="submit" value="<fmt:message key="jsp.register.edit-profile.update.button"/>" />
+	   <input class="btn btn-success col-md-4" type="submit" name="submit" value="<fmt:message key="jsp.register.migrate-profile.update.button"/>" />
 	 </div>
     </form>
 </dspace:layout>
