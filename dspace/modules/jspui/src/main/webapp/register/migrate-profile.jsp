@@ -8,7 +8,7 @@
 
 --%>
 <%--
-  - Profile editing page
+  - Profile migration page
   -
   - Attributes to pass in:
   -
@@ -41,24 +41,22 @@
     attr = (Boolean) request.getAttribute("password.problem");
     boolean passwordProblem = (attr != null && attr.booleanValue());
 
-    boolean epersonMissing = (boolean) request.getAttribute("eperson_exists");
-    boolean notPermitted = (boolean) request.getAttribute("not_permitted");
+    attr = (Boolean) request.getAttribute("eperson_exists");
+    boolean epersonExists = (attr != null && attr.booleanValue());
+
+    attr = (Boolean) request.getAttribute("not_permitted");
+    boolean notPermitted = (attr != null && attr.booleanValue());
 
 
     boolean ldap_enabled = ConfigurationManager.getBooleanProperty("authentication-ldap", "enable");
     boolean ldap_eperson = (ldap_enabled && (eperson.getNetid() != null) && (eperson.getNetid().equals("") == false));
 
-    Boolean shibbolethAuthenticated = (Boolean) session.getAttribute("shib.authenticated");
-    boolean shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
-            "authentication-shibboleth","password.allow_change", false);
-    boolean shibbolethMigrationAllowed = ConfigurationManager.getBooleanProperty(
-        "authentication-shibboleth","password.allow-migrate-to-local", false);
+    attr = (Boolean) session.getAttribute("shib.authenticated");
+    boolean shibbolethAuthenticated = (attr != null && attr.booleanValue());
 %>
 
-<dspace:layout style="default" titlekey="jsp.register.edit-profile.title" nocache="true">
-
-    <%-- <h1>Edit Your Profile</h1> --%>
-	<h1><fmt:message key="jsp.register.edit-profile.title"/>
+<dspace:layout style="default" titlekey="jsp.register.migrate-profile.title" nocache="true">
+	<h1><fmt:message key="jsp.register.migrate-profile.title"/>
 	<dspace:popup page="<%= LocaleSupport.getLocalizedMessage(pageContext, \"help.index\") + \"#editprofile\"%>"><fmt:message key="jsp.morehelp"/></dspace:popup>
 	</h1>
     
@@ -80,22 +78,24 @@
 <%
     }
 
-    if (epersonMissing) {
+    if (epersonExists) {
 %>
-    <p class="alert alert-warning"><fmt:message key="jsp.register.migrate-profile.eperson_missing"/></p>
+    <p class="alert alert-warning"><fmt:message key="jsp.register.migrate-profile.eperson_exists"/></p>
+    <p>Back to Edit Profile</p>
     <%
     }
-
-    if (notPermitted) {
+    else if (notPermitted) {
     %>
     <p class="alert alert-warning"><fmt:message key="jsp.register.migrate-profile.not_permitted"/></p>
+    <p>Back to Edit Profile</p>
     <%}
+    else {
 %>
 
 
 	<div class="alert alert-info"><fmt:message key="jsp.register.edit-profile.info3"/></div>
     
-    <form class="form-horizontal" action="<%= request.getContextPath() %>/profile" method="post">
+    <form class="form-horizontal" action="<%= request.getContextPath() %>/migrate-profile" method="post">
 
         <dspace:include page="/register/profile-form.jsp" />
 
@@ -134,4 +134,5 @@
 	   <input class="btn btn-success col-md-4" type="submit" name="submit" value="<fmt:message key="jsp.register.migrate-profile.update.button"/>" />
 	 </div>
     </form>
+    <% } %>
 </dspace:layout>

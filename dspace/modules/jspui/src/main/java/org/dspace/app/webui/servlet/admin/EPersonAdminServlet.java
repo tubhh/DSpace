@@ -45,6 +45,10 @@ public class EPersonAdminServlet extends DSpaceServlet
         
     /** Logger */
     private static Logger log = Logger.getLogger(EPersonAdminServlet.class);
+
+    private boolean adminCanMigrate = ConfigurationManager
+        .getBooleanProperty("authentication-shibboleth",
+            "password.allow-admin-migrate", false);
     
     protected void doDSGet(Context context, HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException,
@@ -244,9 +248,16 @@ public class EPersonAdminServlet extends DSpaceServlet
                 showMain(context, request, response);
                 context.complete();
             }
-            
-
-
+        }
+        else if (button.equals("submit_migrate")) {
+            EPerson eperson = EPerson.find(context, UIUtil.getIntParameter(request, "eperson_id"));
+            try {
+                migrateAccount(context, request, eperson);
+            } catch(MessagingException e) {
+                JSPManager.showJSP(request, response, "/dspace-admin/eperson-resetpassword-error.jsp");
+            }
+            showMain(context, request, response);
+            context.complete();
         }
         else if (button.equals("submit_delete"))
         {
@@ -378,6 +389,47 @@ public class EPersonAdminServlet extends DSpaceServlet
         // Note, this may throw an error is the email is bad.
         AccountManager.sendForgotPasswordInfo(context, e.getEmail());
         request.setAttribute("reset_password", Boolean.TRUE);
+    }
+
+    private void migrateAccount(Context context, HttpServletRequest request, EPerson e) throws SQLException,
+        IOException, AuthorizeException, ServletException, MessagingException {
+        if(e.getNetid() != null && adminCanMigrate) {
+            // Get the parameters from the form
+            String lastName = request.getParameter("lastname");
+            String firstName = request.getParameter("firstname");
+            String phone = request.getParameter("phone");
+            String language = request.getParameter("language");
+            String email = request.getParameter("email");
+
+            // Check database for other eperson objects with this email address
+            EPerson existing = EPerson.findByEmail(context, email);
+            if(null != existing && !email.equals(e.getEmail())) {
+                // Return error - this email address is already associated with an EPerson
+                // that isn't this account...
+                log.warn("EPerson already exists in database, cannot migrate " + email);
+                request.setAttribute("email_exists",true);
+                return;
+            }
+            // Update the eperson
+            e.setFirstName(firstName);
+            e.setLastName(lastName);
+            e.setMetadata("phone", phone);
+            e.setLanguage(language);
+            e.setEmail(email);
+            e.setNetid(null);
+            e.update();
+
+            request.setAttribute("eperson",e);
+            request.setAttribute("eperson_migrated", email);
+
+            // And now send the forgot password email
+            AccountManager.sendForgotPasswordInfo(context, email);
+        }
+        else {
+            request.setAttribute("eperson", e);
+            request.setAttribute("cannot_migrate",true);
+        }
+
     }
 
     private void showMain(Context c, HttpServletRequest request,

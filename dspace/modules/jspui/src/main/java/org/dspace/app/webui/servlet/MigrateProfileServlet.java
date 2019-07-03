@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.auth.AUTH;
 import org.apache.log4j.Logger;
+import org.dspace.app.webui.util.Authenticate;
 import org.dspace.app.webui.util.JSPManager;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.core.ConfigurationManager;
@@ -43,6 +44,30 @@ public class MigrateProfileServlet extends DSpaceServlet
         // filter means we have a user.
         log.info(LogManager.getHeader(context, "view_migrate_profile", ""));
 
+        // Get the user - authentication should have happened
+        EPerson eperson = context.getCurrentUser();
+
+        // Find out if this user is shibboleth authenticated
+        Boolean shibbolethAuthenticated = (Boolean) request.getSession().getAttribute("shib.authenticated");
+        if(shibbolethAuthenticated == null) {
+            shibbolethAuthenticated = false;
+        }
+        boolean shibbolethUsersCanMigrateAccount = ConfigurationManager.getBooleanProperty(
+            "authentication-shibboleth", "password.allow-migrate-to-local", false);
+
+        // User must be logged in with shibboleth *and* allowed to migrate to local, or we won't process
+        // this request
+        if(!shibbolethAuthenticated || !shibbolethUsersCanMigrateAccount) {
+            log.info(LogManager.getHeader(context, "view_profile",
+                "not shibboleth or not allowed"));
+
+            request.setAttribute("eperson", eperson);
+            request.setAttribute("not_permitted", true );
+
+            JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
+            return;
+        }
+
         request.setAttribute("eperson", context.getCurrentUser());
 
         JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
@@ -57,6 +82,9 @@ public class MigrateProfileServlet extends DSpaceServlet
 
         // Find out if this user is shibboleth authenticated
         Boolean shibbolethAuthenticated = (Boolean) request.getSession().getAttribute("shib.authenticated");
+        if(shibbolethAuthenticated == null) {
+            shibbolethAuthenticated = false;
+        }
         boolean shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
                 "authentication-shibboleth","password.allow_change", false);
         boolean shibbolethUsersCanMigrateAccount = ConfigurationManager.getBooleanProperty(
@@ -66,12 +94,13 @@ public class MigrateProfileServlet extends DSpaceServlet
         // this request
         if(!shibbolethAuthenticated || !shibbolethUsersCanMigrateAccount) {
             log.info(LogManager.getHeader(context, "view_profile",
-                "problem=true"));
+                "not shibboleth or not allowed"));
 
             request.setAttribute("eperson", eperson);
             request.setAttribute("not_permitted", true );
 
             JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
+            return;
         }
 
         // As we are migrating, we will always allow setting of password
@@ -93,6 +122,12 @@ public class MigrateProfileServlet extends DSpaceServlet
                 log.info(LogManager.getHeader(context, "migrate_profile",
                     "password_changed=" + settingPassword));
                 eperson.update();
+
+                // Since this worked, we should also log the user out
+                Authenticate.loggedOut(context, request);
+
+                // Manually invalidate session
+                request.getSession().invalidate();
 
                 // Show confirmation
                 request.setAttribute("password.updated", settingPassword);
@@ -142,9 +177,10 @@ public class MigrateProfileServlet extends DSpaceServlet
         // Check database for other eperson objects with this email address
         // TODO - test as non-admin, will this throw authorizeexception?
         EPerson existing = EPerson.findByEmail(context, email);
-        if(null != existing) {
+        if(null != existing && !email.equals(eperson.getEmail())) {
             // Return error - this email address is already associated with an EPerson
             // Could make use of the 'already-registered' JSP?
+            log.warn("EPerson already exists in database, cannot migrate " + email);
             request.setAttribute("eperson_exists",true);
             JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");
             return false;
@@ -167,7 +203,7 @@ public class MigrateProfileServlet extends DSpaceServlet
             return true;
         }
         else {
-            log.info(LogManager.getHeader(context, "view_migrate_profile",
+            log.warn(LogManager.getHeader(context, "view_migrate_profile",
                 "problem=true"));
             request.setAttribute("missing.fields", Boolean.TRUE);
             JSPManager.showJSP(request, response, "/register/migrate-profile.jsp");

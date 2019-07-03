@@ -29,23 +29,14 @@
 %>
 
 
-<dspace:layout titlekey="jsp.register.profile-updated.title">
-    <%-- <h1>Profile Updated</h1> --%>
-	<h1><fmt:message key="jsp.register.profile-updated.title"/></h1>
-    <%-- <p>Thank you, your profile information
-    <%= (passwordUpdated ? "and password have" : "has") %>
-    been updated.</p> --%>   
+<dspace:layout titlekey="jsp.register.profile-migrated.title">
+	<h1><fmt:message key="jsp.register.profile-migrated.title"/></h1>
 	<p class="alert alert-info">
-<% if(passwordUpdated)
-   { %>
-    <fmt:message key="jsp.register.profile-updated.info1"/>
-<% }
-   else
-   { %>
-    <fmt:message key="jsp.register.profile-updated.info2"/>
-<% } %>
+        <fmt:message key="jsp.register.profile-migrated.info"/>
     </p>
-
-    <%-- <p><a href="<%= request.getContextPath() %>/">Return to DSpace Home</a></p> --%>
-	<p><a href="<%= request.getContextPath() %>/"><fmt:message key="jsp.register.general.return-home"/></a></p>
+	<p>
+        <a href="<%= request.getContextPath() %>/">
+            <fmt:message key="jsp.register.general.return-home"/>
+        </a>
+    </p>
 </dspace:layout>

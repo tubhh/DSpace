@@ -493,6 +493,11 @@
     <servlet-name>request-item</servlet-name>
     <servlet-class>org.dspace.app.webui.servlet.RequestItemServlet</servlet-class>
   </servlet>
+
+    <servlet>
+        <servlet-name>migrate-profile</servlet-name>
+        <servlet-class>org.dspace.app.webui.servlet.MigrateProfileServlet</servlet-class>
+    </servlet>
     	
   <servlet-mapping>
     <servlet-name>shibboleth-login</servlet-name>
@@ -521,15 +526,15 @@
     <url-pattern>/exportdownload/*</url-pattern>
   </servlet-mapping>
 
-        <servlet-mapping>
-                <servlet-name>browse</servlet-name>
-                <url-pattern>/browse</url-pattern>
-        </servlet-mapping>
+    <servlet-mapping>
+            <servlet-name>browse</servlet-name>
+            <url-pattern>/browse</url-pattern>
+    </servlet-mapping>
 
-        <servlet-mapping>
-                <servlet-name>browsewithdrawn</servlet-name>
-                <url-pattern>/dspace-admin/withdrawn</url-pattern>
-        </servlet-mapping>
+    <servlet-mapping>
+            <servlet-name>browsewithdrawn</servlet-name>
+            <url-pattern>/dspace-admin/withdrawn</url-pattern>
+    </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>community-list</servlet-name>
@@ -820,6 +825,11 @@
     <servlet-name>request-item</servlet-name>
     <url-pattern>/request-item</url-pattern>
   </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>migrate-profile</servlet-name>
+        <url-pattern>/migrate-profile</url-pattern>
+    </servlet-mapping>
   
   <!-- Icon MIME type -->
   <mime-mapping>

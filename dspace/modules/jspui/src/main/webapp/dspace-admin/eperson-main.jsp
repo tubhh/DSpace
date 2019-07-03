@@ -30,13 +30,17 @@
 
 <%@ page import="javax.servlet.jsp.jstl.fmt.LocaleSupport" %>
 <%@ page import="org.dspace.core.ConfigurationManager" %>
-	
+<%@ page import="org.dspace.app.webui.util.UIUtil" %>
+<%@ page import="org.parboiled.common.StringUtils" %>
+
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace" %>
 
 <%
    boolean noEPersonSelected = (request.getAttribute("no_eperson_selected") != null);
    boolean resetPassword = (request.getAttribute("reset_password") != null);
    boolean loginAs = ConfigurationManager.getBooleanProperty("webui.user.assumelogin", false);
+   String epersonMigrated = (String) request.getAttribute("eperson_migrated");
+   boolean cannotMigrate = (request.getAttribute("cannot_migrate") != null);
 %>
 
 <dspace:layout style="submission" titlekey="jsp.dspace-admin.eperson-main.title"
@@ -65,7 +69,25 @@
 	{ %><p class="alert alert-success">
 	     <fmt:message key="jsp.dspace-admin.eperson-main.ResetPassword.success_notice"/>
 	   </p>
-<%  } %>    
+<%  }
+	if (epersonMigrated != null && !StringUtils.isEmpty(epersonMigrated)) {
+	%>
+	<p class="alert alert-success">
+		<%
+			LocaleSupport.getLocalizedMessage(pageContext, "jsp.dspace-admin.eperson-edit.migrated",
+					new Object[] { epersonMigrated });
+		%>
+	</p>
+	<%
+	}
+	if (cannotMigrate) {
+	%>
+	<p class="alert alert-warning">
+		<fmt:message key="jsp.dspace-admin.eperson-edit.cannot-migrate"/>
+	</p>
+	<%
+	}
+		%>
     <form name="epersongroup" method="post" action="">    
 			<div class="row">
             <%-- <input type="submit" name="submit_add" value="Add EPerson..."> --%>

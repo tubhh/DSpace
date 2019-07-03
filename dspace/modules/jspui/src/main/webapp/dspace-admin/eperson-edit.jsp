@@ -66,6 +66,9 @@
     boolean emailExists = (request.getAttribute("email_exists") != null);
 
     boolean ldap_enabled = ConfigurationManager.getBooleanProperty("authentication-ldap", "enable");
+    boolean adminCanMigrate = ConfigurationManager
+            .getBooleanProperty("authentication-shibboleth",
+                    "password.allow-admin-migrate", false);
 %>
 
 <dspace:layout style="submission" titlekey="jsp.dspace-admin.eperson-edit.title"
@@ -89,7 +92,10 @@
 	{ %><p class="alert alert-warning">
 	     <fmt:message key="jsp.dspace-admin.eperson-edit.emailexists"/>
 	   </p>
-<%  } %>
+<%  }
+%>
+
+
 
     <form method="post" action="">
 
@@ -183,7 +189,10 @@
                     <%-- <input type="submit" name="submit_save" value="Save Edits"> --%>
                     <input class="btn btn-default" type="submit" name="submit_save" value="<fmt:message key="jsp.dspace-admin.general.save"/>" />
                     <input class="btn btn-default" type="submit" name="submit_resetpassword" value="<fmt:message key="jsp.dspace-admin.eperson-main.ResetPassword.submit"/>"/>
-                    <%-- <input type="submit" name="submit_delete" value="Delete EPerson..."> --%>
+                    <% if(adminCanMigrate && eperson.getNetid() != null) { %>
+                    <input class="btn btn-default" type="submit" name="submit_migrate" value="<fmt:message key="jsp.dspace-admin.eperson-edit.migrate"/>" />
+                    <% } %>
+
                     <input class="btn btn-danger" type="submit" name="submit_delete" value="<fmt:message key="jsp.dspace-admin.general.delete"/>" />
          </div>
 	

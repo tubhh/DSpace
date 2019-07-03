@@ -43,9 +43,15 @@
     boolean ldap_enabled = ConfigurationManager.getBooleanProperty("authentication-ldap", "enable");
     boolean ldap_eperson = (ldap_enabled && (eperson.getNetid() != null) && (eperson.getNetid().equals("") == false));
 
-    Boolean shibbolethAuthenticated = (Boolean) session.getAttribute("shib.authenticated");
+    attr = (Boolean) session.getAttribute("shib.authenticated");
+    boolean shibbolethAuthenticated = (attr != null && attr.booleanValue());
+
     boolean shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
             "authentication-shibboleth","password.allow_change", false);
+
+    boolean shibbolethUsersCanMigrateAccount = ConfigurationManager.getBooleanProperty(
+            "authentication-shibboleth", "password.allow-migrate-to-local", false);
+
 %>
 
 <dspace:layout style="default" titlekey="jsp.register.edit-profile.title" nocache="true">
@@ -110,6 +116,14 @@
 	<div class="col-md-offset-5">
        <%-- <p align="center"><input type="submit" name="submit" value="Update Profile"></p> --%>
 	   <input class="btn btn-success col-md-4" type="submit" name="submit" value="<fmt:message key="jsp.register.edit-profile.update.button"/>" />
-	 </div>
+
+           <%
+               if(shibbolethAuthenticated && shibbolethUsersCanMigrateAccount) {
+           %>
+           &nbsp;<a href="<%=request.getContextPath()%>/migrate-profile" class="btn btn-warning col-md-4" type="button" name="migrate" value="<fmt:message key="jsp.register.edit-profile.migrate.button"/>"><fmt:message key="jsp.register.edit-profile.migrate.button"/></a>
+           <%
+               }
+           %>
+    </div>
     </form>
 </dspace:layout>
