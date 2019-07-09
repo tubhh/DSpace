@@ -238,6 +238,7 @@
 		<property name="types">
 			<map>
 				<entry key="selected" value-ref="selectedPublicationForOUComponent" />
+                                <entry key="all" value-ref="allForOUComponent" />
 				<entry key="journal" value-ref="journalForOUComponent" />
 				<entry key="conference" value-ref="conferenceForOUComponent" />
 				<entry key="book" value-ref="bookForOUComponent" />
@@ -258,7 +259,16 @@
 		<property name="sortby"><value>2</value></property>		
 	</bean>
 		
-	
+    <bean id="allForOUComponent"
+	    class="org.dspace.app.webui.cris.components.BeanFacetComponent">
+	    <property name="componentIdentifier" value="all" />
+	    <property name="facetQuery"><value>*:*</value></property>
+	    <property name="order"><value>desc</value></property>
+	    <property name="rpp"><value>100</value></property>
+            <!-- normal sorting by title (1) or by issue date (2) -->
+	    <property name="sortby"><value>2</value></property>	
+	</bean>
+
 	<bean id="journalForOUComponent"
 		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
 		<property name="componentIdentifier" value="journal" />
