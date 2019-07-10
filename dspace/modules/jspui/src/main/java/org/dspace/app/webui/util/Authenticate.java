@@ -269,7 +269,8 @@ public class Authenticate
 
             // Shibboleth stores information about special groups in the session. Preserve these information.
             Boolean shibbolethAuthenticated = (Boolean) session.getAttribute("shib.authenticated");
-            List<Integer> shibbolethSpecialGroups = (List<Integer>) session.getAttribute("shib.specialgroup");
+
+            int[] shibbolethSpecialGroups = (int[]) session.getAttribute("shib.specialgroup");
 
             // Invalidate session unless dspace.cfg says not to
             if(ConfigurationManager.getBooleanProperty("webui.session.invalidate", true))
