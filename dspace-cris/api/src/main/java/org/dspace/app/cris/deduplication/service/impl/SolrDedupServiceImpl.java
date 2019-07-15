@@ -423,6 +423,7 @@ public class SolrDedupServiceImpl implements DedupService
 
         String uniqueId = type + "-" + dedupID + "-" + flag.getDescription();
         doc.addField(UNIQUE_ID_FIELD, uniqueId);
+
         doc.addField(RESOURCE_ID_FIELD, dedupID);
         doc.addField(RESOURCE_IDS_FIELD, sortedIds[0]);
         if (!firstId.equals(secondId))

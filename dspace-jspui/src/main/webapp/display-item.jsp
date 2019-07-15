@@ -95,6 +95,27 @@
 			title = "Item " + handle;
 		}
 	}
+    boolean pmcEnabled = ConfigurationManager.getBooleanProperty("cris","pmc.enabled",false);
+    boolean scopusEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.elsevier.scopus.enabled",false);
+    boolean wosEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.thomsonreuters.wos.enabled",false);
+    String doiMetadata = ConfigurationManager.getProperty("cris","ametrics.identifier.doi");
+    String isbnMetadata = ConfigurationManager.getProperty("cris","ametrics.identifier.isbn");
+    String pmidMetadata = ConfigurationManager.getProperty("cris","ametrics.identifier.pmid");
+    if (doiMetadata == null) {
+    	doiMetadata = "dc.identifier.doi";
+    }
+    if (isbnMetadata == null) {
+    	isbnMetadata = "dc.identifier.isbn";
+    }
+    if (pmidMetadata == null) {
+    	pmidMetadata = "dc.identifier.pmid";
+    }
+    String doi = item.getMetadata(doiMetadata);
+    String isbn = item.getMetadata(isbnMetadata);
+    String pmid = item.getMetadata(pmidMetadata);
+    boolean scholarEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.google.scholar.enabled",false);
+    boolean altMetricEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.altmetric.enabled",false) && (StringUtils.isNotBlank(doi) || StringUtils.isNotBlank(isbn));
+    boolean altMetricDimensionsEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.altmetric.dimensionsbadges.enabled",false) && (StringUtils.isNotBlank(doi) || StringUtils.isNotBlank(pmid));
     
     Boolean versioningEnabledBool = (Boolean)request.getAttribute("versioning.enabled");
     boolean versioningEnabled = (versioningEnabledBool!=null && versioningEnabledBool.booleanValue());
@@ -114,6 +135,13 @@
   	String crisID = (String)request.getAttribute("crisID");
 %>
 
+<script type='text/javascript' src='<%= request.getContextPath() %>/static/js/abbreviatetext.js'></script>
+
+<% if(pmcEnabled || scopusEnabled || wosEnabled || scholarEnabled || altMetricEnabled) { %>
+<c:set var="dspace.layout.head.last" scope="request">
+<% if(altMetricEnabled) { %> 
+<script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
+<% } %>
 <script type="text/javascript"><!--
 j(document).ready(function() {
 
@@ -309,6 +337,221 @@ j(document).ready(function() {
         }
 %>
     <a class="statisticsLink  btn btn-primary" href="<%= request.getContextPath() %>/handle/<%= handle %>/statistics"><fmt:message key="jsp.display-item.display-statistics"/></a>
+	<% if(coreRecommender) { %>	
+	<br/>
+	<br/>
+	<div id="recommender" class="panel panel-default">
+	<div class="panel-heading"><fmt:message key="jsp.display-item.recommender" /></div>
+	
+	<div class="panel-body">
+	<div id="coreRecommenderOutput"></div>
+	</div>
+	</div>
+	<% } %>
+</div>
+<div class="col-lg-3">
+<div class="row">
+<%
+if (dedupEnabled && admin_button) { %>	
+<div class="col-lg-12 col-md-4 col-sm-6">
+<div class="media dedup">
+	<div class="media-left">
+		<fmt:message key="jsp.display-item.dedup.title"/>
+	</div>
+	<div id="dedupResult" class="media-body text-center">
+		<h4 class="media-heading"><fmt:message key="jsp.display-item.dedup.heading"/></h4>
+	    <span class="metric-counter"><a id="dedupCounter" data-toggle="tooltip" target="_blank" title="<fmt:message key="jsp.display-item.dedup.tooltip"/>" href=""><fmt:message key="jsp.display-item.dedup.check"/></a></span>
+	</div>
+</div>	
+</div>
+<br class="visible-lg" />
+<% } %>
+<c:forEach var="metricType" items="${metricTypes}">
+<c:set var="metricNameKey">
+	jsp.display-item.citation.${metricType}
+</c:set>
+<c:set var="metricIconKey">
+	jsp.display-item.citation.${metricType}.icon
+</c:set>
+<c:if test="${not empty metrics[metricType].counter and metrics[metricType].counter gt 0}">
+	<c:if test="${!empty metrics[metricType].moreLink}">
+		<script type="text/javascript">
+		j(document).ready(function() {
+			var obj = JSON.parse('${metrics[metricType].moreLink}');
+			j( "div" ).data( "moreLink", obj );
+			j( "#metric-counter-${metricType}" ).wrap(function() {
+				  return "<a target='_blank' href='" + j( "div" ).data( "moreLink" ).link + "'></a>";
+			}).append(" <i class='fa fa-info-circle' data-toggle='tooltip' title='Get updated citations from database'></i>");
+			
+			jQuery('[data-toggle="tooltip"]').tooltip();
+		});
+		</script>
+	</c:if>
+<div class="col-lg-12 col-md-4 col-sm-6 col-xs-12 box-${metricType}">
+<div class="media ${metricType}">
+	<div class="media-left">
+		<fmt:message key="${metricIconKey}"/>
+	</div>
+	<div class="media-body text-center">
+		<h4 class="media-heading"><fmt:message key="${metricNameKey}"/>
+		<c:if test="${not empty metrics[metricType].rankingLev}">
+		<span class="pull-right">
+		<fmt:message key="jsp.display-item.citation.top"/>		
+		<span class="metric-ranking arc">
+			<span class="circle" data-toggle="tooltip" data-placement="bottom" 
+				title="<fmt:message key="jsp.display-item.citation.${metricType}.ranking.tooltip"><fmt:param><fmt:formatNumber value="${metrics[metricType].rankingLev}" type="NUMBER" maxFractionDigits="0" /></fmt:param></fmt:message>">
+				<fmt:formatNumber value="${metrics[metricType].rankingLev}" 
+					type="NUMBER" maxFractionDigits="0" />
+			</span>
+		</span>
+		</span>
+		</c:if>
+		</h4>
+		<span id="metric-counter-${metricType}" class="metric-counter">
+		<c:choose>		
+		<c:when test="${!empty metrics[metricType].formatter.type}">
+		<c:choose>
+		<c:when test="${!(metrics[metricType].formatter.type eq 'PERCENT')}">
+			<fmt:formatNumber value="${metrics[metricType].counter}" 
+				type="${metrics[metricType].formatter.type}"
+				maxFractionDigits="${metrics[metricType].formatter.maxFractionDigits}"
+				minFractionDigits="${metrics[metricType].formatter.minFractionDigits}"/>
+		</c:when>
+		<c:otherwise>
+			<fmt:formatNumber value="${metrics[metricType].counter/100}" 
+				type="${metrics[metricType].formatter.type}"
+				maxFractionDigits="${metrics[metricType].formatter.maxFractionDigits}"
+				minFractionDigits="${metrics[metricType].formatter.minFractionDigits}"/>
+		</c:otherwise>
+		</c:choose>
+		</c:when>		
+		<c:otherwise>
+			<fmt:formatNumber value="${metrics[metricType].counter}" 
+				pattern="${metrics[metricType].formatter.pattern}"/>
+		</c:otherwise>
+		</c:choose>
+		</span>
+	</div>
+	<c:if test="${not empty metrics[metricType].last1}">
+	<div class="row">
+		<div class="col-xs-6 text-left">
+			<fmt:message key="jsp.display-item.citation.last1" />
+			<br/>
+				<c:choose>		
+					<c:when test="${!empty metrics[metricType].formatter.type}">
+					<c:choose>
+						<c:when test="${!(metrics[metricType].formatter.type eq 'PERCENT')}">
+							<fmt:formatNumber value="${metrics[metricType].last1}" 
+								type="${metrics[metricType].formatter.type}"
+								maxFractionDigits="${metrics[metricType].formatter.maxFractionDigits}"
+								minFractionDigits="${metrics[metricType].formatter.minFractionDigits}"/>
+						</c:when>
+						<c:otherwise>
+							<fmt:formatNumber value="${metrics[metricType].last1/100}" 
+								type="${metrics[metricType].formatter.type}"
+								maxFractionDigits="${metrics[metricType].formatter.maxFractionDigits}"
+								minFractionDigits="${metrics[metricType].formatter.minFractionDigits}"/>
+						</c:otherwise>
+					</c:choose>
+					</c:when>		
+					<c:otherwise>
+						<fmt:formatNumber value="${metrics[metricType].last1}" 
+							pattern="${metrics[metricType].formatter.pattern}"/>
+					</c:otherwise>
+				</c:choose>			
+		</div>
+		<div class="col-xs-6 text-right">
+			<fmt:message key="jsp.display-item.citation.last2" />
+			<br/>
+				<c:choose>		
+					<c:when test="${!empty metrics[metricType].formatter.type}">
+					<c:choose>
+						<c:when test="${!(metrics[metricType].formatter.type eq 'PERCENT')}">
+							<fmt:formatNumber value="${metrics[metricType].last2}" 
+								type="${metrics[metricType].formatter.type}"
+								maxFractionDigits="${metrics[metricType].formatter.maxFractionDigits}"
+								minFractionDigits="${metrics[metricType].formatter.minFractionDigits}"/>
+						</c:when>
+						<c:otherwise>
+							<fmt:formatNumber value="${metrics[metricType].last2/100}" 
+								type="${metrics[metricType].formatter.type}"
+								maxFractionDigits="${metrics[metricType].formatter.maxFractionDigits}"
+								minFractionDigits="${metrics[metricType].formatter.minFractionDigits}"/>
+						</c:otherwise>
+					</c:choose>
+					</c:when>		
+					<c:otherwise>
+						<fmt:formatNumber value="${metrics[metricType].last2}" 
+							pattern="${metrics[metricType].formatter.pattern}"/>
+					</c:otherwise>
+				</c:choose>				
+		</div>
+	</div>
+	</c:if>
+	<div class="row">
+		<div class="col-lg-12 text-center small">
+			<fmt:message
+				key="jsp.display-item.citation.time">
+				<fmt:param value="${metrics[metricType].time}" />
+			</fmt:message>
+		</div>
+	</div>
+	</div>
+</div>
+</c:if>
+</c:forEach>
+    <%
+	   if(scholarEnabled) { %>
+<div class="col-lg-12 col-md-4 col-sm-6">
+<div class="media google">
+	<div class="media-left">
+		<fmt:message key="jsp.display-item.citation.google.icon">
+			<fmt:param value="<%=request.getContextPath()%>" />
+		</fmt:message>
+	</div>
+	<div id="googleCitedResult" class="media-body text-center">
+		<h4 class="media-heading"><fmt:message key="jsp.display-item.citation.google"/></h4>
+		
+		
+   		    <span class="metric-counter"><a data-toggle="tooltip" target="_blank" title="<fmt:message key="jsp.display-item.citation.google.tooltip"/>" href="https://scholar.google.com/scholar?as_q=&as_epq=<%= title %>&as_occt=any"><fmt:message key="jsp.display-item.citation.google.check"/></a></span>
+	</div>
+</div>	
+</div>
+<br class="visible-lg" />
+    <% }
+	   if(altMetricEnabled) { %>
+<div class="col-lg-12 col-md-4 col-sm-6">
+<div class="media altmetric">
+	<div class="media-left">
+      		<div class='altmetric-embed' data-hide-no-mentions="true" data-badge-popover="right" data-badge-type="donut" data-link-target='_blank'
+      		<% if (doi != null) { %> data-doi="<%= doi %>"<% } else if (isbn != null) { %> data-isbn="<%= isbn %>"<% } %>></div>
+	</div>
+	<div class="media-body media-middle text-center">
+		<h4 class="media-heading"><fmt:message key="jsp.display-item.citation.altmetric"/></h4>
+	</div>
+</div>
+</div>
+<% } 
+  if(altMetricDimensionsEnabled) { %>
+<div class="col-lg-12 col-md-4 col-sm-6">
+<div class="dimensions">
+	<div class="media-left">
+	
+      	<div class="__dimensions_badge_embed__" data-legend="hover-right" data-style="small_circle" <% if (doi != null) { %> data-doi="<%= doi %>"<% } else if (pmid != null) { %> data-pmid="<%= pmid %>"<% } %>" ></div>
+      	<script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
+	</div>
+	<div class="media-body media-middle text-center">
+		<h4 class="media-heading"><fmt:message key="jsp.display-item.citation.altmetric"/></h4>
+	</div>
+</div>
+</div>
+<% } %>
+    </div>
+</div>
+<% if(pmcEnabled) { %>
+<div class="modal fade" id="dialogPMC" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
     <%-- SFX Link --%>
 <%

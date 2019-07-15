@@ -9,10 +9,10 @@ import java.util.Map;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.orcid.OrcidAccessToken;
 import org.dspace.authority.orcid.OrcidService;
-import org.dspace.authority.orcid.jaxb.activities.Employments;
-import org.dspace.authority.orcid.jaxb.employment.Employment;
-import org.dspace.authority.orcid.jaxb.employment.EmploymentSummary;
 import org.dspace.content.authority.Choice;
+import org.orcid.jaxb.model.record_v2.Employment;
+import org.orcid.jaxb.model.record_v2.EmploymentSummary;
+import org.orcid.jaxb.model.record_v2.Employments;
 
 /**
  * 

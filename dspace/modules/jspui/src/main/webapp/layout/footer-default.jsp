@@ -58,11 +58,12 @@
     </div>
              <div id="designedby" class="container text-muted"><fmt:message key="jsp.layout.navbar-default.tubdok-impress"/>&nbsp;-
                                 <a target="_blank" href="<%= request.getContextPath() %>/feedback"><fmt:message key="jsp.layout.footer-default.feedback"/></a>&nbsp;-
-                                <fmt:message key="jsp.layout.navbar-default.tubdok-contact"/>
+                                <fmt:message key="jsp.layout.navbar-default.tubdok-contact"/>&nbsp;-
+                                <fmt:message key="jsp.layout.navbar-default.data-privacy"/>
 
 			<div id="footer_feedback" class="pull-right">                                    
                                 <p class="text-muted"><fmt:message key="jsp.layout.footer-default.text"/>&nbsp;-
-             <fmt:message key="jsp.layout.footer-default.version-by"/> <a href="http://www.4science.it/en/dspace-and-dspace-cris-services/">
+             <fmt:message key="jsp.layout.footer-default.version-by"/> <a href="http://www.4science.it/en/dspace-cris/">
              <img src="<%= request.getContextPath() %>/image/logo-4science-small.png"
                                     alt="Logo 4SCIENCE" height="32px"/></a>
                                     - powered by <img src="<%= request.getContextPath() %>/image/tub_myriad_40h.png"

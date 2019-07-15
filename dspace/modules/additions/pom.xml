@@ -248,6 +248,12 @@
             <artifactId>latex2unicode_2.11</artifactId>
             <version>0.1-SNAPSHOT</version>
       </dependency>
+      <dependency>
+         <groupId>com.openaire</groupId>
+         <artifactId>openaire-piwik-api</artifactId>
+         <version>1.0.0</version>
+         <type>jar</type>
+      </dependency>
 
    </dependencies>
 
