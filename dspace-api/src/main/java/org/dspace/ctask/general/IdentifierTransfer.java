@@ -17,6 +17,8 @@ import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.curate.AbstractCurationTask;
 import org.dspace.curate.Curator;
+import org.dspace.identifier.DOIIdentifierProvider;
+import org.dspace.identifier.doi.DOIIdentifierException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -50,11 +52,11 @@ public class IdentifierTransfer extends AbstractCurationTask
 
 
     /**
-     * Perform the link checking.
+     * Perform the operation.
      *
-     * @param dso The DSpaaceObject to be checked
+     * @param dso The DSpaceObject to be checked
      * @return The curation task status of the checking
-     * @throws java.io.IOException THrown if something went wrong
+     * @throws java.io.IOException Thrown if something went wrong
      */
     @Override
     public int perform(DSpaceObject dso) throws IOException
@@ -66,13 +68,17 @@ public class IdentifierTransfer extends AbstractCurationTask
 
         // Unless this is  an item, we'll skip this item
         status = Curator.CURATE_SKIP;
+        log.debug("Executing Curation Task for item");
         if (dso.getType() == Constants.ITEM)
         {
             Item item = (Item)dso;
+            log.debug("Its really an item");
             if (!getItemHandle(item).equals(NEW_ITEM_HANDLE)) {
+            log.debug("Its not in workflow");
             try {
                 Context context = Curator.curationContext();
                 Metadatum[] hdls = item.getMetadata("dc", "identifier", "hdl", Item.ANY);
+                log.debug(hdls.length+" handles found in record");
                 //String hdl = extractHdl(uris);
                 if (hdls.length == 0) {
                     results.append("Adding handle ").append(getItemHandle(item)).append(" to item ").append(getItemHandle(item)).append("\n");
@@ -80,10 +86,12 @@ public class IdentifierTransfer extends AbstractCurationTask
                 }
 
                 Metadatum[] tuhhurnMd = item.getMetadata("tuhh", "identifier", "urn", Item.ANY);
+                log.debug(tuhhurnMd.length+" URN provided by TUHH");
                 String tuhhurn = "";
                 if (tuhhurnMd.length > 0) {
                     tuhhurn = tuhhurnMd[0].value;
                     Metadatum[] urnMd = item.getMetadata("dc", "identifier", "urn", Item.ANY);
+                    log.debug(urnMd.length+" URNs registered in metadata");
                     if (urnMd.length == 0) {
                         item.addMetadata("dc", "identifier", "urn", null, tuhhurn, null, -1);
                         results.append("Added TUHH URN "+tuhhurn+" to dc.identifier.urn.\n");
@@ -91,20 +99,28 @@ public class IdentifierTransfer extends AbstractCurationTask
                 }
 
                 Metadatum[] tuhhdoi = item.getMetadata("tuhh", "identifier", "doi", Item.ANY);
+                log.debug(tuhhdoi.length+" DOIs registered in metadata");
                 if (tuhhdoi.length == 0) {
+                    String objdoi = DOIIdentifierProvider.getDOIOutOfObject(dso);
                     Metadatum[] uris = item.getMetadata("dc", "identifier", "uri", Item.ANY);
                     String doi = extractDOI(uris);
                     //Metadatum[] dois = item.getMetadata("tuhh", "identifier", "doi", Item.ANY);
 
+                    log.debug("DOI "+doi+", Object DOI "+objdoi);
+
                     item.clearMetadata("dc", "identifier", "uri", Item.ANY);
                     for (Metadatum uri : uris) {
+                        log.debug("Analysing URI "+uri+"...");
                         String name = uri.value;
                         String isdoi = name.substring(0, 26);
-                        if (isdoi == "http://dx.doi.org/10.0137/" || isdoi == "http://dx.doi.org/10.15480" || isdoi == "http://dx.doi.org/10.5072/") {
+                        log.debug("Analysing substring "+isdoi+"...");
+                        if (isdoi.equals("http://dx.doi.org/10.0137/") || isdoi.equals("http://dx.doi.org/10.15480") || isdoi.equals("http://dx.doi.org/10.5072/")) {
+                            log.debug("Its a local DOI! Adding DOI "+doi+" to item");
                             results.append("Adding DOI ").append(doi).append(" to item ").append(getItemHandle(item)).append("\n");
                             item.addMetadata("tuhh", "identifier", "doi", null, doi, null, -1);
                             item.addMetadata("dc", "identifier", "doi", null, doi, null, -1);
                         } else {
+                            log.debug("Its not a local DOI! Leaving everything as is.");
                             item.addMetadata("dc", "identifier", "uri", uri.language, uri.value, uri.authority, uri.confidence);
                         }
                     }
@@ -123,7 +139,13 @@ public class IdentifierTransfer extends AbstractCurationTask
                 // Something went wrong
                 logDebugMessage(sqle.getMessage());
                 status = Curator.CURATE_ERROR;
+            } catch (DOIIdentifierException doie) {
+                // Something went wrong
+                logDebugMessage(doie.getMessage());
+                status = Curator.CURATE_ERROR;
             }
+            } else {
+                log.debug("Its in workflow - skipping!");
             }
         }
 
@@ -150,7 +172,7 @@ public class IdentifierTransfer extends AbstractCurationTask
         for (Metadatum uri : names) {
             String name = uri.value;
             String isdoi = name.substring(0, 26);
-            if (isdoi == "http://dx.doi.org/10.0137/" || isdoi == "http://dx.doi.org/10.15480" || isdoi == "http://dx.doi.org/10.5072/") {
+            if (isdoi.equals("http://dx.doi.org/10.0137/") || isdoi.equals("http://dx.doi.org/10.15480") || isdoi.equals("http://dx.doi.org/10.5072/")) {
                 return name.substring(18);
             }
         }
