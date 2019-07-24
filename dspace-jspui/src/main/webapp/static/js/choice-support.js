@@ -196,6 +196,9 @@ function DSpaceChoiceLookup(url, field, formID, valueInput, authInput,
     // primary input field - for positioning popup.
     var inputFieldName = isName ? dspace_makeFieldInput(valueInput,'_last') : valueInput;
     var inputField = document.getElementById(formID).elements[inputFieldName];
+    var authorityValue = document.getElementById(formID).elements[authInput].value;
+    url += '&authorityValue='+authorityValue;
+
     // scriptactulous magic to figure out true offset:
     var cOffset = 0;
     if (inputField != null)
@@ -256,6 +259,7 @@ function DSpaceChoicesLoad(form)
     var contextPath = form.elements['contextPath'].value;
     var fail = form.elements['paramFail'].value;
     var valueInput = form.elements['paramValueInput'].value;
+    var authorityValue = form.elements['paramAuthorityValue'].value;
     var nonAuthority = "";
     if (form.elements['paramNonAuthority'] != null)
         nonAuthority = form.elements['paramNonAuthority'].value;
@@ -328,6 +332,7 @@ function DSpaceChoicesLoad(form)
 
           // load select and look for default selection
           var selectedByValue = -1; // select by value match
+          var selectedByAuthority = -1; // select by authority match
           var selectedByChoices = -1;  // Choice says its selected
           for (var i = 0; i < opts.length; ++i)
           {
@@ -343,13 +348,14 @@ function DSpaceChoicesLoad(form)
             var oauthority = opt.getAttributeNode('authority').value;
             var option = new Option(olabel, ovalue);
             option.authority = opt.getAttributeNode('authority').value;
-            
             //transfer all data attributes on the option element 
 			option.data = jQuery(opt).data();
 			
             select.add(option, null);
-            if (value == ovalue)
+            if (selectedByValue == -1 && value == ovalue)
                 selectedByValue = select.options.length - 1;
+            if (selectedByAuthority == -1 && oauthority == authorityValue)
+                selectedByAuthority = select.options.length - 1;
             if (opt.getAttributeNode('selected') != null)
                 selectedByChoices = select.options.length - 1;
           }
@@ -361,6 +367,8 @@ function DSpaceChoicesLoad(form)
           var defaultSelected = -1;
           if (selectedByChoices >= 0)
             defaultSelected = selectedByChoices;
+          else if (selectedByAuthority >= 0)
+            defaultSelected = selectedByAuthority;
           else if (selectedByValue >= 0)
             defaultSelected = selectedByValue;
           else if (select.options.length == 1)
