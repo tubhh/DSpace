@@ -196,7 +196,7 @@ function DSpaceChoiceLookup(url, field, formID, valueInput, authInput,
     // primary input field - for positioning popup.
     var inputFieldName = isName ? dspace_makeFieldInput(valueInput,'_last') : valueInput;
     var inputField = document.getElementById(formID).elements[inputFieldName];
-    var authorityValue = document.getElementById(formID).elements[authInput].value;
+    var authorityValue = document.getElementById(formID).elements[authInput] != undefined ? document.getElementById(formID).elements[authInput].value : "";
     url += '&authorityValue='+authorityValue;
 
     // scriptactulous magic to figure out true offset:
