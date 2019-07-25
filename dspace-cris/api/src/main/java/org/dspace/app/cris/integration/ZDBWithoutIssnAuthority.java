@@ -15,7 +15,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.zdb.ZDBAuthorityValue;
-import org.dspace.authority.zdb.ZDBService;
+import org.dspace.authority.zdb.ZDBWithoutIssnService;
 import org.dspace.content.authority.Choice;
 import org.dspace.content.authority.Choices;
 import org.dspace.utils.DSpace;
@@ -24,9 +24,9 @@ public class ZDBWithoutIssnAuthority extends DOAuthority {
 
 	private static final int DEFAULT_MAX_ROWS = 10;
 
-	private static Logger log = Logger.getLogger(ZDBAuthority.class);
+	private static Logger log = Logger.getLogger(ZDBWithoutIssnAuthority.class);
 
-	private ZDBService source = new DSpace().getServiceManager().getServiceByName("ZDBSource", ZDBService.class);
+	private ZDBWithoutIssnService source = new DSpace().getServiceManager().getServiceByName("ZDBSource", ZDBWithoutIssnService.class);
 
 	@Override
 	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
