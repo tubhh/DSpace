@@ -26,7 +26,8 @@ import org.dspace.servicemanager.config.DSpaceConfigurationService;
 
 /**
  * Class for reading the DSpace system configuration. The main configuration is
- * read in as properties from a standard properties file.
+ * read in as properties from a standard properties file. Email templates and
+ * configuration files for other tools are also be accessed via this class.
  * <P>
  * The main configuration is by default read from the <em>resource</em>
  * <code>/dspace.cfg</code>.
@@ -143,6 +144,10 @@ public class ConfigurationManager
         if (module == null)
             return properties;
 
+        if (moduleProps == null)
+        {
+            loadConfig(null);
+        }
         Properties retProps = moduleProps.get(module);
         if (retProps == null)
         {
