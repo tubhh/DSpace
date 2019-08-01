@@ -163,6 +163,7 @@
             <!-- formats to expose on default context -->
             <Format ref="oaidc"/>
             <Format ref="xmetadissplus" />
+            <Format ref="xmetadissplus23" />
             <Format ref="epicur" />
             <Format ref="rdf" />
             <Format ref="marc" />
@@ -292,6 +293,12 @@
             <XSLT>metadataFormats/xMetaDissPlus13.xsl</XSLT>
             <Namespace>http://www.bsz-bw.de/xmetadissplus/1.3</Namespace>
             <SchemaLocation>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</SchemaLocation>
+        </Format>
+        <Format id="xmetadissplus23">
+            <Prefix>xMetaDissPlus-2.3</Prefix>
+            <XSLT>metadataFormats/xMetaDissPlus-2.3.xsl</XSLT>
+            <Namespace>http://www.d-nb.de/standards/xmetadissplus/</Namespace>
+            <SchemaLocation>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</SchemaLocation>
         </Format>
         <Format id="epicur">
             <Prefix>epicur</Prefix>

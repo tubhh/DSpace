@@ -114,7 +114,7 @@
 				<dc:creator xsi:type="pc:MetaPers">
 					<pc:person>
                                             <xsl:if test="../doc:field[@name='authority'][number($i)]!=''">
-                                                <xsl:attribute name="GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($i)]" /></xsl:attribute>
+                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($i)]" /></xsl:attribute>
                                             </xsl:if>
                                             <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]!=''">
                                                 <ddb:ORCID><xsl:text>https://orcid.org/</xsl:text><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]" /></ddb:ORCID>
@@ -231,10 +231,10 @@
 					</xsl:choose>
 					<pc:person>
                                             <xsl:if test="../doc:field[@name='authority'][number($a)]!=''">
-                                                <xsl:attribute name="GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($a)]" /></xsl:attribute>
+                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($a)]" /></xsl:attribute>
                                             </xsl:if>
-                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($i)]!=''">
-                                                <ddb:ORCID><xsl:text>https://orcid.org/</xsl:text><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($i)]" /></ddb:ORCID>
+                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]!=''">
+                                                <ddb:ORCID><xsl:text>https://orcid.org/</xsl:text><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]" /></ddb:ORCID>
                                             </xsl:if>
 						<xsl:variable name="tail" select="substring-after(., ',')"/>
 						<!-- allowed academic titles: "Prof. Dr.", "PD Dr.", Prof. em.", "Dr.", "Prof. Dr.Dr.", "Prof. Dr. h.c.", "Dr. h.c." -->
