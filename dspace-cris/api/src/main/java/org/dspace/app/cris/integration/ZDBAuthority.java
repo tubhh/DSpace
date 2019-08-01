@@ -8,6 +8,7 @@
 package org.dspace.app.cris.integration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,22 +155,27 @@ public abstract class ZDBAuthority extends DOAuthority {
 
     private String getIssn(AuthorityValue val, String locale)
     {
-        String issn = null;
+        String issn = "";
         List<String> issns = val.getOtherMetadata().get(ZDB_IDENTIFIER_FIELD);
         if (issns != null && !issns.isEmpty())
         {
-            issn = issns.get(0);
+            Collections.sort(issns);
+            issn = StringUtils.join(issns, "|");
         }
         return getIssnOrDefault(issn, locale);
     }
 
     private String getIssn(ResearchObject cris, String locale)
     {
-        String issn = null;
+        String issn = "";
         Metadatum[] mm = cris.getMetadataByMetadataString(JOURNALS_IDENTIFIER_FIELD);
         if (mm != null && mm.length > 0)
         {
-            issn = mm[0].value;
+            for (Metadatum m : mm)
+            {
+                issn += m.value + "|";
+            }
+            issn = issn.substring(0, issn.length()-1);
         }
         return getIssnOrDefault(issn, locale);
     }
