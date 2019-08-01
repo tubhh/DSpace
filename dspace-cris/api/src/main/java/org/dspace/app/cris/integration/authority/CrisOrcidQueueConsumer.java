@@ -49,9 +49,8 @@ public class CrisOrcidQueueConsumer implements Consumer {
 							.getAuthorityMetadataForAuthority(crisAuthority);
 					log.debug(LogManager.getHeader(ctx, "consume", "looping over authority " + crisAuthority));
 					for (String metadata : listMetadata) {
+						log.debug(LogManager.getHeader(ctx, "consume", "authority " + crisAuthority + ", metadata " + metadata));
 						if (ConfigurationManager.getBooleanProperty("orcidpush." + metadata, true)) {
-							log.debug(LogManager.getHeader(ctx, "consume",
-									"authority " + crisAuthority + ", metadata " + metadata));
 							ChoiceAuthority choiceAuthority = ChoiceAuthorityManager.getManager()
 									.getChoiceAuthority(metadata);
 							if (RPAuthority.class.isAssignableFrom(choiceAuthority.getClass())) {
