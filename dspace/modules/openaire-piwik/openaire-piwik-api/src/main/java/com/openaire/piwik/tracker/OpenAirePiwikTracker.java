@@ -59,6 +59,7 @@ import org.dspace.content.Bundle;
 import org.dspace.content.Item;
 import org.dspace.core.Constants;
 import org.dspace.services.model.Event;
+import org.dspace.usage.AbstractUsageEventListener;
 import org.dspace.usage.UsageEvent;
 
 import com.google.gson.Gson;
@@ -421,6 +422,14 @@ public class OpenAirePiwikTracker extends AbstractUsageEventListener
             }
 
         });
+    }
+
+    protected void destroy() throws IOException
+    {
+        if (httpClient != null)
+        {
+            httpClient.close();
+        }
     }
 
 }
