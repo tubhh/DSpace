@@ -76,6 +76,7 @@ public class IdentifierTransfer extends AbstractCurationTask
             if (!getItemHandle(item).equals(NEW_ITEM_HANDLE)) {
             log.debug("Its not in workflow");
             try {
+                boolean changed = false;
                 Context context = Curator.curationContext();
                 Metadatum[] hdls = item.getMetadata("dc", "identifier", "hdl", Item.ANY);
                 log.debug(hdls.length+" handles found in record");
@@ -83,6 +84,7 @@ public class IdentifierTransfer extends AbstractCurationTask
                 if (hdls.length == 0) {
                     results.append("Adding handle ").append(getItemHandle(item)).append(" to item ").append(getItemHandle(item)).append("\n");
                     item.addMetadata("dc", "identifier", "hdl", null, getItemHandle(item), null, -1);
+                    changed = true;
                 }
 
                 Metadatum[] tuhhurnMd = item.getMetadata("tuhh", "identifier", "urn", Item.ANY);
@@ -95,6 +97,7 @@ public class IdentifierTransfer extends AbstractCurationTask
                     if (urnMd.length == 0) {
                         item.addMetadata("dc", "identifier", "urn", null, tuhhurn, null, -1);
                         results.append("Added TUHH URN "+tuhhurn+" to dc.identifier.urn.\n");
+                        changed = true;
                     }
                 }
 
@@ -124,13 +127,19 @@ public class IdentifierTransfer extends AbstractCurationTask
                             item.addMetadata("dc", "identifier", "uri", uri.language, uri.value, uri.authority, uri.confidence);
                         }
                     }
+                    changed = true;
                 }
 
-                status = Curator.CURATE_SUCCESS;
+                if (changed == true) {
+                    status = Curator.CURATE_SUCCESS;
 
-                item.updateMetadata();
-                item.update();
-                context.getDBConnection().commit();
+                    item.updateMetadata();
+                    item.update();
+                    context.getDBConnection().commit();
+                } else {
+                    status = Curator.CURATE_SKIP;
+                    results.append("Nothing to do for ").append(getItemHandle(item)).append("\n");
+                }
             } catch (AuthorizeException ae) {
                 // Something went wrong
                 logDebugMessage(ae.getMessage());
@@ -146,6 +155,7 @@ public class IdentifierTransfer extends AbstractCurationTask
             }
             } else {
                 log.debug("Its in workflow - skipping!");
+                results.append("Nothing to do for ").append(getItemHandle(item)).append(" as it is in workflow.\n");
             }
         }
 
