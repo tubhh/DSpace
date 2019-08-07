@@ -992,11 +992,11 @@ public class DOIIdentifierProvider
     protected void saveDOIToObject(Context context, DSpaceObject dso, String doi)
             throws SQLException, AuthorizeException, IdentifierException
     {
-
         String metadataStrategy = null;
         if (this.configurationService.getProperty("identifier.doi.metadata") != null) {
             metadataStrategy = this.configurationService.getProperty("identifier.doi.metadata");
         }
+
         // FIXME
         if (!(dso instanceof Item))
         {
@@ -1004,13 +1004,13 @@ public class DOIIdentifierProvider
                     + "Items only, not for " + dso.getTypeText() + ".");
         }
         Item item = (Item) dso;
-
         if (metadataStrategy == null) {
             item.addMetadata(MD_SCHEMA, DOI_ELEMENT, DOI_QUALIFIER, null, DOI.DOIToExternalForm(doi));
         } else {
             item.addMetadata(MD_SCHEMA, DOI_ELEMENT, DOI_QUALIFIER_DOI, null, doi);
             item.addMetadata(metadataStrategy, DOI_ELEMENT, DOI_QUALIFIER_DOI, null, doi);
         }
+
         try
         {
             item.update();

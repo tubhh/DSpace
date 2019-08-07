@@ -7,6 +7,7 @@
  */
 package org.dspace.app.cris.integration;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.dspace.authority.AuthorityValue;
@@ -29,6 +30,7 @@ public class ZDBIssnAuthority extends ZDBAuthority
         List<String> issns = val.getOtherMetadata().get(ZDB_ISSN_FIELD);
         if (issns != null && !issns.isEmpty())
         {
+            Collections.sort(issns);
             return issns.get(0);
         }
         // default get title
