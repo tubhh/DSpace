@@ -194,6 +194,7 @@
                                 </xsl:when>
                                 <xsl:when test="contains(., 'embargo_')">
                                     <dc:rights>info:eu-repo/semantics/embargoedAccess"</dc:rights>
+                                    <dc:date><xsl:text>info:eu-repo/date/embargoEnd/</xsl:text><xsl:value-of select="substring(., 9, 4)"/><xsl:text>-</xsl:text><xsl:value-of select="substring(., 13, 2)"/><xsl:text>-</xsl:text><xsl:value-of select="substring(., 15, 2)"/></dc:date>
                                 </xsl:when>
                                 <xsl:when test="contains(., 'restricted')">
                                     <dc:rights>info:eu-repo/semantics/restrictedAccess</dc:rights>
