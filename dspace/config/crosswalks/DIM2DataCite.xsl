@@ -248,9 +248,10 @@
                 Rights.
                 Occ: 0-1
             -->
-            <xsl:if test="//dspace:field[@mdschema='dc' and @element='rights']">
+            <xsl:if test="//dspace:field[@mdschema='dc' and @element='rights'] or //dspace:field[@mdschema='item' and @element='grantfulltext']">
                 <xsl:element name="rightsList">
                     <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='rights']" />
+                    <xsl:apply-templates select="//dspace:field[@mdschema='item' and @element='grantfulltext']" />
                 </xsl:element>
             </xsl:if>
 
@@ -698,21 +699,54 @@
                     <xsl:text>CC-0</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-<!--
                     <xsl:attribute name="rightsURI">
                         <xsl:text>https://creativecommons.org/licenses/</xsl:text><xsl:value-of select="." /><xsl:text>/</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
                     </xsl:attribute>
                     <xsl:text>CC-</xsl:text><xsl:value-of select="." /><xsl:text>-</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
--->
+<!--
                     <xsl:attribute name="rightsURI">
                         <xsl:value-of select="." />
                     </xsl:attribute>
                     <xsl:value-of select="." />
+-->
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
     </xsl:template>
-    
+    <xsl:template match="//dspace:field[@mdschema='dc' and @element='rights'][not(@qualifier='cc' or @qualifier='ccversion')]">
+        <xsl:if test="not(contains(., 'info:eu-repo/semantics'))">
+            <xsl:element name="rights">
+                <xsl:attribute name="rightsURI">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+                <xsl:value-of select="." />
+            </xsl:element>
+        </xsl:if>
+    </xsl:template>
+    <!-- RULES:
+        mixedopen, open = info:eu-repo/semantics/openAccess
+        embargo_ = info:eu-repo/semantics/embargoedAccess
+        restricted, embargo_restricted_, mixedrestricted = info:eu-repo/semantics/restrictedAccess
+        reserved = info:eu-repo/semantics/closedAccess -->
+    <xsl:template match="//dspace:field[@mdschema='item' and @element='grantfulltext']">
+        <xsl:element name="rights">
+            <xsl:choose>
+                <xsl:when test="contains(., 'open')">
+                    <xsl:attribute name="rightsURI">info:eu-repo/semantics/openAccess</xsl:attribute>
+                </xsl:when>
+                <xsl:when test="contains(., 'embargo_')">
+                    <xsl:attribute name="rightsURI">info:eu-repo/semantics/embargoedAccess</xsl:attribute>
+                </xsl:when>
+                <xsl:when test="contains(., 'restricted')">
+                    <xsl:attribute name="rightsURI">info:eu-repo/semantics/restrictedAccess</xsl:attribute>
+                </xsl:when>
+                <xsl:when test="contains(., 'reserved')">
+                    <xsl:attribute name="rightsURI">info:eu-repo/semantics/closedAccess</xsl:attribute>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:element>
+    </xsl:template>
+
     <!-- 
         DataCite (17)
         Description
