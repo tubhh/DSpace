@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -35,24 +36,26 @@ public class AccessPolicyDisplayStrategy extends ASimpleDisplayStrategy
         if (metadataArray.length > 0)
         {
             String value = metadataArray[0].value;
-            metadata = value;
+            Locale loc = UIUtil.getSessionLocale(hrq);
+            metadata = I18nUtil.getMessage("org.dspace.app.webui.jsptag.ItemTag."+value, loc);
             if(!StringUtils.isBlank(value) && value.length() > 7) {
                 if(value.substring(0,7).equals("embargo")) {
-                    DCDate dd = new DCDate(value.substring(8));
+                    //DCDate dd = new DCDate(value.substring(8));
                     String interimdate = value.substring(8);
-log.debug("Datestring: "+interimdate);
-log.debug("Year: "+interimdate.substring(0,4));
-log.debug("Month: "+interimdate.substring(4,6));
-log.debug("Day: "+interimdate.substring(6,8));
+                    //log.debug("Datestring: "+interimdate);
+                    //log.debug("Year: "+interimdate.substring(0,4));
+                    //log.debug("Month: "+interimdate.substring(4,6));
+                    //log.debug("Day: "+interimdate.substring(6,8));
                     int year = Integer.parseInt(interimdate.substring(0,4));
-                    int month = Integer.parseInt(interimdate.substring(4,6));
+                    int month = (Integer.parseInt(interimdate.substring(4,6))-1);
                     int day = Integer.parseInt(interimdate.substring(6,8));
                     GregorianCalendar cal = new GregorianCalendar(year, month, day);
                     Date embargoDate = cal.getTime();
                     try {
-//LocaleSupport.getLocalizedMessage(pageContext, "org.dspace.app.webui.jsptag.ItemTag.embargo", new Object[] {DateFormat.getDateInstance(DateFormat.LONG, locale).format(embargoDate)}));
+//LocaleSupport.getLocalizedMessage(pageContext, "org.dspace.app.webui.jsptag.ItemTag.embargo", new Object[] {DateFormat.getDateInstance(DateFormat.LONG, locale).format(embargoDate)});
 //                        metadata = "Embargoed until "+UIUtil.displayDate(dd, false, true, hrq);
-                          metadata = "Embargoed until "+DateFormat.getDateInstance(DateFormat.LONG, hrq.getLocale()).format(embargoDate);
+                          metadata = I18nUtil.getMessage("org.dspace.app.webui.jsptag.ItemTag.embargo", loc);
+                          metadata = metadata.replaceAll("\\{0\\}", DateFormat.getDateInstance(DateFormat.LONG, loc).format(embargoDate));
                     }
                     catch (RuntimeException rte) {
                         log.error("Malformed value for the DateDiplayStrategy " + rte.getMessage() + " - " + value.substring(9));
