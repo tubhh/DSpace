@@ -17,7 +17,9 @@
 })(jQuery);
 
 var nl = document.getElementsByName("dc_rights_nationallicense")[0];
-nl.onchange = input_text;
+if (nl) {
+    nl.onchange = input_text;
+}
 
 function input_text() {
     if (nl.value == "true") {
