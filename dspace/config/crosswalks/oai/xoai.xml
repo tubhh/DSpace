@@ -163,7 +163,7 @@
             <!-- formats to expose on default context -->
             <Format ref="oaidc"/>
             <Format ref="xmetadissplus" />
-            <Format ref="xmetadissplus23" />
+            <Format ref="xmetadissplus22" />
             <Format ref="epicur" />
             <Format ref="rdf" />
             <Format ref="marc" />
@@ -284,7 +284,7 @@
     <Formats>
         <Format id="xmetadissplus">
             <Prefix>xMetaDissPlus</Prefix>
-            <XSLT>metadataFormats/xMetaDissPlus.xsl</XSLT>
+            <XSLT>metadataFormats/xMetaDissPlus-2.3.xsl</XSLT>
             <Namespace>http://www.d-nb.de/standards/xmetadissplus/</Namespace>
             <SchemaLocation>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</SchemaLocation>
         </Format>
@@ -294,9 +294,9 @@
             <Namespace>http://www.bsz-bw.de/xmetadissplus/1.3</Namespace>
             <SchemaLocation>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</SchemaLocation>
         </Format>
-        <Format id="xmetadissplus23">
-            <Prefix>xMetaDissPlus-2.3</Prefix>
-            <XSLT>metadataFormats/xMetaDissPlus-2.3.xsl</XSLT>
+        <Format id="xmetadissplus22">
+            <Prefix>xMetaDissPlus-2.2</Prefix>
+            <XSLT>metadataFormats/xMetaDissPlus.xsl</XSLT>
             <Namespace>http://www.d-nb.de/standards/xmetadissplus/</Namespace>
             <SchemaLocation>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</SchemaLocation>
         </Format>
