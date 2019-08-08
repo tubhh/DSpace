@@ -34,10 +34,20 @@
 	
 	<!-- Prefixing dc.type -->
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element/doc:field/text()">
+                <xsl:choose>
+                <xsl:when test="contains(., 'Thesis')">
+                    <xsl:call-template name="addPrefix">
+                        <xsl:with-param name="value" select="/doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element[@name='thesis']" />
+                        <xsl:with-param name="prefix" select="'info:eu-repo/semantics/'"></xsl:with-param>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
 		<xsl:call-template name="addPrefix">
 			<xsl:with-param name="value" select="." />
 			<xsl:with-param name="prefix" select="'info:eu-repo/semantics/'"></xsl:with-param>
 		</xsl:call-template>
+                </xsl:otherwise>
+                </xsl:choose>
 	</xsl:template>
 	
 	<!-- Prefixing and Modifying dc.rights -->
