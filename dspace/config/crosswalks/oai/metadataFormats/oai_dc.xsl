@@ -126,7 +126,12 @@
                         <!-- DINI Certificate 2013: dini type field -->
                         <!-- dc.type.dini -->
                         <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element[@name='dini']/doc:element/doc:field[@name='value']">
-                            <dc:type><xsl:text>doc-type:</xsl:text><xsl:value-of select="." /></dc:type>
+                            <dc:type>
+                                <xsl:if test="not(contains(.,'info:eu-repo'))">
+                                    <xsl:text>doc-type:</xsl:text>
+                                </xsl:if>
+                                <xsl:value-of select="." />
+                            </dc:type>
                         </xsl:for-each>
                         <!-- TUHH identifier first -->
                         <xsl:for-each select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']">
