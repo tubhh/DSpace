@@ -163,7 +163,7 @@
             <!-- formats to expose on default context -->
             <Format ref="oaidc"/>
             <Format ref="xmetadissplus" />
-            <Format ref="xmetadissplus22" />
+            <Format ref="xmetadissplus23" />
             <Format ref="epicur" />
             <Format ref="rdf" />
             <Format ref="marc" />
@@ -284,7 +284,7 @@
     <Formats>
         <Format id="xmetadissplus">
             <Prefix>xMetaDissPlus</Prefix>
-            <XSLT>metadataFormats/xMetaDissPlus-2.3.xsl</XSLT>
+            <XSLT>metadataFormats/xMetaDissPlus.xsl</XSLT>
             <Namespace>http://www.d-nb.de/standards/xmetadissplus/</Namespace>
             <SchemaLocation>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</SchemaLocation>
         </Format>
@@ -294,9 +294,9 @@
             <Namespace>http://www.bsz-bw.de/xmetadissplus/1.3</Namespace>
             <SchemaLocation>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</SchemaLocation>
         </Format>
-        <Format id="xmetadissplus22">
-            <Prefix>xMetaDissPlus-2.2</Prefix>
-            <XSLT>metadataFormats/xMetaDissPlus.xsl</XSLT>
+        <Format id="xmetadissplus23">
+            <Prefix>xMetaDissPlus-2.3</Prefix>
+            <XSLT>metadataFormats/xMetaDissPlus-2.3.xsl</XSLT>
             <Namespace>http://www.d-nb.de/standards/xmetadissplus/</Namespace>
             <SchemaLocation>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</SchemaLocation>
         </Format>
@@ -1061,6 +1061,11 @@
         <Filter id="doctypeTextFilter">
             <Definition>
                 <Custom ref="doctypeTextCondition"/>
+            </Definition>
+        </Filter>
+        <Filter id="fundedFilter">
+            <Definition>
+                <Custom ref="fundedCondition"/>
             </Definition>
         </Filter>
  
@@ -2180,15 +2185,15 @@
             </Definition>
         </Filter>
 
-        <Filter id="openaireDataFilter">
-            <Definition>
-                <Custom ref="researchDataCondition"/>
-            </Definition>
-        </Filter>
-
         <Filter id="uketdDcFilter">
             <Definition>
                 <Custom ref="thesisDocumentTypeCondition"/>
+            </Definition>
+        </Filter>
+
+        <Filter id="openaireDataFilter">
+            <Definition>
+                <Custom ref="researchDataCondition"/>
             </Definition>
         </Filter>
 
@@ -2264,6 +2269,13 @@
             </Configuration>
         </CustomCondition>
 
+        <CustomCondition id="fundedCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <string name="field">openaire.funder.name</string>
+            </Configuration>
+        </CustomCondition>
+
         <CustomCondition id="noUrnCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
@@ -2298,21 +2310,21 @@
             </Configuration>
         </CustomCondition>
 
-        <CustomCondition id="researchDataCondition">
-            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
-            <Configuration>
-                <string name="field">tuhh.type.rdm</string>
-                <string name="operator">ends_with</string>
-                <string name="value">true</string>
-            </Configuration>
-        </CustomCondition>
-
         <CustomCondition id="thesisDocumentTypeCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
                 <string name="field">dc.type</string>
                 <string name="operator">contains</string>
                 <string name="value">Thesis</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="researchDataCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.type.rdm</string>
+                <string name="operator">ends_with</string>
+                <string name="value">true</string>
             </Configuration>
         </CustomCondition>
 
@@ -3054,7 +3066,7 @@
         <Set id="ecSet">
             <Spec>ec_fundedresources</Spec>
             <Name>EC_fundedresources set</Name>
-            <!-- Just an alias -->
+            <Filter ref="fundedFilter" />
         </Set>
         <Set id="openaireSet">
             <Spec>openaire</Spec>
@@ -3069,7 +3081,7 @@
         <Set id="openaireDataSet">
             <Spec>openaire_data</Spec>
             <Name>OpenAIRE</Name>
-            <!-- Just an alias or set a filter condition to expose only specific kind of items (dataset) -->
+            <Filter ref="openaireDataFilter" />
         </Set>
     </Sets>
 </Configuration>
