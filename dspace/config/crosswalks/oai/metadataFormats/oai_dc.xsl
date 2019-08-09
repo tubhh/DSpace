@@ -152,6 +152,9 @@
                                 <xsl:when test="$lang='en'">
                                     <dc:language><xsl:text>eng</xsl:text></dc:language>
                                 </xsl:when>
+                                <xsl:when test="$lang='en_US'">
+                                    <dc:language><xsl:text>eng</xsl:text></dc:language>
+                                </xsl:when>
                                 <xsl:when test="$lang='de'">
                                     <dc:language><xsl:text>ger</xsl:text></dc:language>
                                 </xsl:when>
