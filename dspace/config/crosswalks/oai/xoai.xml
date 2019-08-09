@@ -2180,6 +2180,12 @@
             </Definition>
         </Filter>
 
+        <Filter id="openaireDataFilter">
+            <Definition>
+                <Custom ref="researchDataCondition"/>
+            </Definition>
+        </Filter>
+
         <Filter id="uketdDcFilter">
             <Definition>
                 <Custom ref="thesisDocumentTypeCondition"/>
@@ -2287,6 +2293,15 @@
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
                 <string name="field">tuhh.oai.show</string>
+                <string name="operator">ends_with</string>
+                <string name="value">true</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="researchDataCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.type.rdm</string>
                 <string name="operator">ends_with</string>
                 <string name="value">true</string>
             </Configuration>
