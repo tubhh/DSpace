@@ -443,9 +443,11 @@
 			     		
 			     		<xsl:otherwise>
 			     			<xsl:if test="$date_issued!=''">
+                                                    <dates>
 				     			<date dateType="Issued">
 				     				<xsl:value-of select="$date_issued"/>
 				     			</date>
+                                                    </dates>
 				     		</xsl:if>
 			     		</xsl:otherwise>
 		     		</xsl:choose>
