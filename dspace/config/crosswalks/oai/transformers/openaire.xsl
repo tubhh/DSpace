@@ -94,6 +94,16 @@
                 </xsl:call-template>
         </xsl:template>
 
+        <!-- Removing dc.relations except for funding information -->
+	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element/doc:element/doc:field[not (contains(., 'info:eu-repo/grantAgreement'))]" />
+<!--
+	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element[@name='dini']/doc:element/doc:field/text()">
+		<xsl:call-template name="addPrefix">
+			<xsl:with-param name="value" select="." />
+			<xsl:with-param name="prefix" select="'info:eu-repo/semantics/'"></xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+-->
 	<!-- AUXILIARY TEMPLATES -->
 	
 	<!-- dc.type prefixing -->
