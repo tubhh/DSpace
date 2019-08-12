@@ -2205,10 +2205,12 @@
        <displayed-value>Deutsch</displayed-value>
        <stored-value>de</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>Englisch (United States)</displayed-value>
        <stored-value>en_US</stored-value>
       </pair>
+-->
      <pair>
        <displayed-value>Englisch</displayed-value>
        <stored-value>en</stored-value>
