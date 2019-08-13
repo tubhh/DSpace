@@ -411,9 +411,10 @@
                     <entry key="journalfirstpage" value="firstpage" />
                     <entry key="journallastpage" value="lastpage" />
                     <entry key="journalyear" value="issued" />
+                    <entry key="articlenumber" value="articlenumber" />
                 </map>
             </property>
-            <property name="basicString" value="%%journalname%% %%journalissue%% (%%journalvolume%%): %%journalfirstpage%%-%%journallastpage%% (%%journalyear%%)" />
+            <property name="basicString" value="%%journalname%% %%journalissue%% (%%journalvolume%%): %%articlenumber%% %%journalfirstpage%%-%%journallastpage%% (%%journalyear%%)" />
         </bean>
 
 	<bean name="valueConcatenationModifier" class="org.dspace.submit.lookup.ValueConcatenationModifier">
@@ -916,7 +917,7 @@
                                 <entry value="volume" key="tuhh.container.volume" />
                                 <entry value="firstpage" key="tuhh.container.startpage" />
                                 <entry value="lastpage" key="tuhh.container.endpage" />
-                                <entry value="articlenumber" key="tuhh.container.startpage" />
+                                <entry value="articlenumber" key="tuhh.container.articlenumber" />
 
                                 <!-- Not used in publication form, but perhaps somewhere else -->
                                 <entry value="bibtextype" key="dc.type.bibtex" />
