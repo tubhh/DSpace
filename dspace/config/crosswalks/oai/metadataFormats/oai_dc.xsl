@@ -181,6 +181,30 @@
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field[@name='value']">
 				<dc:rights><xsl:value-of select="." /></dc:rights>
 			</xsl:for-each>
+                        <!-- select all rights -->
+                        <!-- RULES:
+                            mixedopen, open = info:eu-repo/semantics/openAccess
+                            embargo_ = info:eu-repo/semantics/embargoedAccess
+                            restricted, embargo_restricted_, mixedrestricted = info:eu-repo/semantics/restrictedAccess
+                            reserved = info:eu-repo/semantics/closedAccess -->
+                        <xsl:for-each select="doc:metadata/doc:element[@name='item']/doc:element[@name='grantfulltext']//doc:field[@name='value']">
+                            <xsl:choose>
+                                <xsl:when test="contains(., 'open')">
+                                    <dc:rights>info:eu-repo/semantics/openAccess</dc:rights>
+                                </xsl:when>
+                                <xsl:when test="contains(., 'embargo_')">
+                                    <dc:rights>info:eu-repo/semantics/embargoedAccess"</dc:rights>
+                                    <dc:date><xsl:text>info:eu-repo/date/embargoEnd/</xsl:text><xsl:value-of select="substring(., 9, 4)"/><xsl:text>-</xsl:text><xsl:value-of select="substring(., 13, 2)"/><xsl:text>-</xsl:text><xsl:value-of select="substring(., 15, 2)"/></dc:date>
+                                </xsl:when>
+                                <xsl:when test="contains(., 'restricted')">
+                                    <dc:rights>info:eu-repo/semantics/restrictedAccess</dc:rights>
+                                </xsl:when>
+                                <xsl:when test="contains(., 'reserved')">
+                                    <dc:rights>info:eu-repo/semantics/closedAccess</dc:rights>
+                                </xsl:when>
+                            </xsl:choose>
+                        </xsl:for-each>
+
 			<!-- dc.date for embargo enddate -->
 			<xsl:for-each select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='date']/doc:element[@name='embargo']/doc:element/doc:field[@name='value']">
 				<dc:date>info:eu-repo/date/embargoEnd/<xsl:value-of select="." /></dc:date>
