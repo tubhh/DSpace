@@ -225,7 +225,7 @@
             <!-- Date format, field prefixes, etc are ensured by the transformer -->
             <Transformer ref="driverTransformer"/>
             <!-- The driver filter -->
-            <Filter red="driverFilter"/>
+            <Filter ref="driverFilter"/>
             <!-- Just an alias, in fact it returns all items within the driver context -->
             <Set ref="driverSet"/>
             <!-- Metadata Formats -->
@@ -250,10 +250,10 @@
             <!-- Date format, field prefixes, etc are ensured by the transformer -->
             <Transformer ref="openaireTransformer"/>
             <!-- The driver filter -->
-            <Filter red="driverFilter"/>
+            <!-- <Filter ref="driverFilter"/> -->
             <!-- OpenAIRE filter -->
-<!--            <Filter ref="openAireFilter"/>       -->
-            <!-- Just an alias, in fact it returns all items within the driver context -->
+            <!-- <Filter ref="openAireFilter"/> -->
+            <Filter ref="openAireTuhhFilter"/>
             <Set ref="driverSet"/>
             <Set ref="openaireSet"/>
             <Set ref="ecSet"/>
@@ -2185,6 +2185,41 @@
             </Definition>
         </Filter>
 
+        <Filter id="openAireTuhhFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <And>
+                            <LeftCondition>
+                                <Custom ref="titleExistsCondition"/>
+                            </LeftCondition>
+                            <RightCondition>
+                                <Custom ref="authorExistsCondition"/>
+                            </RightCondition>
+                        </And>
+                    </LeftCondition>
+                    <RightCondition>
+                        <And>
+                            <LeftCondition>
+                                <Not>
+                                    <Condition>
+                                        <Custom ref="noFulltextCondition"/>
+                                    </Condition>
+                                </Not>
+                            </LeftCondition>
+                            <RightCondition>
+                                <Not>
+                                    <Condition>
+                                        <Custom ref="researchDataCondition"/>
+                                    </Condition>
+                                </Not>
+                            </RightCondition>
+                        </And>
+                    </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+
         <Filter id="uketdDcFilter">
             <Definition>
                 <Custom ref="thesisDocumentTypeCondition"/>
@@ -2325,6 +2360,15 @@
                 <string name="field">tuhh.type.rdm</string>
                 <string name="operator">ends_with</string>
                 <string name="value">true</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="noFulltextCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">item.grantfulltext</string>
+                <string name="operator">ends_with</string>
+                <string name="value">none</string>
             </Configuration>
         </CustomCondition>
 
