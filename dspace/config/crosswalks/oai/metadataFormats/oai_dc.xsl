@@ -181,6 +181,10 @@
                             </xsl:choose>
 			</xsl:for-each>
 			<!-- dc.relation -->
+			<xsl:for-each select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publisher']/doc:element[@name='doi']/doc:element/doc:field[@name='value']">
+				<dc:relation>info:eu-repo/semantics/altIdentifier/doi/<xsl:value-of select="." /></dc:relation>
+			</xsl:for-each>
+			<!-- dc.relation -->
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element/doc:field[@name='value']">
 				<dc:relation><xsl:value-of select="." /></dc:relation>
 			</xsl:for-each>
