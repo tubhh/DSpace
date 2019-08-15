@@ -282,6 +282,17 @@
 
        <field>
          <dc-schema>tuhh</dc-schema>
+         <dc-element>container</dc-element>
+         <dc-qualifier>articlenumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Artikelnummer</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier die Artikelnummer des elektronischen Artikels ein, wenn er eine hat.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartofseries</dc-qualifier>
          <repeatable>false</repeatable>
@@ -299,6 +310,17 @@
          <label>Schriftenreihe Bandnummer</label>
          <input-type>onebox</input-type>
          <hint>Geben Sie hier die Bandnummer innerhalb der Schriftenreihe an, falls die Arbeit Teil einer Schriftenreihe ist.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>conference</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Konferenz</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier den Namen der Konferenz ein, mit der diese Veröffentlichung in Verbindung steht</hint>
          <required></required>
        </field>
 
@@ -444,7 +466,7 @@
          <hint>Soll dieser Datensatz über OAI harvestbar sein (z.B. für DNB)?</hint>
          <visibility>workflow</visibility>
         </field>
-
+<!--
        <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>rights</dc-element>
@@ -456,7 +478,7 @@
          <required>Bitte wählen Sie eine Zugangs-Policy aus!</required>
          <visibility>workflow</visibility>
         </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
@@ -569,17 +591,6 @@
          <label>Verwendet</label>
          <input-type>onebox</input-type>
          <hint>Diese Publikation verwendet Forschungsdaten. Die Forschungsdaten können über ihren Persistent Identifier (DOI, URN oder Handle) eingegeben werden, indem Sie einen Präfix doi:, urn: or hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>conference</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Konferenz</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier den Namen der Konferenz ein, mit der diese Veröffentlichung in Verbindung steht</hint>
          <required></required>
        </field>
 
@@ -778,7 +789,7 @@
          <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus</hint>
          <required></required>
        </field>
-
+<!--
        <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>rights</dc-element>
@@ -790,7 +801,7 @@
          <required>Bitte wählen Sie eine Zugangs-Policy aus!</required>
          <visibility>workflow</visibility>
         </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
@@ -1149,6 +1160,17 @@
 
        <field>
          <dc-schema>tuhh</dc-schema>
+         <dc-element>container</dc-element>
+         <dc-qualifier>articlenumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Artikelnummer</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier die Artikelnummer des elektronischen Artikels ein, wenn er eine hat.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartofseries</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1166,6 +1188,17 @@
          <label>Schriftenreihe Bandnummer</label>
          <input-type>onebox</input-type>
          <hint>Geben Sie hier die Bandnummer innerhalb der Schriftenreihe an, falls die Arbeit Teil einer Schriftenreihe ist.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>conference</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Konferenz</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier den Namen der Konferenz ein, mit der diese Veröffentlichung in Verbindung steht</hint>
          <required></required>
        </field>
 
@@ -1438,17 +1471,6 @@
          <label>Verwendet</label>
          <input-type>onebox</input-type>
          <hint>Diese Publikation verwendet Forschungsdaten. Die Forschungsdaten können über ihren Persistent Identifier (DOI, URN oder Handle) eingegeben werden, indem Sie einen Präfix doi:, urn: or hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>conference</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Konferenz</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier den Namen der Konferenz ein, mit der diese Veröffentlichung in Verbindung steht</hint>
          <required></required>
        </field>
 
