@@ -35,8 +35,8 @@
 		<ul>
 					<c:forEach items="${tabList}" var="area" varStatus="rowCounter">
 						<c:set var="tablink"><c:choose>
-							<c:when test="${rowCounter.count == 1}">${root}/cris/${specificPartPath}/${authority}?onlytab=true</c:when>
-							<c:otherwise>${root}/cris/${specificPartPath}/${authority}/${area.shortName}.html?onlytab=true</c:otherwise>
+							<c:when test="${rowCounter.count == 1}">${root}/cris/${specificPartPath}/${authority}</c:when>
+							<c:otherwise>${root}/cris/${specificPartPath}/${authority}/${area.shortName}.html</c:otherwise>
 						</c:choose></c:set>
 
 						<c:choose>
