@@ -286,7 +286,7 @@
 	    <constructor-arg value="SplitValue Modifier"/>
 	    <property name="fieldKeys">
 	        <list>
-	        	<value>scopusKeywords</value>
+	        	<value>keywords</value>
 	        </list>
 	    </property>
 	    <property name="separator" value="|" />
