@@ -31,7 +31,7 @@ public class OpenAccessDisplayStrategy extends ASimpleDisplayStrategy
         {
             String value = metadataArray[0].value;
             if(!StringUtils.isBlank(value)) {
-                if(value.equals("info:eu-repo/semantics/openAccess")) {
+                if(value.equals("open")) {
                     metadata = I18nUtil.getMessage("jsp.mydspace.render.oa", hrq.getLocale());
                 }
             }

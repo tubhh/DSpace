@@ -281,7 +281,7 @@ j(document).ready(function() {
                 %>
     <%
         Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
-        Metadatum[] isOA = item.getMetadata("openaire", "rights", Item.ANY, Item.ANY);
+        Metadatum[] isOA = item.getMetadata("item", "grantfulltext", Item.ANY, Item.ANY);
         Metadatum[] cccheck = item.getMetadata("dc", "rights", Item.ANY, Item.ANY);
         for (Metadatum cc : cccheck) {
             if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
@@ -307,7 +307,7 @@ j(document).ready(function() {
                             }
                         %>
                         <%
-                            if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+                            if (isOA.length > 0 && isOA[0].value.equals("open")) {
                         %>
                                 <fmt:message key="jsp.mydspace.render.oa" /><span style="padding-left:10px;">
                         <%
@@ -349,7 +349,7 @@ j(document).ready(function() {
                             }
                         %>
                         <%
-                            if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+                            if (isOA.length > 0 && isOA[0].value.equals("open")) {
                         %>
                                 <fmt:message key="jsp.mydspace.render.oa" /><span style="padding-left:10px;"></span>
                         <%
@@ -370,7 +370,7 @@ j(document).ready(function() {
                         <% } %>
                     </div>
     <%
-        } else if ((hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) || (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess"))) {
+        } else if ((hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) || (isOA.length > 0 && isOA[0].value.equals("open"))) {
     %>
                     <div class="well">
                         <%
@@ -381,7 +381,7 @@ j(document).ready(function() {
                             }
                         %>
                         <%
-                            if (isOA.length > 0 && isOA[0].value.equals("info:eu-repo/semantics/openAccess")) {
+                            if (isOA.length > 0 && isOA[0].value.equals("open")) {
                         %>
                                 <fmt:message key="jsp.mydspace.render.oa" />
                         <%
