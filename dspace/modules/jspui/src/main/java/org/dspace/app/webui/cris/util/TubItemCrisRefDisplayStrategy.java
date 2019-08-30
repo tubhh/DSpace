@@ -237,8 +237,8 @@ public class TubItemCrisRefDisplayStrategy extends ItemCrisRefDisplayStrategy
                                         String type;
 					String status = "";
 					if(rp == null || !rp.getStatus()) {
-			                    startLink = "&nbsp;";
-			                    endLink = "";
+			                    //startLink = "&nbsp;";
+			                    //endLink = "";
 			                    status = "private.";
                                             type = "unknown";
 					}
