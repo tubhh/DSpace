@@ -407,6 +407,30 @@ public class TypeSettingConsumer implements Consumer
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Text");
             break;
+        case "article-review":
+            //Cerif: Journal Article Review
+            ret.put("opus", "Review (Artikel)");
+            ret.put("dini", "review");
+            ret.put("driver", "review");
+            ret.put("casrai", "Journal Article");
+            ret.put("dcmi", "Text");
+            break;
+        case "letter":
+            //Cerif: Letter to Editor
+            ret.put("opus", "Letter (to Editor)");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            break;
+        case "commentary":
+            //Cerif:Commentary
+            ret.put("opus", "Kommentar");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            break;
         default:
             ret.put("opus", mainType);
             ret.put("dini", "Other");
