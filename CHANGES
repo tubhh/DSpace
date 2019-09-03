@@ -1,0 +1,13 @@
+This file monitors changes in TOR prototype. File starts from Release TOR prototype 1.1 (https://github.com/tubhh/DSpace/releases/tag/tor-1.1) from Aug-14 2019.
+
+2019-08-14 TOR release 1.1
+
+* various translation/labeling changes and additions
+* larger lookup window (JSP change)
+* fulltext icon in article lists (configuration change)
+* display OA symbol for all items with fulltext files (Code change in DisplayStrategy, JSP changes and configuration change)
+* make private profiles visible (Code change in DisplayStrategy and translation files)
+* introduces document type review (TypeSettingConsumer Code change)
+* Bugfix for display of ORCID icon for journals in approval workflow (DisplayStrategy Code changes, configuration changes)
+* Bugfix for problem with display of page without stylesheets (Code change)
+* Bugfix for display of license agreement buttons without whitespace (CSS change)
