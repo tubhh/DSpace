@@ -11,3 +11,4 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * Bugfix for display of ORCID icon for journals in approval workflow (DisplayStrategy Code changes, configuration changes)
 * Bugfix for problem with display of page without stylesheets (Code change)
 * Bugfix for display of license agreement buttons without whitespace (CSS change)
+* Improves display of CC license on item page (jsp change)
