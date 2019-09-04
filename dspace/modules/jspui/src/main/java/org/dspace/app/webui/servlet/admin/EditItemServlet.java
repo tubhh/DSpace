@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -759,6 +760,48 @@ public class EditItemServlet extends DSpaceServlet
                 }
                 else
                 {
+                    //Update bitstreams bundle if not null and not empty
+                    String bitstreamsBundle = request.getParameter("bitstream_bundle_name_"
+                        + key);
+
+                    // Get allowed bundles
+                    String allowedBundlesConfiguration = ConfigurationManager.getProperty("item-edit.bundles");
+                    if(null == allowedBundlesConfiguration) {
+                        allowedBundlesConfiguration = "ORIGINAL";
+                    }
+                    String[] allowedBundleArray = allowedBundlesConfiguration.split("\\s*,\\s*");
+                    ArrayList<String> allowedBundles = new ArrayList<String>(Arrays.asList(allowedBundleArray));
+
+                    //Get all item's bundles matching that bundle name
+                    Bundle[] itemsBundlesByName = item.getBundles(bitstreamsBundle);
+
+
+                    // Is requested bundle valid, and either allowed or already a bundle for this item
+                    if (bitstreamsBundle != null && !bitstreamsBundle.equals("")
+                        && (allowedBundles.contains(bitstreamsBundle) || itemsBundlesByName.length > 0))
+                    {
+                        bitstreamsBundle = bitstreamsBundle.toUpperCase();
+                        String bundleName = bundle.getName();
+
+                        if (!bitstreamsBundle.equalsIgnoreCase(bundleName))
+                        {
+                            if (itemsBundlesByName.length > 0)
+                            {
+                                itemsBundlesByName[0].addBitstream(bitstream);
+                                bundle.removeBitstream(bitstream);
+
+                            }
+                            else
+                            {
+                                Bundle newBundle = item.createBundle(bitstreamsBundle);
+                                newBundle.addBitstream(bitstream);
+                                bundle.removeBitstream(bitstream);
+                            }
+
+                        }
+                    }
+
+
                     // Update the bitstream metadata
                     String name = request.getParameter(p);
                     String source = request.getParameter("bitstream_source_"
@@ -774,12 +817,12 @@ public class EditItemServlet extends DSpaceServlet
                             bundleID + "_primary_bitstream_id");
 
                     // Empty strings become non-null
-                    if (source.equals(""))
+                    if (source != null && source.equals(""))
                     {
                         source = null;
                     }
 
-                    if (desc.equals(""))
+                    if (desc != null && desc.equals(""))
                     {
                         desc = null;
                     }
