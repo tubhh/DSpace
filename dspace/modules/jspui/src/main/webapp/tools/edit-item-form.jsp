@@ -51,12 +51,22 @@
 <%@ page import="org.dspace.content.authority.Choices" %>
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Arrays" %>
+<%@ page import="org.apache.commons.lang.ArrayUtils" %>
 
 <%
     Item item = (Item) request.getAttribute("item");
     String handle = (String) request.getAttribute("handle");
     Collection[] collections = (Collection[]) request.getAttribute("collections");
     MetadataField[] dcTypes = (MetadataField[])  request.getAttribute("dc.types");
+    String allowedBundlesConfiguration = ConfigurationManager.getProperty("item-edit.bundles");
+    if(null == allowedBundlesConfiguration) {
+        allowedBundlesConfiguration = "ORIGINAL";
+    }
+    String[] allowedBundleArray = allowedBundlesConfiguration.split("\\s*,\\s*");
+    ArrayList<String> allowedBundles = new ArrayList<String>(Arrays.asList(allowedBundleArray));
+
     HashMap metadataFields = (HashMap) request.getAttribute("metadataFields");
     request.setAttribute("LanguageSwitch", "hide");
 
@@ -535,6 +545,12 @@
     
 <%
     Bundle[] bundles = item.getBundles();
+    for(Bundle bundle : item.getBundles()) {
+        if(!allowedBundles.contains(bundle.getName())) {
+            allowedBundles.add(bundle.getName());
+        }
+    }
+
     row = "even";
 
     for (int i = 0; i < bundles.length; i++)
@@ -563,10 +579,11 @@
                 <th id="t12" class="oddRowEvenCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem7"/></strong></th>
                 <th id="t13" class="oddRowOddCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem8"/></strong></th>
                 <th id="t14" class="oddRowEvenCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem9"/></strong></th>
-                <th id="t15" class="oddRowOddCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem10"/></strong></th>
-                <th id="t16" class="oddRowEvenCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem11"/></strong></th>
-                <th id="t17" class="oddRowOddCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem12"/></strong></th>
-                <th id="t18" class="oddRowEvenCol">&nbsp;</th>
+                <th id="t19" class="oddRowOddCol"><strong><fmt:message key="jsp.error.invalid-id.constants.type.1"/></strong></th>
+                <th id="t15" class="oddRowEvenCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem10"/></strong></th>
+                <th id="t16" class="oddRowOddCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem11"/></strong></th>
+                <th id="t17" class="oddRowEvenCol"><strong><fmt:message key="jsp.tools.edit-item-form.elem12"/></strong></th>
+                <th id="t18" class="oddRowOddCol">&nbsp;</th>
             </tr>    	
     	
     	
@@ -612,10 +629,30 @@
                 <td headers="t14" class="<%= row %>RowOddCol">
                     <input class="form-control" type="text" name="bitstream_description_<%= key %>" value="<%= (bitstreams[j].getDescription() == null ? "" : Utils.addEntities(bitstreams[j].getDescription())) %>"/>
                 </td>
-                <td headers="t15" class="<%= row %>RowEvenCol">
+                <td headers="t19" class="<%= row %>RowEvenCol">
+                    <select name="bitstream_bundle_name_<%= key %>">
+                        <%
+                            String currentBundle = bundles[i].getName();
+                            for (String allowedBundle : allowedBundles) {
+                                String selected = "";
+                                if(currentBundle.equalsIgnoreCase(allowedBundle)) {
+                                    selected = "selected";
+                                }
+                                else {
+                                    selected = "";
+                                }
+                        %>
+                                <option value="<%= allowedBundle %>" <%= selected %>>
+                                    <%= allowedBundle %>
+                                </option>
+                        <% }
+                        %>
+                    </select>
+                </td>
+                <td headers="t15" class="<%= row %>RowOddCol">
                     <input class="form-control" type="text" name="bitstream_format_id_<%= key %>" value="<%= bf.getID() %>" size="4"/> (<%= Utils.addEntities(bf.getShortDescription()) %>)
                 </td>
-                <td headers="t16" class="<%= row %>RowOddCol">
+                <td headers="t16" class="<%= row %>RowEvenCol">
                     <input class="form-control" type="text" name="bitstream_user_format_description_<%= key %>" value="<%= (bitstreams[j].getUserFormatDescription() == null ? "" : Utils.addEntities(bitstreams[j].getUserFormatDescription())) %>"/>
                 </td>
 <%
