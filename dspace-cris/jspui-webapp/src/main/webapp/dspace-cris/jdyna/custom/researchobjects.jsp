@@ -221,15 +221,15 @@ if (info.getPagetotal() > 1)
 <c:set var="browseType"><c:out value="${info[holder.shortName].browseType}"/>.<c:out value="${info[holder.shortName].type}"/></c:set>
 <div class="row">
 <div class="table-responsive">			
-<dspace:browselist items="<%= (BrowseItem[])info.getItems() %>" config="${browseType}" sortBy="<%= new Integer(info.getSo().getNumber()).toString() %>" order="<%= info.getOrder() %>"/>
+<dspace:browselist items="<%= (BrowseItem[])info.getItems() %>" config="${browseType}" sortBy="<%= new Integer(info.getSo().getNumber()).toString() %>" order="<%= info.getOrder() %>" type="<%= info.getType() %>"/>
 </div>
 </div>
 
 <script type="text/javascript"><!--
-    function sortBy(sort_by, order) {
-        j('#sort_by<%= info.getType() %>').val(sort_by);
-        j('#order<%= info.getType() %>').val(order);
-        j('#sortform<%= info.getType() %>').submit();        
+    function sortBy(sort_by, order, type) {
+        j('#sort_by' + type).val(sort_by);
+        j('#order' + type).val(order);
+        j('#sortform' + type).submit();
     }
 --></script>
 
