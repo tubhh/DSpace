@@ -48,6 +48,9 @@
 	
 	String relationName = info.getRelationName();
 	
+	String crisID = info.getCrisID();
+	boolean addRelations = info.isAddRelations();
+	
 	List<String[]> subLinks = (List<String[]>) request.getAttribute("activeTypes"+relationName);
 	
 	DiscoverResult qResults = (DiscoverResult) request.getAttribute("qResults"+relationName);
@@ -121,6 +124,11 @@
         			<jsp:include page="common/commonComponentGeneralFiltersAndFacets.jsp"></jsp:include>
 				<% } else { %>
 					<jsp:include page="common/commonComponentGeneralFilters.jsp"></jsp:include>
+				<% } %>
+				<% if (addRelations) { %>
+					<a href="<%= request.getContextPath() %>/tools/addrelations?crisID=<%= crisID %>&relationName=<%= relationName %>" class="btn btn-default" style="margin-top: -7px;" title="<fmt:message key="jsp.layout.cris.addrelations.title"/>">
+						<fmt:message key="jsp.layout.cris.addrelations.title"/>
+					</a>
 				<% } %>
 			</h4>
     	</div>
