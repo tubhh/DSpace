@@ -134,7 +134,6 @@
 				<entry key="site" value-ref="homepageConfiguration" />	            
 	            <entry key="researcherprofiles" value-ref="crisRPConfiguration" />	            
 	            <entry key="fundings" value-ref="crisPJConfiguration" />	            
-	            <entry key="projects" value-ref="crisPJConfiguration" />
 	            <entry key="orgunits" value-ref="crisOUConfiguration" />
 	            <entry key="publications" value-ref="itemConfiguration" />	            
 	            <entry key="theses" value-ref="thesisConfiguration" />

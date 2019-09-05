@@ -9,7 +9,6 @@ package org.dspace.app.cris.configuration;
 
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
 import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.cris.model.VisibilityConstants;
 import org.dspace.app.cris.service.ApplicationService;
@@ -22,15 +21,13 @@ import org.dspace.utils.DSpace;
 
 public class RelationMetadataAction {
 
-    private static Logger log = Logger.getLogger(RelationMetadataAction.class);
-
     ApplicationService applicationService = new DSpace().getServiceManager()
             .getServiceByName("applicationService",
                     ApplicationService.class);
 
     private String metadataAction;
 
-    public boolean processSelectedItem(DSpaceObject target, DSpaceObject selected) {
+    public boolean processSelectedItem(DSpaceObject target, DSpaceObject selected) throws SQLException, AuthorizeException {
         if (target instanceof ACrisObject && selected instanceof Item) {
             String[] metadataActionSplitted = metadataAction.split("\\.");
             selected.addMetadata(metadataActionSplitted[0],
@@ -40,11 +37,7 @@ public class RelationMetadataAction {
                     target.getName(),
                     ((ACrisObject) target).getCrisID(),
                     Choices.CF_ACCEPTED);
-            try {
-                selected.update();
-            } catch (SQLException | AuthorizeException e) {
-                log.error(e.getMessage(), e);
-            }
+            selected.update();
 
             return true;
         }

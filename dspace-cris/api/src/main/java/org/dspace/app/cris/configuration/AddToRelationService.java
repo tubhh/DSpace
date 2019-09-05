@@ -7,18 +7,31 @@
  */
 package org.dspace.app.cris.configuration;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.DSpaceObject;
 import org.dspace.core.Context;
-import org.dspace.discovery.configuration.DiscoveryConfiguration;
 
+/**
+ * This class is a service contained into the {@link AddToRelationServiceConfiguration}
+ * defined in the Spring configuration file:
+ * cris-relationpreference.xml
+ *
+ */
 public class AddToRelationService {
 
+    /** the relation configuration */
     private RelationConfiguration relationConfiguration;
-    private DiscoveryConfiguration discoveryConfiguration;
 
+    /** the discovery configuration key */
+    private String discoveryConfigurationKey;
+
+    /** the action that will be performed */
     private RelationMetadataAction action;
+
+    /** list of implementations to check if the current user is authorized to perform the defined action */
     private List<SecurityCheck> security;
 
     public boolean isAuthorized(Context context, DSpaceObject dso) {
@@ -31,7 +44,7 @@ public class AddToRelationService {
         return false;
     }
 
-    public boolean executeAction(DSpaceObject target, DSpaceObject selected)
+    public boolean executeAction(DSpaceObject target, DSpaceObject selected) throws SQLException, AuthorizeException
     {
         return action.processSelectedItem(target, selected);
     }
@@ -44,12 +57,12 @@ public class AddToRelationService {
         this.relationConfiguration = relationConfiguration;
     }
 
-    public DiscoveryConfiguration getDiscoveryConfiguration() {
-        return discoveryConfiguration;
+    public String getDiscoveryConfigurationKey() {
+        return discoveryConfigurationKey;
     }
 
-    public void setDiscoveryConfiguration(DiscoveryConfiguration discoveryConfiguration) {
-        this.discoveryConfiguration = discoveryConfiguration;
+    public void setDiscoveryConfigurationKey(String discoveryConfigurationKey) {
+        this.discoveryConfigurationKey = discoveryConfigurationKey;
     }
 
     public RelationMetadataAction getAction() {

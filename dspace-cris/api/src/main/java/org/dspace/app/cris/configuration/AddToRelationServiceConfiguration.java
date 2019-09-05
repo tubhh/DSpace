@@ -9,8 +9,15 @@ package org.dspace.app.cris.configuration;
 
 import java.util.List;
 
+/**
+ * This class contains the configuration of all the {@link AddToRelationService}
+ * defined in the Spring configuration file:
+ * cris-relationpreference.xml
+ *
+ */
 public class AddToRelationServiceConfiguration {
 
+    /** list of all the {@link AddToRelationService} */
     private List<AddToRelationService> list;
 
     public List<AddToRelationService> getList() {

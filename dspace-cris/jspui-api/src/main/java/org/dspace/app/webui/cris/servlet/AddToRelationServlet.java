@@ -101,18 +101,17 @@ public class AddToRelationServlet extends DSpaceServlet {
         request.setAttribute("crisObject", cris);
         String publicPath = request.getContextPath() + "/cris/" + cris.getPublicPath() + "/" + ResearcherPageUtils.getPersistentIdentifier(cris);
 
-        String configurationName = request.getParameter("location");
-        if (StringUtils.isBlank(configurationName)) {
-            if (StringUtils.isNotBlank(relationName) && relationName.contains(".")) {
-                configurationName = relationName.split("\\.")[1];
-            }
-        }
+        String discoveryConfigurationKey = addToRelationServiceConfiguration
+                .getAddToRelationService(relationName)
+                .getDiscoveryConfigurationKey();
+
+        DiscoveryConfiguration discoveryConfiguration = SearchUtils
+                .getDiscoveryConfigurationByName(discoveryConfigurationKey);
 
         DSpaceObject selectedObject = null;
         String selectedPublicPath = "";
         String ammissibleQuery = "";
-        String notAmmissibleMessage = "";
-        List<String> addedObjectIDs = retrieveAddedObjectIDs(context, request, cris, relationName, configurationName);
+        List<String> addedObjectIDs = retrieveAddedObjectIDs(context, request, cris, relationName, discoveryConfiguration);
         if (StringUtils.isNotBlank(request.getParameter("selected-itemID"))
                 && !addedObjectIDs.contains(request.getParameter("selected-itemID"))) {
             selectedObject = Item.find(context, Integer.valueOf(request.getParameter("selected-itemID")));
@@ -122,10 +121,9 @@ public class AddToRelationServlet extends DSpaceServlet {
                         + selectedObject.getType()
                         + " AND search.resourceid:"
                         + selectedObject.getID();
-                notAmmissibleMessage = "Item with ID " + selectedObject.getID();
             }
             else {
-                log.warn("The user try to add inexistent Item with ID " + request.getParameter("selected-itemID"));
+                log.error("The user try to add inexistent Item with ID " + request.getParameter("selected-itemID"));
             }
         }
         else if (StringUtils.isNotBlank(request.getParameter("selected-crisID"))
@@ -135,25 +133,32 @@ public class AddToRelationServlet extends DSpaceServlet {
                 selectedPublicPath = request.getContextPath() + "/cris/" + ((ACrisObject)selectedObject).getPublicPath() + "/" + ResearcherPageUtils.getPersistentIdentifier(((ACrisObject)selectedObject));
                 ammissibleQuery = "cris-id:"
                         + ((ACrisObject)selectedObject).getCrisID();
-                notAmmissibleMessage = "CRISObject " + ((ACrisObject)selectedObject).getCrisID();
             }
             else {
-                log.warn("The user try to add inexistent CRISObject " + request.getParameter("selected-crisID"));
+                log.error("The user try to add inexistent CRISObject " + request.getParameter("selected-crisID"));
             }
         }
         if (selectedObject != null) {
-            if (isAmmissibleObject(context, request, relationName, ammissibleQuery)) {
+            if (isAmmissibleObject(context, request, discoveryConfiguration, ammissibleQuery)) {
                 if (addToRelationServiceConfiguration
                         .getAddToRelationService(relationName)
                         .executeAction(cris, selectedObject)) {
-                    addMessage(context, request, cris, publicPath, selectedObject, selectedPublicPath);
+                    addMessage(context, request, "jsp.layout.cris.addrelations.success.info", publicPath, cris.getName(), selectedPublicPath, selectedObject.getName());
                     context.commit();
                     response.sendRedirect(publicPath);
                     return;
                 }
+                else {
+                    // mmm this should never happen as it was ammissible and no exception was thrown...
+                    log.error("Something go wrong, we are not able to manage the selected object " + selectedObject.getID() + " for the target " + cris.getCrisID());
+                    throw new RuntimeException("Something go wrong, we are not able to manage the selected object " + selectedObject.getID() + " for the target " + cris.getCrisID());
+                }
             }
             else {
-                log.warn("The user try to add not ammissible " + notAmmissibleMessage + " for the relation " + relationName);
+                log.error("The user try to add not ammissible object " + selectedObject.getTypeText() + " for the relation " + relationName);
+                addMessage(context, request, "jsp.layout.cris.addrelations.error.not.ammissible", selectedPublicPath, selectedObject.getName(), relationName);
+                response.sendRedirect(publicPath);
+                return;
             }
         }
 
@@ -167,10 +172,6 @@ public class AddToRelationServlet extends DSpaceServlet {
             log.error(e.getMessage(), e);
         }
 
-        DiscoveryConfiguration discoveryConfiguration = addToRelationServiceConfiguration
-                .getAddToRelationService(relationName)
-                .getDiscoveryConfiguration();
-
         List<DiscoverySortFieldConfiguration> sortFields = discoveryConfiguration.getSearchSortConfiguration()
                 .getSortFields();
         List<String> sortOptions = new ArrayList<String>();
@@ -181,7 +182,7 @@ public class AddToRelationServlet extends DSpaceServlet {
         }
         request.setAttribute("sortOptions", sortOptions);
 
-        DiscoverQuery queryArgs = DiscoverUtility.getDiscoverQuery(context, request, scope, configurationName, true);
+        DiscoverQuery queryArgs = DiscoverUtility.getDiscoverQuery(context, request, scope, discoveryConfiguration, true);
 
         queryArgs.setSpellCheck(discoveryConfiguration.isSpellCheckEnabled());
 
@@ -321,18 +322,16 @@ public class AddToRelationServlet extends DSpaceServlet {
             request.setAttribute("search.error.message", e.getMessage());
         }
 
-        JSPManager.showJSP(request, response, "/search/discovery.jsp?location=" + configurationName + "&crisID=" + crisID + "&relationName=" + relationName);
+        JSPManager.showJSP(request, response, "/search/discovery.jsp?location=" + discoveryConfigurationKey + "&crisID=" + crisID + "&relationName=" + relationName);
     }
 
-    private List<String> retrieveAddedObjectIDs(Context context, HttpServletRequest request, ACrisObject cris, String relationName, String configurationName) {
+    private List<String> retrieveAddedObjectIDs(Context context, HttpServletRequest request, ACrisObject cris, String relationName, DiscoveryConfiguration discoveryConfiguration) {
         List<String> addedObjectIDs = new ArrayList<>();
 
-        DiscoveryConfiguration discoveryConfiguration = addToRelationServiceConfiguration
-                .getAddToRelationService(relationName)
-                .getDiscoveryConfiguration();
-
         String relationQuery = MessageFormat.format(addToRelationServiceConfiguration
-                .getAddToRelationService(relationName).getRelationConfiguration().getQuery(), cris.getCrisID(), cris.getUuid());
+                .getAddToRelationService(relationName).getRelationConfiguration().getQuery(),
+                cris.getCrisID(),
+                cris.getUuid());
 
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setRows(Integer.MAX_VALUE);
@@ -377,11 +376,7 @@ public class AddToRelationServlet extends DSpaceServlet {
         return addedObjectIDs;
     }
 
-    private boolean isAmmissibleObject(Context context, HttpServletRequest request, String relationName, String selectedQuery) {
-        DiscoveryConfiguration discoveryConfiguration = addToRelationServiceConfiguration
-                .getAddToRelationService(relationName)
-                .getDiscoveryConfiguration();
-
+    private boolean isAmmissibleObject(Context context, HttpServletRequest request, DiscoveryConfiguration discoveryConfiguration, String selectedQuery) {
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setQuery("*:*");
 
@@ -407,7 +402,7 @@ public class AddToRelationServlet extends DSpaceServlet {
         return false;
     }
 
-    private void addMessage(Context context, HttpServletRequest request, DSpaceObject target, String targetPath, DSpaceObject selected, String selectedPath) {
+    private void addMessage(Context context, HttpServletRequest request, String messageKey, String ... args) {
         List messages = (List) request.getSession().getAttribute(
                 it.cilea.osd.common.constants.Constants.MESSAGES_KEY);
         if (messages == null) {
@@ -415,13 +410,8 @@ public class AddToRelationServlet extends DSpaceServlet {
         }
         messages.add(
                 I18nUtil.getMessage(
-                        "jsp.layout.cris.addrelations.success.info",
-                        new String[] {
-                                targetPath,
-                                target.getName(),
-                                selectedPath,
-                                selected.getName()
-                        },
+                        messageKey,
+                        args,
                         context));
         request.getSession().setAttribute(it.cilea.osd.common.constants.Constants.MESSAGES_KEY, messages);
     }
