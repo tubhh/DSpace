@@ -48,6 +48,9 @@
 	ComponentInfoDTO info = ((Map<String, ComponentInfoDTO>)(request.getAttribute("componentinfomap"))).get(holder.getShortName());
 	String relationName = info.getRelationName();
 	
+	String crisID = info.getCrisID();
+	boolean addRelations = info.isAddRelations();
+	
 	List<String[]> subLinks = (List<String[]>) request.getAttribute("activeTypes"+relationName);
 	
 	DiscoverResult qResults = (DiscoverResult) request.getAttribute("qResults"+relationName);
@@ -123,6 +126,11 @@
         			<jsp:include page="common/commonComponentGeneralFiltersAndFacets.jsp"></jsp:include>
 				<% } else { %>
 					<jsp:include page="common/commonComponentGeneralFilters.jsp"></jsp:include>
+				<% } %>
+				<% if (addRelations) { %>
+					<a href="<%= request.getContextPath() %>/tools/addrelations?crisID=<%= crisID %>&relationName=<%= relationName %>" class="btn btn-default" style="margin-top: -7px;" title="<fmt:message key="jsp.layout.cris.addrelations.title"/>">
+						<fmt:message key="jsp.layout.cris.addrelations.title"/>
+					</a>
 				<% } %>
 			</h4>
     	</div>
@@ -213,14 +221,14 @@ if (info.getPagetotal() > 1)
 </form>
 <div class="row">
 <div class="table-responsive">		
-<dspace:browselist items="<%= (BrowseItem[])info.getItems() %>" config="crisou.${info[holder.shortName].type}" sortBy="<%= new Integer(info.getSo().getNumber()).toString() %>" order="<%= info.getOrder() %>"/>
+<dspace:browselist items="<%= (BrowseItem[])info.getItems() %>" config="crisou.${info[holder.shortName].type}" sortBy="<%= new Integer(info.getSo().getNumber()).toString() %>" order="<%= info.getOrder() %>" type="<%= info.getType() %>"/>
 </div>
 </div>
 <script type="text/javascript"><!--
-    function sortBy(sort_by, order) {
-        j('#sort_by<%= info.getType() %>').val(sort_by);
-        j('#order<%= info.getType() %>').val(order);
-        j('#sortform<%= info.getType() %>').submit();        
+    function sortBy(sort_by, order, type) {
+        j('#sort_by' + type).val(sort_by);
+        j('#order' + type).val(order);
+        j('#sortform' + type).submit();
     }
 --></script>
 
