@@ -667,10 +667,6 @@
          <servlet-name>addrelations</servlet-name>
          <servlet-class>org.dspace.app.webui.cris.servlet.AddToRelationServlet</servlet-class>
      </servlet>
-<     <servlet-mapping>
-<         <servlet-name>addrelations</servlet-name>
-<         <url-pattern>/tools/addrelations</url-pattern>
-<     </servlet-mapping>
 
 	<!-- Servlet Mappings -->
 
