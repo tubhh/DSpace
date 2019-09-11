@@ -108,11 +108,11 @@
 		  <% if(showCommList){ %>
 
 	    <!-- Stöbern -->
-<!--
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Dataset.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.browse"/> <b class="caret"></b></a>
              <ul class="dropdown-menu">
                <li><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
+<!--
                     <li class="divider"></li>
                     <li class="dropdown-header"><fmt:message key="jsp.layout.navbar-default.browse-items-by"/>:</li>
                     <%-- Insert the dynamic browse indices here --%>
@@ -127,9 +127,9 @@
                         }
                         %>
                    <%-- End of dynamic browse indices --%>
+-->
             </ul>
           </li>
--->
 <!-- CRIS Community List
 		   <li id="communitylist-top-menu" class="<%= currentPage.endsWith("/community-list")? 
         		   "active" : "" %>"><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
