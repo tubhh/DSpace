@@ -273,7 +273,10 @@ public abstract class ASolrConfigurerComponent<T extends DSpaceObject, IBC exten
                 "appliedFilterQueries"
                         + getRelationConfiguration().getRelationName(),
                 appliedFilterQueries);
-        request.setAttribute("count" + this.getShortName(), docsNumFound);
+        if (!addRelations)
+        {
+            request.setAttribute("count" + this.getShortName(), docsNumFound);
+        }
     }
 
 	private String getOrderField(int sortBy) throws SortException {
