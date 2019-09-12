@@ -80,7 +80,7 @@
 	
 	String query = request.getQueryString();
 	boolean globalShowFacets = false;
-	if (addRelations) {
+	if (addRelations || (info!=null && info.getItems()!=null && info.getItems().length > 0)) {
 	    
 %>
 

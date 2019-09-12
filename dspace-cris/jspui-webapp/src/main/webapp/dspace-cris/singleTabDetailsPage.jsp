@@ -41,7 +41,6 @@
 	}
 %>
 <c:set var="currLocale"><%=currLocale %></c:set>
-<c:set var="req" value="${pageContext.request}" />
 	<div id="tab-${area.id}">
 		<div class="row">
 					<c:forEach items="${propertiesHolders}" var="holder">
@@ -57,7 +56,7 @@
 						if(counterBoxMap==null) {
 					%>
 						<c:set
-							value="${researcher:isBoxHidden(UIUtil.obtainContext(req),entity,holder.shortName)}"
+							value="${researcher:isBoxHidden(entity,holder.shortName)}"
 							var="invisibleBox"></c:set>
 					<% } else {	%>
 						<c:set

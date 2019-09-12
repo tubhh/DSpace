@@ -71,7 +71,7 @@
 	}
 	
 	boolean globalShowFacets = false;
-	if (addRelations) {
+	if (addRelations || (info!=null && info.getItems()!=null && info.getItems().length > 0)) {
 %>
 <c:set var="info" value="<%= info %>" scope="request" />
 
