@@ -27,6 +27,7 @@
 	boolean showBadgeCount = ConfigurationManager.getBooleanProperty("cris", "webui.tab.show.count.for.firstcomponent", false);
 %>
 	
+	<c:set var="req" value="${pageContext.request}" />
 	<div id="tabs">
 		<ul>
 					<c:forEach items="${tabList}" var="area" varStatus="rowCounter">
@@ -36,7 +37,7 @@
 						</c:choose></c:set>
 
 						<c:choose>
-							<c:when test="${(researcher:isTabHidden(entity,area.shortName) == false)}">
+							<c:when test="${(researcher:isTabHidden(req,entity,area.shortName) == false)}">
 								<c:set var="tabName" value="researcher-menu-item"/>
 							</c:when>
 							<c:otherwise>

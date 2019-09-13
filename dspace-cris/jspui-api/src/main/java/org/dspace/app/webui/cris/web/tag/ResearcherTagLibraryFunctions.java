@@ -20,6 +20,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -205,7 +207,7 @@ public class ResearcherTagLibraryFunctions
     }
 
 
-    public static boolean isTabHidden(Object anagrafica,String tabName)
+    public static boolean isTabHidden(HttpServletRequest request, Object anagrafica,String tabName)
             throws IllegalArgumentException, IllegalAccessException,
             InvocationTargetException{
 
@@ -218,7 +220,7 @@ public class ResearcherTagLibraryFunctions
                 if(b.isUnrelevant()){
                     continue;
                 }
-                if(!isBoxHidden(anagrafica, b.getShortName())){
+                if(!isBoxHidden(request, anagrafica, b.getShortName())){
                     hidden= false;
                     break;
                 }
@@ -231,7 +233,7 @@ public class ResearcherTagLibraryFunctions
                 if(b.isUnrelevant()){
                     continue;
                 }
-                if(!isBoxHidden(anagrafica, b.getShortName())){
+                if(!isBoxHidden(request, anagrafica, b.getShortName())){
                     hidden= false;
                     break;
                 }
@@ -244,7 +246,7 @@ public class ResearcherTagLibraryFunctions
                 if(b.isUnrelevant()){
                     continue;
                 }
-                if(!isBoxHidden(anagrafica, b.getShortName())){
+                if(!isBoxHidden(request, anagrafica, b.getShortName())){
                     hidden= false;
                     break;
                 }
@@ -257,7 +259,7 @@ public class ResearcherTagLibraryFunctions
                 if(b.isUnrelevant()){
                     continue;
                 }
-                if(!isBoxHidden(anagrafica, b.getShortName())){
+                if(!isBoxHidden(request, anagrafica, b.getShortName())){
                     hidden= false;
                     break;
                 }
@@ -268,14 +270,14 @@ public class ResearcherTagLibraryFunctions
 
     }
 
-    public static boolean isBoxHidden(ResearcherPage anagrafica, String boxName)
+    public static boolean isBoxHidden(HttpServletRequest request, ResearcherPage anagrafica, String boxName)
             throws IllegalArgumentException, IllegalAccessException,
             InvocationTargetException
     {
         BoxResearcherPage box = applicationService.getBoxByShortName(
                 BoxResearcherPage.class, boxName);
 
-        return isBoxHidden(anagrafica, box);
+        return isBoxHidden(request, anagrafica, box);
 
     }
 
@@ -290,7 +292,7 @@ public class ResearcherTagLibraryFunctions
 
     }
 
-    public static boolean isBoxHidden(Object anagrafica, String boxName)
+    public static boolean isBoxHidden(HttpServletRequest request, Object anagrafica, String boxName)
             throws IllegalArgumentException, IllegalAccessException,
             InvocationTargetException
     {
@@ -298,28 +300,34 @@ public class ResearcherTagLibraryFunctions
         {
             BoxProject box = applicationService.getBoxByShortName(
                     BoxProject.class, boxName);
-            return isBoxHidden((Project) anagrafica, box);
+            return isBoxHidden(request, (Project) anagrafica, box);
         }
         if (anagrafica instanceof OrganizationUnit)
         {
             BoxOrganizationUnit box = applicationService.getBoxByShortName(
                     BoxOrganizationUnit.class, boxName);
-            return isBoxHidden((OrganizationUnit) anagrafica, box);
+            return isBoxHidden(request, (OrganizationUnit) anagrafica, box);
         }
         if (anagrafica instanceof ResearchObject)
         {
             BoxDynamicObject box = applicationService.getBoxByShortName(
                     BoxDynamicObject.class, boxName);
-            return isBoxHidden((ResearchObject) anagrafica, box);
+            return isBoxHidden(request, (ResearchObject) anagrafica, box);
         }
         BoxResearcherPage box = applicationService.getBoxByShortName(
                 BoxResearcherPage.class, boxName);
 
-        return isBoxHidden((ResearcherPage) anagrafica, box);
+        return isBoxHidden(request, (ResearcherPage) anagrafica, box);
 
     }
 
     public static boolean isBoxHidden(ResearcherPage anagrafica,
+            BoxResearcherPage box)
+    {
+        return isBoxHidden(null, anagrafica, box);
+    }
+
+    public static boolean isBoxHidden(HttpServletRequest request, ResearcherPage anagrafica,
             BoxResearcherPage box)
     {
 
@@ -334,7 +342,7 @@ public class ResearcherTagLibraryFunctions
                 if (box.getShortName().equals(key))
                 {
                     IComponent component = rpComponent.get(key);
-                    if (component instanceof AFacetedQueryConfigurerComponent && ((AFacetedQueryConfigurerComponent)component).forceDisplay(anagrafica))
+                    if (component instanceof AFacetedQueryConfigurerComponent && ((AFacetedQueryConfigurerComponent)component).forceDisplay(request, anagrafica))
                     {
                         return false;
                     }
@@ -361,6 +369,11 @@ public class ResearcherTagLibraryFunctions
 
     public static boolean isBoxHidden(Project anagrafica, BoxProject box)
     {
+        return isBoxHidden(null, anagrafica, box);
+    }
+
+    public static boolean isBoxHidden(HttpServletRequest request, Project anagrafica, BoxProject box)
+    {
         Researcher researcher = new Researcher();
 
         Map<String, ICRISComponent> rpComponent = researcher
@@ -373,7 +386,7 @@ public class ResearcherTagLibraryFunctions
                 if (box.getShortName().equals(key))
                 {
                     IComponent component = rpComponent.get(key);
-                    if (component instanceof AFacetedQueryConfigurerComponent && ((AFacetedQueryConfigurerComponent)component).forceDisplay(anagrafica))
+                    if (component instanceof AFacetedQueryConfigurerComponent && ((AFacetedQueryConfigurerComponent)component).forceDisplay(request, anagrafica))
                     {
                         return false;
                     }
@@ -400,6 +413,12 @@ public class ResearcherTagLibraryFunctions
     public static boolean isBoxHidden(ResearchObject anagrafica,
             BoxDynamicObject box)
     {
+        return isBoxHidden(null, anagrafica, box);
+    }
+
+    public static boolean isBoxHidden(HttpServletRequest request, ResearchObject anagrafica,
+            BoxDynamicObject box)
+    {
         Researcher researcher = new Researcher();
 
         Map<String, ICRISComponent> rpComponent = researcher.getDOComponents();
@@ -411,7 +430,7 @@ public class ResearcherTagLibraryFunctions
                 if (box.getShortName().equals(key))
                 {
                     IComponent component = rpComponent.get(key);
-                    if (component instanceof AFacetedQueryConfigurerComponent && ((AFacetedQueryConfigurerComponent)component).forceDisplay(anagrafica))
+                    if (component instanceof AFacetedQueryConfigurerComponent && ((AFacetedQueryConfigurerComponent)component).forceDisplay(request, anagrafica))
                     {
                         return false;
                     }
@@ -438,6 +457,12 @@ public class ResearcherTagLibraryFunctions
     public static boolean isBoxHidden(OrganizationUnit anagrafica,
             BoxOrganizationUnit box)
     {
+        return isBoxHidden(null, anagrafica, box);
+    }
+
+    public static boolean isBoxHidden(HttpServletRequest request, OrganizationUnit anagrafica,
+            BoxOrganizationUnit box)
+    {
         Researcher researcher = new Researcher();
 
         Map<String, ICRISComponent> rpComponent = researcher.getOUComponents();
@@ -449,7 +474,7 @@ public class ResearcherTagLibraryFunctions
                 if (box.getShortName().equals(key))
                 {
                     IComponent component = rpComponent.get(key);
-                    if (component instanceof AFacetedQueryConfigurerComponent && ((AFacetedQueryConfigurerComponent)component).forceDisplay(anagrafica))
+                    if (component instanceof AFacetedQueryConfigurerComponent && ((AFacetedQueryConfigurerComponent)component).forceDisplay(request, anagrafica))
                     {
                         return false;
                     }

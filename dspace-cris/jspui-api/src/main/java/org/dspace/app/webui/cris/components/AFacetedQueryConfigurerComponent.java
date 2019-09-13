@@ -267,27 +267,21 @@ public abstract class AFacetedQueryConfigurerComponent<T extends DSpaceObject>
         this.facets = facets;
     }
 
-    public boolean forceDisplay(DSpaceObject object)
+    public boolean forceDisplay(HttpServletRequest request, DSpaceObject object)
     {
         try {
-            HttpServletRequest request = null;
-            RequestService requestService = new DSpace().getServiceManager().getServiceByName(RequestService.class.getName(), RequestService.class);
-            if (requestService != null && requestService.getCurrentRequest() != null) {
-                request = requestService.getCurrentRequest().getHttpServletRequest();
-            } else {
-                return false;
-            }
-
-            Context context = UIUtil.obtainContext(request);
-            AddToRelationService addToRelationService = getAddToRelationServiceConfiguration()
-                    .getAddToRelationService(
-                            getRelationConfiguration()
-                            .getRelationName());
-            if (addToRelationService != null) {
-                return addToRelationService
-                        .isAuthorized(
-                                context,
-                                object);
+            if (request != null) {
+                Context context = UIUtil.obtainContext(request);
+                AddToRelationService addToRelationService = getAddToRelationServiceConfiguration()
+                        .getAddToRelationService(
+                                getRelationConfiguration()
+                                .getRelationName());
+                if (addToRelationService != null) {
+                    return addToRelationService
+                            .isAuthorized(
+                                    context,
+                                    object);
+                }
             }
         } catch (SQLException ex) {
             log.error(ex.getMessage(), ex);
