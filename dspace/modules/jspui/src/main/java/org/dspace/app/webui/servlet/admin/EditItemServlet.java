@@ -797,6 +797,10 @@ public class EditItemServlet extends DSpaceServlet
                                 newBundle.addBitstream(bitstream);
                                 bundle.removeBitstream(bitstream);
                             }
+                            // Delete bundle too, if empty
+                            if (bundle.getBitstreams().length == 0) {
+                                item.removeBundle(bundle);
+                            }
 
                         }
                     }
