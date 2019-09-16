@@ -147,7 +147,7 @@
 					<property name="discoveryConfigurationKey" value="publications"/>
 					<property name="action">
 						<bean class="org.dspace.app.cris.configuration.RelationMetadataAction">
-							<property name="metadataAction" value="dc.relation" />
+							<property name="metadataAction" value="dc.relation.project" />
 						</bean>
 					</property>
 					<property name="security">
