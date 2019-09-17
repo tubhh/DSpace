@@ -20,17 +20,19 @@ public class AdminSecurityCheck implements SecurityCheck {
     private static Logger log = Logger.getLogger(AdminSecurityCheck.class);
 
     public boolean isAuthorized(Context context, DSpaceObject dso) {
-        EPerson currentUser = context.getCurrentUser();
-        if(currentUser == null) {
-            return false;
-        }
-
-        try {
-            if (AuthorizeManager.isAdmin(context)) {
-                return true;
+        if (context != null) {
+            EPerson currentUser = context.getCurrentUser();
+            if(currentUser == null) {
+                return false;
             }
-        } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+
+            try {
+                if (AuthorizeManager.isAdmin(context)) {
+                    return true;
+                }
+            } catch (SQLException e) {
+                log.error(e.getMessage(), e);
+            }
         }
 
         return false;

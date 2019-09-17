@@ -80,7 +80,7 @@
 	
 	String query = request.getQueryString();
 	boolean globalShowFacets = false;
-	if (info!=null && info.getItems()!=null && info.getItems().length > 0) {
+	if (addRelations || (info!=null && info.getItems()!=null && info.getItems().length > 0)) {
 	    
 %>
 
@@ -195,12 +195,18 @@ sb.append("</ul></div>");
 <% } %>
 <div align="center" class="browse_range">
 
-	<p align="center"><fmt:message key="jsp.search.results.results">
-        <fmt:param><%=info.getStart()+1%></fmt:param>
+	<p align="center">
+	<% if (info.getTotal() > 0) { %>
+	<fmt:message key="jsp.search.results.results">
+        <fmt:param><%= info.getStart()+1%></fmt:param>
         <fmt:param><%=info.getStart()+info.getItems().length%></fmt:param>
         <fmt:param><%=info.getTotal()%></fmt:param>
         <fmt:param><%=(float)info.getSearchTime() / 1000%></fmt:param>
-    </fmt:message></p>
+	</fmt:message>
+	<% } else { %>
+        <fmt:message key="jsp.search.results.noresults" />
+	<% } %>
+	</p>
 
 </div>
 <%
@@ -233,6 +239,7 @@ if (info.getPagetotal() > 1)
    		} %>
 	   <input type="hidden" name="open" value="<%= info.getType() %>" />
 </form>
+<% if (info!=null && info.getItems()!=null && info.getItems().length > 0) { %>
 <div class="row">
 <div class="table-responsive">
 
@@ -272,6 +279,7 @@ if (info.getPagetotal() > 1)
 <% } %>
 </div>
 </div>
+<% } %>
 
 <script type="text/javascript"><!--
     function sortBy(sort_by, order, type) {
