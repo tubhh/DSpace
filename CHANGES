@@ -13,3 +13,5 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * Bugfix for display of license agreement buttons without whitespace (CSS change)
 * Improves display of CC license on item page (jsp change)
 * Updates DataCite crosswalk to Metadataschema 4.2 (crosswalk change: adds new attributes for rights) New elements need to be added to the datacite metadata schema as well: datacite.relation.Obsoletes and datacite.relation.IsObsoletedBy.
+* New Feature: add publications to CRIS entities like projects from entity view page (Feature implemented by 4Science)
+* New Feature: add choice of bundles to bitstreams when they are appended to a record (Feature implemented by The Library Code)
