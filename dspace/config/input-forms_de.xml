@@ -710,7 +710,18 @@
          <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) und/oder Institutionen ein und wählen Sie die Rolle aus.</hint>
          <required></required>
        </field>
-         
+
+       <field>
+         <dc-schema>datacite</dc-schema>
+         <dc-element>contributorCorporate</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Weitere Beteiligte Institutionen</label>
+         <input-type value-pairs-name="contributorCorporate_fdm_de">qualdrop_value</input-type>
+         <hint>Tragen Sie hier die Namen weiterer beteiligter Institutionen ein und wählen Sie die Rolle aus.</hint>
+         <required></required>
+       </field>
+
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>date</dc-element>
@@ -2086,18 +2097,6 @@
        <displayed-value>Anderes</displayed-value>
        <stored-value>Other</stored-value>
      </pair>
-     <pair>
-       <displayed-value>Journal Article Review</displayed-value>
-       <stored-value>article-review</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Letter to Editor</displayed-value>
-       <stored-value>letter</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Commentary</displayed-value>
-       <stored-value>commentary</stored-value>
-     </pair>
    </value-pairs>
 
    <value-pairs value-pairs-name="fdm_types_de" dc-term="type">
@@ -2307,6 +2306,31 @@
        <displayed-value>Kontakt</displayed-value>
        <stored-value>ContactPerson</stored-value>
      </pair>
+     <pair>
+       <displayed-value>Sonstiges</displayed-value>
+       <stored-value>Other</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="contributorCorporate_fdm_de" dc-term="datacite_contributor">
+     <pair>
+       <displayed-value>Data Collector</displayed-value>
+       <stored-value>DataCollector</stored-value>
+     </pair>
+<!--
+     <pair>
+       <displayed-value>Data Curator</displayed-value>
+       <stored-value>DataCurator</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Researcher</displayed-value>
+       <stored-value>Researcher</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Kontakt</displayed-value>
+       <stored-value>ContactPerson</stored-value>
+     </pair>
+-->
      <pair>
        <displayed-value>Sonstiges</displayed-value>
        <stored-value>Other</stored-value>
