@@ -95,6 +95,7 @@
 </span>
     </div>
     </div>
+<div class="dynaClear">&nbsp;</div>
 </c:forEach>
 
 <br/>
