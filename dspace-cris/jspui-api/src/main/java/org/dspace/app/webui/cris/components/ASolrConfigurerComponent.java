@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dspace.app.cris.configuration.AddToRelationService;
+import org.dspace.app.cris.configuration.AddToRelationServiceConfiguration;
 import org.dspace.app.cris.configuration.RelationConfiguration;
 import org.dspace.app.cris.discovery.CrisSearchService;
 import org.dspace.app.cris.integration.ICRISComponent;
@@ -60,6 +62,8 @@ public abstract class ASolrConfigurerComponent<T extends DSpaceObject, IBC exten
 
     private SearchService searchService;
 
+    private AddToRelationServiceConfiguration addToRelationServiceConfiguration;
+
     private RelationConfiguration relationConfiguration;
 
     private String commonFilter;
@@ -86,6 +90,17 @@ public abstract class ASolrConfigurerComponent<T extends DSpaceObject, IBC exten
                     SearchService.class.getName(), CrisSearchService.class);
         }
         return searchService;
+    }
+
+    public AddToRelationServiceConfiguration getAddToRelationServiceConfiguration()
+    {
+        if (addToRelationServiceConfiguration == null)
+        {
+            DSpace dspace = new DSpace();
+            addToRelationServiceConfiguration = dspace.getServiceManager().getServiceByName(
+                    AddToRelationServiceConfiguration.class.getName(), AddToRelationServiceConfiguration.class);
+        }
+        return addToRelationServiceConfiguration;
     }
 
     private Map<String, IBC> types = new HashMap<String, IBC>();
@@ -203,6 +218,11 @@ public abstract class ASolrConfigurerComponent<T extends DSpaceObject, IBC exten
             sortOption = SortOption.getSortOption(sortBy);
         }
 
+        AddToRelationService addToRelationServiceConfiguration = getAddToRelationServiceConfiguration()
+                .getAddToRelationService(getRelationConfiguration()
+                        .getRelationName());
+        boolean addRelations = addToRelationServiceConfiguration != null ? addToRelationServiceConfiguration.isAuthorized(context, cris) : false;
+
         // Pass the results to the display JSP
 
         Map<String, ComponentInfoDTO<T>> componentInfoMap = (Map<String, ComponentInfoDTO<T>>) request
@@ -222,7 +242,7 @@ public abstract class ASolrConfigurerComponent<T extends DSpaceObject, IBC exten
         ComponentInfoDTO<T> componentInfo = buildComponentInfo(docs, context,
                 type, start, order, rpp, etAl, docsNumFound, pageTotal,
 				pageCurrent, pageLast, pageFirst, sortOption,
-				searchTime);
+				searchTime, cris.getCrisID(), addRelations);
 
         componentInfoMap.put(getShortName(), componentInfo);
         request.setAttribute("componentinfomap", componentInfoMap);
@@ -253,7 +273,10 @@ public abstract class ASolrConfigurerComponent<T extends DSpaceObject, IBC exten
                 "appliedFilterQueries"
                         + getRelationConfiguration().getRelationName(),
                 appliedFilterQueries);
-        request.setAttribute("count" + this.getShortName(), docsNumFound);
+        if (!addRelations)
+        {
+            request.setAttribute("count" + this.getShortName(), docsNumFound);
+        }
     }
 
 	private String getOrderField(int sortBy) throws SortException {
@@ -271,7 +294,8 @@ public abstract class ASolrConfigurerComponent<T extends DSpaceObject, IBC exten
     private ComponentInfoDTO<T> buildComponentInfo(DiscoverResult docs,
             Context context, String type, int start, String order, int rpp,
             int etAl, long docsNumFound, int pageTotal, int pageCurrent,
-			int pageLast, int pageFirst, SortOption sortOption, int searchTime)
+			int pageLast, int pageFirst, SortOption sortOption, int searchTime,
+			String crisID, boolean addRelations)
             throws Exception
     {
         ComponentInfoDTO<T> componentInfo = new ComponentInfoDTO<T>();
@@ -295,6 +319,8 @@ public abstract class ASolrConfigurerComponent<T extends DSpaceObject, IBC exten
         componentInfo.setType(type);
 		componentInfo.setSearchTime(searchTime);
 		componentInfo.setBrowseType(getRelationConfiguration().getType());
+		componentInfo.setCrisID(crisID);
+		componentInfo.setAddRelations(addRelations);
         return componentInfo;
     }
 
