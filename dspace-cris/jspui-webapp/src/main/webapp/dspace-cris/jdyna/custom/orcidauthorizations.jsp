@@ -46,7 +46,7 @@ j(document).ready(function() {
           			<fmt:message key="RPAdditionalFieldStorage.box.${holder.shortName}.label"/>
         		</a></h4>
     	</div>
-		<div id="collapseOne${holder.shortName}" class="panel-collapse collapse in">
+		<div id="collapseOne${holder.shortName}" class="panel-collapse collapse<c:if test="${holder.collapsed==false}"> in</c:if>">
 			<div class="panel-body">	
 			<div class="dynaClear">&nbsp;</div>
             <div class="dynaClear">&nbsp;</div>
@@ -173,7 +173,11 @@ j(document).ready(function() {
 					<c:when test="${showmissedidicon eq true or showmissedeyesicon eq true or showmissedrepeaticon eq true}">											
 						<div class="col-md-2">
 							<div class="row">
+<<<<<<< HEAD
 							<a href="<%= request.getContextPath() %>/oauth-login?from=${requestScope['javax.servlet.forward.request_uri']}">
+=======
+							<a href="<%= request.getContextPath() %>/oauth-login?standalone=true">
+>>>>>>> origin/dspace-5_x_x-cris
 		      					<div class="bottomTooltip col-md-offset-3" data-toggle="popover" data-container="body" data-content="<fmt:message key="jsp.orcid.custom.box.label.button.refresh.auth"/>">
 			      					<button class="btn btn-default">		      						
 			      						<img src="<%= request.getContextPath() %>/image/orcid_64x64.png" title="ORCID Authentication"/>

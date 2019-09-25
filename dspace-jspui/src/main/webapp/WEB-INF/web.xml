@@ -126,7 +126,6 @@
       <url-pattern>/handle/*</url-pattern>
   </filter-mapping>
  
-
   <!--
        DSpace Kernel startup listener. This listener is in charge of initializing/starting the
        DSpace Kernel. It MUST be listed BEFORE any other DSpace listeners, as DSpace services
@@ -156,6 +155,12 @@
   </listener>
   
   <!-- Servlets -->
+
+  <!-- Publication Question -->
+  <servlet>
+    <servlet-name>pubquestion</servlet-name>
+    <servlet-class>org.dspace.app.webui.servlet.QuestionsServlet</servlet-class>
+  </servlet>
 
   <servlet>
     <servlet-name>authorize</servlet-name>

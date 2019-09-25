@@ -6,7 +6,7 @@
     Author     : pbecker, ffuerste
     Description: Converts metadata from DSpace Intermediat Format (DIM) into
                  metadata following the DataCite Schema for the Publication and
-                 Citation of Research Data, Version 3.1
+                 Citation of Research Data, Version 4.2
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dspace="http://www.dspace.org/xmlns/dspace/dim"
@@ -43,7 +43,7 @@
         -->
         <resource xmlns="http://datacite.org/schema/kernel-4"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.1/metadata.xsd">
+                  xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.2/metadata.xsd">
 
             <!-- 
                 MANDATORY PROPERTIES
@@ -248,9 +248,10 @@
                 Rights.
                 Occ: 0-1
             -->
-            <xsl:if test="//dspace:field[@mdschema='dc' and @element='rights']">
+            <xsl:if test="//dspace:field[@mdschema='dc' and @element='rights'] or //dspace:field[@mdschema='item' and @element='grantfulltext']">
                 <xsl:element name="rightsList">
                     <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='rights']" />
+                    <xsl:apply-templates select="//dspace:field[@mdschema='item' and @element='grantfulltext']" />
                 </xsl:element>
             </xsl:if>
 
@@ -293,6 +294,9 @@
         <xsl:choose>
             <xsl:when test="//dspace:field[@mdschema='item' and @element='creatorOrcid']">
                 <xsl:for-each select="//dspace:field[@mdschema='item' and @element='creatorOrcid']">
+                    <xsl:variable name="i">
+                        <xsl:number value="position()" />
+                    </xsl:variable>
                     <creator>
                         <creatorName>
                             <xsl:attribute name="nameType">Personal</xsl:attribute>
@@ -305,6 +309,13 @@
                                 <xsl:attribute name="schemeURI">http://orcid.org/</xsl:attribute>
                                 <xsl:attribute name="nameIdentifierScheme">ORCID</xsl:attribute>
                                 <xsl:value-of select="@authority" />
+                            </nameIdentifier>
+                        </xsl:if>
+                        <xsl:if test="//dspace:field[@mdschema='item' and @element='creatorGND'][number($i)]/@authority!=''">
+                            <nameIdentifier>
+                                <xsl:attribute name="nameIdentifierScheme">GND</xsl:attribute>
+                                <xsl:attribute name="schemeURI">https://d-nb.info/gnd/</xsl:attribute>
+                                <xsl:value-of select="//dspace:field[@mdschema='item' and @element='creatorGND'][number($i)]/@authority" />
                             </nameIdentifier>
                         </xsl:if>
                     </creator>
@@ -674,29 +685,270 @@
     -->
     <xsl:template match="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='cc']">
         <xsl:element name="rights">
+            <xsl:attribute name="rightsIdentifierScheme">
+                <xsl:text>SPDX</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="schemeURI">
+                <xsl:text>https://spdx.org/licenses/</xsl:text>
+            </xsl:attribute>
             <xsl:choose>
                 <xsl:when test=".='cc-null'">
+                    <xsl:attribute name="rightsIdentifier">
+                        <xsl:text>CC0-1.0</xsl:text>
+                    </xsl:attribute>
                     <xsl:attribute name="rightsURI">
                         <xsl:text>https://creativecommons.org/share-your-work/public-domain/cc0/</xsl:text>
                     </xsl:attribute>
                     <xsl:text>CC-0</xsl:text>
                 </xsl:when>
                 <xsl:when test=".='0'">
+                    <xsl:attribute name="rightsIdentifier">
+                        <xsl:text>CC0-1.0</xsl:text>
+                    </xsl:attribute>
                     <xsl:attribute name="rightsURI">
                         <xsl:text>https://creativecommons.org/share-your-work/public-domain/cc0/</xsl:text>
                     </xsl:attribute>
                     <xsl:text>CC-0</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
+                    <xsl:choose>
+                        <xsl:when test="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']">
+                            <xsl:attribute name="rightsIdentifier">
+                                <xsl:text>CC-</xsl:text><xsl:value-of select="translate(.,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')" /><xsl:text>-</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
+                            </xsl:attribute>
+                            <xsl:attribute name="rightsURI">
+                                <xsl:text>https://creativecommons.org/licenses/</xsl:text><xsl:value-of select="." /><xsl:text>/</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="rightsIdentifier">
+                                <xsl:choose>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/4.0/'">
+                                        <xsl:text>CC-BY-4.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/4.0/'">
+                                        <xsl:text>CC-BY-SA-4.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/4.0/'">
+                                        <xsl:text>CC-BY-ND-4.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/4.0/'">
+                                        <xsl:text>CC-BY-NC-4.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/4.0/'">
+                                        <xsl:text>CC-BY-NC-SA-4.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/4.0/'">
+                                        <xsl:text>CC-BY-NC-ND-4.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/3.0/'">
+                                        <xsl:text>CC-BY-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/3.0/'">
+                                        <xsl:text>CC-BY-SA-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/3.0/'">
+                                        <xsl:text>CC-BY-ND-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/3.0/'">
+                                        <xsl:text>CC-BY-NC-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/3.0/'">
+                                        <xsl:text>CC-BY-NC-SA-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/3.0/'">
+                                        <xsl:text>CC-BY-NC-ND-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/3.0/de/'">
+                                        <xsl:text>CC-BY-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/3.0/de/'">
+                                        <xsl:text>CC-BY-SA-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/3.0/de/'">
+                                        <xsl:text>CC-BY-ND-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/3.0/de/'">
+                                        <xsl:text>CC-BY-NC-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/3.0/de/'">
+                                        <xsl:text>CC-BY-NC-SA-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/3.0/de/'">
+                                        <xsl:text>CC-BY-NC-ND-3.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/2.5/'">
+                                        <xsl:text>CC-BY-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/2.5/'">
+                                        <xsl:text>CC-BY-SA-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/2.5/'">
+                                        <xsl:text>CC-BY-ND-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/2.5/'">
+                                        <xsl:text>CC-BY-NC-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/2.5/'">
+                                        <xsl:text>CC-BY-NC-SA-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/2.5/'">
+                                        <xsl:text>CC-BY-NC-ND-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/2.5/de/'">
+                                        <xsl:text>CC-BY-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/2.5/de/'">
+                                        <xsl:text>CC-BY-SA-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/2.5/de/'">
+                                        <xsl:text>CC-BY-ND-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/2.5/de/'">
+                                        <xsl:text>CC-BY-NC-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/2.5/de/'">
+                                        <xsl:text>CC-BY-NC-SA-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/2.5/de/'">
+                                        <xsl:text>CC-BY-NC-ND-2.5</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/2.0/'">
+                                        <xsl:text>CC-BY-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/2.0/'">
+                                        <xsl:text>CC-BY-SA-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/2.0/'">
+                                        <xsl:text>CC-BY-ND-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/2.0/'">
+                                        <xsl:text>CC-BY-NC-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/2.0/'">
+                                        <xsl:text>CC-BY-NC-SA-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/2.0/'">
+                                        <xsl:text>CC-BY-NC-ND-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/2.0/de/'">
+                                        <xsl:text>CC-BY-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/2.0/de/'">
+                                        <xsl:text>CC-BY-SA-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/2.0/de/'">
+                                        <xsl:text>CC-BY-ND-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/2.0/de/'">
+                                        <xsl:text>CC-BY-NC-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/2.0/de/'">
+                                        <xsl:text>CC-BY-NC-SA-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/2.0/de/'">
+                                        <xsl:text>CC-BY-NC-ND-2.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/1.0/'">
+                                        <xsl:text>CC-BY-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/1.0/'">
+                                        <xsl:text>CC-BY-SA-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/1.0/'">
+                                        <xsl:text>CC-BY-ND-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/1.0/'">
+                                        <xsl:text>CC-BY-NC-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/1.0/'">
+                                        <xsl:text>CC-BY-NC-SA-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/1.0/'">
+                                        <xsl:text>CC-BY-NC-ND-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by/1.0/de/'">
+                                        <xsl:text>CC-BY-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-sa/1.0/de/'">
+                                        <xsl:text>CC-BY-SA-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nd/1.0/de/'">
+                                        <xsl:text>CC-BY-ND-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc/1.0/de/'">
+                                        <xsl:text>CC-BY-NC-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-sa/1.0/de/'">
+                                        <xsl:text>CC-BY-NC-SA-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/licenses/by-nc-nd/1.0/de/'">
+                                        <xsl:text>CC-BY-NC-ND-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/publicdomain/zero/1.0/'">
+                                        <xsl:text>CC0-1.0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test=".='https://creativecommons.org/publicdomain/zero/1.0/de/'">
+                                        <xsl:text>CC0-1.0</xsl:text>
+                                    </xsl:when>
+                                </xsl:choose>
+                            </xsl:attribute>
+                            <xsl:attribute name="rightsURI">
+                                <xsl:value-of select="." />
+                            </xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+<!--
                     <xsl:attribute name="rightsURI">
-                        <xsl:text>https://creativecommons.org/licenses/</xsl:text><xsl:value-of select="." /><xsl:text>/</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
+                        <xsl:value-of select="." />
                     </xsl:attribute>
-                    <xsl:text>CC-</xsl:text><xsl:value-of select="." /><xsl:text>-</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
+-->
+                    <xsl:choose>
+                        <xsl:when test="//dspace:field[@mdschema='dc' and @element='rights'][not(@qualifier)]">
+                            <xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights'][not(@qualifier)]" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="." />
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
     </xsl:template>
-    
+    <xsl:template match="//dspace:field[@mdschema='dc' and @element='rights'][not(@qualifier='cc' or @qualifier='ccversion' or @qualifier='nationallicense') and @qualifier]">
+        <xsl:if test="not(contains(., 'info:eu-repo/semantics'))">
+            <xsl:element name="rights">
+                <xsl:attribute name="rightsURI">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+                <xsl:value-of select="." />
+            </xsl:element>
+        </xsl:if>
+    </xsl:template>
+    <!-- RULES:
+        mixedopen, open = info:eu-repo/semantics/openAccess
+        embargo_ = info:eu-repo/semantics/embargoedAccess
+        restricted, embargo_restricted_, mixedrestricted = info:eu-repo/semantics/restrictedAccess
+        reserved = info:eu-repo/semantics/closedAccess -->
+    <xsl:template match="//dspace:field[@mdschema='item' and @element='grantfulltext']">
+        <xsl:element name="rights">
+            <xsl:choose>
+                <xsl:when test="contains(., 'open')">
+                    <xsl:attribute name="rightsURI">info:eu-repo/semantics/openAccess</xsl:attribute>
+                </xsl:when>
+                <xsl:when test="contains(., 'embargo_')">
+                    <xsl:attribute name="rightsURI">info:eu-repo/semantics/embargoedAccess</xsl:attribute>
+                </xsl:when>
+                <xsl:when test="contains(., 'restricted')">
+                    <xsl:attribute name="rightsURI">info:eu-repo/semantics/restrictedAccess</xsl:attribute>
+                </xsl:when>
+                <xsl:when test="contains(., 'reserved')">
+                    <xsl:attribute name="rightsURI">info:eu-repo/semantics/closedAccess</xsl:attribute>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:element>
+    </xsl:template>
+
     <!-- 
         DataCite (17)
         Description

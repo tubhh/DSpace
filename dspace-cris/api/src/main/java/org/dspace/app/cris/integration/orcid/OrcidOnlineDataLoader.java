@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.ws.rs.NotFoundException;
 
@@ -15,31 +16,31 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.dspace.app.itemimport.BTEBatchImportService;
 import org.dspace.authority.orcid.OrcidService;
-import org.dspace.authority.orcid.jaxb.activities.WorkGroup;
-import org.dspace.authority.orcid.jaxb.activities.Works;
-import org.dspace.authority.orcid.jaxb.common.CreditName;
-import org.dspace.authority.orcid.jaxb.common.ExternalId;
-import org.dspace.authority.orcid.jaxb.common.ExternalIds;
-import org.dspace.authority.orcid.jaxb.common.FuzzyDate;
-import org.dspace.authority.orcid.jaxb.common.LanguageCode;
-import org.dspace.authority.orcid.jaxb.common.OrcidId;
-import org.dspace.authority.orcid.jaxb.common.SourceType;
-import org.dspace.authority.orcid.jaxb.common.Url;
-import org.dspace.authority.orcid.jaxb.personaldetails.NameCtype;
-import org.dspace.authority.orcid.jaxb.personaldetails.NameCtype.GivenNames;
-import org.dspace.authority.orcid.jaxb.personaldetails.PersonalDetails;
-import org.dspace.authority.orcid.jaxb.work.Citation;
-import org.dspace.authority.orcid.jaxb.work.CitationType;
-import org.dspace.authority.orcid.jaxb.work.Contributor;
-import org.dspace.authority.orcid.jaxb.work.Work;
-import org.dspace.authority.orcid.jaxb.work.WorkContributors;
-import org.dspace.authority.orcid.jaxb.work.WorkSummary;
-import org.dspace.authority.orcid.jaxb.work.WorkTitle;
-import org.dspace.authority.orcid.jaxb.work.WorkType;
 import org.dspace.core.Context;
 import org.dspace.submit.lookup.NetworkSubmissionLookupDataLoader;
 import org.dspace.submit.util.SubmissionLookupPublication;
 import org.dspace.utils.DSpace;
+import org.orcid.jaxb.model.common_v2.CreditName;
+import org.orcid.jaxb.model.common_v2.ExternalId;
+import org.orcid.jaxb.model.common_v2.ExternalIds;
+import org.orcid.jaxb.model.common_v2.FuzzyDate;
+import org.orcid.jaxb.model.common_v2.LanguageCode;
+import org.orcid.jaxb.model.common_v2.OrcidId;
+import org.orcid.jaxb.model.common_v2.SourceType;
+import org.orcid.jaxb.model.common_v2.Url;
+import org.orcid.jaxb.model.record_v2.Citation;
+import org.orcid.jaxb.model.record_v2.CitationType;
+import org.orcid.jaxb.model.record_v2.Contributor;
+import org.orcid.jaxb.model.record_v2.NameType;
+import org.orcid.jaxb.model.record_v2.NameType.GivenNames;
+import org.orcid.jaxb.model.record_v2.PersonalDetails;
+import org.orcid.jaxb.model.record_v2.Work;
+import org.orcid.jaxb.model.record_v2.WorkContributors;
+import org.orcid.jaxb.model.record_v2.WorkGroup;
+import org.orcid.jaxb.model.record_v2.WorkSummary;
+import org.orcid.jaxb.model.record_v2.WorkTitle;
+import org.orcid.jaxb.model.record_v2.WorkType;
+import org.orcid.jaxb.model.record_v2.Works;
 
 import com.google.api.client.util.Charsets;
 import com.google.common.io.Files;
@@ -82,19 +83,21 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
             Map<String, Set<String>> keys) throws HttpException, IOException
     {
         Set<String> orcids = keys != null ? keys.get(ORCID) : null;
+        List<Thread> threads = new ArrayList<Thread>();
+        final ConcurrentLinkedQueue<Record> q = new ConcurrentLinkedQueue<Record>();
         List<Record> results = new ArrayList<Record>();
 
-        OrcidService orcidService = OrcidService.getOrcid();
+        final OrcidService orcidService = OrcidService.getOrcid();
         String sourceName = orcidService.getSourceClientName();
 
         if (orcids != null)
         {
-            for (String orcid : orcids)
+            for (final String orcid : orcids)
             {
 
                 try
                 {
-                    PersonalDetails profile = orcidService
+                    final PersonalDetails profile = orcidService
                             .getPersonalDetails(orcid, null);
                     if (profile != null)
                     {
@@ -102,7 +105,8 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                         workgroup: for (WorkGroup orcidGroup : orcidWorks.getGroup())
                         {
                             int higher = orcidService.higherDisplayIndex(orcidGroup);
-                            worksummary : for (WorkSummary orcidSummary : orcidGroup
+                            // take the Work with highest display index value (the preferred item)
+                            worksummary : for (final WorkSummary orcidSummary : orcidGroup
                                     .getWorkSummary())
                             {
                                 if (StringUtils.isNotBlank(orcidSummary.getDisplayIndex()))
@@ -126,13 +130,28 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                                 {
                                     try
                                     {
-                                        results.add(convertOrcidWorkToRecord(
-                                                profile, orcid,
-                                                orcidService.getWork(orcid,
-                                                        null,
-                                                        orcidSummary
-                                                                .getPutCode()
-                                                                .toString())));
+                                    	threads.add(new Thread() {
+                                    		@Override
+                                    		public void run()
+                                    		{
+                                    			int count = 10;
+                                    			while (count-- > 0)
+                                    			{
+                                    				try {
+                                    					q.add(convertOrcidWorkToRecord(
+                                    							profile, orcid,
+                                    							orcidService.getWork(orcid,
+                                    									null,
+                                    									orcidSummary
+                                    									.getPutCode()
+                                    									.toString())));
+                                    					return;
+                                    				} catch (Exception e) {
+                                    					e.printStackTrace();
+                                    				}
+                                    			}
+                                    		}
+                                    	});
                                     }
                                     catch (Exception e)
                                     {
@@ -149,6 +168,34 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                 }
             }
         }
+        
+        List<Thread> threadsStarted = new ArrayList<Thread>();
+        
+        while (!threads.isEmpty() || !threadsStarted.isEmpty())
+        {
+        	if (!threads.isEmpty() && threadsStarted.size() < 64)
+        	{
+        		Thread t = threads.remove(0);
+        		t.start();
+        		threadsStarted.add(t);
+        	}
+        	else
+        	{
+        		Thread t = threadsStarted.remove(0);
+        		try {
+					t.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
+        }
+        
+        while (!q.isEmpty())
+        {
+        	results.add(q.remove());
+        }
+        
         return results;
     }
 
@@ -237,7 +284,7 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
         }
         if (authNames.isEmpty())
         {
-            NameCtype name = personalDetails.getName();
+            NameType name = personalDetails.getName();
             if (name != null)
             {
             	String value = "Undefined";

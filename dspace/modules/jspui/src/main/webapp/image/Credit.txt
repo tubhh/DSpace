@@ -1,0 +1,9 @@
+Document-icon-16x16.png, Document-icon-128x128.png
+Source: http://www.iconarchive.com/show/sleek-xp-basic-icons-by-hopstarter/Document-icon.html
+License: CC-BY-NC-ND 4
+Author: Hopstarter http://www.iconarchive.com/artist/hopstarter.html
+
+Open_Access_logo_PLoS.svg
+Source: https://upload.wikimedia.org/wikipedia/commons/2/25/Open_Access_logo_PLoS_white.svg
+License: Unknown
+Author: PLoS

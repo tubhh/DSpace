@@ -181,6 +181,7 @@ public class ItemListTag extends TagSupport {
 				configLine = ConfigurationManager
 						.getProperty("webui.itemlist.sort."
 								+ sortOption.getName() + ".columns");
+log.debug("Getting Output configuration from webui.itemlist.sort."+ sortOption.getName() + ".columns");
 				widthLine = ConfigurationManager
 						.getProperty("webui.itemlist.sort."
 								+ sortOption.getName() + ".widths");
@@ -189,6 +190,7 @@ public class ItemListTag extends TagSupport {
 			if (configLine == null) {
 				configLine = ConfigurationManager.getProperty("webui.itemlist."
 						+ sortOption.getName() + ".columns");
+log.debug("Getting Output configuration from webui.itemlist."+ sortOption.getName() + ".columns");
 				widthLine = ConfigurationManager.getProperty("webui.itemlist."
 						+ sortOption.getName() + ".widths");
             }
@@ -198,6 +200,7 @@ public class ItemListTag extends TagSupport {
         {
 		    configLine = ConfigurationManager.getProperty("webui.itemlist."
                     + config + ".columns");
+log.debug("Getting Output configuration from webui.itemlist."+ config + ".columns");
 		    widthLine = ConfigurationManager
                     .getProperty("webui.itemlist." + config + ".widths");
         }
@@ -205,6 +208,7 @@ public class ItemListTag extends TagSupport {
 		if (configLine == null) {
 			configLine = ConfigurationManager
 					.getProperty("webui.itemlist.columns");
+log.debug("No special setting for webui.itemlist.columns");
 			widthLine = ConfigurationManager
 					.getProperty("webui.itemlist.widths");
         }

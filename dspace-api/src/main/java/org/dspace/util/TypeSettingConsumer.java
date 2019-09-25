@@ -78,10 +78,10 @@ public class TypeSettingConsumer implements Consumer
         if (dso.getType() == Constants.ITEM)
         {
             Item item = (Item)dso;
-            Metadatum[] casrai = item.getMetadata("dc", "type", "casrai", Item.ANY);
-            Metadatum[] dcmitype = item.getMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
+            //Metadatum[] casrai = item.getMetadata("dc", "type", "casrai", Item.ANY);
+            //Metadatum[] dcmitype = item.getMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
             Metadatum[] types = item.getMetadata("dc", "type", null, Item.ANY);
-            if (casrai.length == 0 && dcmitype.length == 0 && types.length > 0) {
+            if (types.length > 0) {
                 String type = types[0].value;
                 Metadatum[] thesistypes = item.getMetadata("dc", "type", "thesis", Item.ANY);
                 if (type != "Thesis" || (type == "Thesis" && thesistypes.length > 0)) {
@@ -91,7 +91,10 @@ public class TypeSettingConsumer implements Consumer
                             thesistype = thesistypes[0].value;
                         }
 
+                        item.clearMetadata("dc", "type", "driver", Item.ANY);
+                        item.clearMetadata("dc", "type", "dini", Item.ANY);
                         item.clearMetadata("dc", "type", "casrai", Item.ANY);
+                        item.clearMetadata("tuhh", "type", "opus", Item.ANY);
                         item.clearMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
 
                         Map<String, String> typeset = mapTypeArray(type, thesistype);
@@ -391,8 +394,45 @@ public class TypeSettingConsumer implements Consumer
             ret.put("dcmi", "InteractiveResource");
             break;
         case "Other":
-        default:
             ret.put("opus", "Sonstiges");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            break;
+        case "Text":
+            ret.put("opus", "Text");
+            ret.put("dini", "ResearchData");
+            ret.put("driver", "other");
+            ret.put("casrai", "Online Resource");
+            ret.put("dcmi", "Text");
+            break;
+        case "article-review":
+            //Cerif: Journal Article Review
+            ret.put("opus", "Review (Artikel)");
+            ret.put("dini", "review");
+            ret.put("driver", "review");
+            ret.put("casrai", "Journal Article");
+            ret.put("dcmi", "Text");
+            break;
+        case "letter":
+            //Cerif: Letter to Editor
+            ret.put("opus", "Letter (to Editor)");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            break;
+        case "commentary":
+            //Cerif:Commentary
+            ret.put("opus", "Kommentar");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            break;
+        default:
+            ret.put("opus", mainType);
             ret.put("dini", "Other");
             ret.put("driver", "other");
             ret.put("casrai", "Other");

@@ -327,13 +327,14 @@ td > ul {
     color: #2dc6c6;
 }
 .fa-user.exstaff {
-    color: #b791ae;
+/*     color: #229e9e; */
+    color: #2edcdc;
 }
 .fa-user.externalstaff {
-    color: #333;
+    color: #999999;
 }
 .fa-user.undefinedstaff {
-    color: #999;
+    color: #afafaf;
 }
 
 
@@ -343,6 +344,7 @@ td > ul {
 }
 .btn-warning.col-md-6 , .btn-primary.col-md-6 {
     padding-left: 12px;
+    margin-right: 12px;
 }
 .btn-warning:hover {
     color:#333;

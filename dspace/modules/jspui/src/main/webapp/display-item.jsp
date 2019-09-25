@@ -253,6 +253,7 @@ j(document).ready(function() {
                     <a href="https://doi.org/<%= doiMd %>">https://doi.org/<%= doiMd %></a></div>
                 <%
                     }
+/*
                     else {
                     Metadatum[] dcv = item.getMetadata("dc", "identifier", "urn", Item.ANY);
                     Metadatum[] localdcv = item.getMetadata("tuhh", "identifier", "urn", Item.ANY);
@@ -276,14 +277,20 @@ j(document).ready(function() {
                     <code><%= HandleManager.getCanonicalForm(handle) %></code></div>
                 <%
                     }
+*/
                 %>
     <%
+        Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
+        Metadatum[] isOA = item.getMetadata("item", "grantfulltext", Item.ANY, Item.ANY);
         Metadatum[] cccheck = item.getMetadata("dc", "rights", Item.ANY, Item.ANY);
         for (Metadatum cc : cccheck) {
             if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
                 String[] creativecommonsArray = cc.value.split("/");
                 if (creativecommonsArray[creativecommonsArray.length-1].equals("deed.de")) {
-                    creativecommons = creativecommonsArray[creativecommonsArray.length-4]+"/"+creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                    //creativecommons = creativecommonsArray[creativecommonsArray.length-4]+"/"+creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                    creativecommons = creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                } else if (creativecommonsArray[creativecommonsArray.length-1].equals("de")) {
+                    creativecommons = creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
                 } else {
                     creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1];
                 }
@@ -292,18 +299,32 @@ j(document).ready(function() {
         }
         if (creativecommons != "") {
 %>
-                    <div class="well"><fmt:message key="jsp.display-item.creativecommons"/>
+                    <div class="well"><%-- <fmt:message key="jsp.display-item.creativecommons"/> --%>
+                        <%
+                            if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.fulltext" /><span style="padding-left:10px;">
+                        <%
+                            }
+                        %>
+                        <%
+                            if (isOA.length > 0 && isOA[0].value.equals("open")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.oa" /><span style="padding-left:10px;">
+                        <%
+                            }
+                        %>
                         <% if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/cc0/") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">
-                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" />
+                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" title="CC Null" />
                             </a>
                         <% } else if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/pdm/") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/pdm/">
-                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" />
+                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" title="Public Domain" />
                             </a>
                         <% } else { %>
                             <a href="<%= creativecommonslink %>">
-                                <img src="https://licensebuttons.net/l/<%= creativecommons %>/88x31.png" alt="<%= creativecommonslink %>" />
+                                <img src="https://licensebuttons.net/l/<%= creativecommons %>/88x31.png" alt="<%= creativecommonslink %>" title="<%= creativecommonslink %>" />
                             </a>
                         <% } %>
                     </div>
@@ -320,34 +341,59 @@ j(document).ready(function() {
         }
         if (creativecommons != "") {
     %>
-                    <div class="well"><fmt:message key="jsp.display-item.creativecommons"/>
+                    <div class="well"><%-- <fmt:message key="jsp.display-item.creativecommons"/> --%>
+                        <%
+                            if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.fulltext" /><span style="padding-left:10px;"></span>
+                        <%
+                            }
+                        %>
+                        <%
+                            if (isOA.length > 0 && isOA[0].value.equals("open")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.oa" /><span style="padding-left:10px;"></span>
+                        <%
+                            }
+                        %>
                         <% if (creativecommons == "cc-null") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/cc0/">
-                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" />
+                                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC Null" title="CC Null" />
                             </a>
                         <% } else if (creativecommons == "pd") { %>
                             <a href="https://creativecommons.org/share-your-work/public-domain/pdm/">
-                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" />
+                                <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" alt="Public Domain" title="Public Domain" />
                             </a>
                         <% } else { %>
                             <a href="https://creativecommons.org/licenses/<%= creativecommonslink %>">
-                                <img src="https://licensebuttons.net/l/<%= creativecommonslink %>/88x31.png" alt="<%= creativecommonslink %>" />
+                                <img src="https://licensebuttons.net/l/<%= creativecommonslink %>/88x31.png" alt="<%= creativecommonslink %>" title="<%= creativecommonslink %> "/>
                             </a>
                         <% } %>
+                    </div>
+    <%
+        } else if ((hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) || (isOA.length > 0 && isOA[0].value.equals("open"))) {
+    %>
+                    <div class="well">
+                        <%
+                            if (hasFulltext.length > 0 && hasFulltext[0].value.equals("With Fulltext")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.fulltext" /><span style="padding-left:10px;">
+                        <%
+                            }
+                        %>
+                        <%
+                            if (isOA.length > 0 && isOA[0].value.equals("open")) {
+                        %>
+                                <fmt:message key="jsp.mydspace.render.oa" />
+                        <%
+                            }
+                        %>
                     </div>
     <%
         }
         }
     %>
 
-    <%
-        Metadatum[] hasFulltext = item.getMetadata("item", "fulltext", Item.ANY, Item.ANY);
-        if (hasFulltext[0].value.equals("With Fulltext")) {
-    %>
-                    <div class="well"><fmt:message key="jsp.mydspace.render.fulltextinfo" /> <fmt:message key="jsp.mydspace.render.fulltext" /></div>
-    <%
-        }
-    %>
        </div>         
 <%
         if (admin_button)  // admin edit button
@@ -708,13 +754,31 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
+<%--------- Feedback Box from Bamberg University ---------
+      <div class="col-lg-12 col-md-4 col-sm-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title larger-panel-title">
+              <fmt:message key="jsp.display-item.info.links" />
+            </h3>
+          </div>
+          <div class="panel-list">
+            <%@ include file="layout/fragenmodal.html" %>
+          </div>
+        </div>
+      </div>
+------ End Feedback Box from Bamberg University -------------%>
+
+
 <%-- As there is now only one possible User Tools button (create new version) it can be included
     in this check so an empty sub-menu will not be displayed --%>
-<% if((submitter_button && hasVersionButton) || StringUtils.isNotBlank(crisID)) { %>
+<%-- if((submitter_button && hasVersionButton) || StringUtils.isNotBlank(crisID)) { --%>
+<% if((submitter_button && hasVersionButton)) { %>
        <div class="col-sm-5 col-md-4 col-lg-3">
             <div class="panel panel-warning">
             	<div class="panel-heading"><fmt:message key="jsp.usertools"/></div>
 
+<%--
             <% if(StringUtils.isNotBlank(crisID)) { %>
             	<div class="panel-body">
         			<a class="btn btn-primary col-md-12" href="<%= request.getContextPath() %>/tools/claim?handle=<%= handle %>">
@@ -722,6 +786,7 @@ if (dedupEnabled && admin_button) { %>
         			</a>    	
             	</div>
     <% } %>
+--%>
 <%
         // Include the hasVersionButton test here as well, in case the user tools menu gains additional buttons
         if (submitter_button && hasVersionButton) {

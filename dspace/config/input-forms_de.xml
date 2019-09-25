@@ -17,7 +17,7 @@
 <!--   <name-map collection-handle="default" form-name="traditional" /> -->
    <name-map collection-handle="default" form-name="tubdokwitheu" />
 <!--   <name-map collection-handle="11420/2" form-name="tubdokwitheu" /> -->
-   <name-map collection-handle="123456789/5" form-name="fdm" />
+   <name-map collection-handle="123456789/1513" form-name="fdm" />
    <name-map collection-handle="123456789/4" form-name="metadata" />
    <name-map collection-handle="123456789/35" form-name="fdm-nontuhh" />
    <name-map collection-handle="123456789/40" form-name="fdm-nontuhh" />
@@ -307,16 +307,27 @@
        </field>
 
        <field>
-         <dc-schema>tuhh</dc-schema>
+         <dc-schema>datacite</dc-schema>
          <dc-element>relation</dc-element>
-         <dc-qualifier>issupplementedby</dc-qualifier>
+         <dc-qualifier>IsSupplementedBy</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Verwendet</label>
          <input-type>onebox</input-type>
          <hint>Diese Publikation verwendet Forschungsdaten. Die Forschungsdaten können über ihren Persistent Identifier (DOI, URN oder Handle) eingegeben werden, indem Sie einen Präfix doi:, urn: or hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
          <required></required>
        </field>
-
+<!--
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>issupplementedby</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Verwendet TOR Forschungsdaten</label>
+         <input-type>onebox</input-type>
+         <hint>Diese Publikation verwendet Forschungsdaten, die ebenfalls auf diesem Server bereitgestellt werden. Bitte geben Sie den Titel der Forschungsdaten an. Sie können die Lookup-Funktion (den Button mit der Lupe) nutzen, um den Titel zu finden.</hint>
+         <required></required>
+       </field>
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
@@ -443,6 +454,17 @@
          <label>Verlagslink</label>
          <input-type value-pairs-name="common_uritypes_de">qualdrop_value</input-type>
          <hint>Geben Sie hier den Link zur Parallelpublikation an.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Verlagsversion</label>
+         <input-type value-pairs-name="qualdrop_publication_version_de">qualdrop_value</input-type>
+         <hint>Bitte wählen Sie die Version dieser Publikation, falls sie bei einem Verlag eingereicht wurde, und geben Sie den Identifier an (wenn möglich doi).</hint>
          <required></required>
        </field>
 
@@ -577,6 +599,17 @@
      </page>
 
      <page number="3">
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier>version</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publikationsversion (Status dieser Publikation bei einem Verlag)</label>
+         <input-type value-pairs-name="publication_version_de">dropdown</input-type>
+         <hint>Bitte wählen Sie die Version dieser Publikation, falls sie bei einem Verlag eingereicht wurde.</hint>
+         <required></required>
+        </field>
+
        <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>rights</dc-element>
@@ -1893,6 +1926,56 @@
  <!-- stores the associated stored-values in the database.                  -->
 
  <form-value-pairs>
+   <value-pairs value-pairs-name="publication_version_de" dc-term="publication_version">
+     <pair>
+       <displayed-value>bei keinem Verlag eingereicht (eigenständige Publikation)</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Entwurf</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Eingereichte Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Angenommene Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Veröffentlichte Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Erneuerte Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+
+   <value-pairs value-pairs-name="qualdrop_publication_version_de" dc-term="publication_version">
+     <pair>
+       <displayed-value>Veröffentlichte Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Entwurf</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Eingereichte Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Angenommene Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Erneuerte Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+       
    <value-pairs value-pairs-name="relation_types_de" dc-term="datacite_relation">
      <pair>
        <displayed-value>zitiert</displayed-value>

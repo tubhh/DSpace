@@ -177,6 +177,7 @@
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("dateissued")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=dateissued&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.dateissued"/></a></li>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("documenttype")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=documenttype&rpp=100"><fmt:message key="jsp.layout.navbar-default.tuhh.doctype"/></a></li>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("author")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=author&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.author"/></a></li>
+                  <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("lcAdvisor")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=lcAdvisor&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.advisor"/></a></li>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("journals")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=journals&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.journals"/></a></li>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("crisseries")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=crisseries&rpp=100"><fmt:message key="jsp.layout.navbar-default.tuhh.crisseries"/></a></li>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("tuhhseries")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=tuhhseries&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.tuhhseries"/></a></li>
@@ -206,7 +207,9 @@
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Info.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.help"/>  <b class="caret"></b></a>
              <ul class="dropdown-menu">
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-contact"/></li>
+                <li><fmt:message key="jsp.layout.navbar-default.tubdok-depositlicense"/></li>
                 <li class="divider"></li>
+                <li><fmt:message key="jsp.layout.navbar-default.tore-help"/></li>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=1"><fmt:message key="jsp.layout.navbar-default.tubdok-policies"/></a></li>               --%>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=6"><fmt:message key="jsp.layout.navbar-default.tubdok-usage"/></a></li>          --%>
 <%--                <li class="divider"></li>                                                                                --%>
@@ -216,7 +219,6 @@
 <%--                <li class="divider"></li> --%>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=3"><fmt:message key="jsp.layout.navbar-default.tubdok-documentation"/></a></li>         --%>
 <%--                <li><a href="<%= request.getContextPath() %>/staticpages.jsp?incFile=4"><fmt:message key="jsp.layout.navbar-default.tubdok-disclaimer"/></a></li>         --%>
-                <li><fmt:message key="jsp.layout.navbar-default.tubdok-depositlicense"/></li>
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-orcid"/></li>
 <%--
                 <li class="divider"></li>
