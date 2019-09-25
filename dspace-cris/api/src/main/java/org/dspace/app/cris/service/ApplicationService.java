@@ -14,7 +14,11 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
@@ -59,6 +63,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.cilea.osd.common.model.Identifiable;
 import it.cilea.osd.jdyna.service.IAutoCreateApplicationService;
 import jxl.read.biff.BiffException;
+import it.cilea.osd.jdyna.model.Property;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -101,6 +106,9 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
 	private Cache cacheBySource;
 	private Cache cacheByUUID;
 	
+    // the key is the UUID of the CRIS object, the set contains the UUIDs of all the CRIS objects that hold a reference to such object
+    private Map<String, Set<String>> cacheDependencies = new HashMap<String, Set<String>>();
+
     private static Logger log = Logger.getLogger(ApplicationService.class);
 
     /**
@@ -910,6 +918,54 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
         return null;
     }
 
+    public void clearCacheByUUID(String uuid)
+    {
+        ACrisObject object = getEntityByUUID(uuid);
+        if (object == null) {
+            log.warn("Try to decache unfounded object with UUID: " + uuid);
+            return;
+        }
+        if (cache != null)
+        {
+            try
+            {
+                cache.remove(object.getClass().getName() + "#" + object.getId());
+            }
+            catch (Exception ex)
+            {
+                log.error("clearCacheByUUID", ex);
+            }
+        }
+        if (cacheRpByEPerson != null && object instanceof ResearcherPage) {
+            Integer eid = ((ResearcherPage) object).getEpersonID();
+            if (eid != null) {
+                cacheRpByEPerson.remove(eid);
+            }
+        }
+        if (object instanceof ACrisObject) {
+            if (cacheByCrisID != null) {
+                String key = ((ACrisObject) object).getCrisID();
+                if (key != null) {
+                    cacheByCrisID.remove(key);
+                }
+            }
+            if (cacheBySource != null) {
+                String sourceRef = ((ACrisObject) object).getSourceRef();
+                String sourceID = ((ACrisObject) object).getSourceID();
+                if (sourceID != null) {
+                    String key = sourceRef + "-" + sourceID;
+                    cacheBySource.remove(object.getClass().getName() + "#" + key);
+                }
+            }
+            if (cacheByUUID != null) {
+                String key = ((ACrisObject) object).getUuid();
+                if (key != null) {
+                    cacheByUUID.remove(key);
+                }
+            }
+        }
+    }
+
 	public void clearCache()
     {
         try
@@ -950,6 +1006,38 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
 			}
 		}
 		if (object instanceof ACrisObject) {
+			// get set of the depending objects
+			String myUuid = ((ACrisObject) object).getUuid();
+			Set<String> dependencies = cacheDependencies.get(myUuid);
+
+			// remove from the cache all the depending objects
+			if (dependencies != null) {
+				for (String uuidDep : dependencies) {
+					clearCacheByUUID(uuidDep);
+				}
+			}
+			cacheDependencies.remove(myUuid);
+
+			// add the object for all the CRIS objects mentioned in its direct properties to the dependencies map
+			List<Property> props = ((ACrisObject) object).getAnagrafica();
+			Set<String> myDeps = new HashSet<String>();
+			for (Property prop : props) {
+				Object val = prop.getValue().getReal();
+				if (val instanceof ACrisObject) {
+					myDeps.add(((ACrisObject) val).getUuid());
+				}
+			}
+			if (myDeps.size() > 0) {
+				for (String myDep : myDeps) {
+					Set<String> relatedUuids = cacheDependencies.get(myDep);
+					if (relatedUuids == null) {
+						relatedUuids = new HashSet<String>();
+					}
+					relatedUuids.add(myUuid);
+					cacheDependencies.put(myDep, relatedUuids);
+				}
+			}
+
 			if (cacheByCrisID != null) {
 				String key = ((ACrisObject) object).getCrisID();
 				if (key != null) {
@@ -961,7 +1049,7 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
 				String sourceID = ((ACrisObject) object).getSourceID();
 				if (sourceID != null) {
 					String key = sourceRef + "-" + sourceID;
-					cacheBySource.put(new Element(key, object));
+					cacheBySource.put(new Element(model.getName() + "#" + key, object));
 				}
 			}
 			if (cacheByUUID != null) {
@@ -1095,7 +1183,7 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
 					String[] args = new String[] { "-f", file };
 					ImportCRISDataModelConfiguration.main(args);
 					log.info("Rebuild CRIS Configuration is complete");
-				} catch (SQLException | IOException | BiffException | InstantiationException | IllegalAccessException
+				} catch (SQLException | IOException | InstantiationException | IllegalAccessException
 						| ParseException e) {
 					log.error("Error attempting to Rebuild CRIS Configuration", e);
 				} finally {
