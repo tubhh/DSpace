@@ -10,7 +10,6 @@ package org.dspace.app.cris.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,19 +49,14 @@ import org.dspace.app.cris.model.jdyna.RPProperty;
 import org.dspace.app.cris.model.orcid.OrcidHistory;
 import org.dspace.app.cris.model.orcid.OrcidQueue;
 import org.dspace.app.cris.model.ws.User;
-import org.dspace.app.cris.service.VolatileObjects.CandidateObjectValue;
 import org.dspace.app.cris.util.ResearcherPageUtils;
 import org.dspace.app.util.Util;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.services.ConfigurationService;
 import org.dspace.storage.rdbms.DatabaseUtils;
-import org.dspace.utils.DSpace;
 import org.hibernate.Session;
-import org.springframework.transaction.annotation.Transactional;
 
 import it.cilea.osd.common.model.Identifiable;
-import it.cilea.osd.jdyna.service.IAutoCreateApplicationService;
-import jxl.read.biff.BiffException;
 import it.cilea.osd.jdyna.model.Property;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -76,7 +70,7 @@ import net.sf.ehcache.Element;
  * @author cilea
  * 
  */
-public class ApplicationService extends ExtendedTabService implements IAutoCreateApplicationService
+public class ApplicationService extends ExtendedTabService
 {
 
     private ResearcherPageDao researcherPageDao;
@@ -101,11 +95,11 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
     private CacheManager cacheManager;
 
     private Cache cache;
-	private Cache cacheRpByEPerson;
-	private Cache cacheByCrisID;
-	private Cache cacheBySource;
-	private Cache cacheByUUID;
-	
+    private Cache cacheRpByEPerson;
+    private Cache cacheByCrisID;
+    private Cache cacheBySource;
+    private Cache cacheByUUID;
+    
     // the key is the UUID of the CRIS object, the set contains the UUIDs of all the CRIS objects that hold a reference to such object
     private Map<String, Set<String>> cacheDependencies = new HashMap<String, Set<String>>();
 
@@ -116,7 +110,7 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
      */
     public void init()
     {
-    	super.init();
+	super.init();
         researcherPageDao = (ResearcherPageDao) getDaoByModel(ResearcherPage.class);
         projectDao = (ProjectDao) getDaoByModel(Project.class);
         organizationUnitDao = (OrganizationUnitDao) getDaoByModel(OrganizationUnit.class);
@@ -128,7 +122,7 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
         orcidQueueDao = (OrcidQueueDao) getDaoByModel(OrcidQueue.class);
         orcidHistoryDao = (OrcidHistoryDao) getDaoByModel(OrcidHistory.class);
         
-		if (configurationService.getPropertyAsType("cris.applicationServiceCache.enabled", true, true))
+	if (configurationService.getPropertyAsType("cris.applicationServiceCache.enabled", true, true))
         {
             enableCacheManager();
         }
@@ -231,7 +225,7 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
 
     public ResearchObject getBySourceID(String sourceRef, String sourceId)
     {
-    	return researchDao.uniqueBySourceID(sourceRef, sourceId);
+	return researchDao.uniqueBySourceID(sourceRef, sourceId);
     }
     public long countSubscriptionsByUUID(String uuid)
     {
@@ -272,9 +266,9 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
     }
 
     public void setConfigurationService(
-			ConfigurationService configurationService) {
-		this.configurationService = configurationService;
-	}
+	    ConfigurationService configurationService) {
+	this.configurationService = configurationService;
+    }
     
     /**
      * Get all researcher in a specific status. If status is null all the
@@ -601,18 +595,18 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
 
     public ResearcherPage getResearcherPageByEPersonId(Integer id)
     {
-		if (cacheRpByEPerson != null) {
-			Element element = cacheRpByEPerson.getQuiet(id);
-			if (element != null) {
-				ResearcherPage rp = (ResearcherPage) element.getValue();
-				if (!isExpiredCache(ResearcherPage.class, element, rp.getId(), rp)) {
-					return rp;
-				}
-				else if (rp != null) {
-					return get(ResearcherPage.class, rp.getId(), false);
-				}
-			}
-		}    	
+	if (cacheRpByEPerson != null) {
+	    Element element = cacheRpByEPerson.getQuiet(id);
+	    if (element != null) {
+		ResearcherPage rp = (ResearcherPage) element.getValue();
+		if (!isExpiredCache(ResearcherPage.class, element, rp.getId(), rp)) {
+		    return rp;
+		}
+		else if (rp != null) {
+		    return get(ResearcherPage.class, rp.getId(), false);
+		}
+	    }
+	}    	
         return researcherPageDao.uniqueByEPersonId(id);
     }
 
@@ -640,32 +634,32 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
     public <T extends ACrisObject> T getEntityByCrisId(String crisID,
             Class<T> className)
     {        
-		if (cacheByCrisID != null) {
-			Element element = cacheByCrisID.getQuiet(crisID);
-			if (element != null) {
-				T crisObject = (T) element.getValue();
+	if (cacheByCrisID != null) {
+	    Element element = cacheByCrisID.getQuiet(crisID);
+	    if (element != null) {
+		T crisObject = (T) element.getValue();
                 //the element retrieved by cache is consistent with the className passed as parameter? (add safety check)
                 if(className.isAssignableFrom(crisObject.getClass())) {
-    				if (!isExpiredCache(className, element, crisObject.getId(), crisObject)) {
-    					return crisObject;
-    				}
-    				else if (crisObject != null) {
-    					return get(className, crisObject.getId(), false);
-    				}
+		    if (!isExpiredCache(className, element, crisObject.getId(), crisObject)) {
+			return crisObject;
+		    }
+		    else if (crisObject != null) {
+			return get(className, crisObject.getId(), false);
+		    }
                 }
                 else {
                     //return null because the caller method working on different class object e.g. I searching for a Journal but the primary logic in the caller method see first in ResearcherPage table  
                     return null;
                 }
-			}
-		}
+	    }
+	}
 
         CrisObjectDao<T> dao = (CrisObjectDao<T>) getDaoByModel(className);
-		T object = dao.uniqueByCrisID(crisID);
-		if (object != null) {
-			putToCache(className, object, object.getId());
-		}
-		return object;
+	T object = dao.uniqueByCrisID(crisID);
+	if (object != null) {
+	    putToCache(className, object, object.getId());
+	}
+	return object;
     }
   
     public <T extends ACrisObject> T getEntityByCrisId(String crisID)
@@ -707,12 +701,12 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
     public <T extends ACrisObject> T getEntityBySourceId(String sourceRef, String sourceID,
             Class<T> className)
     {
-		if (cacheBySource != null) {
-			Element element = cacheBySource.getQuiet(sourceRef + "-" + sourceID);
-			if (element != null) {
-				T crisObject = (T) element.getValue();
-				//the element retrieved by cache is consistent with the className passed as parameter? (add safety check)
-				if(className.isAssignableFrom(crisObject.getClass())) {
+	if (cacheBySource != null) {
+	    Element element = cacheBySource.getQuiet(sourceRef + "-" + sourceID);
+	    if (element != null) {
+		T crisObject = (T) element.getValue();
+		//the element retrieved by cache is consistent with the className passed as parameter? (add safety check)
+		if(className.isAssignableFrom(crisObject.getClass())) {
                     if (!isExpiredCache(className, element, crisObject.getId(),
                             crisObject))
                     {
@@ -722,32 +716,32 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
                     {
                         return get(className, crisObject.getId(), false);
                     }
-				}
-				else {
-				    //return null because the caller method working on different class object e.g. I searching for a Journal but the primary logic in the caller method see first in ResearcherPage table  
-				    return null;
-				}
-			}
 		}
+		else {
+		    //return null because the caller method working on different class object e.g. I searching for a Journal but the primary logic in the caller method see first in ResearcherPage table  
+		    return null;
+		}
+	    }
+	}
         CrisObjectDao<T> dao = (CrisObjectDao<T>) getDaoByModel(className);
-		T object = dao.uniqueBySourceID(sourceRef, sourceID);
-		if (object != null) {
-			putToCache(className, object, object.getId());
-		}
-		return object;
+	T object = dao.uniqueBySourceID(sourceRef, sourceID);
+	if (object != null) {
+	    putToCache(className, object, object.getId());
+	}
+	return object;
     }
 
     public ACrisObject getEntityByUUID(String uuid)
     {
-		if (cacheByUUID != null) {
-			Element element = cacheByUUID.getQuiet(uuid);
-			if (element != null) {
-				ACrisObject crisObject = (ACrisObject) element.getValue();
-				if (!isExpiredCache(crisObject.getClass(), element, crisObject.getId(), crisObject)) {
-					return crisObject;
-				}
-			}
-		}    	
+	if (cacheByUUID != null) {
+	    Element element = cacheByUUID.getQuiet(uuid);
+	    if (element != null) {
+		ACrisObject crisObject = (ACrisObject) element.getValue();
+		if (!isExpiredCache(crisObject.getClass(), element, crisObject.getId(), crisObject)) {
+		    return crisObject;
+		}
+	    }
+	}    	
         // return ((ApplicationDao) getApplicationDao()).uniqueByUUID(uuid);
         // HIBERNATE 4 seems not support polymorphic query on mappedsuperclass
         ACrisObject obj = researcherPageDao.uniqueByUUID(uuid);
@@ -763,9 +757,9 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
                 }
             }
         }
-		if (obj != null) {
-			putToCache((Class) obj.getClass(), obj, obj.getId());
-		}        
+	if (obj != null) {
+	    putToCache((Class) obj.getClass(), obj, obj.getId());
+	}        
         return obj;
     }
 
@@ -780,10 +774,10 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
         return userWSDao.uniqueByToken(token);
     }
 
-	public <T extends ACrisObject> Date uniqueLastModifiedTimeStamp(Class<T> model, int id)
+    public <T extends ACrisObject> Date uniqueLastModifiedTimeStamp(Class<T> model, int id)
     {
-		CrisObjectDao<T> dao = (CrisObjectDao<T>) getDaoByModel(model);
-		return dao.uniqueLastModifiedTimeStamp(id);
+	CrisObjectDao<T> dao = (CrisObjectDao<T>) getDaoByModel(model);
+	return dao.uniqueLastModifiedTimeStamp(id);
     }
     
     public ResearcherPage uniqueByCrisID(String crisID)
@@ -850,14 +844,14 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
     public <T extends ACrisObject> T get(
             Class<T> model, Integer objectId, boolean forceDetach)
     {
-		Element element = getFromCache(model, objectId);
-		T rp = element != null ? (T) element.getValue() : null;
-		if (isExpiredCache(model, element, objectId, rp))
+	Element element = getFromCache(model, objectId);
+	T rp = element != null ? (T) element.getValue() : null;
+	if (isExpiredCache(model, element, objectId, rp))
         {
             rp = super.get(model, objectId);
             if (rp != null)
             {
-				putToCache(model, rp, objectId);
+		putToCache(model, rp, objectId);
                 if (forceDetach)
                 {
                     rp.getAnagrafica();
@@ -869,46 +863,46 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
     }
 
 
-	private <T extends ACrisObject> boolean isExpiredCache(Class<T> model, Element element, Integer objectId,
-			ACrisObject rp) {
-		Date now = new Date();
-		if (rp == null) {
-			return true;
-		}		
-		long lastModCache = element.getLastUpdateTime();
-		
-		if ( now.getTime() - element.getLastAccessTime() > 1000) {
-			Date uniqueLastModifiedTimeStamp = uniqueLastModifiedTimeStamp(model, objectId);
-			long lastModDb = uniqueLastModifiedTimeStamp != null? uniqueLastModifiedTimeStamp.getTime():Long.MAX_VALUE;
-			if (lastModCache >= lastModDb) {
-				element.updateAccessStatistics();
-				return false;
-			}
-			else {
-				return true;
-			}
-		}
+    private <T extends ACrisObject> boolean isExpiredCache(Class<T> model, Element element, Integer objectId,
+	    ACrisObject rp) {
+	Date now = new Date();
+	if (rp == null) {
+	    return true;
+	}		
+	long lastModCache = element.getLastUpdateTime();
+	
+	if ( now.getTime() - element.getLastAccessTime() > 1000) {
+	    Date uniqueLastModifiedTimeStamp = uniqueLastModifiedTimeStamp(model, objectId);
+	    long lastModDb = uniqueLastModifiedTimeStamp != null? uniqueLastModifiedTimeStamp.getTime():Long.MAX_VALUE;
+	    if (lastModCache >= lastModDb) {
+		element.updateAccessStatistics();
 		return false;
+	    }
+	    else {
+		return true;
+	    }
 	}
+	return false;
+    }
 
-	@Override
-	public <T, PK extends Serializable> T get(Class<T> modelClass, PK pkey) {
-		if (ACrisObject.class.isAssignableFrom(modelClass) && pkey instanceof Integer) {
-			return (T) get((Class<? extends ACrisObject>) modelClass, (Integer) pkey, false);
-		} else {
-			return super.get(modelClass, pkey);
-		}
+    @Override
+    public <T, PK extends Serializable> T get(Class<T> modelClass, PK pkey) {
+	if (ACrisObject.class.isAssignableFrom(modelClass) && pkey instanceof Integer) {
+	    return (T) get((Class<? extends ACrisObject>) modelClass, (Integer) pkey, false);
+	} else {
+	    return super.get(modelClass, pkey);
 	}
+    }
 
-	public <T extends Serializable, PK extends Serializable> Element getFromCache(
+    public <T extends Serializable, PK extends Serializable> Element getFromCache(
             Class<T> model, PK objectId)
     {
         if (cache != null)
         {
             try
             {
-				Element element = cache.getQuiet(model.getName() + "#" + objectId);
-				return element;
+		Element element = cache.getQuiet(model.getName() + "#" + objectId);
+		return element;
             }
             catch (Exception ex)
             {
@@ -966,99 +960,99 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
         }
     }
 
-	public void clearCache()
+    public void clearCache()
     {
         try
         {
-        	cache.removeAll();
-			cacheRpByEPerson.removeAll();
-			cacheBySource.removeAll();
-			cacheByCrisID.removeAll();
-			cacheByUUID.removeAll();
+    	cache.removeAll();
+	    cacheRpByEPerson.removeAll();
+	    cacheBySource.removeAll();
+	    cacheByCrisID.removeAll();
+	    cacheByUUID.removeAll();
         }
         catch (Exception ex)
         {
             log.error("clearCache", ex);
         }	
     }
-	
-	public <T, PK extends Serializable> void putToCache(Class<T> model,
+    
+    public <T extends Serializable, PK extends Serializable> void putToCache(Class<T> model,
             T object, PK objectId)
     {
-		if (object == null) {
-			return;
-		}
+	if (object == null) {
+	    return;
+	}
         if (cache != null)
         {
             try
             {
-				cache.put(new Element(model.getName() + "#" + objectId, object));
+		cache.put(new Element(model.getName() + "#" + objectId, object));
             }
             catch (Exception ex)
             {
                 log.error("putToCache", ex);
             }
         }
-		if (cacheRpByEPerson != null && object instanceof ResearcherPage) {
-			Integer eid = ((ResearcherPage) object).getEpersonID();
-			if (eid != null) {
-				cacheRpByEPerson.put(new Element(eid, object));
-			}
+	if (cacheRpByEPerson != null && object instanceof ResearcherPage) {
+	    Integer eid = ((ResearcherPage) object).getEpersonID();
+	    if (eid != null) {
+		cacheRpByEPerson.put(new Element(eid, object));
+	    }
+	}
+	if (object instanceof ACrisObject) {
+	    // get set of the depending objects
+	    String myUuid = ((ACrisObject) object).getUuid();
+	    Set<String> dependencies = cacheDependencies.get(myUuid);
+
+	    // remove from the cache all the depending objects
+	    if (dependencies != null) {
+		for (String uuidDep : dependencies) {
+		    clearCacheByUUID(uuidDep);
 		}
-		if (object instanceof ACrisObject) {
-			// get set of the depending objects
-			String myUuid = ((ACrisObject) object).getUuid();
-			Set<String> dependencies = cacheDependencies.get(myUuid);
+	    }
+	    cacheDependencies.remove(myUuid);
 
-			// remove from the cache all the depending objects
-			if (dependencies != null) {
-				for (String uuidDep : dependencies) {
-					clearCacheByUUID(uuidDep);
-				}
-			}
-			cacheDependencies.remove(myUuid);
+	    // add the object for all the CRIS objects mentioned in its direct properties to the dependencies map
+	    List<Property> props = ((ACrisObject) object).getAnagrafica();
+	    Set<String> myDeps = new HashSet<String>();
+	    for (Property prop : props) {
+		Object val = prop.getValue().getReal();
+		if (val instanceof ACrisObject) {
+		    myDeps.add(((ACrisObject) val).getUuid());
+		}
+	    }
+	    if (myDeps.size() > 0) {
+		for (String myDep : myDeps) {
+		    Set<String> relatedUuids = cacheDependencies.get(myDep);
+		    if (relatedUuids == null) {
+			relatedUuids = new HashSet<String>();
+		    }
+		    relatedUuids.add(myUuid);
+		    cacheDependencies.put(myDep, relatedUuids);
+		}
+	    }
 
-			// add the object for all the CRIS objects mentioned in its direct properties to the dependencies map
-			List<Property> props = ((ACrisObject) object).getAnagrafica();
-			Set<String> myDeps = new HashSet<String>();
-			for (Property prop : props) {
-				Object val = prop.getValue().getReal();
-				if (val instanceof ACrisObject) {
-					myDeps.add(((ACrisObject) val).getUuid());
-				}
-			}
-			if (myDeps.size() > 0) {
-				for (String myDep : myDeps) {
-					Set<String> relatedUuids = cacheDependencies.get(myDep);
-					if (relatedUuids == null) {
-						relatedUuids = new HashSet<String>();
-					}
-					relatedUuids.add(myUuid);
-					cacheDependencies.put(myDep, relatedUuids);
-				}
-			}
-
-			if (cacheByCrisID != null) {
-				String key = ((ACrisObject) object).getCrisID();
-				if (key != null) {
-					cacheByCrisID.put(new Element(key, object));
-				}
-			}
-			if (cacheBySource != null) {
-				String sourceRef = ((ACrisObject) object).getSourceRef();
-				String sourceID = ((ACrisObject) object).getSourceID();
-				if (sourceID != null) {
-					String key = sourceRef + "-" + sourceID;
-					cacheBySource.put(new Element(model.getName() + "#" + key, object));
-				}
-			}
-			if (cacheByUUID != null) {
-				String key = ((ACrisObject) object).getUuid();
-				if (key != null) {
-					cacheByUUID.put(new Element(key, object));
-				}
-			}
-		}        
+	    if (cacheByCrisID != null) {
+		String key = ((ACrisObject) object).getCrisID();
+		if (key != null) {
+		    cacheByCrisID.put(new Element(key, object));
+		}
+	    }
+	    if (cacheBySource != null) {
+		String sourceRef = ((ACrisObject) object).getSourceRef();
+		String sourceID = ((ACrisObject) object).getSourceID();
+		if (sourceID != null) {
+		    String key = sourceRef + "-" + sourceID;
+		    cacheBySource.put(new Element(model.getName() + "#" + key, object));
+		}
+	    }
+	    if (cacheByUUID != null) {
+		String key = ((ACrisObject) object).getUuid();
+		if (key != null) {
+		    cacheByUUID.put(new Element(key, object));
+		}
+	    }
+	}        
     }
 
     public Integer getRPidFindMax()
@@ -1091,7 +1085,7 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
     }
   
     public List<ResearchObject> getResearchObjectByShortNameType(String shortName) {
-    	return researchDao.findByShortNameType(shortName);
+	return researchDao.findByShortNameType(shortName);
     }
     
     public List<ResearchObject> getResearchObjectByIDType(Integer id) {
@@ -1100,46 +1094,46 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
     
     @Override
     public <P, PK extends Serializable> void delete(Class<P> model, PK pkey) {    	
-    	super.delete(model, pkey);
-    	clearCache();
+	super.delete(model, pkey);
+	clearCache();
     }
 
-	public List<OrcidQueue> findOrcidQueueByResearcherId(String crisId) {
-		return orcidQueueDao.findOrcidQueueByOwner(crisId);
-	}
-	public OrcidQueue uniqueOrcidQueueByEntityIdAndTypeIdAndOwnerId(Integer entityID, Integer typeId, String ownerId) {
-		return orcidQueueDao.uniqueOrcidQueueByEntityIdAndTypeIdAndOwner(entityID, typeId, ownerId);
-	}
-	public List<OrcidHistory> findOrcidHistoryByOrcidAndTypeId(String orcid, Integer typeId) {	
-		return orcidHistoryDao.findOrcidHistoryByOrcidAndTypeId(orcid, typeId);
-	}
+    public List<OrcidQueue> findOrcidQueueByResearcherId(String crisId) {
+	return orcidQueueDao.findOrcidQueueByOwner(crisId);
+    }
+    public OrcidQueue uniqueOrcidQueueByEntityIdAndTypeIdAndOwnerId(Integer entityID, Integer typeId, String ownerId) {
+	return orcidQueueDao.uniqueOrcidQueueByEntityIdAndTypeIdAndOwner(entityID, typeId, ownerId);
+    }
+    public List<OrcidHistory> findOrcidHistoryByOrcidAndTypeId(String orcid, Integer typeId) {	
+	return orcidHistoryDao.findOrcidHistoryByOrcidAndTypeId(orcid, typeId);
+    }
     public List<OrcidHistory> findOrcidHistoryByOrcidAndEntityUUIDAndTypeId(String orcid, String entityUUID, Integer typeId) {  
         return orcidHistoryDao.findOrcidHistoryByOrcidAndEntityUUIDAndTypeId(orcid, entityUUID, typeId);
     }
-	
-	public void deleteOrcidQueueByOwnerAndTypeId(String crisID, int typeId) {
-		orcidQueueDao.deleteByOwnerAndTypeId(crisID, typeId);
-	}
-	
-	public void deleteOrcidQueueByOwnerAndUuid(String crisID, String uuId) {
-		orcidQueueDao.deleteByOwnerAndUuid(crisID, uuId);
-	}
+    
+    public void deleteOrcidQueueByOwnerAndTypeId(String crisID, int typeId) {
+	orcidQueueDao.deleteByOwnerAndTypeId(crisID, typeId);
+    }
+    
+    public void deleteOrcidQueueByOwnerAndUuid(String crisID, String uuId) {
+	orcidQueueDao.deleteByOwnerAndUuid(crisID, uuId);
+    }
 
-	public List<OrcidHistory> findOrcidHistoryByOwnerAndSuccess(String crisID) {
-		return orcidHistoryDao.findOrcidHistoryInSuccessByOwner(crisID);
-	}
+    public List<OrcidHistory> findOrcidHistoryByOwnerAndSuccess(String crisID) {
+	return orcidHistoryDao.findOrcidHistoryInSuccessByOwner(crisID);
+    }
 
-	public List<OrcidHistory> findOrcidHistoryInSuccessByOwnerAndType(String crisID, int type) {
-		return orcidHistoryDao.findOrcidHistoryInSuccessByOwnerAndTypeId(crisID, type);
-	}
-	
-	public OrcidHistory uniqueOrcidHistoryInSuccessByOwnerAndEntityUUIDAndTypeId(String crisID, String uuid, int typeID) {
-		return orcidHistoryDao.uniqueOrcidHistoryInSuccessByOwnerAndEntityUUIDAndTypeId(crisID, uuid, typeID);
-	}
-	
-	public OrcidHistory uniqueOrcidHistoryByOwnerAndOrcidAndTypeId(String crisID, String orcid, int typeID) {
-		return orcidHistoryDao.uniqueOrcidHistoryByOwnerAndOrcidAndTypeId(crisID, orcid, typeID);
-	}
+    public List<OrcidHistory> findOrcidHistoryInSuccessByOwnerAndType(String crisID, int type) {
+	return orcidHistoryDao.findOrcidHistoryInSuccessByOwnerAndTypeId(crisID, type);
+    }
+    
+    public OrcidHistory uniqueOrcidHistoryInSuccessByOwnerAndEntityUUIDAndTypeId(String crisID, String uuid, int typeID) {
+	return orcidHistoryDao.uniqueOrcidHistoryInSuccessByOwnerAndEntityUUIDAndTypeId(crisID, uuid, typeID);
+    }
+    
+    public OrcidHistory uniqueOrcidHistoryByOwnerAndOrcidAndTypeId(String crisID, String orcid, int typeID) {
+	return orcidHistoryDao.uniqueOrcidHistoryByOwnerAndOrcidAndTypeId(crisID, orcid, typeID);
+    }
 
     public OrcidHistory uniqueOrcidHistoryByOwnerAndEntityUUIDAndTypeId(
             String crisID, String entityUUID, int typeID)
@@ -1166,37 +1160,35 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
         }
     }
     
-	private static class ConfigurationThread extends Thread {
+    private static class ConfigurationThread extends Thread {
 
-		/**
-		 * Actually perform Rebuild Cris Configuration.
-		 */
-		@Override
-		public void run() {
-			if (DatabaseUtils.getRebuildCrisConfiguration()) {
-				try {
-					log.info("Post database migration, rebuild cris configuration");
-					String sourceVersion = Util.getSourceVersion();
+	/**
+	 * Actually perform Rebuild Cris Configuration.
+	 */
+	@Override
+	public void run() {
+	    if (DatabaseUtils.getRebuildCrisConfiguration()) {
+		try {
+		    log.info("Post database migration, rebuild cris configuration");
+		    String sourceVersion = Util.getSourceVersion();
                     log.info("DSpace version: " + sourceVersion);
-					String file = ConfigurationManager.getProperty("dspace.dir") + File.separator + "etc"
-					        + File.separator + "upgrade" + File.separator + sourceVersion+"__DSpaceCRIS-Upgrade.xls";
-					String[] args = new String[] { "-f", file };
-					ImportCRISDataModelConfiguration.main(args);
-					log.info("Rebuild CRIS Configuration is complete");
-				} catch (SQLException | IOException | InstantiationException | IllegalAccessException
-						| ParseException e) {
-					log.error("Error attempting to Rebuild CRIS Configuration", e);
-				} finally {
-					// Reset our flag. Job is done or it threw an error,
-					// Either way, we shouldn't try again.
-					DatabaseUtils.setRebuildCrisConfiguration(false);
+		    String file = ConfigurationManager.getProperty("dspace.dir") + File.separator + "etc"
+		            + File.separator + "upgrade" + File.separator + sourceVersion+"__DSpaceCRIS-Upgrade.xls";
+		    String[] args = new String[] { "-f", file };
+		    ImportCRISDataModelConfiguration.main(args);
+		    log.info("Rebuild CRIS Configuration is complete");
+		} catch (SQLException | IOException | InstantiationException | IllegalAccessException
+			| ParseException e) {
+		    log.error("Error attempting to Rebuild CRIS Configuration", e);
+		} finally {
+		    // Reset our flag. Job is done or it threw an error,
+		    // Either way, we shouldn't try again.
+		    DatabaseUtils.setRebuildCrisConfiguration(false);
 
-				}
-			}
 		}
+	    }
 	}
-	
-	VolatileObjects cachedObjects = new VolatileObjects();
+    }
 
     public void disableCacheManager()
     {
@@ -1211,70 +1203,5 @@ public class ApplicationService extends ExtendedTabService implements IAutoCreat
         }   
     }
 
-	/***
-	 * Cache a candidate of a new Object
-	 * 
-	 * @param name The cached value	
-	 * @param tag Used to highlight new objects
-	 * @return true if auto created is enabled
-	 */
-	@Override
-	public Integer generateTemporaryPointerCandidate(String type, String name, String tag) {
-		return cachedObjects.addCandidateValue(type, name, tag);
-	}
-
-	@Override
-	public Integer persistTemporaryPointerCandidate(Integer id) {
-		if (id != null && id < 0) {
-			// autocreate
-			CandidateObjectValue candidateObject = cachedObjects.getCandidate(id);
-			if (candidateObject != null) {
-				if (candidateObject.getPersistedObjectID() != null) {
-					return candidateObject.getPersistedObjectID();
-				}
-				Class modelClass = ResearchObject.class;
-				if (candidateObject.getType().equals(CrisConstants.getEntityTypeText(CrisConstants.RP_TYPE_ID))) {
-					modelClass = ResearcherPage.class;
-				}
-				else if (candidateObject.getType().equals(CrisConstants.getEntityTypeText(CrisConstants.OU_TYPE_ID))) {
-					modelClass = OrganizationUnit.class;
-				}
-				else if (candidateObject.getType().equals(CrisConstants.getEntityTypeText(CrisConstants.PROJECT_TYPE_ID))) {
-					modelClass = Project.class;
-				}
-				ACrisObject newObject;
-				try {
-					newObject = (ACrisObject) modelClass.newInstance();
-				} catch (InstantiationException | IllegalAccessException e) {
-					log.error(e.getMessage(), e);
-					return null;
-				}				
-				String prefix = "";
-				boolean active = ConfigurationManager.getBooleanProperty("cris",
-						"widgetpointer." + candidateObject.getType() + ".active");
-				if (newObject instanceof ResearchObject) {
-					prefix = candidateObject.getType().substring(CrisConstants.PREFIX_TYPE.length()); 
-					DynamicObjectType dType = findTypoByShortName(DynamicObjectType.class,
-							prefix);
-	                if (dType != null)
-	                {
-	                    ((ResearchObject) newObject).setTypo(dType);
-	                }
-				}
-				ResearcherPageUtils.buildTextValue(newObject,
-	                    candidateObject.getValue(),
-	                    prefix + newObject.getMetadataFieldTitle());
-	
-				newObject.setStatus(active);
-				saveOrUpdate(modelClass, newObject);
-				putToCache(modelClass, newObject, newObject.getId());
-				candidateObject.setPersistedObjectID(newObject.getId());
-				return newObject.getId();
-			}
-			else {
-				return null;
-			}
-		}
-		return null;
-	}
+    
 } 
