@@ -97,6 +97,8 @@ public class AddToRelationServlet extends DSpaceServlet {
             throw new AuthorizeException("The user is not allow to manage the relation " + relationName + " for CRISObject " + crisID);
         }
 
+        context.turnOffAuthorisationSystem();
+
         ACrisObject cris = applicationService.getEntityByCrisId(crisID);
         request.setAttribute("crisObject", cris);
         String publicPath = request.getContextPath() + "/cris/" + cris.getPublicPath() + "/" + ResearcherPageUtils.getPersistentIdentifier(cris);
@@ -145,6 +147,7 @@ public class AddToRelationServlet extends DSpaceServlet {
                         .executeAction(cris, selectedObject)) {
                     addMessage(context, request, "jsp.layout.cris.addrelations.success.info", publicPath, cris.getName(), selectedPublicPath, selectedObject.getName());
                     context.commit();
+                    context.restoreAuthSystemState();
                     response.sendRedirect(publicPath);
                     return;
                 }
@@ -157,10 +160,13 @@ public class AddToRelationServlet extends DSpaceServlet {
             else {
                 log.error("The user try to add not ammissible object " + selectedObject.getTypeText() + " for the relation " + relationName);
                 addMessage(context, request, "jsp.layout.cris.addrelations.error.not.ammissible", selectedPublicPath, selectedObject.getName(), relationName);
+                context.restoreAuthSystemState();
                 response.sendRedirect(publicPath);
                 return;
             }
         }
+
+        context.restoreAuthSystemState();
 
         request.setAttribute("searchName", request.getContextPath() + request.getServletPath());
 
