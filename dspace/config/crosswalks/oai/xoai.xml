@@ -171,6 +171,7 @@
             <Format ref="datacite41_openaire"/>
             <Format ref="qdc" />
             <Format ref="ore" />
+            <Format ref="oai_cerif"/>
             <Description>
                 This is the default context of the DSpace OAI-PMH data provider.
             </Description>
@@ -223,7 +224,7 @@
             <!-- Date format, field prefixes, etc are ensured by the transformer -->
             <Transformer ref="driverTransformer"/>
             <!-- The driver filter -->
-            <Filter red="driverFilter"/>
+            <Filter ref="driverFilter"/>
             <!-- Just an alias, in fact it returns all items within the driver context -->
             <Set ref="driverSet"/>
             <!-- Metadata Formats -->
@@ -238,13 +239,13 @@
         <!--
             OpenAIRE Guidelines 1.1:
 
-            - http://www.openaire.eu/en/component/attachments/download/79%E2%8C%A9=en
+            - https://guidelines.openaire.eu/en/latest/
 
             There is a limitation over the embargoedEndDate parameter:
 
             - Predefined DSpace fields don't allow to set this up with a default.
          -->
-        <Context baseurl="openaire" name="OpenAIRE Context">
+		<Context baseurl="openaire" name="OpenAIRE Context">
             <!-- Date format, field prefixes, etc are ensured by the transformer -->
             <Transformer ref="openaireTransformer"/>
             <!-- The driver filter -->
@@ -254,12 +255,34 @@
             <!-- Just an alias, in fact it returns all items within the driver context -->
             <Set ref="driverSet"/>
             <Set ref="openaireSet"/>
-            <Set ref="ecSet"/>
+            <Set ref="openaireFundedResourcesSet"/>
             <!-- Metadata Formats -->
             <Format ref="oaidc"/>
             <Format ref="mets"/>
+            <Format ref="oai_cerif"/>
             <Description>
                 This contexts complies with OpenAIRE rules.
+            </Description>
+        </Context>
+
+        <Context baseurl="openairecris" name="OpenAIRE Context for CRIS System">
+            <!-- Date format, field prefixes, etc are ensured by the transformer -->
+            <Transformer ref="openairecrisTransformer"/>
+            <Filter ref="openAireCRISFilter"/>
+            <!-- Just an alias, in fact it returns all items within the driver context -->
+            <Set ref="openairePublicationsCrisSet"/>
+            <Set ref="openaireProductsCrisSet"/>
+            <Set ref="openairePatentsCrisSet"/>
+            <Set ref="openairePersonsCrisSet"/>
+            <Set ref="openaireOrgunitsCrisSet"/>
+            <Set ref="openaireProjectsCrisSet"/>
+            <Set ref="openaireEventsCrisSet"/>
+            <Set ref="openaireEquipmentsCrisSet"/>
+            <!-- Metadata Formats -->
+            <Format ref="oaidc"/>
+            <Format ref="oai_cerif"/>
+            <Description>
+                This contexts complies with OpenAIRE rules for CRIS system v 1.1.1
             </Description>
         </Context>
 
@@ -276,8 +299,8 @@
                 This contexts complies with Data Archive OpenAIRE rules.
             </Description>
         </Context>
-
     </Contexts>
+
 
     <Formats>
         <Format id="xmetadissplus">
@@ -386,6 +409,13 @@
             <Namespace>http://schema.datacite.org/oai/oai-1.1/</Namespace>
             <SchemaLocation>http://schema.datacite.org/oai/oai-1.1/oai.xsd</SchemaLocation>
         </Format>
+        <!-- set the format for openaire cerif profile -->
+        <Format id="oai_cerif">
+            <Prefix>oai_cerif_openaire</Prefix>
+            <XSLT>metadataFormats/oai_cerif.xsl</XSLT>
+            <Namespace>https://www.openaire.eu/cerif-profile/1.1/</Namespace>
+            <SchemaLocation>https://www.openaire.eu/schema/cris/1.1/openaire-cerif-profile.xsd</SchemaLocation>
+        </Format>
     </Formats>
 
     <Transformers>
@@ -395,6 +425,9 @@
         <Transformer id="openaireTransformer">
             <XSLT>transformers/openaire.xsl</XSLT>
         </Transformer>
+        <Transformer id="openairecrisTransformer">
+            <XSLT>transformers/openairecris.xsl</XSLT>
+        </Transformer>        
     </Transformers>
 
     <Filters>
@@ -2145,29 +2178,131 @@
             </Definition>
         </Filter>
 
-        <Filter id="openAireFilter">
+        <!-- OpenAIRE CRIS filter for records returned by OAI-PMH.
+         By default, return a record:
+         * If the record is an Item or another supported type
+         This filter is only used in the OpenAIRE context ([oai]/openaire-cris).
+        -->
+        <Filter id="openAireCRISFilter">
             <Definition>
                 <And>
                     <LeftCondition>
-                        <And>
+                        <Or>
                             <LeftCondition>
-                                <Custom ref="titleExistsCondition"/>
+                                <Custom ref="itemAccessCondition"/>
                             </LeftCondition>
                             <RightCondition>
-                                <Custom ref="authorExistsCondition"/>
+                                <Custom ref="itemWithdrawnCondition"/>
                             </RightCondition>
-                        </And>
+                        </Or>
                     </LeftCondition>
                     <RightCondition>
-                        <And>
-                            <LeftCondition>
-                                <Custom ref="driverDocumentTypeCondition"/>
-                            </LeftCondition>
-                            <RightCondition>
-                                <Custom ref="openaireRelationCondition"/>
-                            </RightCondition>
-                        </And>
+                        <Custom ref="crisObjectTypeCondition"/>
                     </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+
+        <!-- OpenAIRE filter for records returned by OAI-PMH.
+         By default, return an Item record:
+            * If a Title & Author field both exist
+            * AND a valid DRIVER Document Type exists
+            * AND Item is either publicly accessible OR Withdrawn (for tombstones)
+            * AND the OpenAIRE "dc.relation" is specified
+         This filter is only used in the OpenAIRE context ([oai]/openaire).
+         
+         TODO: review.
+            * openaire type are related to publications, products and patent. The
+                list driverDocumentTypeCondition is only a partial list of publication types.
+            * openaireRelationCondition must be review to match the list of value of dc.rights.
+                see http://purl.org/coar/access_right.
+         -->        
+        <Filter id="openAireFilter">
+            <Definition>
+            	<And>
+            		<LeftCondition>
+		                <And>
+		                    <LeftCondition>
+		                        <And>
+		                            <LeftCondition>
+		                                <Custom ref="titleExistsCondition"/>
+		                            </LeftCondition>
+		                            <RightCondition>
+		                                <Custom ref="authorExistsCondition"/>
+		                            </RightCondition>
+		                        </And>
+		                    </LeftCondition>
+		                    <RightCondition>
+		                        <And>
+		                            <LeftCondition>
+		                                <Custom ref="driverDocumentTypeCondition"/>
+		                            </LeftCondition>
+		                            <RightCondition>
+		                                <And>
+		                                    <LeftCondition>
+		                                        <Or>
+		                                            <LeftCondition>
+		                                                <Custom ref="itemAccessCondition"/>
+		                                            </LeftCondition>
+		                                            <RightCondition>
+		                                                <Custom ref="itemWithdrawnCondition"/>
+		                                            </RightCondition>
+		                                        </Or>
+		                                    </LeftCondition>
+		                                    <RightCondition>
+		                                        <Custom ref="openaireRelationCondition"/>
+		                                    </RightCondition>
+		                                </And>
+		                            </RightCondition>
+		                        </And>
+		                    </RightCondition>
+		                </And>
+					</LeftCondition>
+                	<RightCondition>
+                		<Custom ref="dspaceItemCondition" />
+                	</RightCondition>
+                </And>		                
+            </Definition>
+        </Filter>
+        
+        <!-- create a new filter for the openairedata Context -->
+        <Filter id="openaireDataFilter">
+            <Definition>
+            	<And>
+            		<LeftCondition>
+		                <And>
+		                    <LeftCondition>
+		                        <And>
+		                            <LeftCondition>
+		                                <Custom ref="titleExistsCondition"/>
+		                            </LeftCondition>
+		                            <RightCondition>
+		                                <Custom ref="authorExistsCondition"/>
+		                            </RightCondition>
+		                        </And>
+		                    </LeftCondition>
+		                    <RightCondition>
+		                        <And>
+		                            <LeftCondition>
+		                                <Custom ref="identifierExistsCondition"/>
+		                            </LeftCondition>
+		                            <RightCondition>
+		                                <And>
+		                                    <LeftCondition>
+		                                        <Custom ref="dateExistsCondition"/> 
+		                                    </LeftCondition>
+		                                    <RightCondition>
+		                                        <Custom ref="publisherExistsCondition"/>
+		                                    </RightCondition>
+		                                </And>
+		                            </RightCondition>
+		                        </And>
+		                    </RightCondition>
+		                </And>
+					</LeftCondition>
+                	<RightCondition>
+                		<Custom ref="dspaceItemCondition" />
+                	</RightCondition>
                 </And>
             </Definition>
         </Filter>
@@ -2178,18 +2313,32 @@
             </Definition>
         </Filter>
 
+   
+        <!-- Default filter for records returned by OAI-PMH. 
+             By default, return an Item record:
+                * If it is publicly accessible
+                * OR it has been withdrawn (in order to display a tombstone record).
+             This filter is used by the default context ([oai]/request).
+        -->
         <Filter id="defaultFilter">
             <Definition>
-                <And>
-                    <LeftCondition>
-                        <Custom ref="oaioutputCondition"/>
-                    </LeftCondition>
-                    <RightCondition>
-                        <Custom ref="bitstreamAccessCondition"/>
-                    </RightCondition>
+            	<And>
+            		<LeftCondition>
+		                <And>
+		                    <LeftCondition>
+		                        <Custom ref="oaioutputCondition"/>
+		                    </LeftCondition>
+		                    <RightCondition>
+		                        <Custom ref="bitstreamAccessCondition"/>
+		                    </RightCondition>
+		                </And>
+					</LeftCondition>
+                	<RightCondition>
+                		<Custom ref="dspaceItemCondition" />
+                	</RightCondition>
                 </And>
             </Definition>
-        </Filter>
+        </Filter>        
 
         <Filter id="ppnexistsFilter">
             <Definition>
@@ -2307,14 +2456,8 @@
             </Configuration>
         </CustomCondition>
 
-        <CustomCondition id="driverDocumentTypeCondition">
-            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
-            <Configuration>
-                <string name="field">dc.type.driver</string>
-
         <!-- This condition determines if an Item has a "dc.type" field
              which contains "Thesis". -->
-<!--
         <CustomCondition id="thesisDocumentTypeCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
@@ -2323,27 +2466,24 @@
                 <string name="value">Thesis</string>
             </Configuration>
         </CustomCondition>
--->
+
         <!-- This condition determines if an Item has a "dc.contributor.author" -->
-<!--
         <CustomCondition id="authorExistsCondition">
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Configuration>
                 <string name="field">dc.contributor.author</string>
             </Configuration>
         </CustomCondition>
--->
+
         <!-- This condition determines if an Item has a "dc.title" -->
-<!--
         <CustomCondition id="titleExistsCondition">
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Configuration>
                 <string name="field">dc.title</string>
             </Configuration>
         </CustomCondition>
--->
+        
         <!-- This condition determines if an Item has a "dc.identifier.doi" or a "dc.identifier.uri" or a "dc.identifier.url" -->
-<!--
         <CustomCondition id="identifierExistsCondition">
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Configuration>
@@ -2354,9 +2494,8 @@
                	</list>
             </Configuration>
         </CustomCondition>
--->
+        
         <!-- This condition determines if an Item has a "dc.date.issued" or a "dc.date.available" or a "dc.date.accessioned" -->
-<!--
         <CustomCondition id="dateExistsCondition">
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Configuration>
@@ -2367,24 +2506,21 @@
                	</list>
             </Configuration>
         </CustomCondition>
--->
+        
         <!-- This condition determines if an Item has a "dc.publisher" -->
-<!--
         <CustomCondition id="publisherExistsCondition">
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Configuration>
                 <string name="field">dc.publisher</string>
             </Configuration>
         </CustomCondition>
--->
+
         <!-- This condition determines if an Item has a "dc.type" field
              specifying one of the valid DRIVER document types. -->
-<!--
         <CustomCondition id="driverDocumentTypeCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">item.openairetype</string>
--->
+                <string name="field">dc.type.driver</string>
                 <string name="operator">ends_with</string>
                 <list name="values">
                     <string>article</string>
@@ -2407,6 +2543,31 @@
             </Configuration>
         </CustomCondition>
 
+		<!-- This condition determines if an OAI document is from a basic dspace items -->
+		<CustomCondition id="dspaceItemCondition">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <string name="value">item</string>
+            </Configuration>
+        </CustomCondition>
+        
+        <!-- This condition determines if an OAI document is of one of the types 
+        	 required by OpenAIRE for CRIS System. -->
+        <CustomCondition id="crisObjectTypeCondition">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <list name="values">
+                    <string>item</string>
+                    <string>project</string>
+                    <string>rp</string>
+                    <string>ou</string>
+                    <string>journals</string>
+                    <string>events</string>
+                    <string>equipment</string>
+                </list>
+            </Configuration>
+        </CustomCondition>
+        
         <!-- This condition determines if an Item has a "dc.rights" field
              specifying "open access", which is required for DRIVER
              OR "openAccess", which is required by OpenAIRE. -->
@@ -2458,7 +2619,137 @@
                 <string name="value">info:eu-repo/grantAgreement/</string>
             </Configuration>
         </CustomCondition>
-
+        
+        <Filter id="publicationOrJournalSetFilter">
+            <Definition>
+            	<Or>
+            		<LeftCondition>
+						<Custom ref="publicationSetFilter" />
+					</LeftCondition>
+                	<RightCondition>
+                		<Custom ref="journalSetFilter" />
+                	</RightCondition>
+                </Or>
+            </Definition>
+        </Filter>
+                
+        <CustomCondition id="publicationSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type</string>
+                <string name="operator">equal</string>
+				<list name="values">
+			        <string>text</string>
+			        <string>annotation</string>
+			        <string>bibliography</string>
+			        <string>book</string>
+			        <string>book part</string>
+			        <string>conference object</string>
+			        <string>conference proceedings</string>
+			        <string>conference paper</string>
+			        <string>conference poster</string>
+			        <string>conference paper not in proceedings</string>
+			        <string>conference poster not in proceedings</string>
+			        <string>lecture</string>
+			        <string>letter</string>
+			        <string>periodical</string>
+			        <string>journal</string>
+			        <string>contribution to journal</string>
+			        <string>journal article</string>
+			        <string>review article</string>
+			        <string>research article</string>
+			        <string>editorial</string>
+			        <string>data paper</string>
+			        <string>letter to the editor</string>
+			        <string>preprint</string>
+			        <string>report</string>
+			        <string>report part</string>
+			        <string>internal report</string>
+			        <string>memorandum</string>
+			        <string>other type of report</string>
+			        <string>policy report</string>
+			        <string>project deliverable</string>
+			        <string>report to funding agency</string>
+			        <string>research report</string>
+			        <string>technical report</string>
+			        <string>research proposal</string>
+			        <string>review</string>
+			        <string>book review</string>
+			        <string>technical documentation</string>
+			        <string>working paper</string>
+			        <string>thesis</string>
+			        <string>bachelor thesis</string>
+			        <string>doctoral thesis</string>
+			        <string>master thesis</string>
+			        <string>musical notation</string>
+                </list>
+            </Configuration>
+        </CustomCondition>
+        <CustomCondition id="productSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type</string>
+                <string name="operator">equal</string>
+                <list name="values">
+                    <string>interactive resource</string>
+					<string>website</string>
+					<string>dataset</string>
+					<string>image</string>
+					<string>moving image</string>
+					<string>video</string>
+					<string>still image</string>
+					<string>other</string>
+					<string>software</string>
+					<string>workflow</string>
+					<string>cartographic material</string>
+					<string>map</string>
+					<string>sound</string>
+					<string>musical composition</string>
+                </list>
+            </Configuration>
+        </CustomCondition>
+        <CustomCondition id="patentSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <string name="value">patent</string>
+            </Configuration>
+        </CustomCondition>
+        <CustomCondition id="researcherSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <string name="value">rp</string>
+            </Configuration>
+        </CustomCondition>
+        <CustomCondition id="orgUnitSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <string name="value">ou</string>
+            </Configuration>            
+        </CustomCondition>
+        <CustomCondition id="projectSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <string name="value">project</string>
+            </Configuration>
+		</CustomCondition>
+        <CustomCondition id="journalSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <string name="value">journals</string>
+            </Configuration>
+		</CustomCondition>		
+        <CustomCondition id="eventSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <string name="value">events</string>
+            </Configuration>
+		</CustomCondition>
+        <CustomCondition id="equipmentSetFilter">
+            <Class>org.dspace.xoai.filter.DSpaceEntityTypeFilter</Class>
+            <Configuration>
+                <string name="value">equipment</string>
+            </Configuration>
+		</CustomCondition>				
         <!-- NOTE to use the flat metadata comment in the previous and use the follow  configuration -->
         <!--        
         <CustomCondition id="openaireRelationCondition">
@@ -3141,7 +3432,7 @@
             <Name>Open Access DRIVERset</Name>
             <!-- Just an alias -->
         </Set>
-        <Set id="ecSet">
+        <Set id="openaireFundedResourcesSet">
             <Spec>ec_fundedresources</Spec>
             <Name>EC_fundedresources set</Name>
             <!-- Just an alias -->
@@ -3157,9 +3448,50 @@
         </Set>
         <Set id="openaireSet">
             <Spec>ec_fundedresources</Spec>
-            <Name>EC_fundedresources set</Name>
+            <Name>EC_fundedresources</Name>
             <!-- Just an alias -->
         </Set>
+		<!-- OpenAIRE OAI-PMH Sets. See https://openaire-guidelines-for-cris-managers.readthedocs.io/en/v1.1.1/implementation.html#openaire-oai-pmh-sets -->
+		<Set id="openairePublicationsCrisSet">
+            <Spec>openaire_cris_publications</Spec>
+            <Name>OpenAIRE_CRIS_publications</Name>
+            <Filter ref="publicationOrJournalSetFilter" />
+        </Set>
+		<Set id="openaireProductsCrisSet">
+            <Spec>openaire_cris_products</Spec>
+            <Name>OpenAIRE_CRIS_products</Name>
+            <Filter ref="productSetFilter" />
+        </Set>
+		<Set id="openairePatentsCrisSet">
+            <Spec>openaire_cris_patents</Spec>
+            <Name>OpenAIRE_CRIS_patents</Name>
+            <Filter ref="patentSetFilter" />
+        </Set>        
+        <Set id="openairePersonsCrisSet">
+            <Spec>openaire_cris_persons</Spec>
+            <Name>OpenAIRE_CRIS_persons</Name>
+            <Filter ref="researcherSetFilter" />
+        </Set>
+        <Set id="openaireOrgunitsCrisSet">
+            <Spec>openaire_cris_orgunits</Spec>
+            <Name>OpenAIRE_CRIS_orgunits</Name>
+            <Filter ref="orgUnitSetFilter" />
+        </Set>
+        <Set id="openaireProjectsCrisSet">
+            <Spec>openaire_cris_projects</Spec>
+            <Name>OpenAIRE_CRIS_projects</Name>
+            <Filter ref="projectSetFilter" />
+        </Set>  
+        <Set id="openaireEventsCrisSet">
+            <Spec>openaire_cris_events</Spec>
+            <Name>OpenAIRE_CRIS_events</Name>
+            <Filter ref="eventSetFilter" />
+        </Set>          
+        <Set id="openaireEquipmentsCrisSet">
+            <Spec>openaire_cris_equipments</Spec>
+            <Name>OpenAIRE_CRIS_equipments</Name>
+            <Filter ref="equipmentSetFilter" />
+        </Set>                
         <!-- set the OpenAIRE Data Archive OAI Set. See: https://guidelines.openaire.eu/en/latest/data/use_of_oai_pmh.html -->
         <Set id="openaireDataSet">
             <Spec>openaire_data</Spec>

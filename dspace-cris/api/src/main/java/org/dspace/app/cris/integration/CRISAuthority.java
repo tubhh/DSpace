@@ -378,7 +378,7 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                 + luceneQuery.substring(0,
                         luceneQuery.length() - 1) + "\")";
     }
-
+    
     protected String getDefaultField() {
         return "crisauthoritylookup";
     }
