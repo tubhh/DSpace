@@ -570,7 +570,7 @@ public class UIUtil extends Util
 		}
 		finally
 		{
-			response.setHeader("Content-Disposition", "attachment;filename=" + name);
+			response.setHeader("Content-Disposition", "attachment;filename=" + '"' + name + '"');
 		}
 	}
 	

@@ -238,7 +238,7 @@
 							auto_query: request.term,
 							auto_sort: 'count',
 							auto_type: jQ("#filtertype").val(),
-							location: '<%= searchScope %>'	
+							location: '<%= Utils.addEntities(searchScope) %>'	
 						},
 						success: function( data ) {
 							response( jQ.map( data.autocomplete, function( item ) {
@@ -286,13 +286,12 @@
 </c:set>
 
 <c:set var="searchinKey">
-jsp.search.results.searchin<%= StringUtils.isNotBlank(searchScope) && !StringUtils.contains(searchScope, hdlPrefix)?"."+searchScope:""  %>
+jsp.search.results.searchin<%= StringUtils.isNotBlank(searchScope) && !StringUtils.contains(searchScope, hdlPrefix)?"."+Utils.addEntities(searchScope):""  %>
 </c:set>
 <%
 String dsoName = "";
 if(StringUtils.contains(searchScope, hdlPrefix) ){
-	String hdl = StringUtils.substring(searchScope, 8);
-	DSpaceObject dso = HandleManager.resolveToObject(UIUtil.obtainContext(request),hdl );
+	DSpaceObject dso = HandleManager.resolveToObject(UIUtil.obtainContext(request),searchScope);
 	dsoName = (dso != null) ? dso.getName() :"";
 }
 %>
@@ -321,8 +320,8 @@ if(StringUtils.contains(searchScope, hdlPrefix) ){
 <div class="discovery-search-form">
     <%-- Controls for a repeat search --%>
 	<div class="discovery-query">
-     <form id="update-form" action="<%= searchName %>" method="get">
-     							<input name="location" type="hidden" value="<%=searchScope %>" />
+     <form id="update-form" action="simple-search" method="get">
+     							<input name="location" type="hidden" value="<%=Utils.addEntities(searchScope) %>" />
                                 <label for="query"><fmt:message key="jsp.search.results.searchfor"/></label>
                                 <input name="crisID" type="hidden" value="<%= crisID %>" />
                                 <input name="relationName" type="hidden" value="<%= relationName %>" />
@@ -502,7 +501,7 @@ else if( qResults != null)
     String baseURL =  searchName
                     + "?query="
                     + URLEncoder.encode(query,"UTF-8")
-                    + "&amp;location="+ searchScope
+                    + "&amp;location="+ Utils.addEntities(searchScope)
                     + httpFilters
                     + "&amp;crisID=" + crisID
                     + "&amp;relationName=" + relationName
@@ -924,7 +923,7 @@ if((showGlobalFacet) || (brefine)) {
 	        %><li class="list-group-item"><span class="badge"><%= fvalue.getCount() %></span> <a href="<%= searchName
                 + "?query="
                 + URLEncoder.encode(query,"UTF-8")
-				+ "&amp;location=" + searchScope
+				+ "&amp;location=" + Utils.addEntities(searchScope)
                 + "&amp;sort_by=" + sortedBy
                 + "&amp;order=" + order
                 + "&amp;rpp=" + rpp
@@ -951,7 +950,7 @@ if((showGlobalFacet) || (brefine)) {
 	        <a class="pull-left" href="<%= searchName
                 + "?query="
                 + URLEncoder.encode(query,"UTF-8")
-				+ "&amp;location=" + searchScope
+				+ "&amp;location=" + Utils.addEntities(searchScope)
                 + "&amp;sort_by=" + sortedBy
                 + "&amp;order=" + order
                 + "&amp;rpp=" + rpp
@@ -965,7 +964,7 @@ if((showGlobalFacet) || (brefine)) {
             <a href="<%= searchName
                 + "?query="
                 + URLEncoder.encode(query,"UTF-8")
-				+ "&amp;location=" + searchScope
+				+ "&amp;location=" + Utils.addEntities(searchScope)
                 + "&amp;sort_by=" + sortedBy
                 + "&amp;order=" + order
                 + "&amp;rpp=" + rpp
