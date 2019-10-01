@@ -46,6 +46,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.AbstractUpdateRequest;
@@ -74,7 +75,6 @@ import org.dspace.content.Collection;
 import org.dspace.content.Community;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
-import org.dspace.content.ItemIterator;
 import org.dspace.content.MetadataValue;
 import org.dspace.content.Metadatum;
 import org.dspace.content.authority.ChoiceAuthorityManager;
@@ -1816,13 +1816,17 @@ public class SolrServiceImpl implements SearchService, IndexingService {
             solrQuery.setRows(discoveryQuery.getMaxResults());
         }
 
+        SortClause defaultSortClause = new SortClause("objectposition_sortint", SolrQuery.ORDER.asc);
+        solrQuery.addSort(defaultSortClause);
         if(discoveryQuery.getSortField() != null)
         {
             SolrQuery.ORDER order = SolrQuery.ORDER.asc;
-            if(discoveryQuery.getSortOrder().equals(DiscoverQuery.SORT_ORDER.desc))
+            if(discoveryQuery.getSortOrder().equals(DiscoverQuery.SORT_ORDER.desc)) {
                 order = SolrQuery.ORDER.desc;
+            }
 
-            solrQuery.addSortField(discoveryQuery.getSortField(), order);
+            SortClause sortClause = new SortClause(discoveryQuery.getSortField(), order);
+            solrQuery.addSort(sortClause);
         }
 
         for(String property : discoveryQuery.getProperties().keySet())

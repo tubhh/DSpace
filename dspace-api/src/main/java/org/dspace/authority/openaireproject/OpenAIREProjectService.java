@@ -39,7 +39,7 @@ public class OpenAIREProjectService {
 
 	public static final String PROJECT_FUNDER="funder";
 
-	public static final String PROJECT_CODE="code";
+	public static final String PROJECT_CODE="grantidentifier";
 
 	public static final String PROJECT_FUNDING_PROGRAM = "fundingProgram";
 	
@@ -72,6 +72,9 @@ public class OpenAIREProjectService {
 			builder.setParameter(field, text);
 			builder.setParameter("format", "json");
 			builder.setParameter("size", String.valueOf(max));
+			if(start==-1) {
+			    start = 0;
+			}
 			builder.setParameter("page", String.valueOf((int) (start / max)) +1);
 			int offset = start % max;
 			URI uri = builder.build();

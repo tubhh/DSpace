@@ -118,7 +118,7 @@ public class ScopusUtils
         String pmid = XMLUtils.getElementValue(article,
                 "pubmed-id");
         if (pmid != null){
-            record.addValue("pmid", new StringValue(volume));
+            record.addValue("pmid", new StringValue(pmid));
         }
         String pubID = XMLUtils.getElementValue(article,
                 "pii");
@@ -136,7 +136,7 @@ public class ScopusUtils
             record.addValue("articlenumber", new StringValue(articleNumber));
         }
         String keywords = XMLUtils.getElementValue(article,
-                "authorkeywords");
+                "authkeywords");
         if (keywords != null){
             record.addValue("scopusKeywords", new StringValue(keywords));
         }

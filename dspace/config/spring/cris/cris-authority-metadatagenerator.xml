@@ -22,6 +22,7 @@
     <context:annotation-config /> <!-- allows us to use spring annotations in beans -->
 
 <!-- USE WITH RPAuthority TO RETRIEVE EXTRA METADATA (NESTED AND SIMPLE METADATA) BY CONFIGURATION -->  
+<!-- 
 	<bean id="org.dspace.app.cris.integration.RPExtraAuthorityMetadataGenerator" 
     	class="org.dspace.app.cris.integration.RPExtraAuthorityMetadataGenerator">
     	<property name="relatedInputformMetadata" value="dc_contributor_department"/>
@@ -29,9 +30,10 @@
     	<property name="element" value="affiliationorgunit"/>
 		<property name="qualifier" value="name"/>
 
-		<!-- USE THE FOLLOW PROPERTY WITH RPMultiAuthority implementation (see RPMultiAuthority) --> 
+		USE THE FOLLOW PROPERTY WITH RPMultiAuthority implementation (see RPMultiAuthority) 
 		<property name="singleResultOnAggregate" value="false"/>
      </bean>
+-->    
     
 <!-- OR USE DEDICATED IMPLEMENTATION TO FORCE THE USE OF ResearcherPage.getOrgUnit() LOGIC (see researcherpage.pdef.orgunit parameter on cris.cfg) --> 
 <!-- 
@@ -63,4 +65,40 @@
     </bean> 
 -->
 
+    <!-- ZDB CONFIGURATION -->
+    <bean id="ZDBExtraTitleMetadataGenerator"
+        class="org.dspace.app.cris.integration.ZDBExtraTitleMetadataGenerator">
+        <property name="relatedInputformMetadata" value="dc_relation_ispartof"/>
+    </bean>
+
+    <bean id="ZDBExtraIssnMetadataGenerator"
+        class="org.dspace.app.cris.integration.ZDBExtraIssnMetadataGenerator">
+        <property name="relatedInputformMetadata" value="dc_identifier_issn"/>
+    </bean>
+
+    <!-- JOURNAL CONFIGURATION -->
+    <bean id="JournalExtraTitleMetadataGenerator"
+        class="org.dspace.app.cris.integration.CRISExtraBasicMetadataGenerator">
+        <property name="type" value="journals" />
+        <property name="relatedMetadata" value="crisjournals.journalsname" />
+        <property name="relatedInputformMetadata" value="dc_relation_ispartof"/>
+    </bean>
+
+    <bean id="JournalExtraIssnMetadataGenerator"
+        class="org.dspace.app.cris.integration.CRISExtraBasicMetadataGenerator">
+        <property name="type" value="journals" />
+        <property name="relatedMetadata" value="crisjournals.journalsissn" />
+        <property name="relatedInputformMetadata" value="dc_identifier_issn"/>
+    </bean>
+
+	<bean id="OpenAIRECodeExtraMetadataGenerator" 
+    	class="org.dspace.app.cris.integration.OpenAIRECodeExtraMetadataGenerator">
+    </bean>
+    
+	<bean id="ProjectCodeExtraMetadataGenerator" 
+    	class="org.dspace.app.cris.integration.CRISExtraBasicMetadataGenerator">
+        <property name="type" value="project" />
+        <property name="relatedMetadata" value="crisproject.grantidentifier" />
+        <property name="relatedInputformMetadata" value="dc_relation_grantno"/>    	
+    </bean>
 </beans>

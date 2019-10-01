@@ -50,6 +50,11 @@ public class RecentSiteSubmissions implements SiteHomeProcessor
         try
         {
             RecentSubmissionsManager rsm = new RecentSubmissionsManager(context);
+            String indexName = ConfigurationManager.getProperty("recent.submission.site");
+            if (StringUtils.isNotBlank(indexName))
+            {
+                rsm.setIndexName(indexName);
+            }
             RecentSubmissions recent = rsm.getRecentSubmissions(null);
             recent.setConfiguration(SearchUtils.getRecentSubmissionConfiguration("site").getMetadataFields());
             

@@ -42,6 +42,16 @@
 
     boolean ldap_enabled = ConfigurationManager.getBooleanProperty("authentication-ldap", "enable");
     boolean ldap_eperson = (ldap_enabled && (eperson.getNetid() != null) && (eperson.getNetid().equals("") == false));
+
+    attr = (Boolean) session.getAttribute("shib.authenticated");
+    boolean shibbolethAuthenticated = (attr != null && attr.booleanValue());
+
+    boolean shibbolethUsersCanChangePassword = ConfigurationManager.getBooleanProperty(
+            "authentication-shibboleth","password.allow_change", false);
+
+    boolean shibbolethUsersCanMigrateAccount = ConfigurationManager.getBooleanProperty(
+            "authentication-shibboleth", "password.allow-migrate-to-local", false);
+
 %>
 
 <dspace:layout style="default" titlekey="jsp.register.edit-profile.title" nocache="true">
@@ -78,8 +88,9 @@
 
 <%
     // Only show password update section if the user doesn't use
-    // certificates
-    if ((eperson.getRequireCertificate() == false) && (ldap_eperson == false))
+    // certificates, LDAP, or Shibboleth authentication (the last can be overriden with password.allow_change=true)
+    if ((eperson.getRequireCertificate() == false) && (ldap_eperson == false) &&
+            (!shibbolethAuthenticated || shibbolethUsersCanChangePassword))
     {
 %>
         <%-- <p><strong>Optionally</strong>, you can choose a new password and enter it into the box below, and confirm it by typing it
@@ -105,6 +116,14 @@
 	<div class="col-md-offset-5">
        <%-- <p align="center"><input type="submit" name="submit" value="Update Profile"></p> --%>
 	   <input class="btn btn-success col-md-4" type="submit" name="submit" value="<fmt:message key="jsp.register.edit-profile.update.button"/>" />
-	 </div>
+
+           <%
+               if(shibbolethAuthenticated && shibbolethUsersCanMigrateAccount) {
+           %>
+           &nbsp;<a href="<%=request.getContextPath()%>/migrate-profile" class="btn btn-warning col-md-4" type="button" name="migrate" value="<fmt:message key="jsp.register.edit-profile.migrate.button"/>"><fmt:message key="jsp.register.edit-profile.migrate.button"/></a>
+           <%
+               }
+           %>
+    </div>
     </form>
 </dspace:layout>

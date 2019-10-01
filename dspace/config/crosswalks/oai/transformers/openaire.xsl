@@ -33,11 +33,24 @@
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name!='issued']" />
 	
 	<!-- Prefixing dc.type -->
+<!--
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element/doc:field/text()">
+                <xsl:choose>
+                <xsl:when test="contains(., 'Thesis')">
+                    <xsl:call-template name="addPrefix">
+                        <xsl:with-param name="value" select="/doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element[@name='thesis']" />
+                        <xsl:with-param name="prefix" select="'info:eu-repo/semantics/'"></xsl:with-param>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+-->
+	<xsl:template match="/doc:metadata/doc:element[@name='item']/doc:element[@name='openairetype']/doc:element/doc:field/text()">
 		<xsl:call-template name="addPrefix">
 			<xsl:with-param name="value" select="." />
 			<xsl:with-param name="prefix" select="'info:eu-repo/semantics/'"></xsl:with-param>
 		</xsl:call-template>
+<!--                </xsl:otherwise>
+                </xsl:choose> -->
 	</xsl:template>
 	
 	<!-- Prefixing and Modifying dc.rights -->
@@ -46,19 +59,26 @@
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field[not (contains(., 'open access') or contains(., 'openAccess') or contains(., 'restrictedAccess') or contains(., 'embargoedAccess'))]" />
 
 	<!-- Replacing -->
-	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field/text()">
+	<xsl:template match="/doc:metadata/doc:element[@name='item']/doc:element[@name='grantfulltext']/doc:element/doc:field/text()">
 		<xsl:choose>
-			<xsl:when test="contains(., 'open access')">
+			<xsl:when test="contains(., 'open')">
 				<xsl:text>info:eu-repo/semantics/openAccess</xsl:text>
 			</xsl:when>
-			<xsl:when test="contains(., 'openAccess')">
-				<xsl:text>info:eu-repo/semantics/openAccess</xsl:text>
-			</xsl:when>
-			<xsl:when test="contains(., 'restrictedAccess')">
+			<xsl:when test="contains(., 'restricted')">
 				<xsl:text>info:eu-repo/semantics/restrictedAccess</xsl:text>
 			</xsl:when>
-			<xsl:when test="contains(., 'embargoedAccess')">
-				<xsl:text>info:eu-repo/semantics/embargoedAccess</xsl:text>
+			<xsl:when test="contains(., 'embargo')">
+
+					<xsl:text>info:eu-repo/date/embargoEnd/</xsl:text>
+					<xsl:value-of select="substring(., 9, 4)" />
+					<xsl:text>-</xsl:text>
+					<xsl:value-of select="substring(., 13, 2)" />
+					<xsl:text>-</xsl:text>
+					<xsl:value-of select="substring(., 15, 2)" />
+
+			</xsl:when>
+			<xsl:when test="contains(., 'reserved')">
+				<xsl:text>info:eu-repo/semantics/closedAccess</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>info:eu-repo/semantics/restrictedAccess</xsl:text>

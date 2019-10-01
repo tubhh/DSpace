@@ -162,11 +162,14 @@ public class CrisItemEnhancerUtility {
 					result.add(new String[] {MetadataValue.PARENT_PLACEHOLDER_VALUE, null});
 				}
 				else {
-					result.addAll(
-							getPathAsMetadata(as,
-									as.get(enh.getClazz(),
-											ResearcherPageUtils.getRealPersistentIdentifier(authKey, enh.getClazz())),
-							path));
+					Integer realPersistentIdentifier = ResearcherPageUtils.getRealPersistentIdentifier(authKey, enh.getClazz());
+					if(realPersistentIdentifier!=null) {
+                        result.addAll(
+    							getPathAsMetadata(as,
+    									as.get(enh.getClazz(),
+    											realPersistentIdentifier),
+    							path));
+					}
 				}
 			}
 

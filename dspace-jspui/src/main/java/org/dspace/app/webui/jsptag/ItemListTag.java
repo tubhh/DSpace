@@ -111,6 +111,10 @@ public class ItemListTag extends TagSupport {
 
 	private static int itemStart = 1;
 
+	private boolean addRelationButton;
+
+	private String type;
+
     private static final long serialVersionUID = 348762897199116432L;
 
     /** Config to use a specific configuration */
@@ -177,6 +181,7 @@ public class ItemListTag extends TagSupport {
 				configLine = ConfigurationManager
 						.getProperty("webui.itemlist.sort."
 								+ sortOption.getName() + ".columns");
+log.debug("Getting Output configuration from webui.itemlist.sort."+ sortOption.getName() + ".columns");
 				widthLine = ConfigurationManager
 						.getProperty("webui.itemlist.sort."
 								+ sortOption.getName() + ".widths");
@@ -185,6 +190,7 @@ public class ItemListTag extends TagSupport {
 			if (configLine == null) {
 				configLine = ConfigurationManager.getProperty("webui.itemlist."
 						+ sortOption.getName() + ".columns");
+log.debug("Getting Output configuration from webui.itemlist."+ sortOption.getName() + ".columns");
 				widthLine = ConfigurationManager.getProperty("webui.itemlist."
 						+ sortOption.getName() + ".widths");
             }
@@ -194,6 +200,7 @@ public class ItemListTag extends TagSupport {
         {
 		    configLine = ConfigurationManager.getProperty("webui.itemlist."
                     + config + ".columns");
+log.debug("Getting Output configuration from webui.itemlist."+ config + ".columns");
 		    widthLine = ConfigurationManager
                     .getProperty("webui.itemlist." + config + ".widths");
         }
@@ -201,6 +208,7 @@ public class ItemListTag extends TagSupport {
 		if (configLine == null) {
 			configLine = ConfigurationManager
 					.getProperty("webui.itemlist.columns");
+log.debug("No special setting for webui.itemlist.columns");
 			widthLine = ConfigurationManager
 					.getProperty("webui.itemlist.widths");
         }
@@ -420,7 +428,7 @@ public class ItemListTag extends TagSupport {
 							css += " sortable";
 							csssort += "fa fa-sort pull-right";
 						}
-						thJs += ")\"";
+						thJs += ",'" + getType() + "')\"";
 						break;
 					}
 				}
@@ -447,6 +455,16 @@ public class ItemListTag extends TagSupport {
                 out.print("<th id=\"" + id +  "\" class=\"" + css + "\">"
 						+ (emph[emph.length - 2] ? "<strong>" : "") + "&nbsp;" // LocaleSupport.getLocalizedMessage(pageContext,
 																				// message)
+                        + (emph[emph.length - 2] ? "</strong>" : "") + "</th>");
+            }
+
+            if (addRelationButton) {
+                String css = "oddRow" + cOddOrEven[cOddOrEven.length - 2]
+                        + "Col";
+
+                // output the header
+                out.print("<th id=\"" + id +  "\" class=\"" + css + "\">"
+                        + (emph[emph.length - 2] ? "<strong>" : "") + "&nbsp;"
                         + (emph[emph.length - 2] ? "</strong>" : "") + "</th>");
             }
 
@@ -604,6 +622,19 @@ public class ItemListTag extends TagSupport {
                             + "</td>");
                     }
 				}
+
+                if (addRelationButton) {
+                    IDisplayMetadataValueStrategy strategy = (IDisplayMetadataValueStrategy) PluginManager
+                            .getNamedPlugin(IDisplayMetadataValueStrategy.class, "addrelation");
+
+                    String metadata = strategy.getMetadataDisplay(hrq, -1, true, null, -1,
+                            null, null, items[i], disableCrossLinks, false);
+
+                    out.print("<td headers=\"" + id + "\" class=\""
+                            + rOddOrEven + "Row" + cOddOrEven[cOddOrEven.length - 2]
+                            + "Col\">"
+                            + metadata + "</td>");
+                }
 
                 out.println("</tr>");
             }
@@ -771,6 +802,7 @@ public class ItemListTag extends TagSupport {
 		inputName = null;
 		radioButton = false;
 		isDesc = false;
+		addRelationButton = false;
 	}
 
 	// allem modified: get-set methods for custom attribute
@@ -796,6 +828,22 @@ public class ItemListTag extends TagSupport {
 		else
 			isDesc = false;
 	}
+
+    public boolean getAddRelationButton() {
+        return addRelationButton;
+    }
+
+    public void setAddRelationButton(boolean addRelationButton) {
+        this.addRelationButton = addRelationButton;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public void setConfig(String config)
     {

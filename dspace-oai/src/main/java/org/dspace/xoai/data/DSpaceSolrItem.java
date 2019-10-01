@@ -17,6 +17,7 @@ import org.apache.solr.common.SolrDocument;
 
 import com.lyncode.xoai.dataprovider.core.ItemMetadata;
 import com.lyncode.xoai.dataprovider.core.ReferenceSet;
+import java.util.Collection;
 
 /**
  * 
@@ -33,17 +34,30 @@ public class DSpaceSolrItem extends DSpaceItem
     private Date lastMod;
     private List<ReferenceSet> sets;
     private boolean deleted;
+    private String entityType;
     
     public DSpaceSolrItem (SolrDocument doc) {
     	log.debug("Creating OAI Item from Solr source");
         unparsedMD = (String) doc.getFieldValue("item.compile");
+        entityType = (String) doc.getFieldValue("item.type");
         handle = (String) doc.getFieldValue("item.handle");
         lastMod = (Date) doc.getFieldValue("item.lastmodified");
         sets = new ArrayList<ReferenceSet>();
-        for (Object obj : doc.getFieldValues("item.communities"))
-            sets.add(new ReferenceSet((String) obj));
-        for (Object obj : doc.getFieldValues("item.collections"))
-            sets.add(new ReferenceSet((String) obj));
+
+        Collection<Object> communities = doc.getFieldValues("item.communities");
+        if (null != communities)
+            for (Object obj : communities)
+                sets.add(new ReferenceSet((String) obj));
+        else
+            log.warn(String.format("Record for item %s has no communities.", handle));
+
+        Collection<Object> collections = doc.getFieldValues("item.collections");
+        if (null != collections)
+            for (Object obj : collections)
+                sets.add(new ReferenceSet((String) obj));
+        else
+            log.warn(String.format("Record for item %s has no collections.", handle));
+
         deleted = (Boolean) doc.getFieldValue("item.deleted");
     }
 
@@ -80,4 +94,8 @@ public class DSpaceSolrItem extends DSpaceItem
         return handle;
     }
 
+    @Override
+    public String getEntityType() {
+    	return entityType;
+    }
 }

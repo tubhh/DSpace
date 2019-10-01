@@ -233,8 +233,8 @@
                                             <xsl:if test="../doc:field[@name='authority'][number($a)]!=''">
                                                 <xsl:attribute name="GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($a)]" /></xsl:attribute>
                                             </xsl:if>
-                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($i)]!=''">
-                                                <ddb:ORCID><xsl:text>https://orcid.org/</xsl:text><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($i)]" /></ddb:ORCID>
+                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]!=''">
+                                                <ddb:ORCID><xsl:text>https://orcid.org/</xsl:text><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]" /></ddb:ORCID>
                                             </xsl:if>
 						<xsl:variable name="tail" select="substring-after(., ',')"/>
 						<!-- allowed academic titles: "Prof. Dr.", "PD Dr.", Prof. em.", "Dr.", "Prof. Dr.Dr.", "Prof. Dr. h.c.", "Dr. h.c." -->
@@ -519,25 +519,38 @@
                             </ddb:transfer>
                         </xsl:for-each>
 			<ddb:identifier ddb:type="URL"><xsl:value-of select="$handle"/></ddb:identifier>
+
+                        <!-- select all rights -->
+                        <!-- RULES:
+                        mixedopen, open = free
+                        embargo_ = blocked
+                        restricted, embargo_restricted_, mixedrestricted, reserved = domain -->
+
+                        <!-- grantfulltext variable is used to checking if there is an embargo period -->
+                        <xsl:variable name="grantfulltext" select="doc:metadata/doc:element[@name='item']/doc:element[@name='grantfulltext']//doc:field[@name='value']"/>
+                        <xsl:variable name="rights" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']"/>
+                        <xsl:variable name="rightsuri" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='uri']//doc:field[@name='value']"/>
+                        <xsl:variable name="embargodate"/>
+
 			<ddb:rights>
 				<xsl:attribute name="ddb:kind">
-					<xsl:choose>
-					<xsl:when test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='embargo']/doc:element[@name='date']/doc:element/doc:field[@name='value']">
-						<xsl:text>blocked</xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>free</xsl:text>
-					</xsl:otherwise>
-					</xsl:choose>
+                        <xsl:if test="$grantfulltext!=''">
+                            <xsl:choose>
+                                <xsl:when test="contains($grantfulltext, 'open')">
+                                    <xsl:text>free</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="contains($grantfulltext, 'embargo_')">
+                                    <xsl:text>blocked</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>domain</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:if>
 				</xsl:attribute>
-				<xsl:choose>
-					<xsl:when test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='date']/doc:element[@name='embargo']/doc:element/doc:field[@name='value']">
-						<xsl:text>Embargo bis </xsl:text><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='date']/doc:element[@name='embargo']/doc:element/doc:field[@name='value']"/><xsl:text>, danach "free". Grund: </xsl:text><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='embargo']/doc:element[@name='reason']/doc:element/doc:field[@name='value']" />
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='embargo']/doc:element[@name='reason']/doc:element/doc:field[@name='value']" />
-					</xsl:otherwise>
-				</xsl:choose>
+				<xsl:if test="$grantfulltext!='' and contains($grantfulltext, 'embargo_')">
+                                    <xsl:text>Embargo bis </xsl:text><xsl:value-of select="substring($grantfulltext, 15, 2)"/><xsl:text>.</xsl:text><xsl:value-of select="substring($grantfulltext, 13, 2)"/><xsl:text>.</xsl:text><xsl:value-of select="substring($grantfulltext, 9, 4)"/><xsl:text>, danach "free".</xsl:text>
+				</xsl:if>
 			</ddb:rights>
 	  </xMetaDiss:xMetaDiss> 
 	</xsl:template>

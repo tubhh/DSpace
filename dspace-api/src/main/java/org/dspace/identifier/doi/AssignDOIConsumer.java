@@ -36,7 +36,7 @@ public class AssignDOIConsumer implements Consumer {
         	// put Item ID and Item into the created map
         	Item item = (Item)event.getSubject(ctx);
         	int itemID = item.getID();
-        	if (!itemIDs.containsKey(itemID))
+        	if (item.isArchived() && !itemIDs.containsKey(itemID))
         	{
         		itemIDs.put(itemID, item);
         	}

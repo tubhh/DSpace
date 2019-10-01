@@ -362,7 +362,14 @@
 			<value>explore</value>
 		</property>		
 	</bean>
-	
+
+	<!-- Private Entities configuration -->
+	<bean id="privateEntitiesController"
+		class="org.dspace.app.webui.cris.controller.PrivateEntitiesController">
+		<property name="detailsView">
+			<value>privateEntities</value>
+		</property>
+	</bean>
 	
 	<!-- Start Researcher controller configurations -->
 	<bean id="detailsResearcherController"
@@ -7007,6 +7014,9 @@
 				<prop key="/stats/*.html">doStatisticsController</prop>
 				<!-- explore -->
 				<prop key="/explore/*">exploreController</prop>
+
+				<!-- Private Entities -->
+				<prop	key="/rp/privateEntities">privateEntitiesController</prop>
 				
 				<!-- Search -->
 				<prop key="/rp/search.htm">searchRPFormController</prop>
@@ -7397,7 +7407,8 @@
 		
 		<property name="interceptors">  
   			<list>  
-    			<ref bean="openSessionInViewInterceptor" />  
+    			<ref bean="openSessionInViewInterceptor" />
+    			<ref bean="localeChangeInterceptor" />  
   			</list>  
 		</property>  
 	</bean>
@@ -7943,5 +7954,14 @@
     <bean id="openSessionInViewInterceptor"  
         class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">  
         <property name="sessionFactory" ref="sessionFactory" />   
-    </bean>  
+    </bean>
+
+    <bean id="localeResolver" class="org.dspace.app.webui.cris.servlet.CustomSessionLocaleResolver">
+        <property name="defaultLocale" value="en" />
+    </bean>
+  
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="locale" />
+    </bean>
+     
 </beans>

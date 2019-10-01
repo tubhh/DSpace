@@ -208,22 +208,26 @@ public class TubItemCrisRefDisplayStrategy extends ItemCrisRefDisplayStrategy
         Boolean hasOrcidLink = false;
         String startOrcidLink = "";
         String endOrcidLink = "";
+        String type = null;
+        String typefield = null;
 
         String authority = metadataArray[j].authority;
         int confidence = metadataArray[j].confidence;
 		if (StringUtils.isNotBlank(authority)) {
 			if (authority.startsWith(AuthorityValueGenerator.GENERATE)) {
 				String[] split = StringUtils.split(authority, AuthorityValueGenerator.SPLIT);
-				String type = null, info = null;
+				String info = null;
 				if (split.length == 3) {
 					type = split[1];
 					info = split[2];
 					String externalContextPath = ConfigurationManager.getProperty("cris","external.domainname.authority.service."+type);
-					startLink = "<a target=\"_blank\" href=\"" + externalContextPath + info;
-					startLink += "\" class=\"authority\">&nbsp;<img style=\"width: 16px; height: 16px;\" src=\""+ hrq.getContextPath() +"/images/mini-icon-orcid.png\" alt=\"\">";
-					endLink = "</a>";
-					sb.append(startLink);
-					sb.append(endLink);
+                                        if (type.equals("orcid")) {
+					    startLink = "<a target=\"_blank\" href=\"" + externalContextPath + info;
+					    startLink += "\" class=\"authority\">&nbsp;<img style=\"width: 16px; height: 16px;\" src=\""+ hrq.getContextPath() +"/images/mini-icon-orcid.png\" alt=\"\">";
+					    endLink = "</a>";
+					    sb.append(startLink);
+					    sb.append(endLink);
+                                        }
 				}
 			}
 			else {
@@ -234,44 +238,43 @@ public class TubItemCrisRefDisplayStrategy extends ItemCrisRefDisplayStrategy
 		        String icon = "";
 				try {
 					ResearcherPage rp = applicationService.getEntityByCrisId(authority);
-                                        String type;
 					String status = "";
 					if(rp == null || !rp.getStatus()) {
-			                    startLink = "&nbsp;";
-			                    endLink = "";
+			                    //startLink = "&nbsp;";
+			                    //endLink = "";
 			                    status = "private.";
-                                            type = "unknown";
+                                            typefield = "unknown";
 					}
                                         else {
-					    type = rp.getMetadata(ConfigurationManager.getProperty("cris", "researcher.cris."+publicPath+".ref.display.strategy.metadata.icon"));
+					    typefield = rp.getMetadata(ConfigurationManager.getProperty("cris", "researcher.cris."+publicPath+".ref.display.strategy.metadata.icon"));
                                         }
 
 					String title;
 					try {
 						title = I18nUtil
-								.getMessage("ItemCrisRefDisplayStrategy." + publicPath + "." + status + type + ".title", true);
+								.getMessage("ItemCrisRefDisplayStrategy." + publicPath + "." + status + typefield + ".title", true);
 					}
 					catch (MissingResourceException e2)
                     {
 						title = I18nUtil
-								.getMessage("ItemCrisRefDisplayStrategy." + publicPath + "." + type + ".title");
+								.getMessage("ItemCrisRefDisplayStrategy." + publicPath + "." + typefield + ".title");
                     }
 					
 					try {
 						icon = MessageFormat.format(
-								I18nUtil.getMessage("ItemCrisRefDisplayStrategy." + publicPath + "." + status + type + ".icon", true),
+								I18nUtil.getMessage("ItemCrisRefDisplayStrategy." + publicPath + "." + status + typefield + ".icon", true),
 								title);
 					}
 					catch (MissingResourceException e2)
                     {
 						icon = MessageFormat.format(
-								I18nUtil.getMessage("ItemCrisRefDisplayStrategy." + publicPath + "." + type + ".icon"),
+								I18nUtil.getMessage("ItemCrisRefDisplayStrategy." + publicPath + "." + typefield + ".icon"),
 								title);
                     }
                         // Now add the ORCID icon, if an ORCID is found in the researcher profile and if the profile has an owner
                         try {
                             String info = rp.getMetadata("orcid");
-                            if (info != null && confidence == 600 && rp.getDspaceUser() != null && !ResearcherPageUtils.getStringValue(rp, "system-orcid-token-authenticate").equals("")) {
+                            if (type.equals("orcid") && info != null && confidence == 600 && rp.getDspaceUser() != null && !ResearcherPageUtils.getStringValue(rp, "system-orcid-token-authenticate").equals("")) {
 					String externalContextPath = ConfigurationManager.getProperty("cris","external.domainname.authority.service.orcid");
 					startOrcidLink = "<a target=\"_blank\" href=\"" + externalContextPath + info;
 					startOrcidLink += "\" class=\"authority\">&nbsp;<img style=\"width: 16px; height: 16px;\" src=\""+ hrq.getContextPath() +"/images/mini-icon-orcid.png\" alt=\"\">";

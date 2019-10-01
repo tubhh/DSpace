@@ -666,6 +666,7 @@ public class CrisSearchService extends SolrServiceImpl
         doc.addField("search.parentfk", parent.getType() + "-" + parent.getID());
         String confName = "ncris" + parent.getPublicPath();
         String schema = confName + dso.getTypo().getShortName();
+        doc.addField("search.schema_s", schema);
         String uuid = dso.getUuid();
         Boolean status = dso.getStatus();
         Integer position = dso.getPositionDef();
@@ -775,6 +776,9 @@ public class CrisSearchService extends SolrServiceImpl
                         "crisDateIssued.year_lastmodified",
                         DateFormatUtils.formatUTC(dso.getTimeStampInfo()
                                 .getTimestampCreated().getTimestamp(), "yyyy"));
+                //if timestamplastmodified is null the lastModified is managed by solr schema with the default value
+                doc.addField("lastModified", dso.getTimeStampInfo()
+                        .getTimestampLastModified().getTimestamp());
             }
         }
         catch (Exception e)

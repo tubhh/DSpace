@@ -237,7 +237,7 @@ jQuery(document).ready(function() {
           			<fmt:message key="RPAdditionalFieldStorage.box.${holder.shortName}.label"/>
         		</a></h4>
     	</div>
-		<div id="collapseOne${holder.shortName}" class="panel-collapse collapse in">
+		<div id="collapseOne${holder.shortName}" class="panel-collapse collapse<c:if test="${holder.collapsed==false}"> in</c:if>">
 			<div class="panel-body">	
 			<div class="dynaClear">&nbsp;</div>
             <div class="dynaClear">&nbsp;</div>
