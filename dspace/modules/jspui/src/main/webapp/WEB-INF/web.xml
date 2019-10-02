@@ -702,6 +702,11 @@
     	<url-pattern>/dspace-admin/doiqueued</url-pattern>
   	</servlet-mapping>
 
+        <servlet-mapping>
+            <servlet-name>pubquestion</servlet-name>
+            <url-pattern>/pubquestion</url-pattern>
+        </servlet-mapping>
+
   	<servlet-mapping>	
     	<servlet-name>deduplication</servlet-name>
     	<url-pattern>/dedup/*</url-pattern>
