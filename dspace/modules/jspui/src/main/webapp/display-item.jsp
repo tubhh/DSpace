@@ -754,8 +754,8 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
-<%--------- Feedback Box from Bamberg University ---------
-      <div class="col-lg-12 col-md-4 col-sm-6">
+<%--------- Feedback Box from Bamberg University ---------%>
+      <div class="ol-sm-5 col-md-4 col-lg-3">
         <div class="panel panel-info">
           <div class="panel-heading">
             <h3 class="panel-title larger-panel-title">
@@ -767,7 +767,7 @@ if (dedupEnabled && admin_button) { %>
           </div>
         </div>
       </div>
------- End Feedback Box from Bamberg University -------------%>
+<%------ End Feedback Box from Bamberg University -------------%>
 
 
 <%-- As there is now only one possible User Tools button (create new version) it can be included
