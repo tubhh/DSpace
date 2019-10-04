@@ -49,6 +49,7 @@ import org.dspace.core.I18nUtil;
 import org.dspace.core.LogManager;
 import org.dspace.discovery.DiscoverQuery;
 import org.dspace.discovery.DiscoverResult;
+import org.dspace.discovery.IndexingService;
 import org.dspace.discovery.SearchServiceException;
 import org.dspace.discovery.SearchUtils;
 import org.dspace.discovery.configuration.DiscoveryConfiguration;
@@ -68,6 +69,10 @@ public class AddToRelationServlet extends DSpaceServlet {
             .getServiceByName(
                     "applicationService",
                     ApplicationService.class);
+
+    private IndexingService indexer = new DSpace().getServiceManager()
+            .getServiceByName(IndexingService.class.getName(),
+                    IndexingService.class);
 
     private AddToRelationServiceConfiguration addToRelationServiceConfiguration = dspace
             .getServiceManager()
@@ -96,8 +101,6 @@ public class AddToRelationServlet extends DSpaceServlet {
                 .isAuthorized(context, applicationService.getEntityByCrisId(crisID))) {
             throw new AuthorizeException("The user is not allow to manage the relation " + relationName + " for CRISObject " + crisID);
         }
-
-        context.turnOffAuthorisationSystem();
 
         ACrisObject cris = applicationService.getEntityByCrisId(crisID);
         request.setAttribute("crisObject", cris);
@@ -142,31 +145,36 @@ public class AddToRelationServlet extends DSpaceServlet {
         }
         if (selectedObject != null) {
             if (isAmmissibleObject(context, request, discoveryConfiguration, ammissibleQuery)) {
-                if (addToRelationServiceConfiguration
-                        .getAddToRelationService(relationName)
-                        .executeAction(cris, selectedObject)) {
-                    addMessage(context, request, "jsp.layout.cris.addrelations.success.info", publicPath, cris.getName(), selectedPublicPath, selectedObject.getName());
-                    context.commit();
+                try {
+                    context.turnOffAuthorisationSystem();
+                    if (addToRelationServiceConfiguration
+                            .getAddToRelationService(relationName)
+                            .executeAction(cris, selectedObject)) {
+                        addMessage(context, request, "jsp.layout.cris.addrelations.success.info", publicPath, cris.getName(), selectedPublicPath, selectedObject.getName());
+                        context.commit();
+                        indexer.commit();
+                        response.sendRedirect(publicPath);
+                        return;
+                    }
+                    else {
+                        // mmm this should never happen as it was ammissible and no exception was thrown...
+                        log.error("Something go wrong, we are not able to manage the selected object " + selectedObject.getID() + " for the target " + cris.getCrisID());
+                        throw new RuntimeException("Something go wrong, we are not able to manage the selected object " + selectedObject.getID() + " for the target " + cris.getCrisID());
+                    }
+                } catch (SearchServiceException e) {
+                    log.error(e.getMessage(), e);
+                    throw new RuntimeException(e.getMessage(), e);
+                } finally {
                     context.restoreAuthSystemState();
-                    response.sendRedirect(publicPath);
-                    return;
-                }
-                else {
-                    // mmm this should never happen as it was ammissible and no exception was thrown...
-                    log.error("Something go wrong, we are not able to manage the selected object " + selectedObject.getID() + " for the target " + cris.getCrisID());
-                    throw new RuntimeException("Something go wrong, we are not able to manage the selected object " + selectedObject.getID() + " for the target " + cris.getCrisID());
                 }
             }
             else {
                 log.error("The user try to add not ammissible object " + selectedObject.getTypeText() + " for the relation " + relationName);
                 addMessage(context, request, "jsp.layout.cris.addrelations.error.not.ammissible", selectedPublicPath, selectedObject.getName(), relationName);
-                context.restoreAuthSystemState();
                 response.sendRedirect(publicPath);
                 return;
             }
         }
-
-        context.restoreAuthSystemState();
 
         request.setAttribute("searchName", request.getContextPath() + request.getServletPath());
 
