@@ -26,7 +26,7 @@
       The location of the main DSpace configuration file
     </description>
 		<param-name>dspace-config</param-name>
-		<param-value>/srv/dspace/dspace-cris-5/config/dspace.cfg</param-value>
+		<param-value>${dspace.dir}/config/dspace.cfg</param-value>
 	</context-param>
 
 	<!-- new ConfigurationService initialization for dspace.dir -->
@@ -35,7 +35,7 @@
       The location of the main DSpace configuration file
     </description>
 		<param-name>dspace.dir</param-name>
-		<param-value>/srv/dspace/dspace-cris-5</param-value>
+		<param-value>${dspace.dir}</param-value>
 	</context-param>
 
 	<context-param>
@@ -604,7 +604,14 @@
     	<servlet-class>org.dspace.app.webui.servlet.ReferencesServlet</servlet-class>
   	</servlet>  
 
+        <!-- Publication Question -->
+        <servlet>
+            <servlet-name>pubquestion</servlet-name>
+            <servlet-class>org.dspace.app.webui.servlet.QuestionsServlet</servlet-class>
+        </servlet>
+
   <!-- BibTeX Export by ZBW -->
+<!--
   <servlet>
         <servlet-name>bibtexexport</servlet-name>
         <servlet-class>org.dspace.app.webui.servlet.BibTeXExportServlet</servlet-class>
@@ -614,7 +621,7 @@
         <servlet-name>bibtexexport</servlet-name>
         <url-pattern>/bibtexexport/*</url-pattern>
   </servlet-mapping>
-
+-->
   <mime-mapping>
     <extension>bib</extension>
     <mime-type>text/x-bibtex</mime-type>
@@ -694,6 +701,11 @@
     	<servlet-name>doiqueued</servlet-name>
     	<url-pattern>/dspace-admin/doiqueued</url-pattern>
   	</servlet-mapping>
+
+        <servlet-mapping>
+            <servlet-name>pubquestion</servlet-name>
+            <url-pattern>/pubquestion</url-pattern>
+        </servlet-mapping>
 
   	<servlet-mapping>	
     	<servlet-name>deduplication</servlet-name>
