@@ -791,6 +791,9 @@ if (dedupEnabled && admin_button) { %>
 %>
 
 <%--------- Feedback Box from Bamberg University ---------%>
+    <%
+    if (user!=null) {
+    %>
       <div class="col-sm-5 col-md-4 col-lg-3">
         <div class="panel panel-info">
           <div class="panel-heading">
@@ -803,6 +806,9 @@ if (dedupEnabled && admin_button) { %>
           </div>
         </div>
       </div>
+    <%
+    }
+    %>
 <%------ End Feedback Box from Bamberg University -------------%>
 
 
