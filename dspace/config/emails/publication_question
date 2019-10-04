@@ -1,0 +1,25 @@
+# EMail to Queue for questions about specific publication
+#
+# Eventually you need to change the order of the arguments when editing the template
+# (in jspui/src/main/java/org/dspace/app/webui/servlet/QuestionsServlet.java)
+#
+# Parameters:
+#             {0}: Title of the publication
+#             {1}: Issue Date
+#             {2}: Author(s)
+#             {3}: Link to the publication
+#             {4}: asked question
+#             {5}: Name
+#             {6}: E-Mail
+#
+Subject: TORE: Fragen/Anmerkungen zu einer Publikation
+
+Es wurde eine Frage zu folgender Publikation gestellt:
+    Titel:                  {0}
+    Erscheinungsjahr:       {1}
+    Autorin(nen)/Autor(en): {2}
+    Link zur Publikation:   {3}
+
+Die Frage lautet:
+    "{4}"
+    von {5} ({6})

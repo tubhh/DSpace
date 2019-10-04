@@ -1,5 +1,4 @@
-
-<link rel="stylesheet" href="/jspui/css/fragenmodal.css" type="text/css">
+<link rel="stylesheet" href="/css/fragenmodal.css" type="text/css">
 <input type="button" class="btn btn-sm btn-lnk" data-toggle="modal" data-target="#FragenModal" value="<fmt:message key="jsp.display-item.question-modal.button" />" />
 
 <!-- Modal -->
@@ -16,18 +15,59 @@
           type: "post",
           url: "<%=request.getContextPath()%>/pubquestion",
           data: "item_id=<%= item.getID()%>&q="+a+"&name="+b+"&mail="+c,
-          success: function(msg){}
+          success: function(msg)
+            {
+              $(".info-window-error.info-window-visible").removeClass("info-window-visible");
+              if (!$(".info-window-success").hasClass("info-window-visible"))
+              {
+                $(".info-window-success").addClass("info-window-visible");
+              }
+              if (!$(".info-window-hide").hasClass("hide"))
+              {
+                $(".info-window-hide").addClass("hide");
+              }
+            },
+          error: function(msg)
+            {
+              $(".info-window-success.info-window-visible").removeClass("info-window-visible");
+              if (!$(".info-window-error").hasClass("info-window-visible"))
+              {
+                $(".info-window-error").addClass("info-window-visible");
+              }
+              if (!$(".info-window-hide").hasClass("hide"))
+              {
+                $(".info-window-hide").addClass("hide");
+              }
+            }
         });
+      }
+
+      function resetAll()
+      {
+        $(".info-window-success.info-window-visible").removeClass("info-window-visible");
+        $(".info-window-error.info-window-visible").removeClass("info-window-visible");
+        $(".info-window-hide.hide").removeClass("hide");
+        $("#question").val("");
+        <% if (user == null) { %>
+        $("#name").val("");
+        $("#email").val("");
+        <% } %>
       }
     </script>
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button id="btn-question-modal-close" type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title"><fmt:message key="jsp.display-item.question-modal.title"/></h4>
       </div>
       <form>
         <div class="modal-body">
+          <div class="info-window info-window-success">
+            <p><fmt:message key="jsp.display-item.question-modal.success"/></p>
+          </div>
+          <div class="info-window info-window-error">
+            <p><fmt:message key="jsp.display-item.question-modal.error"/></p>
+          </div>
           <div class="question-div">
             <label class="question-title"><fmt:message key="metadata.dc.title"/></label>
             <br />
@@ -36,12 +76,12 @@
           <div class="question-div">
             <label class="question-title"><fmt:message key="metadata.dc.contributor.author"/></label>
             <br />
-            <label class="question-value"><%-- = authors --%></label>
+            <label class="question-value"><%= authors %></label>
           </div>
           <div class="question-div">
             <label class="question-title"><fmt:message key="metadata.dc.date.issued"/></label>
             <br />
-            <label class="question-value"><%-- = issued --%></label>
+            <label class="question-value"><%= issued %></label>
           </div>
           <div class="question-div">
             <label class="question-title" for="question"><fmt:message key="jsp.display-item.question-modal.question"/></label>
@@ -60,12 +100,12 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><fmt:message key="jsp.display-item.question-modal.close"/></button>
-          <input type="button" class="btn btn-default" value="<fmt:message key="jsp.display-item.question-modal.send"/>" onclick="display();" />
+          <button type="button" class="btn btn-default info-window-success info-window-error pull-left" data-dismiss="modal" onclick="reset();"><fmt:message key="jsp.display-item.question-modal.finish"/></button>
+          <button type="button" class="btn btn-default info-window-hide pull-left" data-dismiss="modal"><fmt:message key="jsp.display-item.question-modal.close"/></button>
+          <input type="button" class="btn btn-default info-window-hide" value="<fmt:message key="jsp.display-item.question-modal.send"/>" onclick="display();" />
         </div>
       </form>
     </div>
-
   </div>
 </div>
 <!--  -->
