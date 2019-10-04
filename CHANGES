@@ -17,3 +17,6 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * New Feature: add choice of bundles to bitstreams when they are appended to a record (Feature implemented by The Library Code)
 * Improvement: Fallback of multilingual entity fields if they are not set in the active language (Implemented by 4Science)
 * Improvement: Translation for entity pointers (for example show the english name of the orgunit of a researcher's affiliation, if the user has chosen english language, if a name_en for the ou is set). The fallback also applies to this translation, if no name_en ist set for the linked entity. This feature requires customized jsps for the fields. (Implemented by 4Science)
+* Bugfix: change static path in web.xml to use the variable from build.properties instead
+* Improvement: introduces CRIS OpenAire submissions (implemented by 4Science)
+* Improvement: introduces Question button on item level to send publication specific questions (implemented by University Bamberg)
