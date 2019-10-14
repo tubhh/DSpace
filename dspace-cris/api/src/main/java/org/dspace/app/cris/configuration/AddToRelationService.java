@@ -13,6 +13,7 @@ import java.util.List;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.DSpaceObject;
 import org.dspace.core.Context;
+import org.dspace.discovery.SearchServiceException;
 
 /**
  * This class is a service contained into the {@link AddToRelationServiceConfiguration}
