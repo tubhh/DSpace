@@ -99,6 +99,42 @@
 			title = "Item " + handle;
 		}
 	}
+    String authors = "";
+    if (handle != null)
+    {
+      Metadatum[] mAuthors = item.getDC("contributor", "author", Item.ANY);
+      for (Metadatum m : mAuthors)
+      {
+        authors += (!authors.equals("") ? " ; " : "") + m.value;
+      }
+    }
+
+    String issued = "";
+    if (handle != null)
+    {
+      Metadatum[] mIssued = item.getDC("date", "issued", Item.ANY);
+      if (mIssued.length != 0)
+      {
+        issued = mIssued[0].value;
+      }
+    }
+
+    String creator = "";
+    if (handle != null)
+    {
+      Metadatum[] mCreators = item.getDC("description", "provenance", Item.ANY);
+      for (Metadatum m : mCreators)
+      {
+        if (m.value.startsWith("Submitted by"))
+        {
+          int iStart = m.value.indexOf("(") + 1;
+          int iEnd = m.value.indexOf(")");
+          creator = m.value.substring(iStart, iEnd);
+          break;
+        }
+      }
+    }
+
     boolean pmcEnabled = ConfigurationManager.getBooleanProperty("cris","pmc.enabled",false);
     boolean scopusEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.elsevier.scopus.enabled",false);
     boolean wosEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.thomsonreuters.wos.enabled",false);
@@ -754,8 +790,11 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
-<%--------- Feedback Box from Bamberg University ---------
-      <div class="col-lg-12 col-md-4 col-sm-6">
+<%--------- Feedback Box from Bamberg University ---------%>
+    <%
+    if (user!=null) {
+    %>
+      <div class="col-sm-5 col-md-4 col-lg-3">
         <div class="panel panel-info">
           <div class="panel-heading">
             <h3 class="panel-title larger-panel-title">
@@ -767,7 +806,10 @@ if (dedupEnabled && admin_button) { %>
           </div>
         </div>
       </div>
------- End Feedback Box from Bamberg University -------------%>
+    <%
+    }
+    %>
+<%------ End Feedback Box from Bamberg University -------------%>
 
 
 <%-- As there is now only one possible User Tools button (create new version) it can be included

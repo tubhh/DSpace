@@ -152,8 +152,8 @@ public class QuestionsServlet extends DSpaceServlet
         }
         catch (Exception e)
         {
-            log.warn(LogManager.getHeader(context, "emailSuccessMessage",
-                    "cannot notify user of export"), e);
+            log.warn(LogManager.getHeader(context, "emailError",
+                    e.getMessage()), e);
             response.setStatus(500);
         }
     }
