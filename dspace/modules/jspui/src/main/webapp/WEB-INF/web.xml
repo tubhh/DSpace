@@ -663,6 +663,11 @@
     	<servlet-class>org.dspace.app.webui.servlet.InPageLoginServlet</servlet-class>
   	</servlet>
   	
+     <servlet>
+         <servlet-name>addrelations</servlet-name>
+         <servlet-class>org.dspace.app.webui.cris.servlet.AddToRelationServlet</servlet-class>
+     </servlet>
+
 	<!-- Servlet Mappings -->
 
   	<servlet-mapping>
@@ -1079,6 +1084,11 @@
      <servlet-mapping>
          <servlet-name>migrate-profile</servlet-name>
          <url-pattern>/migrate-profile</url-pattern>
+     </servlet-mapping>
+
+     <servlet-mapping>
+         <servlet-name>addrelations</servlet-name>
+         <url-pattern>/tools/addrelations</url-pattern>
      </servlet-mapping>
 
 	<!-- Icon MIME type -->

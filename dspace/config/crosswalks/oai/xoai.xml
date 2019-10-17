@@ -172,7 +172,6 @@
             <Format ref="datacite41_openaire"/>
             <Format ref="qdc" />
             <Format ref="ore" />
-
             <Description>
                 This is the default context of the DSpace OAI-PMH data provider.
             </Description>
@@ -2396,6 +2395,80 @@
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
                 <string name="field">dc.type.driver</string>
+
+        <!-- This condition determines if an Item has a "dc.type" field
+             which contains "Thesis". -->
+<!--
+        <CustomCondition id="thesisDocumentTypeCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.type</string>
+                <string name="operator">contains</string>
+                <string name="value">Thesis</string>
+            </Configuration>
+        </CustomCondition>
+-->
+        <!-- This condition determines if an Item has a "dc.contributor.author" -->
+<!--
+        <CustomCondition id="authorExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <string name="field">dc.contributor.author</string>
+            </Configuration>
+        </CustomCondition>
+-->
+        <!-- This condition determines if an Item has a "dc.title" -->
+<!--
+        <CustomCondition id="titleExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <string name="field">dc.title</string>
+            </Configuration>
+        </CustomCondition>
+-->
+        <!-- This condition determines if an Item has a "dc.identifier.doi" or a "dc.identifier.uri" or a "dc.identifier.url" -->
+<!--
+        <CustomCondition id="identifierExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <list name="fields">
+                	<string>dc.identifier.doi</string>
+                	<string>dc.identifier.uri</string>
+                	<string>dc.identifier.url</string>
+               	</list>
+            </Configuration>
+        </CustomCondition>
+-->
+        <!-- This condition determines if an Item has a "dc.date.issued" or a "dc.date.available" or a "dc.date.accessioned" -->
+<!--
+        <CustomCondition id="dateExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <list name="fields">
+                	<string>dc.date.issued</string>
+                	<string>dc.date.available</string>
+                	<string>dc.date.accessioned</string>
+               	</list>
+            </Configuration>
+        </CustomCondition>
+-->
+        <!-- This condition determines if an Item has a "dc.publisher" -->
+<!--
+        <CustomCondition id="publisherExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <string name="field">dc.publisher</string>
+            </Configuration>
+        </CustomCondition>
+-->
+        <!-- This condition determines if an Item has a "dc.type" field
+             specifying one of the valid DRIVER document types. -->
+<!--
+        <CustomCondition id="driverDocumentTypeCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">item.openairetype</string>
+-->
                 <string name="operator">ends_with</string>
                 <list name="values">
                     <string>article</string>
@@ -2418,6 +2491,9 @@
             </Configuration>
         </CustomCondition>
 
+        <!-- This condition determines if an Item has a "dc.rights" field
+             specifying "open access", which is required for DRIVER
+             OR "openAccess", which is required by OpenAIRE. -->
         <CustomCondition id="driverAccessCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
@@ -2442,6 +2518,41 @@
                 <string name="value">info:eu-repo/grantAgreement/</string>
             </Configuration>
         </CustomCondition>
+
+        <!-- This condition determines if an Item is publicly accessible. -->
+        <CustomCondition id="itemAccessCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAuthorizationFilter</Class>
+        </CustomCondition>
+
+        <!-- This condition determines if an Item is withdrawn. This condition
+             ensures a basic "tombstone" record is shown for withdrawn items,
+             as recommended by OAI-PMH spec. This "tombstone" doesn't display
+             any metadata or content files.  -->
+        <CustomCondition id="itemWithdrawnCondition">
+            <Class>org.dspace.xoai.filter.DSpaceWithdrawnFilter</Class>
+        </CustomCondition>
+
+        <!-- This condition determines if an Item has a "dc.relation" field
+             which specifies the openAIRE project ID. -->
+        <CustomCondition id="openaireRelationCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">crisitem.project.openAire </string>
+                <string name="operator">starts_with</string>
+                <string name="value">info:eu-repo/grantAgreement/</string>
+            </Configuration>
+        </CustomCondition>
+
+        <!-- NOTE to use the flat metadata comment in the previous and use the follow  configuration -->
+        <!--        
+        <CustomCondition id="openaireRelationCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.relation</string>
+                <string name="operator">starts_with</string>
+                <string name="value">info:eu-repo/grantAgreement/</string>
+            </Configuration>
+        </CustomCondition> -->        
     </Filters>
 
     <Sets>
@@ -3108,6 +3219,7 @@
 			<Name>General history of other areas</Name>
 			<Filter ref="ddc990Filter"/>
 		</Set>	
+        
         <Set id="driverSet">
             <Spec>driver</Spec>
             <Name>Open Access DRIVERset</Name>
@@ -3126,6 +3238,11 @@
         <Set id="openaccessSet">
             <Spec>open_access</Spec>
             <Name>OpenAccess Documents</Name>
+        </Set>
+        <Set id="openaireSet">
+            <Spec>ec_fundedresources</Spec>
+            <Name>EC_fundedresources set</Name>
+            <!-- Just an alias -->
         </Set>
         <!-- set the OpenAIRE Data Archive OAI Set. See: https://guidelines.openaire.eu/en/latest/data/use_of_oai_pmh.html -->
         <Set id="openaireDataSet">

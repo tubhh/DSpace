@@ -125,6 +125,10 @@ public class BrowseListTag extends TagSupport
      * select the item
      */
     private String inputName;
+
+    private boolean addRelationButton;
+
+    private String type;
     
     private static final long serialVersionUID = 8091584920304256107L;
 
@@ -619,7 +623,7 @@ public class BrowseListTag extends TagSupport
                                 css += " sortable";
                                 csssort += "fa fa-sort pull-right";
                             }
-                            thJs += ")\"";
+                            thJs += ",'" + getType() + "')\"";
 
                             break;
                         }
@@ -665,6 +669,16 @@ public class BrowseListTag extends TagSupport
                 out.print("<th id=\"" + id + "\" class=\"" + css + "\">"
                         + (emph[emph.length - 2] ? "<strong>" : "") + "&nbsp;" // LocaleSupport.getLocalizedMessage(pageContext,
                                                                                // message)
+                        + (emph[emph.length - 2] ? "</strong>" : "") + "</th>");
+            }
+
+            if (addRelationButton) {
+                String css = "oddRow" + cOddOrEven[cOddOrEven.length - 2]
+                        + "Col";
+
+                // output the header
+                out.print("<th id=\"" + id +  "\" class=\"" + css + "\">"
+                        + (emph[emph.length - 2] ? "<strong>" : "") + "&nbsp;"
                         + (emph[emph.length - 2] ? "</strong>" : "") + "</th>");
             }
 
@@ -859,6 +873,20 @@ public class BrowseListTag extends TagSupport
                                 + "</td>");
                     }
                 }
+
+                if (addRelationButton) {
+                    IDisplayMetadataValueStrategy strategy = (IDisplayMetadataValueStrategy) PluginManager
+                            .getNamedPlugin(IDisplayMetadataValueStrategy.class, "addrelation");
+
+                    String metadata = strategy.getMetadataDisplay(hrq, -1, true, null, -1,
+                            null, null, items[i], disableCrossLinks, false);
+
+                    out.print("<td headers=\"" + id + "\" class=\""
+                            + rOddOrEven + "Row" + cOddOrEven[cOddOrEven.length - 2]
+                            + "Col\">"
+                            + metadata + "</td>");
+                }
+
                 out.println("</tr>");
             }
 
@@ -1025,6 +1053,7 @@ public class BrowseListTag extends TagSupport
         radioButton = false;
         sortBy = null;
         order = null;
+        addRelationButton = false;
     }
 
     public void setInputName(String inputName) {
@@ -1033,5 +1062,21 @@ public class BrowseListTag extends TagSupport
 
     public void setRadioButton(boolean radioButton) {
         this.radioButton = radioButton;
+    }
+
+    public boolean getAddRelationButton() {
+        return addRelationButton;
+    }
+
+    public void setAddRelationButton(boolean addRelationButton) {
+        this.addRelationButton = addRelationButton;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -1418,8 +1418,11 @@ public class PushToORCID
         if (StringUtils.isNotBlank(itemMetadata.getAmount()))
         {
             Amount amount = new Amount();
-            CurrencyCode currencyCode = CurrencyCode
-                    .fromValue(itemMetadata.getCurrencyCode());
+            CurrencyCode currencyCode = CurrencyCode.EUR;
+            String amountCurrencyCode = itemMetadata.getAmountCurrencyCode();
+            if(StringUtils.isNotBlank(amountCurrencyCode)) {
+                currencyCode = CurrencyCode.fromValue(amountCurrencyCode);
+            }
             amount.setValue(itemMetadata.getAmount());
             amount.setCurrencyCode(currencyCode);
             funding.setAmount(amount);
@@ -1539,7 +1542,7 @@ public class PushToORCID
             for (String valContributor : itemMetadata.getContributorsCoLead())
             {
                 addFundingContributor(fundingContributors, valContributor,
-                        "colead");
+                        "co-lead");
                 buildFundingContributors = true;
             }
         }
@@ -1832,6 +1835,24 @@ public class PushToORCID
             workExternalIdentifiers.getExternalId()
                     .add(workExternalIdentifierInternal);
         }
+        
+        // add parent external id
+        if (itemMetadata.getExternalIdentifierParent() != null
+                && !itemMetadata.getExternalIdentifierParent().isEmpty())
+        {
+            for (String valIdentifier : itemMetadata.getExternalIdentifierParent())
+            {
+                ExternalId workExternalIdentifier = new ExternalId();
+                workExternalIdentifier.setExternalIdValue(valIdentifier);
+                workExternalIdentifier.setExternalIdUrl(valIdentifier);
+                workExternalIdentifier.setExternalIdType(
+                        itemMetadata.getExternalIdentifierType(valIdentifier));
+                workExternalIdentifier.setExternalIdRelationship(RelationshipType.PART_OF);
+                workExternalIdentifiers.getExternalId()
+                        .add(workExternalIdentifier);
+            }
+        }
+
         orcidWork.setExternalIds(workExternalIdentifiers);
 
         // export if have an authority value
@@ -2628,10 +2649,19 @@ public class PushToORCID
             for (String l : links)
             {
                 ResearcherUrl researcherUrl = new ResearcherUrl();
-                researcherUrl.setUrlName(l.split("###")[0]);
+                String[] splittedLink = l.split("###");
                 Url url = new Url();
-                url.setValue(l.split("###")[1]);
-                researcherUrl.setUrl(url);
+				if (splittedLink.length == 2) {
+					researcherUrl
+							.setUrlName(StringUtils.isNotBlank(splittedLink[0]) ? splittedLink[0] : splittedLink[1]);
+	                url.setValue(splittedLink[1]);
+	                researcherUrl.setUrl(url);
+				}
+				else {
+					researcherUrl.setUrlName(l);
+	                url.setValue(l);
+	                researcherUrl.setUrl(url);
+				}
                 researcherUrls.add(researcherUrl);
             }
         }
