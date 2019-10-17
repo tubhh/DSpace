@@ -243,7 +243,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the volume number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article,inProceedings</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -255,7 +255,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the issue number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article,inProceedings</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -1135,7 +1135,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the volume number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article,inProceedings</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -1147,7 +1147,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the issue number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article,inProceedings</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -2081,7 +2081,7 @@
 -->
      <pair>
        <displayed-value>Research Paper</displayed-value>
-       <stored-value>Working Paper</stored-value>
+       <stored-value>Research Paper</stored-value>
      </pair>
      <pair>
        <displayed-value>Software</displayed-value>
@@ -2094,6 +2094,10 @@
      <pair>
        <displayed-value>Video/Movie</displayed-value>
        <stored-value>Video</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Working Paper</displayed-value>
+       <stored-value>Working Paper</stored-value>
      </pair>
      <pair>
        <displayed-value>Other</displayed-value>

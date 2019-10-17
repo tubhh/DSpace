@@ -243,7 +243,7 @@
          <input-type>onebox</input-type>
          <hint>Geben Sie hier den Jahrgang (Band) der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
          <required></required>
-         <type-bind>Article,inProceedings</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -255,7 +255,7 @@
          <input-type>onebox</input-type>
          <hint>Geben Sie hier die Ausgabennummer der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
          <required></required>
-         <type-bind>Article,inProceedings</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -1132,7 +1132,7 @@
          <input-type>onebox</input-type>
          <hint>Geben Sie hier den Jahrgang (Band) der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
          <required></required>
-         <type-bind>Article,inProceedings</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -1144,7 +1144,7 @@
          <input-type>onebox</input-type>
          <hint>Geben Sie hier die Ausgabennummer der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
          <required></required>
-         <type-bind>Article,inProceedings</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -2016,6 +2016,10 @@
        <stored-value>manual</stored-value>
      </pair>
      <pair>
+       <displayed-value>Arbeitspapier</displayed-value>
+       <stored-value>Working Paper</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Artikel/Aufsatz</displayed-value>
        <stored-value>Article</stored-value>
      </pair>
@@ -2043,7 +2047,7 @@
 -->
      <pair>
        <displayed-value>Forschungspapier</displayed-value>
-       <stored-value>Working Paper</stored-value>
+       <stored-value>Research Paper</stored-value>
      </pair>
      <pair>
        <displayed-value>Kapitel (Buch)</displayed-value>
