@@ -280,8 +280,8 @@ public class TypeSetter extends AbstractCurationTask
             break;
         case "inProceedings":
             ret.put("opus", "InProceedings (Aufsatz / Paper einer Konferenz etc.)");
-            ret.put("dini", "contributionToPeriodical");
-            ret.put("driver", "contributionToPeriodical");
+            ret.put("dini", "conferenceObject");
+            ret.put("driver", "conferenceObject");
             ret.put("dcmi", "Text");
             ret.put("casrai", "Conference Paper");
             break;
