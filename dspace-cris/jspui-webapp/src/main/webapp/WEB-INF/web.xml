@@ -547,11 +547,6 @@
         <servlet-name>SearchResultLogServlet</servlet-name>
         <servlet-class>org.dspace.app.webui.servlet.SearchResultLogServlet</servlet-class>
     </servlet>  	
-    
-    <servlet>
-        <servlet-name>addrelations</servlet-name>
-        <servlet-class>org.dspace.app.webui.cris.servlet.AddToRelationServlet</servlet-class>
-    </servlet>
 
 	<!-- spring mvc cris -->
 	<servlet>
@@ -1258,11 +1253,6 @@
   	<servlet-mapping>
         <servlet-name>orcidwebhookcallback</servlet-name>
         <url-pattern>/orcidwebhook/*</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-        <servlet-name>addrelations</servlet-name>
-        <url-pattern>/tools/addrelations</url-pattern>
     </servlet-mapping>
     
 </web-app>
