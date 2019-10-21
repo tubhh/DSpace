@@ -111,7 +111,7 @@ public class ItemListTag extends TagSupport {
 
 	private static int itemStart = 1;
 
-	private boolean addRelationButton;
+	private boolean relationButton;
 
 	private String type;
 
@@ -458,7 +458,7 @@ log.debug("No special setting for webui.itemlist.columns");
                         + (emph[emph.length - 2] ? "</strong>" : "") + "</th>");
             }
 
-            if (addRelationButton) {
+            if (relationButton) {
                 String css = "oddRow" + cOddOrEven[cOddOrEven.length - 2]
                         + "Col";
 
@@ -623,9 +623,9 @@ log.debug("No special setting for webui.itemlist.columns");
                     }
 				}
 
-                if (addRelationButton) {
+                if (relationButton) {
                     IDisplayMetadataValueStrategy strategy = (IDisplayMetadataValueStrategy) PluginManager
-                            .getNamedPlugin(IDisplayMetadataValueStrategy.class, "addrelation");
+                            .getNamedPlugin(IDisplayMetadataValueStrategy.class, "managerelation");
 
                     String metadata = strategy.getMetadataDisplay(hrq, -1, true, null, -1,
                             null, null, items[i], disableCrossLinks, false);
@@ -802,7 +802,7 @@ log.debug("No special setting for webui.itemlist.columns");
 		inputName = null;
 		radioButton = false;
 		isDesc = false;
-		addRelationButton = false;
+		relationButton = false;
 	}
 
 	// allem modified: get-set methods for custom attribute
@@ -829,12 +829,12 @@ log.debug("No special setting for webui.itemlist.columns");
 			isDesc = false;
 	}
 
-    public boolean getAddRelationButton() {
-        return addRelationButton;
+    public boolean getRelationButton() {
+        return relationButton;
     }
 
-    public void setAddRelationButton(boolean addRelationButton) {
-        this.addRelationButton = addRelationButton;
+    public void setRelationButton(boolean relationButton) {
+        this.relationButton = relationButton;
     }
 
     public String getType() {
