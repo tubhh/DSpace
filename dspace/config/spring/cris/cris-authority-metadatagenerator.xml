@@ -100,10 +100,11 @@
         <property name="relatedInputformMetadata" value="dc_relation_grantno"/>    	
     </bean>
     
-	<bean id="JournalExtraIssnMetadataGenerator"
+    <!-- Default configuration -->
+    <!-- <bean id="JournalExtraIssnMetadataGenerator"
         class="org.dspace.app.cris.integration.CRISExtraBasicMetadataGenerator">
         <property name="type" value="journals" />
         <property name="relatedMetadata" value="crisjournals.journalsissn" />
         <property name="relatedInputformMetadata" value="dc_relation_issn"/>
-    </bean>
+    </bean> -->
 </beans>
