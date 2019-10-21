@@ -156,7 +156,11 @@ public class RelationServlet extends DSpaceServlet {
                 try {
                     context.turnOffAuthorisationSystem();
                     if (relationService.executeAction(action, cris, selectedObject)) {
-                        addMessage(context, request, "jsp.layout.cris.relations.success.info", publicPath, cris.getName(), selectedPublicPath, selectedObject.getName(), action.equals("add") ? "created" : "removed");
+						addMessage(context, request, "jsp.layout.cris.relations.success.info", publicPath,
+								cris.getName(), selectedPublicPath, selectedObject.getName(),
+								action.equals("add") ? 
+										I18nUtil.getMessage("jsp.layout.cris.relations.success.added")
+										: I18nUtil.getMessage("jsp.layout.cris.relations.success.removed"));
                         context.commit();
                         indexer.commit();
                         response.sendRedirect(publicPath);
@@ -176,7 +180,7 @@ public class RelationServlet extends DSpaceServlet {
             }
             else {
                 log.error("The user try to add not ammissible object " + selectedObject.getTypeText() + " for the relation " + relationName);
-                addMessage(context, request, "jsp.layout.cris.relations.error.not.ammissible", selectedPublicPath, selectedObject.getName(), relationName);
+                addMessage(context, request, "jsp.layout.cris.relations.error.not.acceptable", selectedPublicPath, selectedObject.getName(), relationName);
                 response.sendRedirect(publicPath);
                 return;
             }
