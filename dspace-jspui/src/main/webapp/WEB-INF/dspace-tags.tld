@@ -265,7 +265,7 @@
         <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
-        <name>addRelationButton</name>
+        <name>relationButton</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
       </attribute>
@@ -340,7 +340,7 @@
         <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
-        <name>addRelationButton</name>
+        <name>relationButton</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
       </attribute>
