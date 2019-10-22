@@ -10,26 +10,26 @@ package org.dspace.app.cris.configuration;
 import java.util.List;
 
 /**
- * This class contains the configuration of all the {@link AddToRelationService}
+ * This class contains the configuration of all the {@link RelationService}
  * defined in the Spring configuration file:
  * cris-relationpreference.xml
  *
  */
-public class AddToRelationServiceConfiguration {
+public class RelationServiceConfiguration {
 
-    /** list of all the {@link AddToRelationService} */
-    private List<AddToRelationService> list;
+    /** list of all the {@link RelationService} */
+    private List<RelationService> list;
 
-    public List<AddToRelationService> getList() {
+    public List<RelationService> getList() {
         return list;
     }
 
-    public void setList(List<AddToRelationService> list) {
+    public void setList(List<RelationService> list) {
         this.list = list;
     }
 
-    public synchronized AddToRelationService getAddToRelationService(String name) {
-        for (AddToRelationService relationService : list) {
+    public synchronized RelationService getRelationService(String name) {
+        for (RelationService relationService : list) {
             if (relationService.getRelationConfiguration() != null) {
                 if (name.equals(relationService.getRelationConfiguration().getRelationName())) {
                     return relationService;
