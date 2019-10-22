@@ -20,3 +20,6 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * Bugfix: change static path in web.xml to use the variable from build.properties instead
 * Improvement: introduces CRIS OpenAire submissions (implemented by 4Science)
 * Improvement: introduces Question button on item level to send publication specific questions (implemented by University Bamberg)
+* Improvement: added Cookie note unless cookies are accepted (adopted from 4Science)
+* Improvement: introduces CSL support for publications (provided that an instance of Bamberg's OData interface is installed locally)
+* Improvement: add a remove button to publication management from projects (implemented by 4Science)
