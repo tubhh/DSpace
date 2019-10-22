@@ -100,12 +100,28 @@
 		}
 	}
     String authors = "";
+    int authorAuthority = 0;
     if (handle != null)
     {
       Metadatum[] mAuthors = item.getDC("contributor", "author", Item.ANY);
       for (Metadatum m : mAuthors)
       {
         authors += (!authors.equals("") ? " ; " : "") + m.value;
+        if (authorAuthority == 0) {
+            authorAuthority = Integer.parseInt(m.authority.substring(2));
+        }
+      }
+    }
+
+    int ouAuthority = 0;
+    if (handle != null)
+    {
+      Metadatum[] mOus = item.getMetadata("tuhh", "publication", "institute", Item.ANY);
+      for (Metadatum o : mOus)
+      {
+        if (ouAuthority == 0) {
+            ouAuthority = Integer.parseInt(o.authority.substring(2));
+        }
       }
     }
 
@@ -168,6 +184,8 @@
 	String cfg = ConfigurationManager.getProperty("exportcitation.options");
 	boolean coreRecommender = ConfigurationManager.getBooleanProperty("core-aggregator","core-aggregator.enabled");
 	String coreCredentials = ConfigurationManager.getProperty("core-aggregator", "core-aggregator.credentials");
+
+        String odataPath = ConfigurationManager.getProperty("cris","odataPath");
 	
 	String crisID = (String)request.getAttribute("crisID");
 %>
@@ -810,6 +828,75 @@ if (dedupEnabled && admin_button) { %>
     }
     %>
 <%------ End Feedback Box from Bamberg University -------------%>
+
+<%------ CSL-Einbindung -----%>
+<%
+if ((authorAuthority != 0 || ouAuthority != 0) && odataPath) {
+%>
+    <script>
+        function csl_select() {
+            if (window.XMLHttpRequest) {
+                httpodata = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                httpodata = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            if (httpodata != null) {
+            <%
+                if (authorAuthority != 0) {
+            %>
+                    httpodata.open( "GET" , odataPath + "/cslforresearcher(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=authorAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
+                <%
+                }
+                else if (ouAuthority != 0) {
+                %>
+                    httpodata.open( "GET" , "https://dspace-cris.tub.tuhh.de/odata/ODataService.svc/cslfororgunit(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=ouAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
+                <%
+                }
+                %>
+
+                httpodata.onreadystatechange = setcsl;
+                httpodata.send( null );
+            }
+        }
+
+        function setcsl() {
+            if ( httpodata.readyState == 4 ) {
+                var jsonResponse = httpodata.responseText;
+                var data = JSON.parse(jsonResponse);
+                var xx = document.getElementById("citationbox");
+                xx.innerHTML = data['value'][0]['csl'];
+            }
+        }
+    </script>
+      <div class="col-sm-5 col-md-4 col-lg-3">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title larger-panel-title">
+              <fmt:message key="jsp.display-item.csl.title" />
+            </h3>
+          </div>
+          <div class="panel-list">
+              <form action="#" name="csl_selector">
+                  <select name="citationstyle" onchange="javascript:csl_select()">
+                      <option value=""></option>
+                      <option value="apa">APA</option>
+                      <option value="ieee">IEEE</option>
+                      <option value="chicago-author-date">Chicago</option>
+                      <option value="acm-siggraph">ACM</option>
+                      <option value="council-of-science-editors">CSE</option>
+                      <option value="modern-language-association">MLA</option>
+                  </select>
+              </form>
+          </div>
+          <div id="citationbox" class="panel-list">
+          </div>
+        </div>
+      </div>
+<%
+}
+%>
+<%------ Ende CSL-Einbindung -----%>
 
 
 <%-- As there is now only one possible User Tools button (create new version) it can be included
