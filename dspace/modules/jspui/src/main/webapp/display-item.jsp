@@ -831,7 +831,7 @@ if (dedupEnabled && admin_button) { %>
 
 <%------ CSL-Einbindung -----%>
 <%
-if ((authorAuthority != 0 || ouAuthority != 0) && odataPath) {
+if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
 %>
     <script>
         function csl_select() {
