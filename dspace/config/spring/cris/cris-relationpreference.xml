@@ -154,15 +154,20 @@
 	<bean id="adminSecurityConfiguration" class="org.dspace.app.cris.configuration.AdminSecurityCheck" />
 
 	<bean
-		class="org.dspace.app.cris.configuration.AddToRelationServiceConfiguration">
+		class="org.dspace.app.cris.configuration.RelationServiceConfiguration">
 		<property name="list">
 			<list>
-				<bean
-					class="org.dspace.app.cris.configuration.AddToRelationService">
+				 <bean
+					class="org.dspace.app.cris.configuration.RelationService">
 					<property name="relationConfiguration" ref="relationPJVSItemConfiguration"/>
 					<property name="discoveryConfigurationKey" value="publications"/>
-					<property name="action">
-						<bean class="org.dspace.app.cris.configuration.RelationMetadataAction">
+					<property name="addAction">
+						<bean class="org.dspace.app.cris.configuration.AddRelationMetadataAction">
+							<property name="metadataAction" value="dc.relation.project" />
+						</bean>
+					</property>
+					<property name="removeAction">
+						<bean class="org.dspace.app.cris.configuration.RemoveRelationMetadataAction">
 							<property name="metadataAction" value="dc.relation.project" />
 						</bean>
 					</property>
@@ -175,11 +180,11 @@
 				</bean>
 
 				<!-- <bean
-					class="org.dspace.app.cris.configuration.AddToRelationService">
+					class="org.dspace.app.cris.configuration.RelationService">
 					<property name="relationConfiguration" ref="relationRPVSItemConfiguration"/>
 					<property name="discoveryConfigurationKey" value="publications"/>
-					<property name="action">
-						<bean class="org.dspace.app.cris.configuration.RelationMetadataAction">
+					<property name="addAction">
+						<bean class="org.dspace.app.cris.configuration.AddRelationMetadataAction">
 							<property name="metadataAction" value="dc.contributor.author" />
 						</bean>
 					</property>
@@ -191,11 +196,11 @@
 				</bean> -->
 
 				<!-- <bean
-					class="org.dspace.app.cris.configuration.AddToRelationService">
+					class="org.dspace.app.cris.configuration.RelationService">
 					<property name="relationConfiguration" ref="relationRPVSPJConfiguration"/>
 					<property name="discoveryConfigurationKey" value="fundings"/>
-					<property name="action">
-						<bean class="org.dspace.app.cris.configuration.RelationMetadataAction">
+					<property name="addAction">
+						<bean class="org.dspace.app.cris.configuration.AddRelationMetadataAction">
 							<property name="metadataAction" value="coinvestigators" />
 						</bean>
 					</property>
@@ -207,11 +212,11 @@
 				</bean> -->
 
 				<!-- <bean
-					class="org.dspace.app.cris.configuration.AddToRelationService">
+					class="org.dspace.app.cris.configuration.RelationService">
 					<property name="relationConfiguration" ref="relationJOURNALVSItemConfiguration"/>
 					<property name="discoveryConfigurationKey" value="publications"/>
-					<property name="action">
-						<bean class="org.dspace.app.cris.configuration.RelationMetadataAction">
+					<property name="addAction">
+						<bean class="org.dspace.app.cris.configuration.AddRelationMetadataAction">
 							<property name="metadataAction" value="dc.relation.ispartof" />
 						</bean>
 					</property>

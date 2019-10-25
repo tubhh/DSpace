@@ -23,11 +23,11 @@ import org.dspace.content.Metadatum;
 import org.dspace.core.I18nUtil;
 import org.dspace.discovery.IGlobalSearchResult;
 
-public class AddRelationButtonDisplayStrategy implements IDisplayMetadataValueStrategy
+public class ManageRelationButtonDisplayStrategy implements IDisplayMetadataValueStrategy
 {
 
     public static final Log log = LogFactory
-            .getLog(AddRelationButtonDisplayStrategy.class);
+            .getLog(ManageRelationButtonDisplayStrategy.class);
 
     @Override
     public String getMetadataDisplay(HttpServletRequest hrq, int limit, boolean viewFull, String browseType, int colIdx,
@@ -36,16 +36,25 @@ public class AddRelationButtonDisplayStrategy implements IDisplayMetadataValueSt
         ACrisObject cris = (ACrisObject) ((BrowseDSpaceObject) item).getBrowsableDSpaceObject();
         if (hrq.getAttribute("added-crisIDs") != null
                 && Arrays.asList(((String)hrq.getAttribute("added-crisIDs")).split(",")).contains(cris.getCrisID())) {
-            return "<span>"
-                    + I18nUtil.getMessage("jsp.layout.cris.addrelations.added")
-                    + "</span>";
+            if (hrq.getAttribute("removeRelation") != null && (Boolean)hrq.getAttribute("removeRelation")) {
+                return "<a class=\"btn btn-danger\" href=\""
+                        + "relations?"
+                        + hrq.getQueryString() + "&action=remove&selected-crisID=" + cris.getCrisID() + "\""
+                        + ">"
+                        + I18nUtil.getMessage("jsp.layout.cris.relations.removerelation.button") + "</a>";
+            }
+            else {
+                return "<span>"
+                        + I18nUtil.getMessage("jsp.layout.cris.relations.addrelation.added")
+                        + "</span>";
+            }
         }
         else {
             return "<a class=\"btn btn-default\" href=\""
-                    + "addrelations?"
-                    + hrq.getQueryString() + "&selected-crisID=" + cris.getCrisID() + "\""
+                    + "relations?"
+                    + hrq.getQueryString() + "&action=add&selected-crisID=" + cris.getCrisID() + "\""
                     + ">"
-                    + I18nUtil.getMessage("jsp.layout.cris.addrelations.button")
+                    + I18nUtil.getMessage("jsp.layout.cris.relations.addrelation.button")
                     + "</a>";
         }
     }
@@ -56,16 +65,25 @@ public class AddRelationButtonDisplayStrategy implements IDisplayMetadataValueSt
             throws JspException {
         if (hrq.getAttribute("added-itemIDs") != null
                 && Arrays.asList(((String)hrq.getAttribute("added-itemIDs")).split(",")).contains(String.valueOf(item.getID()))) {
-            return "<span>"
-                    + I18nUtil.getMessage("jsp.layout.cris.addrelations.added")
-                    + "</span>";
+            if (hrq.getAttribute("removeRelation") != null && (Boolean)hrq.getAttribute("removeRelation")) {
+                return "<a class=\"btn btn-danger\" href=\""
+                        + "relations?"
+                        + hrq.getQueryString() + "&action=remove&selected-itemID=" + item.getID() + "\""
+                        + ">"
+                        + I18nUtil.getMessage("jsp.layout.cris.relations.removerelation.button") + "</a>";
+            }
+            else {
+                return "<span>"
+                        + I18nUtil.getMessage("jsp.layout.cris.relations.addrelation.added")
+                        + "</span>";
+            }
         }
         else {
             return "<a class=\"btn btn-default\" href=\""
-                    + "addrelations?"
-                    + hrq.getQueryString() + "&selected-itemID=" + item.getID() + "\""
+                    + "relations?"
+                    + hrq.getQueryString() + "&action=add&selected-itemID=" + item.getID() + "\""
                     + ">"
-                    + I18nUtil.getMessage("jsp.layout.cris.addrelations.button") + "</a>";
+                    + I18nUtil.getMessage("jsp.layout.cris.relations.addrelation.button") + "</a>";
         }
     }
 

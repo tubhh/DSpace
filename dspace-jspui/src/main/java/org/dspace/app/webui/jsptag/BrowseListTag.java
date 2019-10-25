@@ -126,7 +126,7 @@ public class BrowseListTag extends TagSupport
      */
     private String inputName;
 
-    private boolean addRelationButton;
+    private boolean relationButton;
 
     private String type;
     
@@ -672,7 +672,7 @@ public class BrowseListTag extends TagSupport
                         + (emph[emph.length - 2] ? "</strong>" : "") + "</th>");
             }
 
-            if (addRelationButton) {
+            if (relationButton) {
                 String css = "oddRow" + cOddOrEven[cOddOrEven.length - 2]
                         + "Col";
 
@@ -874,9 +874,9 @@ public class BrowseListTag extends TagSupport
                     }
                 }
 
-                if (addRelationButton) {
+                if (relationButton) {
                     IDisplayMetadataValueStrategy strategy = (IDisplayMetadataValueStrategy) PluginManager
-                            .getNamedPlugin(IDisplayMetadataValueStrategy.class, "addrelation");
+                            .getNamedPlugin(IDisplayMetadataValueStrategy.class, "managerelation");
 
                     String metadata = strategy.getMetadataDisplay(hrq, -1, true, null, -1,
                             null, null, items[i], disableCrossLinks, false);
@@ -1053,7 +1053,7 @@ public class BrowseListTag extends TagSupport
         radioButton = false;
         sortBy = null;
         order = null;
-        addRelationButton = false;
+        relationButton = false;
     }
 
     public void setInputName(String inputName) {
@@ -1064,12 +1064,12 @@ public class BrowseListTag extends TagSupport
         this.radioButton = radioButton;
     }
 
-    public boolean getAddRelationButton() {
-        return addRelationButton;
+    public boolean getRelationButton() {
+        return relationButton;
     }
 
-    public void setAddRelationButton(boolean addRelationButton) {
-        this.addRelationButton = addRelationButton;
+    public void setRelationButton(boolean relationButton) {
+        this.relationButton = relationButton;
     }
 
     public String getType() {

@@ -9,55 +9,14 @@ package org.dspace.app.cris.configuration;
 
 import java.sql.SQLException;
 
-import org.dspace.app.cris.model.ACrisObject;
-import org.dspace.app.cris.model.VisibilityConstants;
-import org.dspace.app.cris.service.ApplicationService;
-import org.dspace.app.cris.util.ResearcherPageUtils;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.DSpaceObject;
-import org.dspace.content.Item;
-import org.dspace.content.authority.Choices;
-import org.dspace.utils.DSpace;
 
-public class RelationMetadataAction {
+public abstract class RelationMetadataAction {
 
-    ApplicationService applicationService = new DSpace().getServiceManager()
-            .getServiceByName("applicationService",
-                    ApplicationService.class);
+    protected String metadataAction;
 
-    private String metadataAction;
-
-    public boolean processSelectedItem(DSpaceObject target, DSpaceObject selected) throws SQLException, AuthorizeException {
-        if (target instanceof ACrisObject && selected instanceof Item) {
-            String[] metadataActionSplitted = metadataAction.split("\\.");
-            selected.addMetadata(metadataActionSplitted[0],
-                    metadataActionSplitted[1],
-                    metadataActionSplitted.length == 3 ? metadataActionSplitted[2] : null,
-                    null,
-                    target.getName(),
-                    ((ACrisObject) target).getCrisID(),
-                    Choices.CF_ACCEPTED);
-            selected.update();
-
-            return true;
-        }
-        else if (target instanceof ACrisObject && selected instanceof ACrisObject) {
-            ResearcherPageUtils.
-                    buildGenericValue((ACrisObject)selected, (ACrisObject)target, metadataAction, VisibilityConstants.PUBLIC);
-
-            new DSpace().getServiceManager()
-                    .getServiceByName(
-                            "applicationService",
-                            ApplicationService.class)
-                    .saveOrUpdate(
-                            ((ACrisObject)selected).getCRISTargetClass(),
-                            (ACrisObject)selected);
-
-            return true;
-        }
-
-        return false;
-    }
+    public abstract boolean processSelectedItem(DSpaceObject target, DSpaceObject selected) throws SQLException, AuthorizeException;
 
     public String getMetadataAction() {
         return metadataAction;

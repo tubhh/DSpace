@@ -80,6 +80,8 @@
 	String crisID = request.getParameter("crisID") != null ? (String) request.getParameter("crisID") : "";
 	String relationName = request.getParameter("relationName") != null ? (String) request.getParameter("relationName") : "";
 	ACrisObject cris = (ACrisObject) request.getAttribute("crisObject");
+	boolean addRelation = request.getAttribute("addRelation") != null ? ((Boolean)request.getAttribute("addRelation")).booleanValue() : false;
+	boolean removeRelation = request.getAttribute("removeRelation") != null ? ((Boolean)request.getAttribute("removeRelation")).booleanValue() : false;
 
 	String hdlPrefix = ConfigurationManager.getProperty("handle.prefix");
     // Get the attributes
@@ -301,6 +303,17 @@ if(StringUtils.contains(searchScope, hdlPrefix) ){
 
 <% if (StringUtils.isBlank(crisID)) { %>
 	<h2><fmt:message key="${searchinKey}"/> <%= dsoName %></h2>
+<% } else if (addRelation && removeRelation) { %>
+	<h2>
+		<fmt:message key="jsp.layout.cris.relations.search.title">
+			<fmt:param>
+				<%= request.getContextPath() + "/cris/" + cris.getPublicPath() + "/" + ResearcherPageUtils.getPersistentIdentifier(cris) %>
+			</fmt:param>
+			<fmt:param>
+				<%= cris.getName() %>
+			</fmt:param>
+		</fmt:message>
+	</h2>
 <% } else { %>
 	<h2>
 		<fmt:message key="jsp.layout.cris.addrelations.search.title">
@@ -700,14 +713,14 @@ else if( qResults != null)
 								</label>
 								<input id="export-submit-button" class="btn btn-default" type="submit" name="submit_export" value="<fmt:message key="exportcitation.option.submitexport" />" disabled/>
 							</div>
-							<dspace:itemlist items="<%= items %>" authorLimit="<%= etAl %>" radioButton="false" inputName="item_id" order="<%= order %>" sortOption="<%= sortOption %>" addRelationButton="<%= StringUtils.isNotBlank(crisID) %>"/>
+							<dspace:itemlist items="<%= items %>" authorLimit="<%= etAl %>" radioButton="false" inputName="item_id" order="<%= order %>" sortOption="<%= sortOption %>" relationButton="<%= StringUtils.isNotBlank(crisID) %>"/>
 						</form>
 					<%
 					}
 					else
 					{
 					%>
-						<dspace:itemlist items="<%= items %>" authorLimit="<%= etAl %>" order="<%= order %>" sortOption="<%= sortOption %>" addRelationButton="<%= StringUtils.isNotBlank(crisID) %>"/>
+						<dspace:itemlist items="<%= items %>" authorLimit="<%= etAl %>" order="<%= order %>" sortOption="<%= sortOption %>" relationButton="<%= StringUtils.isNotBlank(crisID) %>"/>
 					<%
 					}
 					%>
@@ -748,7 +761,7 @@ else if( qResults != null)
 				<c:set var="typeName"><%= ((ACrisObject) mapOthers.get(objectType)[0].getBrowsableDSpaceObject()).getPublicPath() %></c:set>
 				<div class="panel panel-info">
 					<div class="panel-heading"><h6><fmt:message key="jsp.search.results.cris.${typeName}"/></h6></div>
-					<dspace:browselist config="cris${typeName}" items="<%= mapOthers.get(objectType) %>"  order="<%= order %>" sortBy="<%= sortIdx %>" addRelationButton="<%= StringUtils.isNotBlank(crisID) %>" />
+					<dspace:browselist config="cris${typeName}" items="<%= mapOthers.get(objectType) %>"  order="<%= order %>" sortBy="<%= sortIdx %>" relationButton="<%= StringUtils.isNotBlank(crisID) %>" />
 				</div>
 			<%
 			}

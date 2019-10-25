@@ -27,7 +27,8 @@ import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
-import org.dspace.app.cris.configuration.AddToRelationServiceConfiguration;
+import org.dspace.app.cris.configuration.RelationService;
+import org.dspace.app.cris.configuration.RelationServiceConfiguration;
 import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.cris.service.ApplicationService;
 import org.dspace.app.cris.util.ResearcherPageUtils;
@@ -58,9 +59,9 @@ import org.dspace.discovery.configuration.DiscoverySearchFilterFacet;
 import org.dspace.discovery.configuration.DiscoverySortFieldConfiguration;
 import org.dspace.utils.DSpace;
 
-public class AddToRelationServlet extends DSpaceServlet {
+public class RelationServlet extends DSpaceServlet {
 
-    private Logger log = Logger.getLogger(AddToRelationServlet.class);
+    private Logger log = Logger.getLogger(RelationServlet.class);
 
     private DSpace dspace = new DSpace();
 
@@ -74,11 +75,11 @@ public class AddToRelationServlet extends DSpaceServlet {
             .getServiceByName(IndexingService.class.getName(),
                     IndexingService.class);
 
-    private AddToRelationServiceConfiguration addToRelationServiceConfiguration = dspace
+    private RelationServiceConfiguration relationServiceConfiguration = dspace
             .getServiceManager()
             .getServiceByName(
-                    AddToRelationServiceConfiguration.class.getName(),
-                    AddToRelationServiceConfiguration.class);
+                    RelationServiceConfiguration.class.getName(),
+                    RelationServiceConfiguration.class);
 
     @Override
     protected void doDSGet(Context context, HttpServletRequest request,
@@ -95,30 +96,36 @@ public class AddToRelationServlet extends DSpaceServlet {
         String crisID = request.getParameter("crisID");
         String relationName = request.getParameter("relationName");
 
+        RelationService relationService = relationServiceConfiguration
+                .getRelationService(relationName);
+
         // check authorization
-        if (!addToRelationServiceConfiguration
-                .getAddToRelationService(relationName)
+        if (!relationService
                 .isAuthorized(context, applicationService.getEntityByCrisId(crisID))) {
             throw new AuthorizeException("The user is not allow to manage the relation " + relationName + " for CRISObject " + crisID);
         }
+
+        request.setAttribute("addRelation", relationService.getAddAction() != null);
+        request.setAttribute("removeRelation", relationService.getRemoveAction() != null);
 
         ACrisObject cris = applicationService.getEntityByCrisId(crisID);
         request.setAttribute("crisObject", cris);
         String publicPath = request.getContextPath() + "/cris/" + cris.getPublicPath() + "/" + ResearcherPageUtils.getPersistentIdentifier(cris);
 
-        String discoveryConfigurationKey = addToRelationServiceConfiguration
-                .getAddToRelationService(relationName)
-                .getDiscoveryConfigurationKey();
+        String discoveryConfigurationKey = relationService.getDiscoveryConfigurationKey();
 
         DiscoveryConfiguration discoveryConfiguration = SearchUtils
                 .getDiscoveryConfigurationByName(discoveryConfigurationKey);
+
+        String action = request.getParameter("action");
 
         DSpaceObject selectedObject = null;
         String selectedPublicPath = "";
         String ammissibleQuery = "";
         List<String> addedObjectIDs = retrieveAddedObjectIDs(context, request, cris, relationName, discoveryConfiguration);
         if (StringUtils.isNotBlank(request.getParameter("selected-itemID"))
-                && !addedObjectIDs.contains(request.getParameter("selected-itemID"))) {
+                && (!addedObjectIDs.contains(request.getParameter("selected-itemID"))
+                        || StringUtils.isNotBlank(action) && action.equals("remove"))) {
             selectedObject = Item.find(context, Integer.valueOf(request.getParameter("selected-itemID")));
             if (selectedObject != null) {
                 selectedPublicPath = request.getContextPath() + "/handle/" + selectedObject.getHandle();
@@ -132,7 +139,8 @@ public class AddToRelationServlet extends DSpaceServlet {
             }
         }
         else if (StringUtils.isNotBlank(request.getParameter("selected-crisID"))
-                && !addedObjectIDs.contains(request.getParameter("selected-crisID"))) {
+                && (!addedObjectIDs.contains(request.getParameter("selected-crisID"))
+                        || StringUtils.isNotBlank(action) && action.equals("remove"))) {
             selectedObject = applicationService.getEntityByCrisId(request.getParameter("selected-crisID"));
             if (selectedObject != null) {
                 selectedPublicPath = request.getContextPath() + "/cris/" + ((ACrisObject)selectedObject).getPublicPath() + "/" + ResearcherPageUtils.getPersistentIdentifier(((ACrisObject)selectedObject));
@@ -147,10 +155,12 @@ public class AddToRelationServlet extends DSpaceServlet {
             if (isAmmissibleObject(context, request, discoveryConfiguration, ammissibleQuery)) {
                 try {
                     context.turnOffAuthorisationSystem();
-                    if (addToRelationServiceConfiguration
-                            .getAddToRelationService(relationName)
-                            .executeAction(cris, selectedObject)) {
-                        addMessage(context, request, "jsp.layout.cris.addrelations.success.info", publicPath, cris.getName(), selectedPublicPath, selectedObject.getName());
+                    if (relationService.executeAction(action, cris, selectedObject)) {
+						addMessage(context, request, "jsp.layout.cris.relations.success.info", publicPath,
+								cris.getName(), selectedPublicPath, selectedObject.getName(),
+								action.equals("add") ? 
+										I18nUtil.getMessage("jsp.layout.cris.relations.success.added")
+										: I18nUtil.getMessage("jsp.layout.cris.relations.success.removed"));
                         context.commit();
                         indexer.commit();
                         response.sendRedirect(publicPath);
@@ -170,7 +180,7 @@ public class AddToRelationServlet extends DSpaceServlet {
             }
             else {
                 log.error("The user try to add not ammissible object " + selectedObject.getTypeText() + " for the relation " + relationName);
-                addMessage(context, request, "jsp.layout.cris.addrelations.error.not.ammissible", selectedPublicPath, selectedObject.getName(), relationName);
+                addMessage(context, request, "jsp.layout.cris.relations.error.not.acceptable", selectedPublicPath, selectedObject.getName(), relationName);
                 response.sendRedirect(publicPath);
                 return;
             }
@@ -342,8 +352,8 @@ public class AddToRelationServlet extends DSpaceServlet {
     private List<String> retrieveAddedObjectIDs(Context context, HttpServletRequest request, ACrisObject cris, String relationName, DiscoveryConfiguration discoveryConfiguration) {
         List<String> addedObjectIDs = new ArrayList<>();
 
-        String relationQuery = MessageFormat.format(addToRelationServiceConfiguration
-                .getAddToRelationService(relationName).getRelationConfiguration().getQuery(),
+        String relationQuery = MessageFormat.format(relationServiceConfiguration
+                .getRelationService(relationName).getRelationConfiguration().getQuery(),
                 cris.getCrisID(),
                 cris.getUuid());
 

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dspace.app.cris.configuration.AddToRelationService;
+import org.dspace.app.cris.configuration.RelationService;
 import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.webui.discovery.DiscoverUtility;
 import org.dspace.app.webui.util.UIUtil;
@@ -281,12 +281,12 @@ public abstract class AFacetedQueryConfigurerComponent<T extends DSpaceObject>
         try {
             if (request != null) {
                 Context context = UIUtil.obtainContext(request);
-                AddToRelationService addToRelationService = getAddToRelationServiceConfiguration()
-                        .getAddToRelationService(
+                RelationService relationService = getRelationServiceConfiguration()
+                        .getRelationService(
                                 getRelationConfiguration()
                                 .getRelationName());
-                if (addToRelationService != null) {
-                    return addToRelationService
+                if (relationService != null) {
+                    return relationService
                             .isAuthorized(
                                     context,
                                     object);

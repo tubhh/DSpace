@@ -13,15 +13,14 @@ import java.util.List;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.DSpaceObject;
 import org.dspace.core.Context;
-import org.dspace.discovery.SearchServiceException;
 
 /**
- * This class is a service contained into the {@link AddToRelationServiceConfiguration}
+ * This class is a service contained into the {@link RelationServiceConfiguration}
  * defined in the Spring configuration file:
  * cris-relationpreference.xml
  *
  */
-public class AddToRelationService {
+public class RelationService {
 
     /** the relation configuration */
     private RelationConfiguration relationConfiguration;
@@ -29,8 +28,11 @@ public class AddToRelationService {
     /** the discovery configuration key */
     private String discoveryConfigurationKey;
 
-    /** the action that will be performed */
-    private RelationMetadataAction action;
+    /** the add action that will be performed */
+    private RelationMetadataAction addAction;
+
+    /** the remove action that will be performed */
+    private RelationMetadataAction removeAction;
 
     /** list of implementations to check if the current user is authorized to perform the defined action */
     private List<SecurityCheck> security;
@@ -45,9 +47,14 @@ public class AddToRelationService {
         return false;
     }
 
-    public boolean executeAction(DSpaceObject target, DSpaceObject selected) throws SQLException, AuthorizeException
+    public boolean executeAction(String action, DSpaceObject target, DSpaceObject selected) throws SQLException, AuthorizeException
     {
-        return action.processSelectedItem(target, selected);
+        if (action.equals("add")) {
+            return addAction.processSelectedItem(target, selected);
+        }
+        else {
+            return removeAction.processSelectedItem(target, selected);
+        }
     }
 
     public RelationConfiguration getRelationConfiguration() {
@@ -66,12 +73,20 @@ public class AddToRelationService {
         this.discoveryConfigurationKey = discoveryConfigurationKey;
     }
 
-    public RelationMetadataAction getAction() {
-        return action;
+    public RelationMetadataAction getAddAction() {
+        return addAction;
     }
 
-    public void setAction(RelationMetadataAction action) {
-        this.action = action;
+    public void setAddAction(RelationMetadataAction addAction) {
+        this.addAction = addAction;
+    }
+
+    public RelationMetadataAction getRemoveAction() {
+        return removeAction;
+    }
+
+    public void setRemoveAction(RelationMetadataAction removeAction) {
+        this.removeAction = removeAction;
     }
 
     public List<SecurityCheck> getSecurity() {

@@ -49,6 +49,8 @@ public class ComponentInfoDTO<T extends DSpaceObject>
 
 	private boolean addRelations;
 
+	private boolean removeRelations;
+
     private String buildCommonURL()
     {
 
@@ -313,5 +315,15 @@ public class ComponentInfoDTO<T extends DSpaceObject>
     public void setAddRelations(boolean addRelations)
     {
         this.addRelations = addRelations;
+    }
+
+    public boolean isRemoveRelations()
+    {
+        return removeRelations;
+    }
+
+    public void setRemoveRelations(boolean removeRelations)
+    {
+        this.removeRelations = removeRelations;
     }
 }

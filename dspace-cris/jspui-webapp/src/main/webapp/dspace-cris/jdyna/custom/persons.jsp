@@ -50,6 +50,7 @@
 	
 	String crisID = info.getCrisID();
 	boolean addRelations = info.isAddRelations();
+	boolean removeRelations = info.isRemoveRelations();
 	
 	List<String[]> subLinks = (List<String[]>) request.getAttribute("activeTypes"+relationName);
 	
@@ -125,8 +126,12 @@
 				<% } else { %>
 					<jsp:include page="common/commonComponentGeneralFilters.jsp"></jsp:include>
 				<% } %>
-				<% if (addRelations) { %>
-					<a href="<%= request.getContextPath() %>/tools/addrelations?crisID=<%= crisID %>&relationName=<%= relationName %>" class="btn btn-default" style="margin-top: -7px;" title="<fmt:message key="jsp.layout.cris.addrelations.title"/>">
+				<% if (addRelations && removeRelations) { %>
+					<a href="<%= request.getContextPath() %>/tools/relations?crisID=<%= crisID %>&relationName=<%= relationName %>" class="btn btn-default" style="margin-top: -7px;" title="<fmt:message key="jsp.layout.cris.relations.title"/>">
+						<fmt:message key="jsp.layout.cris.relations.title"/>
+					</a>
+				<% } else if (addRelations) { %>
+					<a href="<%= request.getContextPath() %>/tools/relations?crisID=<%= crisID %>&relationName=<%= relationName %>" class="btn btn-default" style="margin-top: -7px;" title="<fmt:message key="jsp.layout.cris.addrelations.title"/>">
 						<fmt:message key="jsp.layout.cris.addrelations.title"/>
 					</a>
 				<% } %>
