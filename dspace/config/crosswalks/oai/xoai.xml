@@ -249,12 +249,10 @@
             <!-- Date format, field prefixes, etc are ensured by the transformer -->
             <Transformer ref="openaireTransformer"/>
             <!-- The driver filter -->
-            <Filter red="driverFilter"/>
-            <!-- OpenAIRE filter -->
-<!--            <Filter ref="openAireFilter"/>       -->
+            <!-- <Filter ref="driverFilter"/> -->
+            <Filter ref="onlyDSpaceItemFilter"/>
             <!-- Just an alias, in fact it returns all items within the driver context -->
-            <Set ref="driverSet"/>
-            <Set ref="openaireSet"/>
+            <!-- <Set ref="driverSet"/> -->
             <Set ref="openaireFundedResourcesSet"/>
             <!-- Metadata Formats -->
             <Format ref="oaidc"/>
@@ -2135,6 +2133,12 @@
             </Configuration>
         </CustomCondition>
 
+        <Filter id="onlyDSpaceItemFilter">
+            <Definition>
+                 <Custom ref="dspaceItemCondition" />
+            </Definition>
+        </Filter>
+
         <!-- DRIVER filter for records returned by OAI-PMH.
              By default, return an Item record:
                * If a Title & Author field both exist
@@ -2146,34 +2150,41 @@
         <Filter id="driverFilter">
             <Definition>
                 <And>
-                    <LeftCondition>
-                        <And>
-                            <LeftCondition>
-                                <Custom ref="titleExistsCondition"/>
-                            </LeftCondition>
-                            <RightCondition>
-                                <Custom ref="authorExistsCondition"/>
-                            </RightCondition>
-                        </And>
-                    </LeftCondition>
-                    <RightCondition>
-                        <And>
-                            <LeftCondition>
-                                <Custom ref="driverDocumentTypeCondition"/>
-                            </LeftCondition>
-                            <RightCondition>
-                                <And>
-                                    <LeftCondition>
-                                        <Custom ref="bitstreamAccessCondition"/>
-                                    </LeftCondition>
-                                    <RightCondition>
-                                        <Custom ref="driverAccessCondition"/>
-                                    </RightCondition>
-                                </And>
-                            </RightCondition>
-                        </And>
-                    </RightCondition>
-                </And>
+                	<LeftCondition>            
+		                <And>
+		                    <LeftCondition>
+		                        <And>
+		                            <LeftCondition>
+		                                <Custom ref="titleExistsCondition"/>
+		                            </LeftCondition>
+		                            <RightCondition>
+		                                <Custom ref="authorExistsCondition"/>
+		                            </RightCondition>
+		                        </And>
+		                    </LeftCondition>
+		                    <RightCondition>
+		                        <And>
+		                            <LeftCondition>
+		                                <Custom ref="driverDocumentTypeCondition"/>
+		                            </LeftCondition>
+		                            <RightCondition>
+		                                <And>
+		                                    <LeftCondition>
+		                                        <Custom ref="bitstreamAccessCondition"/>
+		                                    </LeftCondition>
+		                                    <RightCondition>
+		                                        <Custom ref="driverAccessCondition"/>
+		                                    </RightCondition>
+		                                </And>
+		                            </RightCondition>
+		                        </And>
+		                    </RightCondition>
+		                </And>
+	             	</LeftCondition>
+               		<RightCondition>
+               			<Custom ref="dspaceItemCondition" />
+               		</RightCondition>
+               	</And>                
             </Definition>
         </Filter>
 
@@ -3382,23 +3393,13 @@
         </Set>
         <Set id="openaireFundedResourcesSet">
             <Spec>ec_fundedresources</Spec>
-            <Name>EC_fundedresources set</Name>
-            <!-- Just an alias -->
-        </Set>
-        <Set id="openaireSet">
-            <Spec>openaire</Spec>
-            <Name>openaire set</Name>
+            <Name>EC_fundedresources</Name>
             <!-- Just an alias -->
         </Set>
         <Set id="openaccessSet">
             <Spec>open_access</Spec>
             <Name>OpenAccess Documents</Name>
-        </Set>
-        <Set id="openaireSet">
-            <Spec>ec_fundedresources</Spec>
-            <Name>EC_fundedresources</Name>
-            <!-- Just an alias -->
-        </Set>
+        </Set>        
 		<!-- OpenAIRE OAI-PMH Sets. See https://openaire-guidelines-for-cris-managers.readthedocs.io/en/v1.1.1/implementation.html#openaire-oai-pmh-sets -->
 		<Set id="openairePublicationsCrisSet">
             <Spec>openaire_cris_publications</Spec>
