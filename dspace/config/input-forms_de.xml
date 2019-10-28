@@ -1584,12 +1584,12 @@
      </pair>
 <!--
      <pair>
-       <displayed-value>ergaenzt</displayed-value>
+       <displayed-value>ergänzt</displayed-value>
        <stored-value>IsSupplementedBy</stored-value>
      </pair>
 -->
      <pair>
-       <displayed-value>ist eine Ergaenzung zu</displayed-value>
+       <displayed-value>ist eine Ergänzung zu</displayed-value>
        <stored-value>IsSupplementTo</stored-value>
      </pair>
 <!--
