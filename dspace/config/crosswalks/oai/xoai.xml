@@ -252,10 +252,14 @@
             <!-- <Filter ref="driverFilter"/> -->
             <!-- OpenAIRE filter -->
             <!-- <Filter ref="openAireFilter"/> -->
-            <Filter ref="openAireTuhhFilter"/>
+            <!-- <Filter ref="openAireTuhhFilter"/> -->
             <Set ref="driverSet"/>
             <Set ref="openaireSet"/>
             <Set ref="ecSet"/>
+            <Filter ref="onlyDSpaceItemFilter"/>
+            <!-- Just an alias, in fact it returns all items within the driver context -->
+            <!-- <Set ref="driverSet"/> -->
+            <Set ref="openaireFundedResourcesSet"/>
             <!-- Metadata Formats -->
             <Format ref="oaidc"/>
             <Format ref="mets"/>
@@ -2121,6 +2125,12 @@
             </Configuration>
         </CustomCondition>
 
+        <Filter id="onlyDSpaceItemFilter">
+            <Definition>
+                 <Custom ref="dspaceItemCondition" />
+            </Definition>
+        </Filter>
+
         <!-- DRIVER filter for records returned by OAI-PMH.
              By default, return an Item record:
                * If a Title & Author field both exist
@@ -2132,34 +2142,41 @@
         <Filter id="driverFilter">
             <Definition>
                 <And>
-                    <LeftCondition>
-                        <And>
-                            <LeftCondition>
-                                <Custom ref="titleExistsCondition"/>
-                            </LeftCondition>
-                            <RightCondition>
-                                <Custom ref="authorExistsCondition"/>
-                            </RightCondition>
-                        </And>
-                    </LeftCondition>
-                    <RightCondition>
-                        <And>
-                            <LeftCondition>
-                                <Custom ref="driverDocumentTypeCondition"/>
-                            </LeftCondition>
-                            <RightCondition>
-                                <And>
-                                    <LeftCondition>
-                                        <Custom ref="bitstreamAccessCondition"/>
-                                    </LeftCondition>
-                                    <RightCondition>
-                                        <Custom ref="driverAccessCondition"/>
-                                    </RightCondition>
-                                </And>
-                            </RightCondition>
-                        </And>
-                    </RightCondition>
-                </And>
+                	<LeftCondition>            
+		                <And>
+		                    <LeftCondition>
+		                        <And>
+		                            <LeftCondition>
+		                                <Custom ref="titleExistsCondition"/>
+		                            </LeftCondition>
+		                            <RightCondition>
+		                                <Custom ref="authorExistsCondition"/>
+		                            </RightCondition>
+		                        </And>
+		                    </LeftCondition>
+		                    <RightCondition>
+		                        <And>
+		                            <LeftCondition>
+		                                <Custom ref="driverDocumentTypeCondition"/>
+		                            </LeftCondition>
+		                            <RightCondition>
+		                                <And>
+		                                    <LeftCondition>
+		                                        <Custom ref="bitstreamAccessCondition"/>
+		                                    </LeftCondition>
+		                                    <RightCondition>
+		                                        <Custom ref="driverAccessCondition"/>
+		                                    </RightCondition>
+		                                </And>
+		                            </RightCondition>
+		                        </And>
+		                    </RightCondition>
+		                </And>
+	             	</LeftCondition>
+               		<RightCondition>
+               			<Custom ref="dspaceItemCondition" />
+               		</RightCondition>
+               	</And>                
             </Definition>
         </Filter>
 
@@ -3227,7 +3244,7 @@
         </Set>
         <Set id="ecSet">
             <Spec>ec_fundedresources</Spec>
-            <Name>EC_fundedresources set</Name>
+            <Name>EC_fundedresources</Name>
             <Filter ref="fundedFilter" />
         </Set>
         <Set id="openaireSet">
@@ -3244,6 +3261,52 @@
             <Name>EC_fundedresources set</Name>
             <!-- Just an alias -->
         </Set>
+		<!-- OpenAIRE OAI-PMH Sets. See https://openaire-guidelines-for-cris-managers.readthedocs.io/en/v1.1.1/implementation.html#openaire-oai-pmh-sets -->
+		<Set id="openairePublicationsCrisSet">
+            <Spec>openaire_cris_publications</Spec>
+            <Name>OpenAIRE_CRIS_publications</Name>
+            <Filter ref="publicationOrJournalSetFilter" />
+        </Set>
+		<Set id="openaireProductsCrisSet">
+            <Spec>openaire_cris_products</Spec>
+            <Name>OpenAIRE_CRIS_products</Name>
+            <Filter ref="productSetFilter" />
+        </Set>
+		<Set id="openairePatentsCrisSet">
+            <Spec>openaire_cris_patents</Spec>
+            <Name>OpenAIRE_CRIS_patents</Name>
+            <Filter ref="patentSetFilter" />
+        </Set>        
+        <Set id="openairePersonsCrisSet">
+            <Spec>openaire_cris_persons</Spec>
+            <Name>OpenAIRE_CRIS_persons</Name>
+            <Filter ref="researcherSetFilter" />
+        </Set>
+        <Set id="openaireOrgunitsCrisSet">
+            <Spec>openaire_cris_orgunits</Spec>
+            <Name>OpenAIRE_CRIS_orgunits</Name>
+            <Filter ref="orgUnitSetFilter" />
+        </Set>
+        <Set id="openaireProjectsCrisSet">
+            <Spec>openaire_cris_projects</Spec>
+            <Name>OpenAIRE_CRIS_projects</Name>
+            <Filter ref="projectSetFilter" />
+        </Set>  
+        <Set id="openaireEventsCrisSet">
+            <Spec>openaire_cris_events</Spec>
+            <Name>OpenAIRE_CRIS_events</Name>
+            <Filter ref="eventSetFilter" />
+        </Set>          
+        <Set id="openaireEquipmentsCrisSet">
+            <Spec>openaire_cris_equipments</Spec>
+            <Name>OpenAIRE_CRIS_equipments</Name>
+            <Filter ref="equipmentSetFilter" />
+        </Set>
+        <Set id="openaireFundingCrisSet">
+            <Spec>openaire_cris_funding</Spec>
+            <Name>OpenAIRE_CRIS_funding</Name>
+            <Filter ref="fundingSetFilter" />
+        </Set>                        
         <!-- set the OpenAIRE Data Archive OAI Set. See: https://guidelines.openaire.eu/en/latest/data/use_of_oai_pmh.html -->
         <Set id="openaireDataSet">
             <Spec>openaire_data</Spec>
