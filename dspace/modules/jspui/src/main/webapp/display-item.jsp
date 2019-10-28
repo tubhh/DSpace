@@ -831,7 +831,7 @@ if (dedupEnabled && admin_button) { %>
 
 <%------ CSL-Einbindung -----%>
 <%
-if ((authorAuthority != 0 || ouAuthority != 0) && odataPath) {
+if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
 %>
     <script>
         function csl_select() {
@@ -845,12 +845,12 @@ if ((authorAuthority != 0 || ouAuthority != 0) && odataPath) {
             <%
                 if (authorAuthority != 0) {
             %>
-                    httpodata.open( "GET" , odataPath + "/cslforresearcher(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=authorAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
+                    httpodata.open( "GET" , "<%=odataPath%>/cslforresearcher(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=authorAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
                 <%
                 }
                 else if (ouAuthority != 0) {
                 %>
-                    httpodata.open( "GET" , "https://dspace-cris.tub.tuhh.de/odata/ODataService.svc/cslfororgunit(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=ouAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
+                    httpodata.open( "GET" , "<%=odataPath%>/cslfororgunit(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=ouAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
                 <%
                 }
                 %>
