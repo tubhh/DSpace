@@ -520,9 +520,9 @@
          <dc-element>rights</dc-element>
          <dc-qualifier>cc</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
-         <input-type value-pairs-name="license_fdm_de">dropdown</input-type>
-         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
+         <label>Creative Commons Lizenz</label>
+         <input-type value-pairs-name="license_de">dropdown</input-type>
+         <hint>Bitte wählen Sie eine Creative Commons Lizenz. Wenn Sie eine andere Lizenz benötigen, kontaktieren Sie uns bitte.</hint>
          <required></required>
        </field>
 <!--
@@ -716,7 +716,7 @@
          <dc-element>contributorCorporate</dc-element>
          <dc-qualifier></dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Weitere Beteiligte Institutionen</label>
+         <label>Beteiligte Institutionen</label>
          <input-type value-pairs-name="contributorCorporate_fdm_de">qualdrop_value</input-type>
          <hint>Tragen Sie hier die Namen weiterer beteiligter Institutionen ein und wählen Sie die Rolle aus.</hint>
          <required></required>
@@ -797,7 +797,7 @@
          <repeatable>true</repeatable>
          <label>Verwandte Identifier</label>
          <input-type value-pairs-name="relation_types_de">qualdrop_value</input-type>
-         <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus</hint>
+         <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus. Die Beziehung kann über ihren Persistent Identifier (DOI, URN oder Handle) eingegeben werden, indem Sie einen Präfix doi:, urn: or hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
          <required></required>
        </field>
 <!--
@@ -830,9 +830,9 @@
          <dc-element>rights</dc-element>
          <dc-qualifier>cc</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
+         <label>Creative Commons Lizenz</label>
          <input-type value-pairs-name="license_fdm_de">dropdown</input-type>
-         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
+         <hint>Bitte wählen Sie eine Creative Commons Lizenz. Wenn Sie eine andere Lizenz benötigen, kontaktieren Sie uns bitte.</hint>
          <required></required>
        </field>
          
@@ -908,7 +908,7 @@
          <dc-element>publication</dc-element>
          <dc-qualifier>institute</dc-qualifier>
          <repeatable>true</repeatable>
-         <label>TUHH-Institut(e) / Arbeitsgruppe(n)</label>
+         <label>TUHH-Institut</label>
          <input-type>onebox</input-type>
          <hint>Wählen Sie hier das Institut bzw. die Arbeitsgruppe aus, an dem die Arbeit angefertigt wurde, indem Sie den Namen oder das Kürzel des Instituts hier eingeben (z.B. E-4 Kommunikationsnetze) und den Lupenbutton benutzen.</hint>
          <required>Bitte geben Sie das Institut an, an dem die Arbeit entstanden ist!</required>
@@ -920,8 +920,8 @@
          <dc-qualifier>deleteaftertenyears</dc-qualifier>
          <repeatable>false</repeatable>
          <label>Automatische Löschung</label>
-         <input-type value-pairs-name="oai_flag_de">dropdown</input-type>
-         <hint>Sollen die Daten in 10 Jahren gelöscht werden?</hint>
+         <input-type value-pairs-name="nl">dropdown</input-type>
+         <hint>Sollen die Dateien in 10 Jahren gelöscht werden?</hint>
          <required></required>
        </field>
       </page>
@@ -1744,6 +1744,41 @@
    </value-pairs>
 
    <value-pairs value-pairs-name="license_fdm_de" dc-term="dc_rights_uri">
+     <pair>
+       <displayed-value>No CC license</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
+       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+   </value-pairs>
+     
+   <value-pairs value-pairs-name="license_de" dc-term="dc_rights_uri">
      <pair>
        <displayed-value>No CC license</displayed-value>
        <stored-value></stored-value>

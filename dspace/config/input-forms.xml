@@ -522,9 +522,9 @@
          <dc-element>rights</dc-element>
          <dc-qualifier>cc</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>CreativeCommons License</label>
-         <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>If your document is already or shall be under a CreativeCommons License, please select the license here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
+         <label>Creative Commons License</label>
+         <input-type value-pairs-name="license_en">dropdown</input-type>
+         <hint>Please choose a Creative Commons License. If you need a different license, please contact us.</hint>
          <required></required>
        </field>
 <!--
@@ -812,7 +812,7 @@
          <repeatable>true</repeatable>
          <label>Related Identifiers</label>
          <input-type value-pairs-name="relation_types_en">qualdrop_value</input-type>
-         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation</hint>
+         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
          <required></required>
        </field>
 <!--
@@ -833,9 +833,9 @@
          <dc-element>rights</dc-element>
          <dc-qualifier>cc</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
+         <label>Creative Commons Lizenz</label>
          <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>If your document is already or shall be under a CreativeCommons License, please select the license here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
+         <hint>Please choose a Creative Commons License. If you need a different license, please contact us.</hint>
          <required></required>
        </field>
 
@@ -911,7 +911,7 @@
          <dc-element>publication</dc-element>
          <dc-qualifier>institute</dc-qualifier>
          <repeatable>true</repeatable>
-         <label>TUHH-Institute / Workgroup</label>
+         <label>TUHH-Institute</label>
          <input-type>onebox</input-type>
          <hint>Choose the institute(s) or the workgroup(s), at that this work has been produced by typing the name or the code of the institute and using the lookup button.</hint>
          <required>Please provide the institute of your publication.</required>
@@ -923,8 +923,8 @@
          <dc-qualifier>deleteaftertenyears</dc-qualifier>
          <repeatable>false</repeatable>
          <label>Automatic Deletion</label>
-         <input-type value-pairs-name="oai_flag">dropdown</input-type>
-         <hint>Shall we drop the item in 10 years?</hint>
+         <input-type value-pairs-name="nl_en">dropdown</input-type>
+         <hint>Should the files be deleted in 10 years?</hint>
          <required></required>
        </field>
      </page>
@@ -1750,6 +1750,41 @@
    </value-pairs>
 
    <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_rights_uri">
+     <pair>
+       <displayed-value>No CC license</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
+       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="license_en" dc-term="dc_rights_uri">
      <pair>
        <displayed-value>No CC license</displayed-value>
        <stored-value></stored-value>
