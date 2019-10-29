@@ -140,96 +140,101 @@
 <%
     String row = "even";
 
-    Bitstream[] bitstreams = subInfo.getSubmissionItem().getItem().getNonInternalBitstreams();
-    Bundle[] bundles = null;
-
-    if (bitstreams[0] != null) {
-        bundles = bitstreams[0].getBundles();
+    String[] bundlesToList = {"ORIGINAL"};
+    String configuredBundlesToList = ConfigurationManager.getProperty("upload-step.list-bundles");
+    if(configuredBundlesToList != null) {
+        bundlesToList = configuredBundlesToList.split("\\s*,\\s*");
     }
 
-    for (int i = 0; i < bitstreams.length; i++)
-    {
-        BitstreamFormat format = bitstreams[i].getFormat();
-        String description = bitstreams[i].getFormatDescription();
-        String supportLevel = LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.upload-file-list.supportlevel1");
+    for(String bundleToList : bundlesToList) {
+        Bundle[] bundles = subInfo.getSubmissionItem().getItem().getBundles(bundleToList);
+        for(Bundle bundle : bundles) {
+            Bitstream[] bitstreams = bundle.getBitstreams();
 
-        if(format.getSupportLevel() == 1)
-        {
-            supportLevel = LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.upload-file-list.supportlevel2");
-        }
+            for (int i = 0; i < bitstreams.length; i++) {
+                BitstreamFormat format = bitstreams[i].getFormat();
+                String description = bitstreams[i].getFormatDescription();
+                String supportLevel = LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.upload-file-list.supportlevel1");
 
-        if(format.getSupportLevel() == 0)
-        {
-            supportLevel = LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.upload-file-list.supportlevel3");
-        }
+                if(format.getSupportLevel() == 1)
+                {
+                    supportLevel = LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.upload-file-list.supportlevel2");
+                }
 
-        // Full param to dspace:popup must be single variable
-        String supportLevelLink = LocaleSupport.getLocalizedMessage(pageContext, "help.formats") +"#" + supportLevel;
-%>
-            <tr>
-		<td headers="t1" class="<%= row %>RowEvenCol" align="center">
-		    <input type="radio" name="primary_bitstream_id" value="<%= bitstreams[i].getID() %>"
-			   <% if (bundles[0] != null) {
-				if (bundles[0].getPrimaryBitstreamID() == bitstreams[i].getID()) { %>
-			       	  <%="checked='checked'" %>
-			   <%   }
-			      } %> />
-		</td>
-                <td headers="t2" class="<%= row %>RowOddCol">
-                	<a href="<%= request.getContextPath() %>/retrieve/<%= bitstreams[i].getID() %>/<%= org.dspace.app.webui.util.UIUtil.encodeBitstreamName(bitstreams[i].getName()) %>" target="_blank"><%= bitstreams[i].getName() %></a>
-            <%      // Don't display "remove" button in workflow mode
-			        if (allowFileEditing)
-			        {
-			%>
-	                    <button class="btn btn-danger pull-right" type="submit" name="submit_remove_<%= bitstreams[i].getID() %>" value="<fmt:message key="jsp.submit.upload-file-list.button2"/>">
-	                    <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;<fmt:message key="jsp.submit.upload-file-list.button2"/>
-	                    </button>
-			<%
-			        } %>	
-                </td>
-                <td headers="t3" class="<%= row %>RowEvenCol"><%= bitstreams[i].getSize() %> bytes</td>
-                <td headers="t4" class="<%= row %>RowOddCol">
-                    <%= (bitstreams[i].getDescription() == null || bitstreams[i].getDescription().equals("")
-                        ? LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.upload-file-list.empty1")
-                        : bitstreams[i].getDescription()) %>
-                    <button type="submit" class="btn btn-default pull-right" name="submit_describe_<%= bitstreams[i].getID() %>" value="<fmt:message key="jsp.submit.upload-file-list.button1"/>">
-                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;<fmt:message key="jsp.submit.upload-file-list.button1"/>
-                    </button>
-                </td>
-                <td headers="t5" class="<%= row %>RowEvenCol">
-                    <%= description %> <dspace:popup page="<%= supportLevelLink %>">(<%= supportLevel %>)</dspace:popup>
-                    <button type="submit" class="btn btn-default pull-right" name="submit_format_<%= bitstreams[i].getID() %>" value="<fmt:message key="jsp.submit.upload-file-list.button1"/>">
-                    <span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;<fmt:message key="jsp.submit.upload-file-list.button1"/>
-                    </button>
-                </td>
-<%
-        // Checksum
-        if (showChecksums)
-        {
-%>
-                <td headers="t6" class="<%= row %>RowOddCol">
-                    <code><%= bitstreams[i].getChecksum() %> (<%= bitstreams[i].getChecksumAlgorithm() %>)</code>
-                </td>
-<%
-        }
+                if(format.getSupportLevel() == 0)
+                {
+                    supportLevel = LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.upload-file-list.supportlevel3");
+                }
 
-        String column = "";
-        if (withEmbargo)
-        {
-            column = (showChecksums ? "Even" : "Odd");
-%>
-                <td headers="t6" class="<%= row %>Row<%= column %>Col" style="text-align:center"> 
-                    <button class="btn btn-default pull-left" type="submit" name="submit_editPolicy_<%= bitstreams[i].getID() %>" value="<fmt:message key="jsp.submit.upload-file-list.button1"/>">
-                    <span class="fa fa-lock"></span>&nbsp;&nbsp;<fmt:message key="jsp.submit.upload-file-list.button1"/>
-                    </button>
+                // Full param to dspace:popup must be single variable
+                String supportLevelLink = LocaleSupport.getLocalizedMessage(pageContext, "help.formats") +"#" + supportLevel;
+        %>
+                    <tr>
+                <td headers="t1" class="<%= row %>RowEvenCol" align="center">
+                    <input type="radio" name="primary_bitstream_id" value="<%= bitstreams[i].getID() %>"
+                       <% if (bundles[0] != null) {
+                        if (bundles[0].getPrimaryBitstreamID() == bitstreams[i].getID()) { %>
+                              <%="checked='checked'" %>
+                       <%   }
+                          } %> />
                 </td>
-<%
-        }
-%>
-            </tr>
-<%
-        row = (row.equals("even") ? "odd" : "even");
-    }
+                        <td headers="t2" class="<%= row %>RowOddCol">
+                            <a href="<%= request.getContextPath() %>/retrieve/<%= bitstreams[i].getID() %>/<%= org.dspace.app.webui.util.UIUtil.encodeBitstreamName(bitstreams[i].getName()) %>" target="_blank"><%= bitstreams[i].getName() %></a>
+                    <%      // Don't display "remove" button in workflow mode
+                            if (allowFileEditing)
+                            {
+                    %>
+                                <button class="btn btn-danger pull-right" type="submit" name="submit_remove_<%= bitstreams[i].getID() %>" value="<fmt:message key="jsp.submit.upload-file-list.button2"/>">
+                                <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;<fmt:message key="jsp.submit.upload-file-list.button2"/>
+                                </button>
+                    <%
+                            } %>
+                        </td>
+                        <td headers="t3" class="<%= row %>RowEvenCol"><%= bitstreams[i].getSize() %> bytes</td>
+                        <td headers="t4" class="<%= row %>RowOddCol">
+                            <%= (bitstreams[i].getDescription() == null || bitstreams[i].getDescription().equals("")
+                                ? LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.upload-file-list.empty1")
+                                : bitstreams[i].getDescription()) %>
+                            <button type="submit" class="btn btn-default pull-right" name="submit_describe_<%= bitstreams[i].getID() %>" value="<fmt:message key="jsp.submit.upload-file-list.button1"/>">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;<fmt:message key="jsp.submit.upload-file-list.button1"/>
+                            </button>
+                        </td>
+                        <td headers="t5" class="<%= row %>RowEvenCol">
+                            <%= description %> <dspace:popup page="<%= supportLevelLink %>">(<%= supportLevel %>)</dspace:popup>
+                            <button type="submit" class="btn btn-default pull-right" name="submit_format_<%= bitstreams[i].getID() %>" value="<fmt:message key="jsp.submit.upload-file-list.button1"/>">
+                            <span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;<fmt:message key="jsp.submit.upload-file-list.button1"/>
+                            </button>
+                        </td>
+        <%
+                // Checksum
+                if (showChecksums)
+                {
+        %>
+                        <td headers="t6" class="<%= row %>RowOddCol">
+                            <code><%= bitstreams[i].getChecksum() %> (<%= bitstreams[i].getChecksumAlgorithm() %>)</code>
+                        </td>
+        <%
+                }
+
+                String column = "";
+                if (withEmbargo)
+                {
+                    column = (showChecksums ? "Even" : "Odd");
+        %>
+                        <td headers="t6" class="<%= row %>Row<%= column %>Col" style="text-align:center">
+                            <button class="btn btn-default pull-left" type="submit" name="submit_editPolicy_<%= bitstreams[i].getID() %>" value="<fmt:message key="jsp.submit.upload-file-list.button1"/>">
+                            <span class="fa fa-lock"></span>&nbsp;&nbsp;<fmt:message key="jsp.submit.upload-file-list.button1"/>
+                            </button>
+                        </td>
+        <%
+                }
+        %>
+                    </tr>
+        <%
+                row = (row.equals("even") ? "odd" : "even");
+            } // end bitstream for loop
+        } // end bundle for loop
+    } // end configured-bundles loop
 %>
         </table>
 
