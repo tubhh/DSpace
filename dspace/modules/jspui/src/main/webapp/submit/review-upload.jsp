@@ -30,6 +30,7 @@
 
 <%@ page import="javax.servlet.jsp.jstl.fmt.LocaleSupport" %>
 <%@ page import="javax.servlet.jsp.PageContext" %>
+<%@ page import="org.dspace.content.Bundle" %>
 
 
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace" %>
@@ -69,73 +70,83 @@
                                         <span class="metadataFieldLabel col-md-4"><%= (subInfo.getSubmissionItem().hasMultipleFiles() ? LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.review.upload1") : LocaleSupport.getLocalizedMessage(pageContext, "jsp.submit.review.upload2")) %></span>
                                         <span class="metadataFieldValue col-md-8">
 <%
-    Bitstream[] bitstreams = item.getNonInternalBitstreams();
+	String[] bundlesToList = {"ORIGINAL"};
+	String configuredBundlesToList = ConfigurationManager.getProperty("upload-step.list-bundles");
+	if(configuredBundlesToList != null) {
+		bundlesToList = configuredBundlesToList.split("\\s*,\\s*");
+	}
+	int totalBitstreams = 0;
 
-	if(bitstreams.length > 0)
-	{
-	    for (int i = 0; i < bitstreams.length ; i++)
-	    {
-	        // Work out whether to use /retrieve link for simple downloading,
-	        // or /html link for HTML files
-	        BitstreamFormat format = bitstreams[i].getFormat();
-	        String downloadLink = "retrieve/" + bitstreams[i].getID();
-	        if (format != null && format.getMIMEType().equals("text/html"))
-	        {
-	            downloadLink = "html/db-id/" + item.getID();
-	        }
+	for (String bundleToList : bundlesToList) {
+		Bundle[] bundles = subInfo.getSubmissionItem().getItem().getBundles(bundleToList);
+		for(Bundle bundle : bundles) {
+			Bitstream[] bitstreams = bundle.getBitstreams();
+			for (int i = 0; i < bitstreams.length ; i++) {
+				totalBitstreams++;
+				// Work out whether to use /retrieve link for simple downloading,
+				// or /html link for HTML files
+				BitstreamFormat format = bitstreams[i].getFormat();
+				String downloadLink = "retrieve/" + bitstreams[i].getID();
+				if (format != null && format.getMIMEType().equals("text/html"))
+				{
+					downloadLink = "html/db-id/" + item.getID();
+				}
 %>
-	                                            <a href="<%= request.getContextPath() %>/<%= downloadLink %>/<%= UIUtil.encodeBitstreamName(bitstreams[i].getName()) %>" target="_blank"><%= bitstreams[i].getName() %></a> - <%= bitstreams[i].getFormatDescription() %>
+			 <a href="<%= request.getContextPath() %>/<%= downloadLink %>/<%= UIUtil.encodeBitstreamName(bitstreams[i].getName()) %>" target="_blank"><%= bitstreams[i].getName() %></a> - <%= bitstreams[i].getFormatDescription() %>
 <%
-	        switch (format.getSupportLevel())
-	        {
-	        case 0:
-	            %><fmt:message key="jsp.submit.review.unknown"/><%
-	            break;
-	        case 1:
-	            %><fmt:message key="jsp.submit.review.known"/><%
-	            break;
-	        case 2:
-	            %><fmt:message key="jsp.submit.review.supported"/><%
-	        }
-%>    
+	switch (format.getSupportLevel())
+	{
+		case 0:
+%><fmt:message key="jsp.submit.review.unknown"/><%
+		break;
+		case 1:
+	%><fmt:message key="jsp.submit.review.known"/><%
+			break;
+		case 2:
+	%><fmt:message key="jsp.submit.review.supported"/><%
+		}
+	%>
 <%
-if(isUploadWithEmbargo) {
-List<ResourcePolicy> rpolicies = AuthorizeManager.findPoliciesByDSOAndType(context, bitstreams[i], ResourcePolicy.TYPE_CUSTOM); %>
+	if(isUploadWithEmbargo) {
+		List<ResourcePolicy> rpolicies = AuthorizeManager.findPoliciesByDSOAndType(context, bitstreams[i], ResourcePolicy.TYPE_CUSTOM); %>
 <% if(rpolicies!=null && !rpolicies.isEmpty()) { %>
 		<% int countPolicies = 0;
-		   //show information about policies setting only in the case of advanced embargo form
-		   if(advanced) {  
-		       countPolicies = rpolicies.size();
+			//show information about policies setting only in the case of advanced embargo form
+			if(advanced) {
+				countPolicies = rpolicies.size();
 		%>
-			<% if(countPolicies>0) { %>		
+			<% if(countPolicies>0) { %>
 				<i class="label label-info"><fmt:message key="jsp.submit.review.policies.founded"><fmt:param><%= countPolicies %></fmt:param></fmt:message></i>
 			<% } %>
 		<% } else { %>
-				<% for(ResourcePolicy rpolicy : rpolicies) { 
-						if(rpolicy.getStartDate()!=null) {
-						%>
+				<% for(ResourcePolicy rpolicy : rpolicies) {
+					if(rpolicy.getStartDate()!=null) {
+				%>
 							<c:set var="policyStartDate" value="<%= rpolicy.getStartDate() %>" target="java.util.Date"/>
-							<i class="label label-info"><fmt:message key="jsp.submit.review.policies.embargoed"><fmt:param value="${policyStartDate}"/></fmt:message></i>				    
+							<i class="label label-info"><fmt:message key="jsp.submit.review.policies.embargoed"><fmt:param value="${policyStartDate}"/></fmt:message></i>
 						<%
 						}
-						else { 
+						else {
 						%>
-							<i class="label label-success"><fmt:message key="jsp.submit.review.policies.openaccess"/></i>														    
+							<i class="label label-success"><fmt:message key="jsp.submit.review.policies.openaccess"/></i>
 					    <%
-						}
-					}
-				%>
-				
-				
+								}
+							}
+						%>
+
+
 		<% } %>
-<% } 
+<% }
 }
 %>
-<br />	                                     
+<br />
 <%
-	    }
+			}
+		}
 	}
-	else { //otherwise, no files uploaded
+
+
+	if(totalBitstreams == 0) { // no files uploaded
 %>
 		<fmt:message key="jsp.submit.review.no_md"/>
 <%		
