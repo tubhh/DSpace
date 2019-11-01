@@ -229,3 +229,4 @@ submission.lookup.webofknowledge.ip.authentication = false
 submission.lookup.webofknowledge.user =
 submission.lookup.webofknowledge.password =
 
+bte.crossref.apikey =
