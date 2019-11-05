@@ -333,7 +333,7 @@ if(StringUtils.contains(searchScope, hdlPrefix) ){
 <div class="discovery-search-form">
     <%-- Controls for a repeat search --%>
 	<div class="discovery-query">
-     <form id="update-form" action="simple-search" method="get">
+     <form id="update-form" action="<%= searchName %>" method="get">
      							<input name="location" type="hidden" value="<%=Utils.addEntities(searchScope) %>" />
                                 <label for="query"><fmt:message key="jsp.search.results.searchfor"/></label>
                                 <input name="crisID" type="hidden" value="<%= crisID %>" />

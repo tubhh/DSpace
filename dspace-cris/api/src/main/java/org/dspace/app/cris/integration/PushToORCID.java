@@ -20,12 +20,13 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.MessagingException;
 import javax.ws.rs.core.Response.Status.Family;
@@ -70,7 +71,10 @@ import org.dspace.discovery.SearchServiceException;
 import org.dspace.handle.HandleManager;
 import org.dspace.util.SimpleMapConverter;
 import org.dspace.utils.DSpace;
+import org.joda.time.DateTime;
 import org.orcid.jaxb.model.common_v2.Amount;
+import org.orcid.jaxb.model.common_v2.ContributorEmail;
+import org.orcid.jaxb.model.common_v2.CreditName;
 import org.orcid.jaxb.model.common_v2.CurrencyCode;
 import org.orcid.jaxb.model.common_v2.ExternalId;
 import org.orcid.jaxb.model.common_v2.ExternalIds;
@@ -93,8 +97,6 @@ import org.orcid.jaxb.model.record_v2.Citation;
 import org.orcid.jaxb.model.record_v2.CitationType;
 import org.orcid.jaxb.model.record_v2.Contributor;
 import org.orcid.jaxb.model.record_v2.ContributorAttributes;
-import org.orcid.jaxb.model.common_v2.ContributorEmail;
-import org.orcid.jaxb.model.common_v2.CreditName;
 import org.orcid.jaxb.model.record_v2.ContributorRole;
 import org.orcid.jaxb.model.record_v2.ContributorSequence;
 import org.orcid.jaxb.model.record_v2.Education;
@@ -139,6 +141,7 @@ import it.cilea.osd.jdyna.value.EmbeddedLinkValue;
 import it.cilea.osd.jdyna.value.TextValue;
 import it.cilea.osd.jdyna.widget.WidgetLink;
 import it.cilea.osd.jdyna.widget.WidgetPointer;
+import it.cilea.osd.jdyna.widget.WidgetTesto;
 
 /**
  * @author Pascarelli
@@ -461,7 +464,20 @@ public class PushToORCID
             for (WrapperEducation wrapperEducation : wrapperEducations)
             {
                 Education education = wrapperEducation.getEducation();
-                String md5ContentPartOfResearcher = getMd5Hash(education.toString());
+                String value = "";
+                if(education.getOrganization()!=null) {
+                    value += education.getOrganization().getName();
+                }
+                if(education.getStartDate()!=null) {
+                    value += education.getStartDate().toString();
+                }
+                if(education.getEndDate()!=null) {    
+                    value += education.getEndDate().toString();    
+                }
+                if(StringUtils.isBlank(value)) {
+                    value = education.toString();
+                }
+                String md5ContentPartOfResearcher = getMd5Hash(value);
                 result = result && sendPartOfResearcher(orcidService, applicationService, crisId, token, orcid, OrcidService.CONSTANT_EDUCATION_UUID, md5ContentPartOfResearcher, education, delete, timestampAttempt);
             }
         }
@@ -479,7 +495,20 @@ public class PushToORCID
             for (WrapperEmployment wrapperEmployment : wrapperEmployments)
             {
                 Employment employment = wrapperEmployment.getEmployment();
-                String md5ContentPartOfResearcher = getMd5Hash(employment.toString());
+                String value = "";
+                if(employment.getOrganization()!=null) {
+                    value += employment.getOrganization().getName();
+                }
+                if(employment.getStartDate()!=null) {
+                    value += employment.getStartDate().toString();
+                }
+                if(employment.getEndDate()!=null) {    
+                    value += employment.getEndDate().toString();    
+                }
+                if(StringUtils.isBlank(value)) {
+                    value = employment.toString();
+                }
+                String md5ContentPartOfResearcher = getMd5Hash(value);
                 result = result && sendPartOfResearcher(orcidService, applicationService, crisId, token, orcid, OrcidService.CONSTANT_EMPLOYMENT_UUID, md5ContentPartOfResearcher, employment, delete, timestampAttempt);
             }
         }
@@ -1972,11 +2001,11 @@ public class PushToORCID
                 {
                     String stringStartDate = listStartDate.get(0);
                     Date startDate;
-                    Calendar cal1 = Calendar.getInstance();
+                    DateTime cal1 = null;
                     try
                     {
                         startDate = df.parse(stringStartDate);
-                        cal1.setTime(startDate);
+                        cal1 = new DateTime(startDate.getTime());
                     }
                     catch (ParseException e)
                     {
@@ -1986,19 +2015,19 @@ public class PushToORCID
                     FuzzyDate fuzzyStartDate = new FuzzyDate();
                     try
                     {
-                        int yearSD = cal1.get(Calendar.YEAR);
+                        int yearSD = cal1.getYear();
                         Year year = new Year();
                         year.setValue(String.valueOf(yearSD));
                         fuzzyStartDate.setYear(year);
                     }
                     catch (Exception ex)
                     {
-                    	log.error(ex.getMessage(), ex);
+                    	log.error(ex.getMessage());
                     }
 
                     try
                     {
-                        int monthSD = cal1.get(Calendar.MONTH);
+                        int monthSD = cal1.getMonthOfYear();
                         Month month = new Month();
                         month.setValue(dateMonthAndDayFormat
                                 .format(monthSD));
@@ -2006,12 +2035,12 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                    	log.error(ex.getMessage(), ex);
+                    	log.error(ex.getMessage());
                     }
 
                     try
                     {
-                        int daySD = cal1.get(Calendar.DAY_OF_MONTH);
+                        int daySD = cal1.getDayOfMonth();
                         Day day = new Day();
                         day.setValue(dateMonthAndDayFormat
                                 .format(daySD));
@@ -2019,7 +2048,7 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                    	log.error(ex.getMessage(), ex);
+                    	log.error(ex.getMessage());
                     }
                     affiliation.setStartDate(fuzzyStartDate);
                 }
@@ -2029,11 +2058,11 @@ public class PushToORCID
                 {
                     String stringEndDate = listEndDate.get(0);
                     Date endDate;
-                    Calendar cal2 = Calendar.getInstance();
+                    DateTime cal2 = null;
                     try
                     {
                         endDate = df.parse(stringEndDate);
-                        cal2.setTime(endDate);
+                        cal2 = new DateTime(endDate.getTime());
                     }
                     catch (ParseException e)
                     {
@@ -2043,19 +2072,19 @@ public class PushToORCID
                     FuzzyDate fuzzyEndDate = new FuzzyDate();
                     try
                     {
-                        int yearED = cal2.get(Calendar.YEAR);
+                        int yearED = cal2.getYear();
                         Year year = new Year();
                         year.setValue(String.valueOf(yearED));
                         fuzzyEndDate.setYear(year);
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
 
                     try
                     {
-                        int monthED = cal2.get(Calendar.MONTH);
+                        int monthED = cal2.getMonthOfYear();
                         Month month = new Month();
                         month.setValue(dateMonthAndDayFormat
                                 .format(monthED));
@@ -2063,12 +2092,12 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
 
                     try
                     {
-                        int dayED = cal2.get(Calendar.DAY_OF_MONTH);
+                        int dayED = cal2.getDayOfMonth();
                         Day day = new Day();
                         day.setValue(dateMonthAndDayFormat
                                 .format(dayED));
@@ -2076,7 +2105,7 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
 
                     affiliation.setEndDate(fuzzyEndDate);
@@ -2182,12 +2211,12 @@ public class PushToORCID
                 if (listStartDate != null && !listStartDate.isEmpty())
                 {
                     String stringStartDate = listStartDate.get(0);
-                    Date startDate;
-                    Calendar cal1 = Calendar.getInstance();
+                    Date startDate = null;
+                    DateTime cal1 = null;
                     try
                     {
                         startDate = df.parse(stringStartDate);
-                        cal1.setTime(startDate);
+                        cal1 = new DateTime(startDate.getTime());
                     }
                     catch (ParseException e)
                     {
@@ -2198,19 +2227,19 @@ public class PushToORCID
 
                     try
                     {
-                        int yearSD = cal1.get(Calendar.YEAR);
+                        int yearSD = cal1.getYear();
                         Year year = new Year();
                         year.setValue(String.valueOf(yearSD));
                         fuzzyStartDate.setYear(year);
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
 
                     try
                     {
-                        int monthSD = cal1.get(Calendar.MONTH);
+                        int monthSD = cal1.getMonthOfYear();
                         Month month = new Month();
                         month.setValue(MessageFormat.format("{0,number,#00}",
                                 new Object[] { new Integer(monthSD) }));
@@ -2218,12 +2247,12 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
 
                     try
                     {
-                        int daySD = cal1.get(Calendar.DAY_OF_MONTH);
+                        int daySD = cal1.getDayOfMonth();
                         Day day = new Day();
                         day.setValue(MessageFormat.format("{0,number,#00}",
                                 new Object[] { new Integer(daySD) }));
@@ -2231,7 +2260,7 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
                     affiliation.setStartDate(fuzzyStartDate);
                 }
@@ -2239,13 +2268,13 @@ public class PushToORCID
                 List<String> listEndDate = education.get("educationenddate");
                 if (listEndDate != null && !listEndDate.isEmpty())
                 {
-                    String stringEndDate = listStartDate.get(0);
-                    Date endDate;
-                    Calendar cal2 = Calendar.getInstance();
+                    String stringEndDate = listEndDate.get(0);
+                    Date endDate = null;
+                    DateTime cal2 = null;
                     try
                     {
                         endDate = df.parse(stringEndDate);
-                        cal2.setTime(endDate);
+                        cal2 = new DateTime(endDate.getTime());
                     }
                     catch (ParseException e)
                     {
@@ -2256,19 +2285,19 @@ public class PushToORCID
 
                     try
                     {
-                        int yearED = cal2.get(Calendar.YEAR);
+                        int yearED = cal2.getYear();
                         Year year = new Year();
                         year.setValue(String.valueOf(yearED));
                         fuzzyEndDate.setYear(year);
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
 
                     try
                     {
-                        int monthED = cal2.get(Calendar.MONTH);
+                        int monthED = cal2.getMonthOfYear();
                         Month month = new Month();
                         month.setValue(MessageFormat.format("{0,number,#00}",
                                 new Object[] { new Integer(monthED) }));
@@ -2276,12 +2305,12 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
 
                     try
                     {
-                        int dayED = cal2.get(Calendar.DAY_OF_MONTH);
+                        int dayED = cal2.getDayOfMonth();
                         Day day = new Day();
                         day.setValue(MessageFormat.format("{0,number,#00}",
                                 new Object[] { new Integer(dayED) }));
@@ -2289,7 +2318,7 @@ public class PushToORCID
                     }
                     catch (Exception ex)
                     {
-                        // nothing todo
+                        log.error(ex.getMessage());
                     }
                     affiliation.setEndDate(fuzzyEndDate);
                 }
@@ -2468,7 +2497,19 @@ public class PushToORCID
             for(EmploymentSummary nctype : employmentsOrcid.getEmploymentSummary()) {
                 String orcidSourceName = nctype.getSource().getSourceName().getContent();
                 if(orcidSourceName.equals(currentSourceName)) {
-                    String value = nctype.getOrganization().getName() + nctype.getStartDate().toString() + nctype.getEndDate().toString();
+                    String value = "";
+                    if(nctype.getOrganization()!=null) {
+                        value += nctype.getOrganization().getName();
+                    }
+                    if(nctype.getStartDate()!=null) {
+                        value += nctype.getStartDate().toString();
+                    }
+                    if(nctype.getEndDate()!=null) {    
+                        value += nctype.getEndDate().toString();    
+                    }
+                    if(StringUtils.isBlank(value)) {
+                        value = nctype.toString();
+                    }
                     Integer constantType = OrcidService.CONSTANT_PART_OF_RESEARCHER_TYPE;
                     registerHistoryStillInOrcid(applicationService, crisId, orcid,
                             timestampAttemptToRetrieve, value, nctype.getPutCode().toString(), constantType, OrcidService.CONSTANT_EMPLOYMENT_UUID);
@@ -2488,7 +2529,19 @@ public class PushToORCID
             for(EducationSummary nctype : educationsOrcid.getEducationSummary()) {
                 String orcidSourceName = nctype.getSource().getSourceName().getContent();
                 if(orcidSourceName.equals(currentSourceName)) {
-                    String value = nctype.getOrganization().getName() + nctype.getStartDate().toString() + nctype.getEndDate().toString();
+                    String value = "";
+                    if(nctype.getOrganization()!=null) {
+                        value += nctype.getOrganization().getName();
+                    }
+                    if(nctype.getStartDate()!=null) {
+                        value += nctype.getStartDate().toString();
+                    }
+                    if(nctype.getEndDate()!=null) {    
+                        value += nctype.getEndDate().toString();    
+                    }
+                    if(StringUtils.isBlank(value)) {
+                        value = nctype.toString();
+                    }
                     Integer constantType = OrcidService.CONSTANT_PART_OF_RESEARCHER_TYPE;
                     registerHistoryStillInOrcid(applicationService, crisId, orcid,
                             timestampAttemptToRetrieve, value, nctype.getPutCode().toString(), constantType, OrcidService.CONSTANT_EDUCATION_UUID);
@@ -2625,9 +2678,32 @@ public class PushToORCID
                         ExternalIdentifier externalIdentifier = new ExternalIdentifier();
                         externalIdentifier.setExternalIdRelationship(
                                 RelationshipType.SELF);
-                        externalIdentifier.setExternalIdUrl(value);
-                        externalIdentifier.setExternalIdType(rpPD.getLabel());
-                        externalIdentifier.setExternalIdValue(value);
+                        
+                        String[] splittedLink = value.split("###");
+                        if (splittedLink.length == 2) {
+                            externalIdentifier
+                                    .setExternalIdValue(StringUtils.isNotBlank(splittedLink[0]) ? splittedLink[0] : splittedLink[1]);
+                            externalIdentifier.setExternalIdUrl(splittedLink[1]);
+                            externalIdentifier.setExternalIdType(rpPD.getLabel());
+                        }
+                        else {
+                            externalIdentifier.setExternalIdUrl(value);
+                            if(rpPD.getRendering() instanceof WidgetTesto) {
+                                String format = ((WidgetTesto)rpPD.getRendering()).getDisplayFormat();
+                                if(StringUtils.isNotBlank(format)) {
+                                    Pattern p = Pattern.compile("href=\"([^\"]*)\"", Pattern.DOTALL);
+                                    Matcher m = p.matcher(format);
+                                    if (m.find()) {
+                                        externalIdentifier.setExternalIdUrl(MessageFormat.format(m.group(1), value));
+                                    }
+                                    else {
+                                        externalIdentifier.setExternalIdUrl(MessageFormat.format(format, value));
+                                    }
+                                }
+                            }
+                            externalIdentifier.setExternalIdType(rpPD.getLabel());
+                            externalIdentifier.setExternalIdValue(value);
+                        }
                         externalIdentifiers.add(externalIdentifier);
                     }
                 }
@@ -2658,8 +2734,26 @@ public class PushToORCID
 	                researcherUrl.setUrl(url);
 				}
 				else {
+	                RPPropertiesDefinition rpPD = applicationService
+	                        .findPropertiesDefinitionByShortName(
+	                                RPPropertiesDefinition.class,
+	                                orcidMetadataConfiguration.get("researcher-urls"));
+	                
 					researcherUrl.setUrlName(l);
 	                url.setValue(l);
+                    if(rpPD.getRendering() instanceof WidgetTesto) {
+                        String format = ((WidgetTesto)rpPD.getRendering()).getDisplayFormat();
+                        if(StringUtils.isNotBlank(format)) {
+                            Pattern p = Pattern.compile("href=\"([^\"]*)\"", Pattern.DOTALL);
+                            Matcher m = p.matcher(format);
+                            if (m.find()) {
+                                url.setValue(MessageFormat.format(m.group(1), l));
+                            }
+                            else {
+                                url.setValue(MessageFormat.format(format, l));
+                            }
+                        }
+                    }
 	                researcherUrl.setUrl(url);
 				}
                 researcherUrls.add(researcherUrl);
@@ -2680,10 +2774,32 @@ public class PushToORCID
                     if (StringUtils.isNotBlank(value))
                     {
                         ResearcherUrl researcherUrl = new ResearcherUrl();
-                        researcherUrl.setUrlName(rpPD.getLabel());
+                        String[] splittedLink = value.split("###");
                         Url url = new Url();
-                        url.setValue(value);
-                        researcherUrl.setUrl(url);
+                        if (splittedLink.length == 2) {
+                            researcherUrl
+                                    .setUrlName(StringUtils.isNotBlank(splittedLink[0]) ? splittedLink[0] : splittedLink[1]);
+                            url.setValue(splittedLink[1]);
+                            researcherUrl.setUrl(url);
+                        }
+                        else {
+                            researcherUrl.setUrlName(rpPD.getLabel());
+                            url.setValue(value);
+                            if(rpPD.getRendering() instanceof WidgetTesto) {
+                                String format = ((WidgetTesto)rpPD.getRendering()).getDisplayFormat();
+                                if(StringUtils.isNotBlank(format)) {
+                                    Pattern p = Pattern.compile("href=\"([^\"]*)\"", Pattern.DOTALL);
+                                    Matcher m = p.matcher(format);
+                                    if (m.find()) {
+                                        url.setValue(MessageFormat.format(m.group(1), value));
+                                    }
+                                    else {
+                                        url.setValue(MessageFormat.format(format, value));
+                                    }
+                                }
+                            }
+                            researcherUrl.setUrl(url);
+                        }
                         researcherUrls.add(researcherUrl);
                     }
                 }
