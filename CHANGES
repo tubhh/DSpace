@@ -23,3 +23,4 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * Improvement: added Cookie note unless cookies are accepted (adopted from 4Science)
 * Improvement: introduces CSL support for publications (provided that an instance of Bamberg's OData interface is installed locally)
 * Improvement: add a remove button to publication management from projects (implemented by 4Science)
+* Bugfix: do not show all bundles in submission of new versions for items (implemented by The Library Code)
