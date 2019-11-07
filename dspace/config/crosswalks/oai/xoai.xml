@@ -3259,6 +3259,11 @@
             <Name>EC_fundedresources set</Name>
             <!-- Just an alias -->
         </Set>
+        <Set id="openaireFundedResourcesSet">
+            <Spec>ec_fundedresources</Spec>
+            <Name>EC_fundedresources</Name>
+            <!-- Just an alias -->
+        </Set>
 		<!-- OpenAIRE OAI-PMH Sets. See https://openaire-guidelines-for-cris-managers.readthedocs.io/en/v1.1.1/implementation.html#openaire-oai-pmh-sets -->
 		<Set id="openairePublicationsCrisSet">
             <Spec>openaire_cris_publications</Spec>
