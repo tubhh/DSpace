@@ -223,9 +223,13 @@
             	</xsl:for-each>
             	
             	<xsl:for-each select="doc:element[@name='crisou']/doc:element[@name='name']/doc:element/doc:element">
+					<oai_cerif:Name xml:lang="de"><xsl:value-of select="doc:field[@name='value']" /></oai_cerif:Name>
+				</xsl:for-each>
+
+				<xsl:for-each select="doc:element[@name='crisou']/doc:element[@name='name_en']/doc:element/doc:element">
 					<oai_cerif:Name xml:lang="en"><xsl:value-of select="doc:field[@name='value']" /></oai_cerif:Name>
 				</xsl:for-each>
-			
+				
 				<xsl:variable name="identifiertypeid" select="doc:element[@name='ouidentifier']/doc:element[@name='ouidentifiertypeid']/doc:element/doc:element/doc:field[@name='value']" />
 				<xsl:variable name="identifierid" select="doc:element[@name='ouidentifier']/doc:element[@name='ouidentifierid']/doc:element/doc:element/doc:field[@name='value']" />
 				<xsl:if test="$identifiertypeid">
