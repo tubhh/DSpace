@@ -251,10 +251,10 @@
             <!-- OpenAIRE filter -->
             <!-- <Filter ref="openAireFilter"/> -->
             <!-- <Filter ref="openAireTuhhFilter"/> -->
+            <Filter ref="onlyDSpaceItemFilter"/>
             <Set ref="driverSet"/>
             <Set ref="openaireSet"/>
             <Set ref="ecSet"/>
-            <Filter ref="onlyDSpaceItemFilter"/>
             <!-- Just an alias, in fact it returns all items within the driver context -->
             <!-- <Set ref="driverSet"/> -->
             <Set ref="openaireFundedResourcesSet"/>
