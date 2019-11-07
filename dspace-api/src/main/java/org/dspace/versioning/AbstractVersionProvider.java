@@ -7,16 +7,22 @@
  */
 package org.dspace.versioning;
 
-import org.dspace.authorize.AuthorizeException;
-import org.dspace.content.*;
-import org.dspace.core.Context;
-import org.dspace.storage.bitstore.BitstreamStorageManager;
-
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+
+import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
 import org.dspace.authorize.ResourcePolicy;
+import org.dspace.content.Bitstream;
+import org.dspace.content.Bundle;
+import org.dspace.content.Item;
+import org.dspace.content.Metadatum;
+import org.dspace.core.ConfigurationManager;
+import org.dspace.core.Context;
+import org.dspace.storage.bitstore.BitstreamStorageManager;
 
 /**
  *
@@ -45,9 +51,27 @@ public abstract class AbstractVersionProvider {
         }
     }
 
-    protected void createBundlesAndAddBitstreams(Context c, Item itemNew, Item nativeItem) throws SQLException, AuthorizeException {
+    protected void createBundlesAndAddBitstreams(Context c, Item itemNew, Item nativeItem)
+        throws SQLException, AuthorizeException {
+        // First, get list of bundles to discard. We use a cautious approach - if the bundles are not configured, none
+        // will be discarded
+        List<String> bundlesToDiscard = new ArrayList<>();
+        String bundlesToDiscardConfiguration = ConfigurationManager.getProperty("versioning", "discard-bundles");
+        if(bundlesToDiscardConfiguration != null) {
+            String[] bundlesToDiscardArray = bundlesToDiscardConfiguration.split("\\s*,\\s*");
+            for(String b : bundlesToDiscardArray) {
+                if(b != null) {
+                    bundlesToDiscard.add(b.trim().toUpperCase());
+                }
+            }
+        }
+
         for(Bundle nativeBundle : nativeItem.getBundles())
         {
+            if(bundlesToDiscard.contains(nativeBundle.getName().toUpperCase())) {
+                // This bundle name is in the "discard" list so we will *not* create it in the new item
+                continue;
+            }
             Bundle bundleNew = itemNew.createBundle(nativeBundle.getName());
             // DSpace knows several types of resource policies (see the class
             // org.dspace.authorize.ResourcePolicy): Submission, Workflow, Custom
