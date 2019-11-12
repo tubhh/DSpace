@@ -52,14 +52,14 @@
 			</map>
 		</property>
 	</bean>
-	<!--
+	
 	<bean class="org.dspace.app.cris.integration.authority.ItemMetadataImportFiller" id="fullitemMetadataConfiguration" abstract="true">
 		<property name="applicationService" ref="applicationService" />
 		<property name="metricsPersistenceService" ref="org.dspace.app.cris.metrics.common.services.MetricsPersistenceService" />
 		<property name="allowsUpdateByDefault" value="true" />
 		<property name="configurations">
 			<map>
-				<entry key="dc.contributor.author">
+<!--				<entry key="dc.contributor.author">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
 						<property name="updateEnabled" value="true" />
@@ -92,7 +92,7 @@
 							</map>
 						</property>
 					</bean>
-				</entry>							
+				</entry>							-->
 				<entry key="dc.relation.ispartof">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
@@ -130,15 +130,6 @@
 			</map>	
 		</property>
 	</bean>
-	-->
-        <bean class="org.dspace.app.cris.integration.authority.ItemMetadataImportFiller" id="fullitemMetadataConfiguration" abstract="true">
-            <property name="applicationService" ref="applicationService" />
-            <property name="metricsPersistenceService" ref="org.dspace.app.cris.metrics.common.services.MetricsPersistenceService" />
-            <property name="allowsUpdateByDefault" value="true" />
-            <property name="configurations">
-                <bean class="java.util.HashMap" />
-            </property>
-        </bean>
 
 	<bean id="openAIREProjectImportFiller" class="org.dspace.app.cris.integration.authority.OpenAIREProjectImportFiller" parent="fullitemMetadataConfiguration">
 		<property name="searchService" ref="org.dspace.discovery.SearchService" />
