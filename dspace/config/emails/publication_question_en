@@ -12,14 +12,13 @@
 #             {5}: Name
 #             {6}: E-Mail
 #
-Subject: TORE: Fragen/Anmerkungen zu einer Publikation
+Subject: TORE: Question/Note about a publication
 
-Es wurde eine Frage zu folgender Publikation gestellt:
-    Titel:       {0}
-    Datum:       {1}
-    Autor*in:    {2}
-    Link:        {3}
-
-Die Frage lautet:
+There is a question by {5} ({6}):
     "{4}"
-    von {5} ({6})
+
+This question is bound to the following publication:
+    Title:      {0}
+    Date:       {1}
+    Author(s):  {2}
+    Link:       {3}
