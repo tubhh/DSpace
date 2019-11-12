@@ -43,7 +43,7 @@
                                             <entry key="journalTitle" value="journalsname"/>
                                             <entry key="journalZDBID" value="journalszdbid"/>
                                             <entry key="journalPublisher" value="journalspublisher"/>
-                                            <entry key="journalIssn" value="journalsissn"/>
+                                            <entry key="journalISSN" value="journalsissn"/>
                                             <entry key="journalAlternativeTitle" value="journalsalternativetitle"/>
                                         </map>
                                     </property>
@@ -52,7 +52,7 @@
 			</map>
 		</property>
 	</bean>
-	
+	<!--
 	<bean class="org.dspace.app.cris.integration.authority.ItemMetadataImportFiller" id="fullitemMetadataConfiguration" abstract="true">
 		<property name="applicationService" ref="applicationService" />
 		<property name="metricsPersistenceService" ref="org.dspace.app.cris.metrics.common.services.MetricsPersistenceService" />
@@ -130,7 +130,16 @@
 			</map>	
 		</property>
 	</bean>
-	
+	-->
+        <bean class="org.dspace.app.cris.integration.authority.ItemMetadataImportFiller" id="fullitemMetadataConfiguration" abstract="true">
+            <property name="applicationService" ref="applicationService" />
+            <property name="metricsPersistenceService" ref="org.dspace.app.cris.metrics.common.services.MetricsPersistenceService" />
+            <property name="allowsUpdateByDefault" value="true" />
+            <property name="configurations">
+                <bean class="java.util.HashMap" />
+            </property>
+        </bean>
+
 	<bean id="openAIREProjectImportFiller" class="org.dspace.app.cris.integration.authority.OpenAIREProjectImportFiller" parent="fullitemMetadataConfiguration">
 		<property name="searchService" ref="org.dspace.discovery.SearchService" />
 		<property name="openAIREProjectService" ref="org.dspace.authority.openaireproject.OpenAIREProjectService" />
