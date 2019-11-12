@@ -102,7 +102,7 @@
 						<property name="updateEnabled" value="true" />
 						<property name="mapping">
 							<map>
-								<entry key="dc.relation.issn">
+								<entry key="dc.identifier.issn">
 									<bean
 										class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration.MappingDetails">
 										<property name="shortName" value="issn" />
