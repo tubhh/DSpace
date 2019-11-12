@@ -721,8 +721,8 @@
 			</bean>
 		</property>
 		<!--Default result per page -->
-		<property name="defaultRpp" value="10" />
-		<property name="maxRpp" value="20" />
+		<property name="defaultRpp" value="50" />
+		<property name="maxRpp" value="50" />
 		<property name="hitHighlightingConfiguration">
 			<bean
 				class="org.dspace.discovery.configuration.DiscoveryHitHighlightingConfiguration">
