@@ -134,6 +134,15 @@
 		</property>
 	</bean>
 
+        <bean id="relationOUVSEventsConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">
+            <property name="type" value="crisou" />    										
+            <property name="relationName" value="crisou.events" />		
+            <property name="relationClass" value="org.dspace.app.cris.model.ResearchObject" />		
+            <property name="query">
+	        <value>crisevents.eventsorganiser_authority:{0}</value>
+            </property>
+        </bean>
+
 	<!-- <bean id="relationPJVSItemPoliciesSecurityConfiguration" class="org.dspace.app.cris.configuration.PoliciesSecurityCheck">
 		<property name="epersonFields">
 			<list>
