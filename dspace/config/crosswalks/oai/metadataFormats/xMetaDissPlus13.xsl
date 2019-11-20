@@ -324,9 +324,9 @@
 
     
 			<!-- identifier: dc.identifier.urn -->
-                        <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']">
+                        <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']">
                             <dc:identifier xsi:type="urn:nbn">
-                                <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']"/>
+                                <xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']"/>
                             </dc:identifier>
                         </xsl:if>
                         <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']">
