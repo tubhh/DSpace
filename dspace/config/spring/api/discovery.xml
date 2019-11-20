@@ -1719,7 +1719,7 @@
 			<bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
 				<property name="defaultSort" ref="sortEventsName"/>
 				<!--DefaultSortOrder can either be desc or asc (desc is default) -->
-				<property name="defaultSortOrder" value="asc" />
+				<property name="defaultSortOrder" value="desc" />
 				<property name="sortFields">
 					<list>
 						<ref bean="sortEventsName" />
@@ -2330,6 +2330,11 @@
 	<bean id="sortEventsName"
 		class="org.dspace.discovery.configuration.DiscoverySortFieldConfiguration">
 		<property name="metadataField" value="crisevents.eventsname" />
+	</bean>
+
+	<bean id="sortEventsYear"
+		class="org.dspace.discovery.configuration.DiscoverySortFieldConfiguration">
+		<property name="metadataField" value="crisevents.eventsyear" />
 	</bean>
 
 	<bean id="sortEquipmentName"
