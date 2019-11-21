@@ -2071,6 +2071,10 @@
        <stored-value>book</stored-value>
      </pair>
      <pair>
+       <displayed-value>Editorial</displayed-value>
+       <stored-value>editorial</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Festschrift</displayed-value>
        <stored-value>Festschrift</stored-value>
      </pair>
@@ -2111,6 +2115,10 @@
      <pair>
        <displayed-value>Präsentation</displayed-value>
        <stored-value>Presentation</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Review</displayed-value>
+       <stored-value>article-review</stored-value>
      </pair>
      <pair>
        <displayed-value>Software</displayed-value>

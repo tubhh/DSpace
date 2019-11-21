@@ -2073,6 +2073,10 @@
        <stored-value>Proceedings</stored-value>
      </pair>
      <pair>
+       <displayed-value>Editorial</displayed-value>
+       <stored-value>editorial</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Image</displayed-value>
        <stored-value>Image</stored-value>
      </pair>
@@ -2117,6 +2121,10 @@
      <pair>
        <displayed-value>Research Paper</displayed-value>
        <stored-value>Research Paper</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Review (Article)</displayed-value>
+       <stored-value>article-review</stored-value>
      </pair>
      <pair>
        <displayed-value>Software</displayed-value>
