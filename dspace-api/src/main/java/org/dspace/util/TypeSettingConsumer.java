@@ -431,6 +431,14 @@ public class TypeSettingConsumer implements Consumer
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
             break;
+        case "editorial":
+            //Cerif:Editorial
+            ret.put("opus", "Editorial");
+            ret.put("dini", "article");
+            ret.put("driver", "article");
+            ret.put("casrai", "Journal Article");
+            ret.put("dcmi", "Text");
+            break;
         default:
             ret.put("opus", mainType);
             ret.put("dini", "Other");
