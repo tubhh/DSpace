@@ -468,6 +468,17 @@
          <hint>Should this item be harvestable via OAI (e.g. for DNB)?</hint>
          <visibility>workflow</visibility>
         </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>status</dc-element>
+         <dc-qualifier>inpress</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Inpress?</label>
+         <input-type value-pairs-name="nl_en">dropdown</input-type>
+         <hint>Is this item in press (not yet really published)?</hint>
+         <visibility>workflow</visibility>
+        </field>
 <!--
        <field>
          <dc-schema>openaire</dc-schema>
