@@ -4,18 +4,18 @@
 # {1}  Name of collection
 # {2}  handle 
 #
-Subject: TORE: Publikation freigeschaltet
+Subject: TORE: Ihre Publikation wurde veröffentlicht
 
-Ihr Publikationstitel: {0}
-
-In der Sammlung: {1}
+Titel: {0}
+Sammlung: {1}
 
 Ihre Veröffentlichung auf TORE wurde genehmigt und freigeschaltet.
-Er ist ab sofort unter folgender Adresse zugänglich:
+Sie ist ab sofort unter folgender Adresse zugänglich:
 {2}
 
-Zum Zitieren benutzen Sie bitte einen der zugewiesenen persistenten 
-Identifier (DOI, URN oder Handle)
+Zum Zitieren benutzen Sie bitte den DOI auf der Publikationsseite.
+Ihre Publikation wird automatisch in Ihr ORCID-Profil übertragen werden, wenn Sie dies aktiviert haben:
+https://tore.tuhh.de/hilfe/412_orcid_integration.html
 
 Vielen Dank für Ihre Veröffentlichung!
 
