@@ -287,9 +287,18 @@
 					<xsl:value-of select="doc:metadata/doc:element[@name='dcterms']/doc:element[@name='dateAccepted']/doc:element/doc:field[@name='value']"/>
 				</dcterms:dateAccepted>
 			</xsl:if>
-			<dcterms:issued xsi:type="dcterms:W3CDTF">
-				<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
-			</dcterms:issued>
+                        <xsl:choose>
+                            <xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']">
+                                <dcterms:issued xsi:type="dcterms:W3CDTF">
+                                    <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
+                                </dcterms:issued>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <dcterms:issued xsi:type="dcterms:W3CDTF">
+                                    <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='available']/doc:element/doc:field[@name='value']"/>
+                                </dcterms:issued>
+                            </xsl:otherwise>
+                        </xsl:choose>
 
 			<!-- publication type: dc.type or (if that is set) dc.type.thesis -->
 			<dc:type xsi:type="dini:PublType">
