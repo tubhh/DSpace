@@ -226,6 +226,7 @@
 				<entry key="rp" value-ref="personslist" />				
 				<entry key="organizations" value-ref="organizationslist" />
                                 <entry key="ouevents" value-ref="eventslist" />
+                                <entry key="oujournals" value-ref="oujournallist" />
 			</map>
 		</property>
 	</bean>
@@ -453,6 +454,28 @@
         <bean id="eventsForOUComponent"
             class="org.dspace.app.webui.cris.components.BeanFacetComponent">
             <property name="componentIdentifier" value="events" />
+            <property name="facetQuery"><value>*:*</value></property>
+            <property name="order"><value>asc</value></property>
+            <property name="rpp"><value>20</value></property>
+            <property name="sortby"><value>10</value></property>			
+        </bean>
+
+        <!-- Journals list for OU entity -->
+        <bean id="oujournallist"
+            class="org.dspace.app.webui.cris.components.CRISOUConfigurerComponent">
+            <property name="relationConfiguration" ref="relationOUVSJournalsConfiguration" />
+            <property name="target" value="org.dspace.app.cris.model.OrganizationUnit" />
+            <property name="facets" ref="facetsJournalsConfiguration"/>
+            <property name="types">
+	        <map>
+		    <entry key="journals" value-ref="journalsForOUComponent" />
+	        </map>
+	    </property>
+        </bean>
+
+        <bean id="journalsForOUComponent"
+            class="org.dspace.app.webui.cris.components.BeanFacetComponent">
+            <property name="componentIdentifier" value="journals" />
             <property name="facetQuery"><value>*:*</value></property>
             <property name="order"><value>asc</value></property>
             <property name="rpp"><value>20</value></property>
