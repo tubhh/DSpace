@@ -190,13 +190,19 @@
 	<!-- Forschungsdaten --
           <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("researchdata")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=researchdata&rpp=50"><img src=/image/navicons/Dataset.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.researchdata"/></a></li>
 
-	<!-- TUHH-Mitarbeiter/Institute -->
+	<!-- TUHH-Mitarbeiter/Institute als Dropdown
           <li class="dropdown <%= (currentPage.endsWith("/browse") && (request.getParameter("type").equals("rpname") || request.getParameter("type").equals("rpdept"))) ? "active" : "" %>">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Gruppe.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.researcherprofiles"/> <b class="caret"></b></a>
               <ul class="dropdown-menu">
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("rpname")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=rpname&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.researcherprofilesbyname"/></a></li>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("rpdept")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=rpdept&rpp=100"><fmt:message key="jsp.layout.navbar-default.tuhh.researcherprofilesbydept"/></a></li>
               </ul>
+          </li>
+        -->
+
+	<!-- TUHH-Mitarbeiter/Institute -->
+          <li class="<%= (currentPage.endsWith("/browse") && (request.getParameter("type").equals("rpname"))) ? "active" : "" %>">
+              <a href="<%= request.getContextPath() %>/browse?type=rpname&rpp=50"><img src=/image/navicons/Gruppe.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.researcherprofiles"/></a>
           </li>
 
 	<!-- TUHH Institute -->
