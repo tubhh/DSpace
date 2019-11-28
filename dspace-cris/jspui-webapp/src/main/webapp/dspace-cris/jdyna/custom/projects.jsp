@@ -120,7 +120,7 @@
     	<div class="panel-heading">
     		<h4 class="panel-title">
         		<a data-toggle="collapse" data-parent="#${holder.shortName}" href="#collapseOne${holder.shortName}">
-          			${holder.title} 
+          			<fmt:message key="jsp.layout.dspace.cris.generic.box.${holder.shortName}.label"/><%-- ${holder.title} --%>
         		</a>
         		<% if(subLinks!=null && subLinks.size()>0 && globalShowFacets) {%>
         			<jsp:include page="common/commonComponentGeneralFiltersAndFacets.jsp"></jsp:include>
