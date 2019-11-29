@@ -54,6 +54,8 @@
 <html>
     <head>
         <title><%= title %> | <%= siteName %></title>
+        <meta name="google-site-verification" content="juvl3McEzhHwPPh-J7zNwwec0_E6c81ZH4are8PlTso" />
+        <meta name="msvalidate.01" content="9DAB6E8B4DCD4D51BA0637771F617274" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="Generator" content="<%= generator %>" />
@@ -75,7 +77,6 @@
 		<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/bootstrap-datetimepicker.min.css" />
             <link rel="stylesheet" href="<%= request.getContextPath() %>/css/tubhh.css" type="text/css" />
             <link rel="stylesheet" href="<%= request.getContextPath() %>/css/tor.css" type="text/css" />
-            <link rel="stylesheet" href="<%= request.getContextPath() %>/css/tor-testsystem.css" type="text/css" />
 <%
     if (!"NONE".equals(feedRef))
     {
@@ -168,41 +169,42 @@
 <a class="sr-only" href="#content">Skip navigation</a>
 
 <div id="page">
-
 <header id="branding">
 
-<div id="tulogo">
+            <div id="tulogo">
     <a href="http://www.tuhh.de">
-    <img src="/image/TUHH-LOGO.svg" alt="TUHH HOME" title="TUHH HOME" class="tulogo"/>
-    </a>
-</div>
-
+    <img class="tulogo" src="/image/TUHH-LOGO.svg" alt="TUHH HOME" title="TUHH HOME" />
+                </a>
+            </div><!-- logo -->
 <div id="tulogosmall">
-    <a id="box-link" href="http://www.tuhh.de"></a>
+<a id="box-link" href="http://www.tuhh.de"></a>
 </div>
-
-
-<div id="apbranding-box">
-    <div class="sitename">
-            <a style="color:#000000;" href="/"
+<div id="tubdoklogomobile">
+<a id="box-link" href="https://tore.tuhh.de"></a>
+</div>
+            <div id="apbranding-box">
+                <div class="sitename">
+            <a style="color:#000000;" href="https://tore.tuhh.de/"
             title="<fmt:message key="tuhh.library.name" />" rel="home">
-            <!--<fmt:message key="tuhh.library.dokuservice.description" />--> open research</a>
+            <fmt:message key="tuhh.library.dokuservice.description" /></a>
+                </div>
+        <div class="tubdoklogosmall">
+    <a id="box-link" href="https://tore.tuhh.de"> </a>
     </div>
-
-  <div> <!-- 3 Spalten für DE|EN Search Logo -->
-    <div class="msls">
-	<% if (supportedLocales != null && supportedLocales.length > 1)
-	{
-	%>
+<div> <!-- 3 Spalten für DE|EN Search Logo -->
+                <div class="msls">
+<% if (supportedLocales != null && supportedLocales.length > 1)
+{
+%>
         <form method="get" name="langrepost" action="">
           <input type ="hidden" name ="locale"/>
           <!-- hidden field type will cause trouble if it is null, so use a different name and rename field if necessary -->
           <input type ="hidden" name ="subst_type"/>
         </form>
-	<%
-	for (int i = supportedLocales.length-1; i >= 0; i--)
-	{
-	%>
+<%
+for (int i = supportedLocales.length-1; i >= 0; i--)
+{
+%>
         <a class ="langChange"
                   onclick="javascript:document.langrepost.locale.value='<%=supportedLocales[i].toString()%>';
                   var t = '<%=request.getParameter("type")%>';
@@ -213,13 +215,12 @@
                   document.langrepost.submit();">
                  <%= supportedLocales[i].getDisplayLanguage(supportedLocales[i])%>
         </a> &nbsp;
-	<%
-	}
-	}
-	%>
-    </div>
-
-    <div class="tubdoksearch">
+<%
+}
+}
+%>
+            </div>
+        <div class="tubdoksearch">
         <%-- Search Box DSpace --%>
         <form method="get" action="<%= request.getContextPath() %>/simple-search" class="navbar-right" scope="search" accept-charset="UTF-8">
             <div class="form-group">
@@ -238,15 +239,18 @@
             <input type="hidden" value="TUBdok" name="type">
         </form>
         --%>
+        </div>
+        <div class="tubdoklogo">
+    <a href="https://tubdok.tub.tuhh.de">
+        <img src="/image/tub_dok_logo.png"  height="40" alt="TUBdok" title="TUBdok Home" />
+            </a>
     </div>
+        </div> <!-- 3 Spalten ende-->
 
-  </div> <!-- 3 Spalten ende-->
+                <div class="clear"></div>
+            </div><!-- branding-box -->
 
 <div class="clear"></div>
-</div><!-- branding-box -->
-
-<div class="clear"></div>
-
 <header class="navbar navbar-inverse navbar-square">    
     <%
     if (!navbar.equals("off"))

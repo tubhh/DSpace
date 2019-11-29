@@ -15,10 +15,10 @@
 Subject: TORE: Fragen/Anmerkungen zu einer Publikation
 
 Es wurde eine Frage zu folgender Publikation gestellt:
-    Titel:                  {0}
-    Erscheinungsjahr:       {1}
-    Autorin(nen)/Autor(en): {2}
-    Link zur Publikation:   {3}
+    Titel:       {0}
+    Datum:       {1}
+    Autor*in:    {2}
+    Link:        {3}
 
 Die Frage lautet:
     "{4}"

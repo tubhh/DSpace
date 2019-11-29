@@ -610,8 +610,7 @@
             <servlet-class>org.dspace.app.webui.servlet.QuestionsServlet</servlet-class>
         </servlet>
 
-  <!-- BibTeX Export by ZBW -->
-<!--
+  <!-- BibTeX Export by ZBW
   <servlet>
         <servlet-name>bibtexexport</servlet-name>
         <servlet-class>org.dspace.app.webui.servlet.BibTeXExportServlet</servlet-class>

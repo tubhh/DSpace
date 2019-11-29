@@ -30,7 +30,7 @@
 					<property name="preHtml" value="&lt;span class='text-muted'&gt;" />
 					<property name="postHtml" value="&lt;/span&gt;&lt;br/&gt;" />
 					<property name="field" value="dc.contributor.author" />
-					<property name="decorator" value="itemcrisref" />
+					<property name="decorator" value="tubitemcrisref" />
 				</bean>
 				<bean
 					class="org.dspace.discovery.configuration.DiscoveryViewFieldConfiguration">

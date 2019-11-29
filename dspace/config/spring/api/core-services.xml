@@ -19,11 +19,11 @@
 				<value>news-top.html</value>
 				<value>news-side.html</value>
 				<value>news-footer.html</value>
-                <value>news-top_de.html</value>
-                <value>news-side_de.html</value>
-                <value>news-footer_de.html</value>
-                <value>iconsbar_de.html</value>
-                <value>iconsbar.html</value>
+                                <value>news-top_de.html</value>
+                                <value>news-side_de.html</value>
+                                <value>news-footer_de.html</value>
+                                <value>iconsbar_de.html</value>
+                                <value>iconsbar.html</value>
 			</list>
 		</property>	
 	</bean>
@@ -61,4 +61,32 @@
 		</property>		
 	</bean>
 	
+
+    <bean id="org.dspace.content.service.TemplateItemService" class="org.dspace.content.service.DSpaceTemplateItemService" scope="singleton">
+    <property name="generators">
+    <map>
+    <entry key="urn">
+    <bean class="org.dspace.content.generator.UrnValueGenerator">
+        <property name="prefix"><value>urn:nbn:de:gbv:23-</value></property>
+    </bean>
+    </entry>
+    <entry key="submitter">
+    <bean class="org.dspace.content.generator.SubmitterValueGenerator" />
+    </entry>
+    <entry key="date">
+    <bean class="org.dspace.content.generator.DateValueGenerator" />
+    </entry>
+    <entry key="identifier">
+    <bean class="org.dspace.content.generator.IdentifierValueGenerator" />
+    </entry>
+<entry key="group">
+    <bean class="org.dspace.content.generator.GroupValueGenerator" />
+    </entry>
+<entry key="eperson">
+    <bean class="org.dspace.content.generator.EPersonValueGenerator" />
+    </entry>
+    </map>
+    </property>
+    </bean>
+
 </beans>

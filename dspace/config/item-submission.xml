@@ -18,6 +18,7 @@
  <!-- for handle "default".                                                -->
  <submission-map>
    <name-map collection-handle="default" submission-name="traditional" />
+   <name-map collection-handle="11420/2093" submission-name="pubwithoutfulltext" />
  </submission-map>
 
 
@@ -207,6 +208,24 @@
         <workflow-editable>true</workflow-editable>
       </step>
 
+      <!-- The following two steps should be considdered atomic. You should either include both or none.
+           The first one mints persistent identifiers like doi and/or handle. Which persistent identifiers are minted
+           depends on the configuration of DSpace. The second step displays the minted persistent identifiers to the
+           submitter so he/she can include them directory into any uploaded file.
+           Currently it is not possible to write a submission step that does not send any JSP at start of the step, but
+           only at its end. Therefore we had to write two steps: a non-interactive one that does mint the identifiers
+           only and a second separate step that does show the previously minted identifiers to the user. -->
+      <step>
+        <processing-class>org.dspace.submit.step.MintIdentifiersStep</processing-class>
+        <workflow-editable>false</workflow-editable>
+      </step>
+      <step>
+        <heading>submit.progressbar.showidentifiers</heading>
+        <processing-class>org.dspace.submit.step.ShowIdentifiersStep</processing-class>
+        <jspui-binding>org.dspace.app.webui.submit.step.JSPShowIdentifiersStep</jspui-binding>
+        <workflow-editable>false</workflow-editable>
+      </step>
+
        <!--Step 3 will be to Manage Item access.
        <step>
            <heading>submit.progressbar.access</heading>
@@ -218,6 +237,7 @@
        -->
 
       <!--Step 4 will be to Upload the item -->
+<!--
       <step>
         <heading>submit.progressbar.upload</heading>
         <processing-class>org.dspace.submit.step.UploadStep</processing-class>
@@ -225,10 +245,10 @@
 		<xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadStep</xmlui-binding>
         <workflow-editable>true</workflow-editable>
       </step>
-      
+      -->
 
        <!-- Step 4 Upload Item with Embargo Features
-            to enable this step, please make sure to comment-out the previous step "UploadStep"  
+            to enable this step, please make sure to comment-out the previous step "UploadStep"  -->
        <step>
            <heading>submit.progressbar.upload</heading>
            <processing-class>org.dspace.submit.step.UploadWithEmbargoStep</processing-class>
@@ -236,7 +256,6 @@
            <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadWithEmbargoStep</xmlui-binding>
            <workflow-editable>true</workflow-editable>
        </step>
-       -->
 
  	  <!--Step 5 will be to Verify/Review everything -->
  	  <step>
@@ -270,6 +289,31 @@
 
 
      
+   </submission-process>
+
+   <submission-process name="pubwithoutfulltext">
+        <step>
+            <processing-class>org.dspace.submit.step.SkipInitialQuestionsStep</processing-class>
+        </step>
+
+      <!--Step 2 will be to Describe the item.-->
+      <step>
+        <heading>submit.progressbar.describe</heading>
+        <processing-class>org.dspace.submit.step.DescribeStep</processing-class>
+        <jspui-binding>org.dspace.app.webui.submit.step.JSPDescribeStep</jspui-binding>
+        <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.DescribeStep</xmlui-binding>
+        <workflow-editable>true</workflow-editable>
+      </step>
+
+      <!--Step 3 will be to Verify/Review everything -->
+      <step>
+        <heading>submit.progressbar.verify</heading>
+        <processing-class>org.dspace.submit.step.VerifyStep</processing-class>
+        <jspui-binding>org.dspace.app.webui.submit.step.JSPVerifyStep</jspui-binding>
+        <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.ReviewStep</xmlui-binding>
+        <workflow-editable>true</workflow-editable>
+      </step>
+
    </submission-process>
 
  </submission-definitions>

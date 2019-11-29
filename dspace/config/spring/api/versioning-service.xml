@@ -37,6 +37,14 @@
                    <set>
                        <value>dc.date.accessioned</value>
                        <value>dc.description.provenance</value>
+                       <value>tuhh.identifier.urn</value>
+                       <value>dc.identifier.hdl</value>
+                       <value>tuhh.identifier.doi</value>
+                       <value>dc.identifier.doi</value>
+                       <value>dc.identifier.urn</value>
+                       <value>tuhh.uploader.email</value>
+                       <value>dc.relation.isreplacedby</value>
+                       <value>dc.relation.replaces</value>
                    </set>
                </property>
                

@@ -426,6 +426,7 @@ implements DOIConnector
         }
         
         String metadataDOI = extractDOI(root);
+log.debug("metadataDOI is "+metadataDOI);
         if (null == metadataDOI)
         {
             // The DOI will be saved as metadata of dso after successful
@@ -433,6 +434,7 @@ implements DOIConnector
             // sent to DataCite. So we add it to the XML we'll send to DataCite
             // and we'll add it to the DSO after successful registration.
             root = addDOI(doi, root);
+log.debug("Adding "+doi+" to XML ");
         }
         else if (!metadataDOI.equals(doi.substring(DOI.SCHEME.length())))
         {
@@ -445,7 +447,7 @@ implements DOIConnector
                     + "generating the metadata. Unable to reserve doi, see logs "
                     + "for further information.");
         }
-        
+log.debug("Sending XML to DataCite: "+root.toString());
         // send metadata as post to mds/metadata
         DataCiteResponse resp = this.sendMetadataPostRequest(doi, root);
         
@@ -711,7 +713,6 @@ implements DOIConnector
             ContentType contentType = ContentType.create("application/xml", "UTF-8");
             reqEntity = new StringEntity(metadata, contentType);
             httppost.setEntity(reqEntity);
-            
             return sendHttpRequest(httppost, doi);
         }
         finally

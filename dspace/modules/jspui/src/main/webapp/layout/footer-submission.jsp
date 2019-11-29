@@ -29,5 +29,6 @@ try {
 </script>
 
 <%-- <script type="text/javascript" src="<%= request.getContextPath() %>/js/urn-support.js"></script> --%>
+<%-- <script type="text/javascript" src="<%= request.getContextPath() %>/static/js/getISSNAuthority.js"></script> --%>
 
 <%@ include file="footer-default.jsp" %>

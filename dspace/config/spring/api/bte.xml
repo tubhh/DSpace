@@ -21,16 +21,16 @@
 			    <entry key="pdf" value-ref="grobidDataLoader" />-->
 				<entry key="pubmedXML" value-ref="pubmedFileDataLoader" />
 				<entry key="crossrefXML" value-ref="crossRefFileDataLoader" />
+				<entry key="bibtex" value-ref="bibTeXDataLoader" />
+<!--
 				<entry key="arxivXML" value-ref="arXivFileDataLoader" />
 				<entry key="ciniiXML" value-ref="ciniiFileDataLoader" />
-				<entry key="bibtex" value-ref="bibTeXDataLoader" />
 				<entry key="ris" value-ref="risDataLoader" />
-				<entry key="wosris" value-ref="wosRISDataLoader" />
 				<entry key="endnote" value-ref="endnoteDataLoader" />
 				<entry key="csv" value-ref="csvDataLoader" />
 				<entry key="tsv" value-ref="tsvDataLoader" />
 				<entry key="oai" value-ref="oaipmhDataLoader" />
-
+-->
 			</map>
 		</property>
 		
@@ -52,6 +52,8 @@
 	<bean id="batchImportLinearWorkflow" class="gr.ekt.bte.core.LinearWorkflow">
 		<property name="process">
 			<list>
+                                <ref bean="splitAuthors"/>
+                                <ref bean="latexDecode"/>
 				<!-- Add here filters and modifiers -->
 			</list>
 		</property>
@@ -113,62 +115,38 @@
 	            <!-- Specify here any data loaders you want to include in the submission lookup process.
 	            	Dataloaders must either extend the "NetworkSubmissionLookupDataLoader" abstract class
 	            	or conform to "FileDataLoader" interface of BTE -->
+	            <entry key="crossref" value-ref="crossRefOnlineDataLoader"/>
 	            <entry key="pubmed" value-ref="pubmedOnlineDataLoader"/>
 	            <!-- <entry key="pubmedEurope" value-ref="pubmedEuropeOnlineDataLoader"/> -->	            
-	            <entry key="crossref" value-ref="crossRefOnlineDataLoader"/>
+<!--
 	            <entry key="orcid" value-ref="orcidOnlineDataLoader"/>
 	            <entry key="arxiv" value-ref="arXivOnlineDataLoader"/>
 	            <entry key="cinii" value-ref="ciniiOnlineDataLoader"/>
+-->
 <!-- 	            depending on your apiKey you should use scopusOnlineDataLoader or scivalOnlineDataLoader or
-					adsOnlineDataLoader 
+					adsOnlineDataLoader -->
 		    <entry key="scopus" value-ref="scopusOnlineDataLoader"/>
+<!--
 	            <entry key="wos" value-ref="wosOnlineDataLoader"/> 
 	            <entry key="ads" value-ref="adsOnlineDataLoader"/>-->
-	            <entry key="pubmedXML" value-ref="pubmedFileDataLoader"/>
+<!--	            <entry key="pubmedXML" value-ref="pubmedFileDataLoader"/> -->
 	            <!-- <entry key="pubmedEuropeXML" value-ref="pubmedEuropeFileDataLoader"/> -->
-	            <entry key="crossRefXML" value-ref="crossRefFileDataLoader"/>
+<!--	            <entry key="crossRefXML" value-ref="crossRefFileDataLoader"/>
 	            <entry key="arXivXML" value-ref="arXivFileDataLoader"/>
 	            <entry key="ciniiXML" value-ref="ciniiFileDataLoader"/>
+-->
 	            <entry key="bibtex" value-ref="bibTeXDataLoader"/>
-	            <entry key="ris" value-ref="risDataLoader"/>
+<!--	            <entry key="ris" value-ref="risDataLoader"/>
 	            <entry key="wosris" value-ref="wosRISDataLoader"/>
 	            <entry key="endnote" value-ref="endnoteDataLoader"/>
 	            <entry key="csv" value-ref="csvDataLoader"/>
-	            <entry key="tsv" value-ref="tsvDataLoader"/>
+	            <entry key="tsv" value-ref="tsvDataLoader"/> -->
 	            <!-- <entry key="pdf" value-ref="grobidDataLoader" /> -->
-		    <entry key="b3kat" value-ref="ISBNOnlineDataLoaderB3Kat" />
-		    <entry key="loc" value-ref="ISBNOnlineDataLoaderLOC" />
 			</map>
 	    </property>
 	</bean>
 
-	<bean name="org.dspace.submit.lookup.SubmissionLookupOutputGenerator" class="org.dspace.submit.lookup.SubmissionLookupOutputGenerator" scope="prototype">
-	<property name="identifiersMap">
-		<map>
-			<entry key="pubmed">
-				<value>pubmedID</value>
-			</entry>
-			<entry key="crossref">
-				<value>doi</value>
-			</entry>
-			<entry key="arxiv">
-				<value>url</value>
-			</entry>
-			<entry key="cinii">
-				<value>ncid</value>
-			</entry>
-			<entry key="scopus">
-				<value>eid</value>
-			</entry>
-			<entry key="wos">
-				<value>isiId</value>
-			</entry>
-			<entry key="ads">
-				<value>adsbibcode</value>
-			</entry>
-		</map>
-	</property>
-    </bean>
+	<bean name="org.dspace.submit.lookup.SubmissionLookupOutputGenerator" class="org.dspace.submit.lookup.SubmissionLookupOutputGenerator" scope="prototype"/>
 	
 	<!-- Specify here any filters or modifiers to run before the output -->
 	<bean name="phase1LinearWorkflow" class="gr.ekt.bte.core.LinearWorkflow" scope="prototype">
@@ -180,7 +158,10 @@
 			    <ref bean="mapConverter_scopusType"/>
 			    <ref bean="mapConverter_crossrefType"/>
 			    <ref bean="mapConverter_wosType"/>			    			    
+                            <ref bean="latexDecode"/>
 			    <ref bean="splitValue"/>							    
+                            <ref bean="splitBibTexKeywords"/>
+                            <ref bean="splitAuthors"/>
 			    <ref bean="removeLastDot"/>
 			</list>
 		</property>
@@ -275,7 +256,21 @@
 			</list>
 		</property>
 	</bean>
-		
+
+        <!-- Converts an input value to an output one -->
+        <bean name="mapConverter_bibtexType" class="org.dspace.submit.lookup.MapConverterModifier" init-method="init">
+            <constructor-arg value="mapConverter_bibtexType Modifier"/>
+            <property name="converterNameFile" value="mapConverter-bibtexType.properties"/>
+            <property name="configurationService" ref="org.dspace.services.ConfigurationService"/>
+            <property name="fieldKeys">
+                <list>
+                    <!-- Specify the internal BTE keys that this modifier needs to be applied for -->
+                    <value>subtype</value>
+                    <value>bibtextype</value>
+                </list>
+            </property>
+        </bean>
+
 	<!-- Remove the last dot in the specified field keys -->
 	<bean name="removeLastDot" class="org.dspace.submit.lookup.RemoveLastDotModifier">
 	    <constructor-arg value="removeLastDot Modifier"/>
@@ -292,12 +287,49 @@
 	    <constructor-arg value="SplitValue Modifier"/>
 	    <property name="fieldKeys">
 	        <list>
-	        	<value>scopusKeywords</value>
+	        	<value>keywords</value>
 	        </list>
 	    </property>
 	    <property name="separator" value="|" />
 	</bean>	
-	
+
+        <!-- Split the authors - each author gets its own field -->
+        <bean name="splitAuthors" class="org.dspace.submit.lookup.SplitValueByWordModifier">
+            <constructor-arg value="SplitValue Modifier"/>
+            <property name="fieldKeys">
+                <list>
+                    <value>authors</value>
+                </list>
+            </property>
+            <property name="separator" value=" and " />
+        </bean>
+
+        <!-- Split values based on a single seperator character -->
+        <bean name="splitBibTexKeywords" class="org.dspace.submit.lookup.SplitValueModifier">
+            <constructor-arg value="SplitValue Modifier"/>
+            <property name="fieldKeys">
+                <list>
+                    <value>bibtexKeywords</value>
+                </list>
+            </property>
+            <property name="separator" value=";" />
+        </bean>
+
+        <!-- Decode LaTeX input into normal UTF8 strings -->
+        <bean name="latexDecode" class="org.dspace.submit.lookup.LatexDecodeModifier">
+            <constructor-arg value="LaTeXDecode Modifier"/>
+            <property name="fieldKeys">
+                <list>
+                    <value>authors</value>
+                    <value>title</value>
+                    <value>sourceTitle</value>
+                    <value>journal</value>
+                    <value>abstract</value>
+                </list>
+            </property>
+            <property name="separator" value="none" />
+        </bean>
+
 	<!-- **************************************************************************************************** -->
 	<!-- Submission Lookup Transformation Engine (phase 2) 													  -->
 	<!-- **************************************************************************************************** -->
@@ -315,7 +347,8 @@
 	    <property name="process">
 			<list>
 			    <ref bean="fieldMergeModifier"/>
-			    <ref bean="valueConcatenationModifier"/>
+<!--			    <ref bean="valueConcatenationModifier"/> -->
+                            <ref bean="citationReferenceCreator"/>
 			    <ref bean="languageCodeModifier"/>			    
 			    <ref bean="journalsModifier"/>
 			    <ref bean="authorsModifier"/>			    
@@ -340,10 +373,51 @@
 						<value>classificationASJC</value>						
 					</list>
 	            </entry>
+                    <entry key="allissns">
+                        <list>
+                            <value>jissn</value>
+                            <value>jeissn</value>
+                            <value>sissn</value>
+                        </list>
+                    </entry>
+                    <entry key="othercontributors">
+                        <list>
+                            <value>investigators</value>
+                            <value>translators</value>
+                            <value>chairs</value>
+                        </list>
+                    </entry>
+                    <entry key="citationRef-DEPRACATED">
+                        <list>
+                            <value>journal</value>
+                            <value>issue</value>
+                            <value>volume</value>
+                            <value>firstpage</value>
+                            <value>lastpage</value>
+                            <value>issued</value>
+                        </list>
+                    </entry>
 	        </map>
 	    </property>
 	</bean>
-		
+
+        <bean name="citationReferenceCreator" class="org.dspace.submit.lookup.CitationReferenceModifier">
+            <constructor-arg value="citationReference Creator"/>
+            <property name="finalField" value="citationReference"/>
+            <property name="fieldKeys">
+                <map>
+                    <entry key="journalname" value="journal" />
+                    <entry key="journalissue" value="issue" />
+                    <entry key="journalvolume" value="volume" />
+                    <entry key="journalfirstpage" value="firstpage" />
+                    <entry key="journallastpage" value="lastpage" />
+                    <entry key="journalyear" value="issued" />
+                    <entry key="articlenumber" value="articlenumber" />
+                </map>
+            </property>
+            <property name="basicString" value="%%journalname%% %%journalissue%% (%%journalvolume%%): %%articlenumber%% %%journalfirstpage%%-%%journallastpage%% (%%journalyear%%)" />
+        </bean>
+
 	<bean name="valueConcatenationModifier" class="org.dspace.submit.lookup.ValueConcatenationModifier">
 	    <property name="field" value="allkeywords"/>
 	    <property name="separator" value=";" />
@@ -435,7 +509,9 @@
 	<!-- The key of the map is just the BibTeX label (e.g. author, date, pages 
 		etc). The value the label that the record internally associates with the 
 		specific data. -->
-	<bean id="bibTeXDataLoader" class="gr.ekt.bteio.loaders.BibTeXDataLoader">
+        <!-- Original-Dataloader: gr.ekt.bteio.loaders.BibTeXDataLoader -->
+        <bean id="bibTeXDataLoader" class="org.dspace.submit.lookup.BibTeXFileDataLoader">
+                <property name="typeField" value="subtype" />
 		<property name="fieldMap">
 			<map>
 				<entry key="title" value="title" />
@@ -447,13 +523,14 @@
 				<entry key="volume" value="volume" />
 				<entry key="issue" value="issue" />
 				<entry key="pages" value="firstpage" />
-				<entry key="keywords" value="keywords" />
 				<entry key="abstract" value="abstract" />
 				<entry key="pubmed_id" value="pubmedID" />
 				<entry key="language" value="language" />
 				<entry key="document_type" value="subtype" />
 				<entry key="url" value="url" />
 				<entry key="publisher" value="publisher" />
+                                <entry key="booktitle" value="sourceTitle" />
+                                <entry key="keywords" value="bibtexKeywords" />
 			</map>
 		</property>
 	</bean>
@@ -517,6 +594,7 @@
 				<entry key="T1" value="title" />
 				<entry key="TI" value="title" />
 				<entry key="T2" value="journal" />
+                                <entry key="SO" value="journal" />
 				<entry key="AU" value="authors" />
 				<entry key="PY" value="issued" />
 				<entry key="SN" value="jissn" />
@@ -532,57 +610,18 @@
 				<entry key="PP" value="publisherPlace" />
 				<entry key="LA" value="language" />
 				<entry key="UR" value="url" />
-				<entry key="DO" value="doi" />			
-			</map>
+				<entry key="DO" value="doi" />			</map>
 		</property>
 	</bean>
 
-	<bean id="wosRISDataLoader" class="org.dspace.submit.extraction.WOSRISDataLoader">
+	<bean id="endnoteDataLoader" class="gr.ekt.bteio.loaders.EndnoteDataLoader">
 		<property name="fieldMap">
 			<map>
 				<entry key="TI" value="title" />
-				<entry key="T2" value="journal" />
 				<entry key="AU" value="authors" />
-				<entry key="PY" value="issued" />
-				<entry key="SN" value="jissn" />
-				<entry key="PT" value="subtype" />
-				<entry key="M3" value="subtype" />
 				<entry key="AB" value="abstract" />
-				<entry key="VL" value="volume" />
-				<entry key="IS" value="issue" />
-				<entry key="SP" value="firstpage" />
-				<entry key="EP" value="lastpage" />
-				<entry key="KW" value="keywords" />
-				<entry key="PB" value="publisher" />
-				<entry key="PP" value="publisherPlace" />
-				<entry key="LA" value="language" />
-				<entry key="UR" value="url" />
-				<entry key="DO" value="doi" />			
-			</map>
-		</property>
-	</bean>
-
-	<bean id="endnoteDataLoader" class="org.dspace.submit.extraction.EndnoteDataLoader">
-		<property name="fieldMap">
-			<map>
-				<entry key="%T" value="title" />
-				<entry key="%O" value="titleAlternative" />
-				<entry key="%A" value="authors" />
-				<entry key="%E" value="editors" />
-				<entry key="%D" value="issued" />
-				<entry key="%X" value="abstract" />
-				<entry key="%N" value="issue" />
-				<entry key="%V" value="volume" />
-				<entry key="%J" value="journal" />
-				<entry key="%B" value="booktitle" />
-				<entry key="%G" value="language" />
-				<entry key="%K" value="keywords" />
-				<entry key="%I" value="publisher" />
-				<entry key="%C" value="publisherPlace" />
-				<entry key="%R" value="doi" />
-				<entry key="%U" value="url" />
-				<entry key="%0" value="subtype" />
-				<entry key="%7" value="editionnumber" />
+				<entry key="PY" value="issued" />
+				<entry key="SO" value="journal" />
 			</map>
 		</property>
 	</bean>
@@ -622,7 +661,7 @@
 	
 	<!-- PubMed -->
 	<bean id="pubmedOnlineDataLoader" class="org.dspace.submit.lookup.PubmedOnlineDataLoader" scope="prototype">
-		<property name="searchProvider" value="false" />
+		<property name="searchProvider" value="true" />
 		<property name="fieldMap" ref="pubmedInputMap" />
 	</bean>
 
@@ -763,6 +802,7 @@
 				<entry key="translators" value="others" />
 				<entry key="chairs" value="others" />
 				<entry key="doiType" value="subtype" />
+                                <entry key="publisher" value="publisher" />
 				<!-- Not used -->
 				<!-- 
 					<entry key="publicationType" value="" />
@@ -816,50 +856,6 @@
 
 	
 	
-	<bean id="ISBNOnlineDataLoaderLOC" class="org.dspace.submit.lookup.ISBNOnlineDataLoader">
-	    <property name="searchProvider" value="false" />
-	    <property name="fieldMap" ref="ISBNInputMap" />
-	    <property name="isbnURL" value="http://lx2.loc.gov:210/LCDB" />
-	    <property name="queryFieldName" value="bath.isbn" />
-	</bean>
-
-	<bean id="ISBNOnlineDataLoaderB3Kat" class="org.dspace.submit.lookup.ISBNOnlineDataLoader">
-	    <property name="searchProvider" value="false" />
-	    <property name="fieldMap" ref="ISBNInputMap" />
-	    <property name="isbnURL" value="http://bvbr.bib-bvb.de:5661/bvb01sru" />
-	    <property name="queryFieldName" value="marcxml.isbn" />
-	</bean>
-
-	<bean name="ISBNInputMap" class="java.util.HashMap" scope="prototype">
-		<constructor-arg>
-			<map key-type="java.lang.String" value-type="java.lang.String">
-				<entry key="url" value="url" />
-				<entry key="title" value="title" />
-				<entry key="providerType" value="providerType" />
-				<entry key="sourceTitle" value="journal" />
-				<entry key="issued" value="issued" />
-				<entry key="abstract" value="abstract" />
-				<entry key="language" value="language" />
-				<entry key="author" value="authors" />
-				<entry key="orcid" value="orcid" />
-				<entry key="arxiv" value="arxiv" />
-				<entry key="eid" value="eid" />
-				<entry key="doi" value="doi" />
-				<entry key="pmid" value="pubmedID" />
-				<entry key="pmc" value="pubmedcentralID" />
-				<entry key="handle" value="handle" />
-				<entry key="isbn" value="pisbn" />
-				<entry key="issn" value="jissn" />
-				<entry key="uri" value="uri" />
-				<entry key="wosuid" value="isiId" />
-				<entry key="type" value="subtype" />
-			</map>
-		</constructor-arg>
-	</bean>
-
-
-
-
 	<!-- **************************************************************************************************** -->
 	<!-- Output Mapping 																					  -->
 	<!-- **************************************************************************************************** -->
@@ -874,33 +870,30 @@
 		<constructor-arg>
 			<map key-type="java.lang.String" value-type="java.lang.String">
 				<entry value="jissn" key="dc.identifier.issn" />
-				<entry value="jeissn" key="dc.identifier.eissn" />
+				<entry value="jeissn" key="dc.identifier.issn" />
+                                <entry value="allissns" key="dc.identifier.issn" />
 				<entry value="pisbn" key="dc.identifier.isbn" />
 				<entry value="eisbn" key="dc.identifier.eisbn" />
 				<entry value="journal" key="dc.relation.ispartof" />				
 				<entry value="proceedingsPaper.journal" key="dc.relation.ispartofbook" />				
 				<entry value="title" key="dc.title" />
-				<entry value="titleAlternative" key="dc.title.alternative" />
 				<entry value="issued" key="dc.date.issued" />
 				<entry value="language" key="dc.language.iso" />
 				<entry value="subtype" key="dc.type" />
 				<entry value="authors" key="dc.contributor.author" />
 				<entry value="editors" key="dc.contributor.editor" />
 				<entry value="others" key="dc.contributor.other" />
-				<entry value="abstract" key="dc.description.abstract" />
+				<entry value="abstract" key="tuhh.abstract.english" />
+                                <entry value="description" key="dc.description" />
 				<entry value="allkeywords" key="dc.subject" />
-				<entry value="doi" key="dc.identifier.doi" />
+				<entry value="doi" key="tuhh.publisher.doi" />
 				<entry value="publisher" key="dc.publisher" />
 				<entry value="publisherPlace" key="dc.publisher.place" />
 				<entry value="pubmedID" key="dc.identifier.pmid" />
 				<entry value="pubmedcentralID" key="dc.identifier.pmcid" />
 				<entry value="adsbibcode" key="dc.identifier.bibcode" />
-				<entry value="uri" key="dc.identifier.uri" />
-				<entry value="url" key="dc.identifier.url" />
-				<entry value="issue" key="dc.relation.issue" />
-				<entry value="volume" key="dc.relation.volume" />
-				<entry value="firstpage" key="dc.relation.firstpage" />
-				<entry value="lastpage" key="dc.relation.lastpage" />
+				<entry value="uri" key="tuhh.publisher.uri" />
+				<entry value="url" key="tuhh.publisher.url" />
 				<entry value="editionnumber" key="dc.relation.edition" />
 				<entry value="seriestitle" key="dc.relation.ispartofjournal" />
 				<entry value="booktitle" key="dc.relation.ispartofbook" />				
@@ -920,7 +913,16 @@
 				<entry value="fundingAcronym" key="dc.relation.acronym" />
 				<entry value="fundingNumber" key="dc.funding.number" />
 				<entry value="fundingSponsor" key="dc.funding.sponsor" />
-				
+                                <entry value="citationReference" key="dc.identifier.citation" />
+                                <entry value="issue" key="tuhh.container.issue" />
+                                <entry value="volume" key="tuhh.container.volume" />
+                                <entry value="firstpage" key="tuhh.container.startpage" />
+                                <entry value="lastpage" key="tuhh.container.endpage" />
+                                <entry value="articlenumber" key="tuhh.container.articlenumber" />
+
+                                <!-- Not used in publication form, but perhaps somewhere else -->
+                                <entry value="bibtextype" key="dc.type.bibtex" />
+
 				<!-- Not used - new metadata fields need to be declared for them in DSpace registry -->
 				<!-- 
 				<entry value="url" key="" />
@@ -931,7 +933,7 @@
 				<entry value="jeissn" key="" />
 				<entry value="eisbn" key="" />
 
-				
+				<entry value="titleAlternative" key="" />
 				<entry value="authorAlternative" key="" />
 				<entry value="ncid" key="" />
 				<entry value="naid" key="" />
@@ -944,7 +946,7 @@
 	
 	<!-- Scopus -->
 	<bean id="scopusOnlineDataLoader" class="org.dspace.submit.lookup.ScopusOnlineDataLoader" scope="prototype">
-		<property name="searchProvider" value="false" />
+		<property name="searchProvider" value="true" />
 		<property name="fieldMap" ref="scopusInputMap" />
 	</bean>	
 	
@@ -954,7 +956,7 @@
 	<bean name="scopusInputMap" class="java.util.HashMap" scope="prototype">
             <constructor-arg>
                 <map key-type="java.lang.String" value-type="java.lang.String">
-                    <entry key="url" value="url" />
+                    <entry key="url" value="scopusrecordurl" />
                     <entry key="eid" value="eid" />
                     <entry key="doi" value="doi" />
                     <entry key="pmid" value="pubmedID" />
@@ -972,7 +974,7 @@
                     <entry key="epage" value="lastpage" />
                     <entry key="description" value="abstract" />
                     <entry key="scopusKeywords" value="keywords" />
-                    <entry key="articlenumber" value="articlenumber" />                    
+                    <entry key="articlenumber" value="articlenumber" />
                     <entry key="authors" value="authors" />
 					<entry key="authorUrl" value="authorUrl" />
 					<entry key="authorScopusid" value="authorScopusID" />

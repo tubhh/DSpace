@@ -1,0 +1,13 @@
+Um das System vorkonfiguriert anhand TOR zu installieren, werden die angepassten Quellen und Configs genutzt.
+
+Nach der Installation nach dem DSpace-Leitfaden sollten die ergänzten TOR-Metadatenschemata eingespielt werden:
+
+sudo -u postgres sh -c  "psql dspace < /srv/dspace/metadataschema_tor.sql"
+sudo -u postgres sh -c  "psql dspace < /srv/dspace/dspace-cris/etc/postgres/update-sequences.sql"
+
+[dspace-install]/bin/dspace load-cris-configuration -f [tor-git]/tor-cris-config.xls
+[dspace-install]/bin/dspace load-cris-configuration -f [tor-git]/tor-cris-config.xls
+
+Das Script muss wirklich zweimal eingespielt werden, dies ist kein Fehler!
+
+Zum Aktivieren der neuen Metadatenschemata muss einmal ein Metadatenschema manuell hinzugefügt werden. Es kann danach wieder gelöscht werden. Ansonsten kommt es zu Fehlern beim Aufruf der ergänzten Metadatenschemata!
