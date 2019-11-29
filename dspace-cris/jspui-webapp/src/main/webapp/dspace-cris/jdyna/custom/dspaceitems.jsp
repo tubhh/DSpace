@@ -46,7 +46,7 @@
 	
 	boolean exportBiblioEnabled =  ConfigurationManager.getBooleanProperty("exportcitation.list.enabled", false);
 	
-    String cfg = (String)request.getAttribute("exportcitations");
+    String cfg = ConfigurationManager.getProperty("exportcitation.options");
 	Boolean isLoggedIn = (Boolean)request.getAttribute("isLoggedIn");
 	boolean exportBiblioAll =  ConfigurationManager.getBooleanProperty("exportcitation.show.all", false);
 	
