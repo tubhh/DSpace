@@ -56,12 +56,14 @@
 -->
 
 <!-- USE WITH ORCIDAuthority TO RETRIEVE EXTRA METADATA FOR EMPLOYMENT -->
+<!-- Disbaled because it breaks ORCID Lookup completely at the moment
 	<bean id="org.dspace.app.cris.integration.OrcidExtraEmploymentAuthorityMetadataGenerator" 
     	class="org.dspace.app.cris.integration.OrcidExtraEmploymentAuthorityMetadataGenerator">
     	<property name="relatedInputformMetadata" value="dc_contributor_department"/>
-<!--     	USE THE FOLLOW PROPERTY WITH ORCIDMultiAuthority implementation to aggregate "extra" result (see ORCIDMultiAuthority) -->
+     	USE THE FOLLOW PROPERTY WITH ORCIDMultiAuthority implementation to aggregate "extra" result (see ORCIDMultiAuthority)
      	<property name="singleResultOnAggregate" value="false"/>
     </bean> 
+-->
 
     <!-- ZDB CONFIGURATION -->
     <bean id="ZDBExtraTitleMetadataGenerator"

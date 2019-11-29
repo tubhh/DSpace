@@ -38,7 +38,7 @@
 		<org.hibernate.annotations.version>4.0.2.Final</org.hibernate.annotations.version>
 		<org.hibernate.jpa.version>1.0.1.Final</org.hibernate.jpa.version>
 		
-		<org.jdyna.version>5.15</org.jdyna.version>
+		<org.jdyna.version>5.12</org.jdyna.version>		
 		<it.cilea.ccommons.version>2.5</it.cilea.ccommons.version>
 		
 		<ckan.addon.modules>[5.1-SNAPSHOT,6.0-SNAPSHOT)</ckan.addon.modules>
@@ -144,22 +144,6 @@
                       </execution>
                   </executions>
              </plugin>
-                <!-- Used to clean all 'target' directories from parent project -->
-                <!-- This additional configuration also cleans sub-modules -->
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.5</version>
-                    <configuration>
-                        <filesets>
-                            <fileset>
-                                <directory>dspace/modules</directory>
-                                <includes>
-                                    <include>**/target</include>
-                                </includes>
-                            </fileset>
-                        </filesets>
-                    </configuration>
-                </plugin>
              <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
@@ -1517,6 +1501,11 @@
             <artifactId>httpclient</artifactId>
             <version>4.3.5</version>
          </dependency>
+         <dependency>
+            <groupId>net.sourceforge.jexcelapi</groupId>
+            <artifactId>jxl</artifactId>
+            <version>2.6.12</version>
+        </dependency>
         <dependency>
              <groupId>org.slf4j</groupId>
              <artifactId>jcl-over-slf4j</artifactId>
@@ -1724,14 +1713,6 @@
 			<artifactId>addon-commons-api</artifactId>
 			<version>${commons.addon.modules}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.openaire</groupId>
-			<artifactId>openaire-piwik-api</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-		</dependency>
-
       </dependencies>
    </dependencyManagement>
 
@@ -2042,7 +2023,15 @@
        <repository>
 			<id>4science-repo-nexus</id>
 			<name>4Science Maven Repository</name>
-			<url>https://nexus.4science.it/repository/maven-public/</url>
+                       <url>https://github.com/4Science/mvn-repo/raw/master/snapshots</url>
+                       <releases>
+                               <enabled>false</enabled>
+                               <checksumPolicy>never</checksumPolicy>
+                       </releases>
+                       <snapshots>
+                               <enabled>true</enabled>
+                               <checksumPolicy>never</checksumPolicy>
+                       </snapshots>
 		</repository>
 
        <repository>

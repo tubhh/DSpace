@@ -43,7 +43,7 @@
                                             <entry key="journalTitle" value="journalsname"/>
                                             <entry key="journalZDBID" value="journalszdbid"/>
                                             <entry key="journalPublisher" value="journalspublisher"/>
-                                            <entry key="journalIssn" value="journalsissn"/>
+                                            <entry key="journalISSN" value="journalsissn"/>
                                             <entry key="journalAlternativeTitle" value="journalsalternativetitle"/>
                                         </map>
                                     </property>
@@ -59,7 +59,7 @@
 		<property name="allowsUpdateByDefault" value="true" />
 		<property name="configurations">
 			<map>
-				<entry key="dc.contributor.author">
+<!--				<entry key="dc.contributor.author">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
 						<property name="updateEnabled" value="true" />
@@ -92,14 +92,14 @@
 							</map>
 						</property>
 					</bean>
-				</entry>							
+				</entry>							-->
 				<entry key="dc.relation.ispartof">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
 						<property name="updateEnabled" value="true" />
 						<property name="mapping">
 							<map>
-								<entry key="dc.relation.issn">
+								<entry key="dc.identifier.issn">
 									<bean
 										class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration.MappingDetails">
 										<property name="shortName" value="issn" />
@@ -130,7 +130,7 @@
 			</map>	
 		</property>
 	</bean>
-	
+
 	<bean id="openAIREProjectImportFiller" class="org.dspace.app.cris.integration.authority.OpenAIREProjectImportFiller" parent="fullitemMetadataConfiguration">
 		<property name="searchService" ref="org.dspace.discovery.SearchService" />
 		<property name="openAIREProjectService" ref="org.dspace.authority.openaireproject.OpenAIREProjectService" />

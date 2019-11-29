@@ -300,7 +300,7 @@
     <Formats>
         <Format id="xmetadissplus">
             <Prefix>xMetaDissPlus</Prefix>
-            <XSLT>metadataFormats/xMetaDissPlus.xsl</XSLT>
+            <XSLT>metadataFormats/xMetaDissPlus-2.3.xsl</XSLT>
             <Namespace>http://www.d-nb.de/standards/xmetadissplus/</Namespace>
             <SchemaLocation>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</SchemaLocation>
         </Format>
