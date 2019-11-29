@@ -111,7 +111,10 @@
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Dataset.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.browse"/> <b class="caret"></b></a>
              <ul class="dropdown-menu">
-               <li><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
+                <li><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
+                <li><a href="<%= request.getContextPath() %>/handle/11420/2"><fmt:message key="jsp.layout.navbar-default.collection-with-fulltext"/></a></li>
+                <li><a href="<%= request.getContextPath() %>/handle/11420/2093"><fmt:message key="jsp.layout.navbar-default.collection-without-fulltext"/></a></li>
+                <li><a href="<%= request.getContextPath() %>/handle/11420/2023"><fmt:message key="jsp.layout.navbar-default.collection-researchdata"/></a></li>
 <!--
                     <li class="divider"></li>
                     <li class="dropdown-header"><fmt:message key="jsp.layout.navbar-default.browse-items-by"/>:</li>
