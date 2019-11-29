@@ -40,7 +40,7 @@
 		<property name="relationName" value="crisou.persons" />		
 		<property name="relationClass" value="org.dspace.app.cris.model.ResearcherPage" />		
 		<property name="query">
-			<value>crisrp.dept_authority:{0} AND crisrp.tuhhmember:true</value>
+			<value>crisrp.dept_authority:{0}</value>
 		</property>
 	</bean>
 
@@ -133,24 +133,6 @@
 			<value>dc.relation.conference_authority:{0}</value>
 		</property>
 	</bean>
-
-        <bean id="relationOUVSEventsConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">
-            <property name="type" value="crisou" />    										
-            <property name="relationName" value="crisou.events" />		
-            <property name="relationClass" value="org.dspace.app.cris.model.ResearchObject" />		
-            <property name="query">
-	        <value>crisevents.eventsorganiser_authority:{0}</value>
-            </property>
-        </bean>
-
-        <bean id="relationOUVSJournalsConfiguration" class="org.dspace.app.cris.configuration.RelationConfiguration">
-            <property name="type" value="crisou" />    										
-            <property name="relationName" value="crisou.journals" />		
-            <property name="relationClass" value="org.dspace.app.cris.model.ResearchObject" />		
-            <property name="query">
-	        <value>crisjournals.journalstuhhinstitute_authority:{0}</value>
-            </property>
-        </bean>
 
 	<!-- <bean id="relationPJVSItemPoliciesSecurityConfiguration" class="org.dspace.app.cris.configuration.PoliciesSecurityCheck">
 		<property name="epersonFields">

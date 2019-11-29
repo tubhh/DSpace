@@ -186,16 +186,12 @@
 			     	
 			     	<!-- select the publisher -->
 			     	<xsl:variable name="publisher" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='publisher']/doc:element[@name='name']//doc:field[@name='value']"/>
+					
+					<xsl:if test="$publisher!=''">
 				     	<publisher>
-					<xsl:choose>
-					<xsl:when test="$publisher!=''">
 				     		<xsl:value-of select="$publisher"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:text>Hamburg University of Technology</xsl:text>
-                                        </xsl:otherwise>
-			     	</xsl:choose>
 				     	</publisher>
+			     	</xsl:if>
 			     	
 			     	
 			     	
@@ -447,11 +443,9 @@
 			     		
 			     		<xsl:otherwise>
 			     			<xsl:if test="$date_issued!=''">
-                                                    <dates>
 				     			<date dateType="Issued">
 				     				<xsl:value-of select="$date_issued"/>
 				     			</date>
-                                                    </dates>
 				     		</xsl:if>
 			     		</xsl:otherwise>
 		     		</xsl:choose>

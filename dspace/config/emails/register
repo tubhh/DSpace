@@ -4,17 +4,13 @@
 #
 # See org.dspace.core.Email for information on the format of this file.
 #
-Subject: Ihr TORE-Konto
-Um die Registrierung bei TORE abzuschließen klicken Sie bitte
-auf den folgenden Link:
+Subject: DSpace Account Registration
+To complete registration for a DSpace account, please click the link
+below:
 
   {0}
 
-Das TORE-Konto kann nur zum Zugriff auf TORE genutzt werden,
-es gilt nicht für andere Dienste der Universitätsbibliothek!
+If you need assistance with your account, please email
+dspace-help@myu.edu or call us at xxx-555-xxxx.
 
-Wenn Sie Unterstützung brauchen oder Fragen zu Ihrem Konto haben,
-schicken Sie bitte eine eMail an tubdok@tuhh.de.
-
-Mit freundlichen Grüßen
-Das TORE Team
+The DSpace Team

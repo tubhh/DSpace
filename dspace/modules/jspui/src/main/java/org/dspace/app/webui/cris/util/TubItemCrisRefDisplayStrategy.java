@@ -274,7 +274,7 @@ public class TubItemCrisRefDisplayStrategy extends ItemCrisRefDisplayStrategy
                         // Now add the ORCID icon, if an ORCID is found in the researcher profile and if the profile has an owner
                         try {
                             String info = rp.getMetadata("orcid");
-                            if (info != null && confidence == 600 && rp.getDspaceUser() != null && !ResearcherPageUtils.getStringValue(rp, "system-orcid-token-authenticate").equals("")) {
+                            if (type.equals("orcid") && info != null && confidence == 600 && rp.getDspaceUser() != null && !ResearcherPageUtils.getStringValue(rp, "system-orcid-token-authenticate").equals("")) {
 					String externalContextPath = ConfigurationManager.getProperty("cris","external.domainname.authority.service.orcid");
 					startOrcidLink = "<a target=\"_blank\" href=\"" + externalContextPath + info;
 					startOrcidLink += "\" class=\"authority\">&nbsp;<img style=\"width: 16px; height: 16px;\" src=\""+ hrq.getContextPath() +"/images/mini-icon-orcid.png\" alt=\"\">";

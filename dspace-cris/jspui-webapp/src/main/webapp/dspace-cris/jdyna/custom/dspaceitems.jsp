@@ -46,7 +46,7 @@
 	
 	boolean exportBiblioEnabled =  ConfigurationManager.getBooleanProperty("exportcitation.list.enabled", false);
 	
-    String cfg = ConfigurationManager.getProperty("exportcitation.options");
+    String cfg = (String)request.getAttribute("exportscitations");
 	Boolean isLoggedIn = (Boolean)request.getAttribute("isLoggedIn");
 	boolean exportBiblioAll =  ConfigurationManager.getBooleanProperty("exportcitation.show.all", false);
 	
@@ -125,23 +125,12 @@
     }
 	%>
 
-<c:set var="holdertitle"><fmt:message key="jsp.layout.dspace.cris.generic.box.${holder.shortName}.label" /></c:set>
-
-<c:choose>
-    <c:when test="${!fn:startsWith(holdertitle,'???')}">
-        <c:set var="displayTitle">${holdertitle}</c:set>
-    </c:when>
-    <c:otherwise>
-        <c:set var="displayTitle">${holder.title}</c:set>
-    </c:otherwise>
-</c:choose>
-
 <div class="panel-group col-md-12" id="${holder.shortName}">
 	<div class="panel panel-default">
     	<div class="panel-heading">
     		<h4 class="panel-title">
         		<a data-toggle="collapse" data-parent="#${holder.shortName}" href="#collapseOne${holder.shortName}">
-          			${displayTitle}
+          			${holder.title} 
         		</a>
         		<% if(subLinks!=null && subLinks.size()>0 && globalShowFacets) {%>
         			<jsp:include page="common/commonComponentGeneralFiltersAndFacets.jsp"></jsp:include>

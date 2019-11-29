@@ -8,7 +8,7 @@
         <xsl:output omit-xml-declaration="yes" method="xml" indent="yes" />
 
         <!-- global variables-->
-        <xsl:variable name="handle-prefix">http://tore.tuhh.de/handle/11420/</xsl:variable>
+        <xsl:variable name="handle-prefix">http://tubdok.tub.tuhh.de/handle/11420/</xsl:variable>
         <xsl:variable name="handle-prefix-pure">11420/</xsl:variable>
         <xsl:variable name="gkdnr">1097763-6</xsl:variable>
         <xsl:variable name="dnbnr">F6000-0198</xsl:variable>
@@ -114,10 +114,10 @@
 				<dc:creator xsi:type="pc:MetaPers">
 					<pc:person>
                                             <xsl:if test="../doc:field[@name='authority'][number($i)]!=''">
-                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($i)]" /></xsl:attribute>
+                                                <xsl:attribute name="GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($i)]" /></xsl:attribute>
                                             </xsl:if>
                                             <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]!=''">
-                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]" /></ddb:ORCID>
+                                                <ddb:ORCID><xsl:text>https://orcid.org/</xsl:text><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]" /></ddb:ORCID>
                                             </xsl:if>
             					<pc:name type="nameUsedByThePerson">
 							<!-- handle names with "von", "van", "Van", and "de" -->
@@ -231,10 +231,10 @@
 					</xsl:choose>
 					<pc:person>
                                             <xsl:if test="../doc:field[@name='authority'][number($a)]!=''">
-                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($a)]" /></xsl:attribute>
+                                                <xsl:attribute name="GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($a)]" /></xsl:attribute>
                                             </xsl:if>
                                             <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]!=''">
-                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]" /></ddb:ORCID>
+                                                <ddb:ORCID><xsl:text>https://orcid.org/</xsl:text><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]" /></ddb:ORCID>
                                             </xsl:if>
 						<xsl:variable name="tail" select="substring-after(., ',')"/>
 						<!-- allowed academic titles: "Prof. Dr.", "PD Dr.", Prof. em.", "Dr.", "Prof. Dr.Dr.", "Prof. Dr. h.c.", "Dr. h.c." -->
@@ -287,18 +287,9 @@
 					<xsl:value-of select="doc:metadata/doc:element[@name='dcterms']/doc:element[@name='dateAccepted']/doc:element/doc:field[@name='value']"/>
 				</dcterms:dateAccepted>
 			</xsl:if>
-                        <xsl:choose>
-                            <xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']">
-                                <dcterms:issued xsi:type="dcterms:W3CDTF">
-                                    <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
-                                </dcterms:issued>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <dcterms:issued xsi:type="dcterms:W3CDTF">
-                                    <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='available']/doc:element/doc:field[@name='value']"/>
-                                </dcterms:issued>
-                            </xsl:otherwise>
-                        </xsl:choose>
+			<dcterms:issued xsi:type="dcterms:W3CDTF">
+				<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
+			</dcterms:issued>
 
 			<!-- publication type: dc.type or (if that is set) dc.type.thesis -->
 			<dc:type xsi:type="dini:PublType">

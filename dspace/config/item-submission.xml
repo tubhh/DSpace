@@ -18,7 +18,6 @@
  <!-- for handle "default".                                                -->
  <submission-map>
    <name-map collection-handle="default" submission-name="traditional" />
-   <name-map collection-handle="11420/2093" submission-name="pubwithoutfulltext" />
  </submission-map>
 
 
@@ -223,7 +222,7 @@
         <heading>submit.progressbar.showidentifiers</heading>
         <processing-class>org.dspace.submit.step.ShowIdentifiersStep</processing-class>
         <jspui-binding>org.dspace.app.webui.submit.step.JSPShowIdentifiersStep</jspui-binding>
-        <workflow-editable>false</workflow-editable>
+        <workflow-editable>true</workflow-editable>
       </step>
 
        <!--Step 3 will be to Manage Item access.
@@ -289,31 +288,6 @@
 
 
      
-   </submission-process>
-
-   <submission-process name="pubwithoutfulltext">
-        <step>
-            <processing-class>org.dspace.submit.step.SkipInitialQuestionsStep</processing-class>
-        </step>
-
-      <!--Step 2 will be to Describe the item.-->
-      <step>
-        <heading>submit.progressbar.describe</heading>
-        <processing-class>org.dspace.submit.step.DescribeStep</processing-class>
-        <jspui-binding>org.dspace.app.webui.submit.step.JSPDescribeStep</jspui-binding>
-        <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.DescribeStep</xmlui-binding>
-        <workflow-editable>true</workflow-editable>
-      </step>
-
-      <!--Step 3 will be to Verify/Review everything -->
-      <step>
-        <heading>submit.progressbar.verify</heading>
-        <processing-class>org.dspace.submit.step.VerifyStep</processing-class>
-        <jspui-binding>org.dspace.app.webui.submit.step.JSPVerifyStep</jspui-binding>
-        <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.ReviewStep</xmlui-binding>
-        <workflow-editable>true</workflow-editable>
-      </step>
-
    </submission-process>
 
  </submission-definitions>

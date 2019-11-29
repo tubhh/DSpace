@@ -6,20 +6,18 @@
 # {3}  Reason for the rejection
 # {4}  Link to 'My DSpace' page
 #
-Subject: TORE: Veröffentlichung abgelehnt
+Subject: DSpace: Submission Rejected
 
-Sie haben übermittelt: {0}
+You submitted: {0}
 
-Zur Sammlung: {1}
+To collection: {1}
 
-Ihre Veröffentlichung wurde mit der folgenden
-Begründung abgelehnt:
+Your submission has been rejected by {2}
+with the following explanation:
 
 {3}
 
-Die Veröffentlichung wurde nicht gelöscht. Sie können
-sie über die Seite "Mein TORE" aufrufen oder dort selbst
-löschen: {4}
+Your submission has not been deleted.  You can access it from your
+"My DSpace" page: {4}
 
-Mit freundlichen Grüßen
-Das TORE-Team
+DSpace

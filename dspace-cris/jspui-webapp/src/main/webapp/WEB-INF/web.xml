@@ -599,7 +599,7 @@
     	<servlet-class>org.dspace.app.webui.servlet.ReferencesServlet</servlet-class>
   	</servlet>  
 
-  <!-- BibTeX Export by ZBW
+  <!-- BibTeX Export by ZBW -->
   <servlet>
         <servlet-name>bibtexexport</servlet-name>
         <servlet-class>org.dspace.app.webui.servlet.BibTeXExportServlet</servlet-class>
@@ -609,7 +609,7 @@
         <servlet-name>bibtexexport</servlet-name>
         <url-pattern>/bibtexexport/*</url-pattern>
   </servlet-mapping>
-  -->
+
   <mime-mapping>
     <extension>bib</extension>
     <mime-type>text/x-bibtex</mime-type>

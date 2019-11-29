@@ -305,18 +305,9 @@
 					<xsl:value-of select="doc:metadata/doc:element[@name='dcterms']/doc:element[@name='dateAccepted']/doc:element/doc:field[@name='value']"/>
 				</dcterms:dateAccepted>
 			</xsl:if>
-                        <xsl:choose>
-                            <xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']">
-                                <dcterms:issued xsi:type="dcterms:W3CDTF">
-                                    <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
-                                </dcterms:issued>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <dcterms:issued xsi:type="dcterms:W3CDTF">
-                                    <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='available']/doc:element/doc:field[@name='value']"/>
-                                </dcterms:issued>
-                            </xsl:otherwise>
-                        </xsl:choose>
+			<dcterms:issued xsi:type="dcterms:W3CDTF">
+				<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
+			</dcterms:issued>
                         <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='available']/doc:element/doc:field[@name='value']">
                             <dcterms:created xsi:type="dcterms:W3CDTF">
                                 <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='available']/doc:element/doc:field[@name='value']"/>
@@ -333,9 +324,9 @@
 
     
 			<!-- identifier: dc.identifier.urn -->
-                        <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']">
+                        <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']">
                             <dc:identifier xsi:type="urn:nbn">
-                                <xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']"/>
+                                <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']"/>
                             </dc:identifier>
                         </xsl:if>
                         <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']">

@@ -4,20 +4,18 @@
 # {1}  Name of collection
 # {2}  handle 
 #
-Subject: TORE: Ihre Publikation wurde veröffentlicht
+Subject: DSpace: Submission Approved and Archived 
 
-Titel: {0}
-Sammlung: {1}
+You submitted: {0}
 
-Ihre Veröffentlichung auf TORE wurde genehmigt und freigeschaltet.
-Sie ist ab sofort unter folgender Adresse zugänglich:
+To collection: {1}
+
+Your submission has been accepted and archived in DSpace,
+and it has been assigned the following identifier:
 {2}
 
-Zum Zitieren benutzen Sie bitte den DOI auf der Publikationsseite.
-Ihre Publikation wird automatisch in Ihr ORCID-Profil übertragen werden, wenn Sie dies aktiviert haben:
-https://tore.tuhh.de/hilfe/412_orcid_integration.html
+Please use this identifier when citing your submission.
 
-Vielen Dank für Ihre Veröffentlichung!
+Many thanks!
 
-Mit freundlichen Grüßen
-Das TORE-Team
+DSpace

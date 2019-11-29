@@ -921,7 +921,7 @@ log.debug("Sending XML to DataCite: "+root.toString());
         {
             return root;
         }
-        Element identifier = new Element("identifier", getNamespace());
+        Element identifier = new Element("identifier", "http://datacite.org/schema/kernel-4");
         identifier.setAttribute("identifierType", "DOI");
         identifier.addContent(doi.substring(DOI.SCHEME.length()));
         return root.addContent(0, identifier);

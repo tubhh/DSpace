@@ -108,14 +108,11 @@
 		  <% if(showCommList){ %>
 
 	    <!-- Stöbern -->
+<!--
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Dataset.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.browse"/> <b class="caret"></b></a>
              <ul class="dropdown-menu">
-                <li><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
-                <li><a href="<%= request.getContextPath() %>/handle/11420/2"><fmt:message key="jsp.layout.navbar-default.collection-with-fulltext"/></a></li>
-                <li><a href="<%= request.getContextPath() %>/handle/11420/2093"><fmt:message key="jsp.layout.navbar-default.collection-without-fulltext"/></a></li>
-                <li><a href="<%= request.getContextPath() %>/handle/11420/2023"><fmt:message key="jsp.layout.navbar-default.collection-researchdata"/></a></li>
-<!--
+               <li><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
                     <li class="divider"></li>
                     <li class="dropdown-header"><fmt:message key="jsp.layout.navbar-default.browse-items-by"/>:</li>
                     <%-- Insert the dynamic browse indices here --%>
@@ -130,9 +127,9 @@
                         }
                         %>
                    <%-- End of dynamic browse indices --%>
--->
             </ul>
           </li>
+-->
 <!-- CRIS Community List
 		   <li id="communitylist-top-menu" class="<%= currentPage.endsWith("/community-list")? 
         		   "active" : "" %>"><a href="<%= request.getContextPath() %>/community-list"><fmt:message key="jsp.layout.navbar-default.communities-collections"/></a></li>
@@ -193,7 +190,7 @@
 	<!-- Forschungsdaten --
           <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("researchdata")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=researchdata&rpp=50"><img src=/image/navicons/Dataset.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.researchdata"/></a></li>
 
-	<!-- TUHH-Mitarbeiter/Institute als Dropdown
+	<!-- TUHH-Mitarbeiter/Institute --
           <li class="dropdown <%= (currentPage.endsWith("/browse") && (request.getParameter("type").equals("rpname") || request.getParameter("type").equals("rpdept"))) ? "active" : "" %>">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Gruppe.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.researcherprofiles"/> <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -201,13 +198,7 @@
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("rpdept")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=rpdept&rpp=100"><fmt:message key="jsp.layout.navbar-default.tuhh.researcherprofilesbydept"/></a></li>
               </ul>
           </li>
-        -->
-
-	<!-- TUHH-Mitarbeiter/Institute -->
-          <li class="<%= (currentPage.endsWith("/browse") && (request.getParameter("type").equals("rpname"))) ? "active" : "" %>">
-              <a href="<%= request.getContextPath() %>/browse?type=rpname&rpp=50"><img src=/image/navicons/Gruppe.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.researcherprofiles"/></a>
-          </li>
-
+-->
 	<!-- TUHH Institute -->
           <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("ouname")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=ouname&rpp=100"><img src=/image/navicons/Department.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.tuhh.orgunits"/></a></li>
 
@@ -215,7 +206,7 @@
           <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src=/image/navicons/Info.svg class="navicon"/><br><fmt:message key="jsp.layout.navbar-default.help"/>  <b class="caret"></b></a>
              <ul class="dropdown-menu">
-<%--                <li><fmt:message key="jsp.layout.navbar-default.tor.help"/></li>            --%>
+                <li><fmt:message key="jsp.layout.navbar-default.tor.help"/></li>
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-contact"/></li>
                 <li><fmt:message key="jsp.layout.navbar-default.tubdok-depositlicense"/></li>
                 <li class="divider"></li>

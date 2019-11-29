@@ -902,7 +902,6 @@
                     <xsl:attribute name="rightsURI">
                         <xsl:value-of select="." />
                     </xsl:attribute>
-                    <xsl:text>CC-</xsl:text><xsl:value-of select="." /><xsl:text>-</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
 -->
                     <xsl:choose>
                         <xsl:when test="//dspace:field[@mdschema='dc' and @element='rights'][not(@qualifier)]">
