@@ -21,7 +21,7 @@
 			</administrative_data>
 			<record>
 				<identifier scheme="urn:nbn:de">
-					<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']" />
+					<xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']" />
                 </identifier>
 
 				<resource>

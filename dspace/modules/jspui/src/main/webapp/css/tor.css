@@ -159,8 +159,8 @@ li.pull-left:nth-child(1) {
     }
 
 /* extra Home-Button einsparen und auf sitename legen */
-/*
-#home-top-menu {
+
+/*#home-top-menu {
     display:none;
     }
 */
@@ -301,10 +301,20 @@ td > ul {
 }
 
 
+
 .nav-tabs > li > a {
     border:none;
+    font-weight: normal;
+    margin-right: 0px;
 }
 
+
+.researcher-menu-item.ui-state-focus.active {
+    border: none;
+    background:none;
+    font-weight: normal;
+    margin-right: 0px;
+}
 
 /* login user ico */
 .glyphicon {
