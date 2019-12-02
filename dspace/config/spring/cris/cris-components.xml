@@ -455,7 +455,7 @@
             class="org.dspace.app.webui.cris.components.BeanFacetComponent">
             <property name="componentIdentifier" value="events" />
             <property name="facetQuery"><value>*:*</value></property>
-            <property name="order"><value>asc</value></property>
+            <property name="order"><value>desc</value></property>
             <property name="rpp"><value>20</value></property>
             <property name="sortby"><value>10</value></property>			
         </bean>
