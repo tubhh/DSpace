@@ -118,8 +118,8 @@
 	            <entry key="crossref" value-ref="crossRefOnlineDataLoader"/>
 	            <entry key="pubmed" value-ref="pubmedOnlineDataLoader"/>
 	            <!-- <entry key="pubmedEurope" value-ref="pubmedEuropeOnlineDataLoader"/> -->	            
-<!--
 	            <entry key="orcid" value-ref="orcidOnlineDataLoader"/>
+<!--
 	            <entry key="arxiv" value-ref="arXivOnlineDataLoader"/>
 	            <entry key="cinii" value-ref="ciniiOnlineDataLoader"/>
 -->
