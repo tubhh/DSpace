@@ -354,8 +354,7 @@
          <label>Publikationsdatum</label>
          <input-type>date</input-type>
          <hint>Geben Sie hier das Publikationsdatum einer Printpublikation oder vorherigen Veröffentlichung ein. Monat und/oder Tag sind optional, das Jahr obligatorisch.</hint>
-         <required></required>
-         <!--<required>Bitte geben Sie ein Publikationsdatum ein</required>-->
+         <required>Bitte geben Sie ein Publikationsdatum ein</required>
        </field>
 
 <!--
@@ -1254,8 +1253,7 @@
          <label>Publikationsdatum</label>
          <input-type>date</input-type>
          <hint>Geben Sie hier das Publikationsdatum einer Printpublikation oder vorherigen Veröffentlichung ein. Monat und/oder Tag sind optional, das Jahr obligatorisch.</hint>
-         <required></required>
-         <!--<required>Bitte geben Sie ein Publikationsdatum ein</required>-->
+         <required>Bitte geben Sie ein Publikationsdatum ein</required>
        </field>
 
 <!--
