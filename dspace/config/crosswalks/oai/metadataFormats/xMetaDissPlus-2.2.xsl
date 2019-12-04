@@ -227,8 +227,8 @@
 						</xsl:otherwise>
 					</xsl:choose>
 					<pc:person>
-                                            <xsl:if test="../doc:field[@name='authority'][number($a)]!=''">
-                                                <xsl:attribute name="PND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($a)]" /></xsl:attribute>
+                                            <xsl:if test="../doc:field[@name='authority'][$a]!=''">
+                                                <xsl:attribute name="PND-Nr"><xsl:value-of select="../doc:field[@name='authority'][$a]" /></xsl:attribute>
                                             </xsl:if>
 						<xsl:variable name="tail" select="substring-after(., ',')"/>
 						<!-- allowed academic titles: "Prof. Dr.", "PD Dr.", Prof. em.", "Dr.", "Prof. Dr.Dr.", "Prof. Dr. h.c.", "Dr. h.c." -->
