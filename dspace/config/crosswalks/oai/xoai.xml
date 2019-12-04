@@ -2274,6 +2274,7 @@
         </Filter>
         
         <!-- create a new filter for the openairedata Context -->
+        <!--
         <Filter id="openaireDataFilter">
             <Definition>
             	<And>
@@ -2311,6 +2312,20 @@
                 	<RightCondition>
                 		<Custom ref="dspaceItemCondition" />
                 	</RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+        -->
+
+        <Filter id="openaireDataFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <Custom ref="researchDataCondition"/>
+                    </LeftCondition>
+                    <RightCondition>
+                        <Custom ref="dspaceItemCondition" />
+                    </RightCondition>
                 </And>
             </Definition>
         </Filter>
@@ -2627,7 +2642,16 @@
                 <string name="value">info:eu-repo/grantAgreement/</string>
             </Configuration>
         </CustomCondition>
-        
+
+        <CustomCondition id="researchDataCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.type.rdm</string>
+                <string name="operator">ends_with</string>
+                <string name="value">true</string>
+            </Configuration>
+        </CustomCondition>
+
         <Filter id="publicationOrJournalSetFilter">
             <Definition>
             	<Or>
