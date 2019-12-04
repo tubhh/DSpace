@@ -2349,7 +2349,14 @@
             		<LeftCondition>
 		                <And>
 		                    <LeftCondition>
-		                        <Custom ref="oaioutputCondition"/>
+                                        <OR>
+                                            <LeftCondition>
+                                                <Custom ref="oaioutputCondition"/>
+                                            </LeftCondition>
+                                            <RightCondition>
+                                                <Custom ref="noFulltextCondition"/>
+                                            </RightCondition>
+                                        </OR>
 		                    </LeftCondition>
 		                    <RightCondition>
 		                        <Custom ref="bitstreamAccessCondition"/>
@@ -2453,6 +2460,15 @@
                 <string name="field">tuhh.oai.show</string>
                 <string name="operator">ends_with</string>
                 <string name="value">true</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="noFulltextCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">item.fulltext</string>
+                <string name="operator">contains</string>
+                <string name="value">No Fulltext</string>
             </Configuration>
         </CustomCondition>
 
