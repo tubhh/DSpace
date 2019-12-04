@@ -106,6 +106,7 @@
 					</dcterms:alternative>
 	        		</xsl:if>
     			</xsl:for-each>
+                        <xsl:variable name="orcid" select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority']"/>
 			<!-- author data: dc.contributor.author -->
 			<xsl:for-each select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorGND']/doc:element/doc:field[@name='value']">
                             <xsl:variable name="i">
@@ -116,8 +117,8 @@
                                             <xsl:if test="../doc:field[@name='authority'][$i]!=''">
                                                 <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][$i]" /></xsl:attribute>
                                             </xsl:if>
-                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][$i]!=''">
-                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][$i]" /></ddb:ORCID>
+                                            <xsl:if test="$orcid[number($i)]!=''">
+                                                <ddb:ORCID><xsl:value-of select="$orcid[number($i)]" /></ddb:ORCID>
                                             </xsl:if>
             					<pc:name type="nameUsedByThePerson">
 							<!-- handle names with "von", "van", "Van", and "de" -->
@@ -161,7 +162,6 @@
             				</pc:person>
 				</dc:creator>
 			</xsl:for-each>
-
 			<!-- subjects data: dc.subject.other-->
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='subject']/doc:element[@name='other']/doc:element/doc:field[@name='value']">
 				<dc:subject xsi:type="xMetaDiss:noScheme">
