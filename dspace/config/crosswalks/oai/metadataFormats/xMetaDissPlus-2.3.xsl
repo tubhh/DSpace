@@ -113,11 +113,11 @@
                             </xsl:variable>
 				<dc:creator xsi:type="pc:MetaPers">
 					<pc:person>
-                                            <xsl:if test="../doc:field[@name='authority'][number($i)]!=''">
-                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($i)]" /></xsl:attribute>
+                                            <xsl:if test="../doc:field[@name='authority'][$i]!=''">
+                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][$i]" /></xsl:attribute>
                                             </xsl:if>
-                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]!=''">
-                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]" /></ddb:ORCID>
+                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][$i]!=''">
+                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][$i]" /></ddb:ORCID>
                                             </xsl:if>
             					<pc:name type="nameUsedByThePerson">
 							<!-- handle names with "von", "van", "Van", and "de" -->
