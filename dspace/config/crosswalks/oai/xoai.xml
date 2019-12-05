@@ -1313,9 +1313,9 @@
 		<CustomCondition id="doctypeResearchDataCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.type.dini</string>
+                <string name="field">tuhh.type.rdm</string>
 				<string name="operator">equal</string>
-				<string name="value">ResearchData</string>
+				<string name="value">true</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="doctypeOtherCondition">
