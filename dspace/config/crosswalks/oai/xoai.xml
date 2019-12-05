@@ -2405,23 +2405,18 @@
 
         <Filter id="hasNoPPNFilter">
             <Definition>
-                <And>
+                <OR>
                     <LeftCondition>
-                        <Custom ref="oaioutputCondition"/>
+                        <Custom ref="noPPNCondition"/>
                     </LeftCondition>
-                    <OR>
-                        <LeftCondition>
-                            <Custom ref="noPPNCondition"/>
-                        </LeftCondition>
-                        <RightCondition>
-                            <Not>
-                                <Condition>
-                                    <Custom ref="hasPPNCondition"/>
-                                </Condition>
-                            </Not>
-                        </RightCondition>
-                    </OR>
-                </And>
+                    <RightCondition>
+                        <Not>
+                            <Condition>
+                                <Custom ref="hasPPNCondition"/>
+                            </Condition>
+                        </Not>
+                    </RightCondition>
+                </OR>
             </Definition>
         </Filter>
 
