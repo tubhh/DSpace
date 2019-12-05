@@ -2354,12 +2354,19 @@
                                                 <Custom ref="oaioutputCondition"/>
                                             </LeftCondition>
                                             <RightCondition>
-                                                <Custom ref="noFulltextCondition"/>
+                                                <OR>
+                                                    <LeftCondition>
+                                                        <Custom ref="noFulltextCondition"/>
+                                                    </LeftCondition>
+                                                    <RightCondition>
+                                                        <Custom ref="researchDataCondition"/>
+                                                    </RightCondition>
+                                                </OR>
                                             </RightCondition>
                                         </OR>
 		                    </LeftCondition>
 		                    <RightCondition>
-		                        <Custom ref="bitstreamAccessCondition"/>
+                                        <Custom ref="bitstreamAccessCondition"/>
 		                    </RightCondition>
 		                </And>
 					</LeftCondition>
@@ -2679,7 +2686,7 @@
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
                 <string name="field">tuhh.type.rdm</string>
-                <string name="operator">ends_with</string>
+                <string name="operator">equal</string>
                 <string name="value">true</string>
             </Configuration>
         </CustomCondition>
