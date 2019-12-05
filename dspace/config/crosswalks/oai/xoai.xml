@@ -1068,7 +1068,7 @@
                 <Custom ref="doctypeCarthographicMaterialCondition"/>
             </Definition>
         </Filter>
-        <Filter id="doctypeResearchDataFilterFilter">
+        <Filter id="doctypeResearchDataFilter">
             <Definition>
                 <Custom ref="doctypeResearchDataCondition"/>
             </Definition>
