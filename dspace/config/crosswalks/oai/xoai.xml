@@ -2402,9 +2402,18 @@
                     <LeftCondition>
                         <Custom ref="oaioutputCondition"/>
                     </LeftCondition>
-                    <RightCondition>
-                        <Custom ref="noPPNCondition"/>
-                    </RightCondition>
+                    <OR>
+                        <LeftCondition>
+                            <Custom ref="noPPNCondition"/>
+                        </LeftCondition>
+                        <RightCondition>
+                            <Not>
+                                <Condition>
+                                    <Custom ref="hasPPNCondition"/>
+                                </Condition>
+                            </Not>
+                        </RightCondition>
+                    </OR>
                 </And>
             </Definition>
         </Filter>
@@ -2444,6 +2453,13 @@
                 <string name="field">tuhh.gvk.hasppn</string>
                 <string name="operator">ends_with</string>
                 <string name="value">false</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="hasPPNCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.gvk.hasppn</string>
             </Configuration>
         </CustomCondition>
 
