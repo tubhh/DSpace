@@ -49,6 +49,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -384,6 +385,13 @@ public class ScriptCrisSubscribe
             options.addOption(opt);        	
         }
 
+        {
+            Option opt = new Option("c", "clean", false,
+                    "First to process Daily Notification, clean subscriptions with inexistent CRIS entity");
+            opt.setRequired(false);
+            options.addOption(opt);
+        }
+
         try
         {
             line = new PosixParser().parse(options, argv);
@@ -415,6 +423,8 @@ public class ScriptCrisSubscribe
             Researcher researcher = new Researcher();
             ApplicationService applicationService = researcher
                     .getApplicationService();
+            CrisSubscribeService crisSubscribeService = researcher.
+                    getCrisSubscribeService();
             
             if(line.hasOption("s")) {
         
@@ -438,7 +448,6 @@ public class ScriptCrisSubscribe
                     	Integer oo = (Integer) solrDoc.getFieldValue(OwnerRPAuthorityIndexer.OWNER_I);
                     	
                     	if(oo!=null) {
-	                    	CrisSubscribeService crisSubscribeService = researcher.getCrisSubscribeService();
 	                    	EPerson eperson = EPerson.find(context, oo);
 	                    	if(eperson!=null && StringUtils.isNotBlank(uuid)) {
 	                    		crisSubscribeService.subscribe(eperson, uuid);
@@ -447,6 +456,21 @@ public class ScriptCrisSubscribe
                     }
                 }
             	
+            }
+
+            if(line.hasOption("c")) {
+                List<CrisSubscription> rpSubscriptions = applicationService
+                        .getList(CrisSubscription.class);
+                HashSet<String> rpUUIDs = new HashSet<>();
+                for (CrisSubscription rpSubscription : rpSubscriptions) {
+                    rpUUIDs.add(rpSubscription.getUuid());
+                }
+                for (String rpUUID : rpUUIDs) {
+                    if (applicationService
+                            .getEntityByUUID(rpUUID) == null) {
+                        crisSubscribeService.unsubscribe(rpUUID);
+                    }
+                }
             }
 
             List<CrisComponentsService> serviceComponent = researcher
