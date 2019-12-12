@@ -32,6 +32,7 @@ import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
 import org.dspace.eperson.EPerson;
+import org.dspace.eperson.Group;
 import org.dspace.utils.DSpace;
 
 /**
@@ -269,8 +270,9 @@ public class Authenticate
 
             // Shibboleth stores information about special groups in the session. Preserve these information.
             Boolean shibbolethAuthenticated = (Boolean) session.getAttribute("shib.authenticated");
-
             int[] shibbolethSpecialGroups = (int[]) session.getAttribute("shib.specialgroup");
+            // Also our improved LDAP authentication stores special groups in the session.
+            int[] ldapSpecialGroups = (int[]) session.getAttribute("ldap.specialgroups");
 
             // Invalidate session unless dspace.cfg says not to
             if(ConfigurationManager.getBooleanProperty("webui.session.invalidate", true))
@@ -285,6 +287,11 @@ public class Authenticate
             if (sessionLocale != null)
             {
                 Config.set(request.getSession(), Config.FMT_LOCALE, sessionLocale);
+            }
+
+            // Restore LDAP special groups (retrieved only during authentication)
+            if(ldapSpecialGroups != null) {
+                session.setAttribute("ldap.specialgroups", ldapSpecialGroups);
             }
 
             // Restore interrupted request information and url to new session
