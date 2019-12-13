@@ -24,3 +24,7 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * Improvement: introduces CSL support for publications (provided that an instance of Bamberg's OData interface is installed locally)
 * Improvement: add a remove button to publication management from projects (implemented by 4Science)
 * Bugfix: do not show all bundles in submission of new versions for items (implemented by The Library Code)
+* Bugfix: add namespace to DataCite OAI output
+* REVERT: Reverting changes by 4Science for importing Excelfiles as they break import of correct files, which have been generated with PHPSpreadsheet
+* Bugfix for LDAP specialgroups (implemented by The Library Code)
+* Improvement: add SHERPA/RoMEO config option
