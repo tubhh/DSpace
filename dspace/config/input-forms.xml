@@ -2078,6 +2078,10 @@
        <stored-value>inProceedings</stored-value>
      </pair>
      <pair>
+       <displayed-value>Commentary</displayed-value>
+       <stored-value>commentary</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Conference Proceedings</displayed-value>
        <stored-value>Proceedings</stored-value>
      </pair>

@@ -2110,6 +2110,10 @@
        <stored-value>Map</stored-value>
      </pair>
      <pair>
+       <displayed-value>Kommentar</displayed-value>
+       <stored-value>commentary</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Konferenzband</displayed-value>
        <stored-value>Proceedings</stored-value>
      </pair>
