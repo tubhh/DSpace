@@ -708,7 +708,7 @@
 			queries done by discovery for this configuration -->
 		<property name="defaultFilterQueries">
 			<list>
-				<value>resourcetype_authority:publications</value>
+				<value>resourcetype_authority:publications OR resourcetype_authority:conferencematerials</value>
 			</list>
 		</property>
 		<!--The configuration for the recent submissions -->
