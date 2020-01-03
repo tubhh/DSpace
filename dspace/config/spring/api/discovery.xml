@@ -306,9 +306,9 @@
 		<!--Which sidebar facets are to be displayed -->
 		<property name="sidebarFacets">
 			<list>
-				<ref bean="searchFilterObjectPeople" />
-				<ref bean="searchFilterObjectOU" />
-				<ref bean="searchFilterFulltext" />
+				<!--<ref bean="searchFilterObjectPeople" />-->
+				<!--<ref bean="searchFilterObjectOU" />-->
+				<!--<ref bean="searchFilterFulltext" />-->
 			</list>
 		</property>
 		<!--The search filters which can be used on the discovery search page -->
