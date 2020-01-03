@@ -24,6 +24,11 @@ public class CrisSubscribeService
         this.applicationService = applicationService;
     }
     
+    public void unsubscribe(String uuid)
+    {
+        applicationService.deleteSubscriptionByUUID(uuid);
+    }
+
     public void unsubscribe(EPerson e, String uuid)
     {        
         CrisSubscription rpsub = applicationService.getSubscription(e.getID(),
