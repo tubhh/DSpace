@@ -385,16 +385,29 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
     
     protected Map<String, String> getExtra(T crisObject, String field) {
         Map<String, String> extras = new HashMap<String,String>();
-        List<CRISExtraBasicMetadataGenerator> generators = new DSpace().getServiceManager().getServicesByType(CRISExtraBasicMetadataGenerator.class);
-        if(generators!=null) {
-            for(CRISExtraBasicMetadataGenerator gg : generators) {
-                if(gg.getType().equals(getInstanceType(field))) {
-                    Map<String, String> extrasTmp = gg.build(crisObject);
-                    extras.putAll(extrasTmp);
+        if (hasExtra())
+        {
+            List<CRISExtraBasicMetadataGenerator> generators = new DSpace()
+                    .getServiceManager()
+                    .getServicesByType(CRISExtraBasicMetadataGenerator.class);
+            if (generators != null)
+            {
+                for (CRISExtraBasicMetadataGenerator gg : generators)
+                {
+                    if (gg.getType().equals(getInstanceType(field)))
+                    {
+                        Map<String, String> extrasTmp = gg.build(crisObject);
+                        extras.putAll(extrasTmp);
+                    }
                 }
             }
         }
         return extras;
+    }
+
+    protected boolean hasExtra()
+    {
+        return true;
     }
 
     protected String getInstanceType(String field)

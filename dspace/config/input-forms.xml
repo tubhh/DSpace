@@ -307,6 +307,17 @@
        </field>
 
        <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Series</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the series assigned to this item by your community.</hint>
+         <required></required>
+       </field>
+       
+       <field>
          <dc-schema>datacite</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>IsSupplementedBy</dc-qualifier>
