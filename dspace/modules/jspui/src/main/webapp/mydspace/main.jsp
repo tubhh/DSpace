@@ -648,7 +648,7 @@
 	<fmt:message key="jsp.mydspace.cris.privateentities"/>
 	<div id="update-private-entities-indicator" class="loader"></div>
     </h3>
-    <div id="private-entities-table"></div>
+    <div id="private-entities-table"><fmt:message key="jsp.mydspace.cris.privateentities.load"/></div>
 </div>
 
 	<%if(exportsAvailable!=null && exportsAvailable.size()>0){ %>
