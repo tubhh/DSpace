@@ -203,7 +203,7 @@ public class MultipleSubmissionLookupDataLoader implements DataLoader
                     continue;
                 }
 
-                if (true)
+                if (!"localduplicate".equalsIgnoreCase(providerName))
                 {
                     continue;
                 }
