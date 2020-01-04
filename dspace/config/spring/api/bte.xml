@@ -864,10 +864,10 @@
 		<property name="identifiers2metadata">
 			<map>
 				<entry key="doi" value="tuhh.publisher.doi" />
-				<entry key="isbn" value="dc.identifier.isbn" />
+				<!-- <entry key="isbn" value="dc.identifier.isbn" /> -->
 				<entry key="pubmed" value="dc.identifier.pmid" />
 				<entry key="scopuseid" value="dc.identifier.scopus" />
-				<entry key="isiid" value="dc.identifier.isi" />
+				<!-- <entry key="isiid" value="dc.identifier.isi" /> -->
 			</map>
 		</property>
 	</bean>
