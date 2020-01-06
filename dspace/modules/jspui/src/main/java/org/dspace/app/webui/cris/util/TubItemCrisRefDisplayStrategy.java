@@ -245,9 +245,7 @@ public class TubItemCrisRefDisplayStrategy extends ItemCrisRefDisplayStrategy
 			                    status = "private.";
                                             typefield = "unknown";
 					}
-                                        else {
-					    typefield = rp.getMetadata(ConfigurationManager.getProperty("cris", "researcher.cris."+publicPath+".ref.display.strategy.metadata.icon"));
-                                        }
+				        typefield = rp.getMetadata(ConfigurationManager.getProperty("cris", "researcher.cris."+publicPath+".ref.display.strategy.metadata.icon"));
 
 					String title;
 					try {
