@@ -103,10 +103,12 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
 	</style>	
 	<script type='text/javascript'>var dspaceContextPath = "<%=request.getContextPath()%>";</script>		
 </c:set>
+<script type="text/javascript">
+var duplicatewarning_text = "<fmt:message key="jsp.submit.start-lookup-submission.duplicatewarning"/>";
+</script>
 <c:set var="dspace.layout.head.last" scope="request">		
 	<script type="text/javascript" src="<%= request.getContextPath() %>/static/js/submission-lookup.js"></script>
 </c:set>
-
 <dspace:layout style="submission" locbar="off"
                navbar="off"
                titlekey="jsp.submit.start-lookup-submission.title"
