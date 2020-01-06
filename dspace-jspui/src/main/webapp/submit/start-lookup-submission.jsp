@@ -217,7 +217,7 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
 %>
 		<img class="img-thumbnail" src="<%= request.getContextPath() %>/image/submission-lookup-small-<%= provider %>.jpg" 
 <%
-                if (provider.equals("")) {
+                if (provider.equals("localduplicate")) {
 %>
                     alt="<fmt:message key="jsp.submit.start-lookup-submission.duplicatewarning"/>";
 <%
