@@ -215,7 +215,15 @@ void generateCollectionTree(javax.servlet.jsp.JspWriter out, CollectionsTree tre
 		for (String provider : searchProviders)
 		{			
 %>
-		<img class="img-thumbnail" src="<%= request.getContextPath() %>/image/submission-lookup-small-<%= provider %>.jpg" />
+		<img class="img-thumbnail" src="<%= request.getContextPath() %>/image/submission-lookup-small-<%= provider %>.jpg" 
+<%
+                if (provider.equals("")) {
+%>
+                    alt="<fmt:message key="jsp.submit.start-lookup-submission.duplicatewarning"/>";
+<%
+                }
+%>
+                />
 <% 
 		}
 	%>
