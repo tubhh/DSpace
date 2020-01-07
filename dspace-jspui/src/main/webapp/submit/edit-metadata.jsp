@@ -1570,7 +1570,7 @@
 		
 %>
 
-  <form action="<%= request.getContextPath() %>/submit#<%= si.getJumpToField()%>" method="post" name="edit_metadata" id="edit_metadata">
+  <form action="<%= request.getContextPath() %>/submit" method="post" name="edit_metadata" id="edit_metadata">
 
         <jsp:include page="/submit/progressbar.jsp"></jsp:include>
 
@@ -1673,9 +1673,9 @@
                    if(si.getJumpToField()==null || si.getJumpToField().length()==0)
                                 si.setJumpToField(fieldName);
 
-                   String req = "<div class=\"alert alert-warning\">" +
+                   String req = "<div class=\"alert alert-warning\" id=\"" + fieldName +"_help\">" +
                                                         inputs[z].getWarning() +
-                                                        "<a name=\""+fieldName+"\"></a></div>";
+                                                        "</div>";
                    out.write(req);
            }
        }
@@ -1694,7 +1694,7 @@
                    catch(Exception ex) {
                        message = I18nUtil.getMessage("jsp.submit.edit-metadata.validation.errors", i18nargs, locale);
                    }
-                   String req = "<div class=\"alert alert-warning\">" + message + "<a name=\""+fieldName+"\"></a></div>";
+                   String req = "<div class=\"alert alert-warning\" id=\"" + fieldName + "_help>" + message + "<a name=\""+fieldName+"\"></a></div>";
                    out.write(req);
            }
        }
@@ -1704,7 +1704,7 @@
            if(inputs[z].getHints() != null)
            {
            		%>
-           		<div class="help-block">
+           		<div class="help-block" id="<%= fieldName %>_help">
                 	<%= inputs[z].getHints() %>
                 <%
                     if (hasVocabulary(vocabulary) &&  !readonly)
@@ -1719,6 +1719,9 @@
 				</div>
 				<%
            }
+           else { %>
+        	   <div style="display:none;" id="<%= fieldName %>_help">&nbsp;</div>
+           <% }
        }
 
        repeatable = inputs[z].getRepeatable();
@@ -1835,6 +1838,15 @@
 j(document).ready(
 		function()
 		{			
+			<% if (si.getJumpToField() != null) { %>
+			var focusTarget = j('#<%= si.getJumpToField() %>_help');
+			if (!focusTarget.is(":visible")) {
+				focusTarget = focusTarget.next();
+			}
+			j('html, body').stop().animate({
+		            scrollTop: focusTarget.offset().top
+		        }, 200);
+			<% } %>
 			<%@ include file="/deduplication/javascriptDeduplication.jsp" %>
 		}		
 
