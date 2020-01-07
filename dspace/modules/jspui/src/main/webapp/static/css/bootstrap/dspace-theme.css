@@ -68,3 +68,4 @@ input.ds-authority-lock.is-unlocked
 .nav > .researcher-menu-item-hidden {
 	display:none;
 }
+div.row > label.col-md-2 {clear: left;}
