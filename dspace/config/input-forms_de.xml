@@ -2077,6 +2077,7 @@
        <displayed-value>Artikel/Aufsatz</displayed-value>
        <stored-value>Article</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>Bild</displayed-value>
        <stored-value>Image</stored-value>
@@ -2085,6 +2086,7 @@
        <displayed-value>3-D-Bild</displayed-value>
        <stored-value>Image, 3-D</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>Buch</displayed-value>
        <stored-value>book</stored-value>
@@ -2143,10 +2145,12 @@
        <displayed-value>Review</displayed-value>
        <stored-value>article-review</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>Software</displayed-value>
        <stored-value>Software</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>Technischer Report</displayed-value>
        <stored-value>Technical Report</stored-value>

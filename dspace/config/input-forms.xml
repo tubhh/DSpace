@@ -2099,6 +2099,7 @@
        <displayed-value>Editorial</displayed-value>
        <stored-value>editorial</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>Image</displayed-value>
        <stored-value>Image</stored-value>
@@ -2107,6 +2108,7 @@
        <displayed-value>Image (3D)</displayed-value>
        <stored-value>Image, 3-D</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>Journal Volume</displayed-value>
        <stored-value>Journal</stored-value>
@@ -2149,10 +2151,12 @@
        <displayed-value>Review (Article)</displayed-value>
        <stored-value>article-review</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>Software</displayed-value>
        <stored-value>Software</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>Technical Report</displayed-value>
        <stored-value>Technical Report</stored-value>
