@@ -66,4 +66,8 @@ public class ZDBWithoutIssnAuthority extends DOAuthority {
 		return source.buildDetailsURL(val.getServiceId());
 	}
 
+    protected boolean hasExtra()
+    {
+        return false;
+    }
 }
