@@ -122,8 +122,8 @@
 <!--
 	            <entry key="arxiv" value-ref="arXivOnlineDataLoader"/>
 	            <entry key="cinii" value-ref="ciniiOnlineDataLoader"/>
-			    <entry key="localduplicate" value-ref="localDuplicateDataLoader" />
 -->
+			    <entry key="localduplicate" value-ref="localDuplicateDataLoader" />
 <!-- 	            depending on your apiKey you should use scopusOnlineDataLoader or scivalOnlineDataLoader or
 					adsOnlineDataLoader -->
 		    <entry key="scopus" value-ref="scopusOnlineDataLoader"/>
@@ -931,7 +931,7 @@
 				<!-- <entry key="isbn" value="dc.identifier.isbn" /> -->
 				<entry key="pubmed" value="dc.identifier.pmid" />
 				<entry key="scopuseid" value="dc.identifier.scopus" />
-				<!--- <entry key="isiid" value="dc.identifier.isi" /> -->
+				<!-- <entry key="isiid" value="dc.identifier.isi" /> -->
 			</map>
 		</property>
 	</bean>
