@@ -224,6 +224,62 @@
        </field>
 
        <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Series</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the series assigned to this item by your community.</hint>
+         <required></required>
+       </field>
+       
+       <field>
+         <dc-schema>datacite</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>IsSupplementedBy</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Supplemented By</label>
+         <input-type>onebox</input-type>
+         <hint>This item is supplemented by research data. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
+         <required></required>
+       </field>
+<!--
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>issupplementedby</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Supplemented By a TOR record</label>
+         <input-type>onebox</input-type>
+         <hint>This item is supplemented by research data, which is published on the same server as this publication. Please provide the title of the research data record here. You can use the lookup function (the button with the magnifiing glass) to search for the title.</hint>
+         <required></required>
+       </field>
+-->
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>publication</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Related to another tub.dok publication</label>
+         <input-type>onebox</input-type>
+         <hint>This item is related to another item published on tub.dok</hint>
+         <required></required>
+       </field>
+<!-- Experiment mit parent-Element
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>publication</dc-qualifier>
+         <repeatable>false</repeatable>
+         <parent>dc_relation_publication</parent>
+         <label>Type of relation</label>
+         <input-type value-pairs-name="relation_types">dropdown</input-type>
+         <hint>Select the type of relation to the above mentioned publication</hint>
+         <required></required>
+       </field>
+-->
+       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>publisher</dc-element>
          <dc-qualifier></dc-qualifier>
