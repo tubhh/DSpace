@@ -287,7 +287,7 @@
          <repeatable>false</repeatable>
          <label>Artikelnummer</label>
          <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Artikelnummer des elektronischen Artikels ein, wenn er eine hat.</hint>
+         <hint>Geben Sie hier die Artikelnummer des Artikels ein, wenn er eine hat.</hint>
          <required></required>
        </field>
 
@@ -1186,7 +1186,7 @@
          <repeatable>false</repeatable>
          <label>Artikelnummer</label>
          <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Artikelnummer des elektronischen Artikels ein, wenn er eine hat.</hint>
+         <hint>Geben Sie hier die Artikelnummer des Artikels ein, wenn er eine hat.</hint>
          <required></required>
        </field>
 

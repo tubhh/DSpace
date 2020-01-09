@@ -343,7 +343,7 @@
          <repeatable>false</repeatable>
          <label>Article Number</label>
          <input-type>onebox</input-type>
-         <hint>Enter the article number of the electronic article, if it has one.</hint>
+         <hint>Enter the article number of the article, if it has one.</hint>
          <required></required>
        </field>
 
@@ -1245,7 +1245,7 @@
          <repeatable>false</repeatable>
          <label>Article Number</label>
          <input-type>onebox</input-type>
-         <hint>Enter the article number of the electronic article, if it has one.</hint>
+         <hint>Enter the article number of the article, if it has one.</hint>
          <required></required>
        </field>
 
