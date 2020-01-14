@@ -32,3 +32,4 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * minor Layout corrections in Submission form (implemented by 4Science)
 * new Feature: duplicate check for import operations (check if record exists already locally) (implemented by 4Science, funded in cooperation with Bamberg University)
 * Bugfix: do not override journal fields if series is entered
+* Improvement: ignore abbreviating dots in names for ORCID Lookup
