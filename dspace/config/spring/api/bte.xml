@@ -815,8 +815,6 @@
             </constructor-arg>
 	</bean>
 
-	
-	
 	<bean id="ISBNOnlineDataLoaderLOC" class="org.dspace.submit.lookup.ISBNOnlineDataLoader">
 	    <property name="searchProvider" value="false" />
 	    <property name="fieldMap" ref="ISBNInputMap" />
@@ -881,6 +879,7 @@
 			</map>
 		</constructor-arg>
 	</bean>
+
 	<!-- **************************************************************************************************** -->
 	<!-- Output Mapping 																					  -->
 	<!-- **************************************************************************************************** -->
