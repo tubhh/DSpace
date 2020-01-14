@@ -414,6 +414,16 @@ public class OrcidService extends RestSource
     {
         DCPersonName tmpPersonName = new DCPersonName(text);
 
+        String firstName = tmpPersonName.getFirstNames();
+        if (StringUtils.isNotBlank(firstName))
+        {
+	        firstName = firstName.trim();
+	        if (firstName.endsWith("."))
+	        {
+	            firstName = firstName.substring(0, firstName.length()-1);
+	        }
+        }
+
         String query = "";
         if (StringUtils.isNotBlank(tmpPersonName.getLastName()))
         {
@@ -423,10 +433,10 @@ public class OrcidService extends RestSource
                     + ")";
         }
 
-        if (StringUtils.isNotBlank(tmpPersonName.getFirstNames()))
+        if (StringUtils.isNotBlank(firstName))
         {
             query += (query.length() > 0 ? " AND given-names:("
-                    : "given-names:(") + tmpPersonName.getFirstNames().trim()
+                    : "given-names:(") + firstName
                     + "*)";
         }
 
