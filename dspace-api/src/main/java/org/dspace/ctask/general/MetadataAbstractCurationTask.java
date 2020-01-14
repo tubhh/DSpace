@@ -96,6 +96,8 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
             // get the abstract from dc field and transfer it into corresponding local field (english|german)
             // if no language is set in dc field, set it to english and store it in local english field
             else if (abstractDc.length > 0) {
+                // clear metadata only once
+                item.clearMetadata("dc", "description", "abstract", Item.ANY);
                 for (Metadatum abs : abstractDc) {
                     try {
                         language = abs.language;
@@ -105,13 +107,14 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
                             }
                             item.addMetadata("tuhh", "abstract", "german", "de", abs.value, null, -1);
                             results.append("Set german abstract from dc.abstract into local local abstract field").append("\n");
+                            item.addMetadata("dc", "description", "abstract", "de", abs.value, null, -1);
+                            results.append("Set language german to abstract in dc.abstract").append("\n");
                         } else {
                             if (abstractEnglish.length > 0) {
                                 item.clearMetadata("tuhh", "abstract", "english", Item.ANY);
                             }
                             item.addMetadata("tuhh", "abstract", "english", "en", abs.value, null, -1);
                             results.append("Set unqualified abstract from dc.abstract into local local abstract field").append("\n");
-                            item.clearMetadata("dc", "description", "abstract", Item.ANY);
                             item.addMetadata("dc", "description", "abstract", "en", abs.value, null, -1);
                             results.append("Set language english to abstract in dc.abstract").append("\n");
                         }
@@ -122,7 +125,6 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
                         }
                         item.addMetadata("tuhh", "abstract", "english", "en", abs.value, null, -1);
                         results.append("Set unqualified abstract from dc.abstract into local local abstract field").append("\n");
-                        item.clearMetadata("dc", "description", "abstract", Item.ANY);
                         item.addMetadata("dc", "description", "abstract", "en", abs.value, null, -1);
                         results.append("Set language english to abstract in dc.abstract").append("\n");
                     }
