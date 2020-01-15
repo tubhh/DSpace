@@ -121,9 +121,7 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
                         }
                         item.addMetadata("tuhh", "abstract", "english", "en", abs.value, null, -1);
                         results.append("Set unqualified abstract from dc.abstract into local abstract field").append("\n");
-                        item.clearMetadata("dc", "description", "abstract", "en");
-                        item.clearMetadata("dc", "description", "abstract", "en_GB");
-                        item.clearMetadata("dc", "description", "abstract", "en_US");
+                        item.clearMetadata("dc", "description", "abstract", Item.ANY);
                         item.addMetadata("dc", "description", "abstract", "en", abs.value, null, -1);
                         results.append("Set language english to abstract in dc.abstract").append("\n");
                     }
