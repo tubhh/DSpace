@@ -101,25 +101,18 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
                 for (Metadatum abs : abstractDc) {
                     try {
                         language = abs.language;
-                        if (language.equals("de")) {
+                        if (language.equals("de") || language.equals("de_DE")) {
                             if (abstractGerman.length > 0) {
                                 item.clearMetadata("tuhh", "abstract", "german", Item.ANY);
                             }
                             item.addMetadata("tuhh", "abstract", "german", "de", abs.value, null, -1);
                             results.append("Set german abstract from dc.abstract into local abstract field").append("\n");
-                            item.addMetadata("dc", "description", "abstract", "de", abs.value, null, -1);
-                            results.append("Set language german to abstract in dc.abstract").append("\n");
-                        } else {
+                        } else if (language.equals("en") || language.equals("en_US")){
                             if (abstractEnglish.length > 0) {
                                 item.clearMetadata("tuhh", "abstract", "english", Item.ANY);
                             }
                             item.addMetadata("tuhh", "abstract", "english", "en", abs.value, null, -1);
                             results.append("Set english abstract from dc.abstract into local abstract field").append("\n");
-                            item.clearMetadata("dc", "description", "abstract", "en");
-                            item.clearMetadata("dc", "description", "abstract", "en_GB");
-                            item.clearMetadata("dc", "description", "abstract", "en_US");
-                            item.addMetadata("dc", "description", "abstract", "en", abs.value, null, -1);
-                            results.append("Set language english to abstract in dc.abstract").append("\n");
                         }
                     }
                     catch (NullPointerException npe) {
@@ -127,7 +120,7 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
                             item.clearMetadata("tuhh", "abstract", "english", Item.ANY);
                         }
                         item.addMetadata("tuhh", "abstract", "english", "en", abs.value, null, -1);
-                        results.append("Set unqualified abstract from dc.abstract into local local abstract field").append("\n");
+                        results.append("Set unqualified abstract from dc.abstract into local abstract field").append("\n");
                         item.clearMetadata("dc", "description", "abstract", "en");
                         item.clearMetadata("dc", "description", "abstract", "en_GB");
                         item.clearMetadata("dc", "description", "abstract", "en_US");
