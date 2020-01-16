@@ -53,7 +53,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%= title %> | <%= siteName %></title>
+        <title><%= siteName %> | <%= title %></title>
         <meta name="google-site-verification" content="juvl3McEzhHwPPh-J7zNwwec0_E6c81ZH4are8PlTso" />
         <meta name="msvalidate.01" content="9DAB6E8B4DCD4D51BA0637771F617274" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
