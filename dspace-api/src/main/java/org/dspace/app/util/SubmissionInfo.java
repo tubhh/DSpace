@@ -8,10 +8,7 @@
 package org.dspace.app.util;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,14 +17,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
-import org.dspace.content.Bitstream;
-import org.dspace.content.Bundle;
-import org.dspace.content.EditItem;
-import org.dspace.content.InProgressSubmission;
-import org.dspace.content.Item;
+import org.dspace.content.*;
+import org.dspace.content.Collection;
+import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.submit.AbstractProcessingStep;
 import org.dspace.workflow.WorkflowItem;
+import org.dspace.workflow.WorkflowManager;
 import org.dspace.xmlworkflow.storedcomponents.XmlWorkflowItem;
 
 /**
@@ -145,7 +141,23 @@ public class SubmissionInfo extends HashMap
             collectionHandle = subItem.getCollection().getHandle();
             Item item = subItem.getItem();
             if (subItem instanceof EditItem) {
-                if (!AuthorizeManager.isAdmin(context) && !item.canEdit()) {
+                // If we are adding fulltext, we don't need to be the owner or an auth'd editor of the item
+                // But we do need to have permission to submit to the new collection
+                if (subItem instanceof AddFulltextItem) {
+                    Collection[] authorizedCollections = Collection.findAuthorizedOptimized(context, Constants.ADD);
+                    boolean authorized = false;
+                    for (Collection authorizedCollection : authorizedCollections) {
+                        if (collectionHandle.equals(authorizedCollection.getHandle())) {
+                            authorized = true;
+                        }
+                    }
+                    if (!authorized) {
+                        throw new AuthorizeException("Unauthorized attempt to submit new files for ItemID " + item.getID());
+                    }
+                }
+                // If we are using the previous "edit in submission mode" functionality, then just check for item
+                // admin or edit capability
+                else if (!AuthorizeManager.isAdmin(context) && !item.canEdit()) {
                     throw new AuthorizeException("Unauthorized attempt to edit ItemID " + item.getID());
                 }
                 context.turnOffAuthorisationSystem();
@@ -176,7 +188,20 @@ public class SubmissionInfo extends HashMap
     public boolean isEditing() {
         return ((this.submissionItem != null) && (this.submissionItem instanceof EditItem));
     }
-    
+
+    public boolean isAddingFulltext() {
+        return ((this.submissionItem != null) && (this.submissionItem instanceof AddFulltextItem || hasPending()));
+    }
+
+    public boolean hasPending() {
+        try {
+            return ((this.submissionItem != null) && WorkflowManager.isPendingFulltext(this.submissionItem.getItem()));
+        } catch(SQLException e) {
+            log.error("Error trying to detect pending fulltext for item: " + this.submissionItem.getItem());
+            return false;
+        }
+    }
+
     /**
      * Return the current in progress submission
      * 
@@ -625,14 +650,14 @@ public class SubmissionInfo extends HashMap
             throws ServletException
     {
 
-        log.debug("Loading Submission Config information");
+        log.debug("Loading Submission Config information. Full text mode is " + subInfo.isAddingFulltext());
 
         if (!forceReload)
         {
             // first, try to load from cache
             subInfo.submissionConfig = loadSubmissionConfigFromCache(request
                     .getSession(), subInfo.getCollectionHandle(), subInfo
-                    .isInWorkflow() || subInfo.isEditing());
+                    .isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext());
         }
 
         if (subInfo.submissionConfig == null || forceReload)
@@ -641,12 +666,12 @@ public class SubmissionInfo extends HashMap
             // (by reading the XML config file)
             subInfo.submissionConfig = submissionConfigReader
                     .getSubmissionConfig(subInfo.getCollectionHandle(), subInfo
-                            .isInWorkflow() || subInfo.isEditing());
+                            .isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext());
 
             // cache this new submission process configuration
             saveSubmissionConfigToCache(request.getSession(),
                     subInfo.submissionConfig, subInfo.getCollectionHandle(),
-                    subInfo.isInWorkflow() || subInfo.isEditing());
+                    subInfo.isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext());
 
             // also must force reload Progress Bar info,
             // since it's based on the Submission config
@@ -678,7 +703,7 @@ public class SubmissionInfo extends HashMap
      */
     private static void saveSubmissionConfigToCache(HttpSession session,
             SubmissionConfig subConfig, String collectionHandle,
-            boolean isWorkflow)
+            boolean isWorkflow, boolean isAddingFulltext)
     {
         // cache the submission process config
         // and the collection it corresponds to
@@ -686,6 +711,7 @@ public class SubmissionInfo extends HashMap
         session.setAttribute("submission.config.collection", collectionHandle);
         session.setAttribute("submission.config.isWorkflow", Boolean.valueOf(
                 isWorkflow));
+        session.setAttribute("submission.config.isAddingFulltext", isAddingFulltext);
     }
 
     /**
@@ -704,7 +730,7 @@ public class SubmissionInfo extends HashMap
      * @return The cached SubmissionConfig for this collection
      */
     private static SubmissionConfig loadSubmissionConfigFromCache(
-            HttpSession session, String collectionHandle, boolean isWorkflow)
+            HttpSession session, String collectionHandle, boolean isWorkflow, boolean isAddingFulltext)
     {
         // attempt to load submission process config
         // from cache for the current collection
@@ -714,10 +740,13 @@ public class SubmissionInfo extends HashMap
         Boolean cachedIsWorkflow = (Boolean) session
                 .getAttribute("submission.config.isWorkflow");
 
+        Boolean cachedIsAddingFulltext = (Boolean) session.getAttribute("submission.config.isAddingFulltext");
+
         // only load from cache if the collection handle and
         // workflow item status both match!
         if (collectionHandle.equals(cachedHandle)
-                && isWorkflow == cachedIsWorkflow.booleanValue())
+                && isWorkflow == cachedIsWorkflow.booleanValue()
+                && isAddingFulltext == cachedIsAddingFulltext.booleanValue())
 
         {
             return (SubmissionConfig) session.getAttribute("submission.config");

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.hdfs.DFSClient;
 import org.apache.log4j.Logger;
 import org.dspace.app.util.GoogleMetadata;
 import org.dspace.app.webui.util.Authenticate;
@@ -49,6 +51,8 @@ import org.dspace.plugin.CommunityHomeProcessor;
 import org.dspace.plugin.ItemHomeProcessor;
 import org.dspace.usage.UsageEvent;
 import org.dspace.utils.DSpace;
+import org.dspace.workflow.WorkflowItem;
+import org.dspace.workflow.WorkflowManager;
 import org.jdom.Element;
 import org.jdom.Text;
 import org.jdom.output.XMLOutputter;
@@ -362,6 +366,31 @@ public class HandleServlet extends DSpaceServlet
         {
             // set a variable to create a button to create a new item version
             request.setAttribute("submitter_button", Boolean.TRUE);
+        }
+
+        // is adding new files by users allowed here?
+        // 1. member of one of the configured 'from' (non-fulltext) collection:
+        String nonFulltextCollectionConfig = ConfigurationManager.getProperty("submit.fulltext.from-collections");
+        if (nonFulltextCollectionConfig != null) {
+            String[] nonFulltextCollectionHandles = nonFulltextCollectionConfig.split("\\s*,\\s*");
+            List<String> nonFulltextCollectionList = Arrays.asList(nonFulltextCollectionHandles);
+            try {
+                if (nonFulltextCollectionList.contains(item.getOwningCollection().getHandle())) {
+                    // 2. not already in review
+                    WorkflowItem workflowItem = WorkflowItem.findByItem(context, item);
+                    if (workflowItem == null) {
+                        request.setAttribute("add_fulltext_allowed", true);
+                    } else {
+                        // 3. otherwise, is the current user the submitter? if so, we can show them a "pending" msg
+                        if (context.getCurrentUser() != null && context.getCurrentUser() == workflowItem.getSubmitter()) {
+                            request.setAttribute("fulltext_under_review", true);
+                        }
+                    }
+                }
+            } catch (NullPointerException e) {
+                log.error("Error resolving owning collection for item " + item.getHandle());
+            }
+
         }
 
         // Get the collections

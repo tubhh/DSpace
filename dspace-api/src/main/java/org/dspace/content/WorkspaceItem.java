@@ -591,6 +591,10 @@ public class WorkspaceItem implements InProgressSubmission
         return item;
     }
 
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
     public Collection getCollection()
     {
         return collection;

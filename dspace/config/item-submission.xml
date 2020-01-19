@@ -225,7 +225,15 @@
 		<xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadStep</xmlui-binding>
         <workflow-editable>true</workflow-editable>
       </step>
-      
+
+       <!--Step 4.1 - pending upload special handling for "new files" submissions -->
+       <step>
+           <heading>submit.progressbar.upload</heading>
+           <processing-class>org.dspace.submit.step.PendingUploadStep</processing-class>
+           <jspui-binding>org.dspace.app.webui.submit.step.JSPPendingUploadStep</jspui-binding>
+           <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadStep</xmlui-binding>
+           <add-fulltext-step>only</add-fulltext-step>
+       </step>
 
        <!-- Step 4 Upload Item with Embargo Features
             to enable this step, please make sure to comment-out the previous step "UploadStep"  
@@ -266,6 +274,7 @@
         <jspui-binding>org.dspace.app.webui.submit.step.JSPLicenseStep</jspui-binding>
 		<xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.LicenseStep</xmlui-binding>
 		<workflow-editable>false</workflow-editable>
+        <add-fulltext-step>true</add-fulltext-step>
       </step>
 
 

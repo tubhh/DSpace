@@ -52,6 +52,12 @@ public class SubmissionStepConfig implements Serializable
     /** whether or not this step is editable during workflow (default=true) */
     private boolean workflowEditable = true;
 
+    /** whether or not this step is to be included in "add fulltext" mode */
+    private boolean inAddFullText = false;
+
+    /** whether or not to include this step in non-fulltext submissions */
+    private boolean addFullTextOnly = false;
+
     /** 
      * The full name of the JSP-UI binding class for this step. This field is
      * ONLY used by the JSP-UI.
@@ -95,6 +101,18 @@ public class SubmissionStepConfig implements Serializable
         if (wfEditString != null && wfEditString.length() > 0)
         {
             workflowEditable = Boolean.parseBoolean(wfEditString);
+        }
+
+        // Fetch new configuration to see if this step is included in "add fulltext" process
+        String addFulltextStep = stepMap.get("add-fulltext-step");
+        if (addFulltextStep  != null && addFulltextStep.length() > 0) {
+            inAddFullText = Boolean.parseBoolean(addFulltextStep);
+            if ("only".equals(addFulltextStep) || "true".equals(addFulltextStep)) {
+                inAddFullText = true;
+                if ("only".equals(addFulltextStep)) {
+                   addFullTextOnly = true;
+                }
+            }
         }
     }
 
@@ -205,6 +223,21 @@ public class SubmissionStepConfig implements Serializable
     public boolean isWorkflowEditable()
     {
         return workflowEditable;
+    }
+
+    /**
+     * Whether or not this step is editable during adding new fulltext. If
+     * "true", then this step will appear in the "Add Fulltext" process
+     *
+     * @return if step is editable in add fulltext process
+     */
+    public boolean isInAddFullText()
+    {
+        return inAddFullText;
+    }
+
+    public boolean isAddFullTextOnly() {
+        return addFullTextOnly;
     }
 
     /**

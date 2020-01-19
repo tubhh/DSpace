@@ -150,8 +150,12 @@ public class SubmissionConfigReader
      * @throws ServletException
      *             if no default submission process configuration defined
      */
+    public SubmissionConfig getSubmissionConfig(String collectionHandle, boolean isWorkflow) throws ServletException {
+        return getSubmissionConfig(collectionHandle, isWorkflow, false);
+    }
+
     public SubmissionConfig getSubmissionConfig(String collectionHandle,
-            boolean isWorkflow) throws ServletException
+            boolean isWorkflow, boolean isAddFulltext) throws ServletException
     {
         // get the name of the submission process config for this collection
         String submitName = collectionToSubmissionConfig
@@ -195,7 +199,7 @@ public class SubmissionConfigReader
                 + "' not in cache. Reloading from scratch.");
 
         lastSubmissionConfig = new SubmissionConfig(submitName, steps,
-                isWorkflow);
+                isWorkflow, isAddFulltext);
 
         log.debug("Submission process config has "
                 + lastSubmissionConfig.getNumberOfSteps() + " steps listed.");
