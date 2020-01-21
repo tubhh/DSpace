@@ -139,8 +139,8 @@
 	            <entry key="ciniiXML" value-ref="ciniiFileDataLoader"/>
 -->
 	            <entry key="bibtex" value-ref="bibTeXDataLoader"/>
-<!--	            <entry key="ris" value-ref="risDataLoader"/>
-	            <entry key="wosris" value-ref="wosRISDataLoader"/>
+	            <entry key="ris" value-ref="risDataLoader"/>
+<!--	            <entry key="wosris" value-ref="wosRISDataLoader"/>
 	            <entry key="endnote" value-ref="endnoteDataLoader"/>
 	            <entry key="csv" value-ref="csvDataLoader"/>
 	            <entry key="tsv" value-ref="tsvDataLoader"/> -->
