@@ -25,7 +25,9 @@
 <!--
 				<entry key="arxivXML" value-ref="arXivFileDataLoader" />
 				<entry key="ciniiXML" value-ref="ciniiFileDataLoader" />
+-->
 				<entry key="ris" value-ref="risDataLoader" />
+<!--
 				<entry key="endnote" value-ref="endnoteDataLoader" />
 				<entry key="csv" value-ref="csvDataLoader" />
 				<entry key="tsv" value-ref="tsvDataLoader" />
