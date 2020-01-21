@@ -209,12 +209,22 @@ public class TypeSettingConsumer implements Consumer
                 break;
             case "workingPaper":
             case "Working Paper":
-            ret.put("opus", "ResearchPaper");
-            ret.put("dini", "workingPaper");
-            ret.put("driver", "workingPaper");
-            ret.put("casrai", "Working Paper");
-            ret.put("dcmi", "Text");
-            break;
+                ret.put("opus", "ResearchPaper");
+                ret.put("dini", "workingPaper");
+                ret.put("driver", "workingPaper");
+                ret.put("casrai", "Working Paper");
+                ret.put("dcmi", "Text");
+                break;
+            case "ResearchPaper":
+            case "Research Paper":
+            case "ResearchReport":
+            case "Research Report":
+                ret.put("opus", "Research Report");
+                ret.put("dini", "workingPaper");
+                ret.put("driver", "workingPaper");
+                ret.put("casrai", "Working Paper");
+                ret.put("dcmi", "Text");
+                break;
         case "article":
         case "Article":
             ret.put("opus", "(wissenschaftlicher) Artikel");
