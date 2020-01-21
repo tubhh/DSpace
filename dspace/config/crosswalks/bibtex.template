@@ -16,6 +16,7 @@
 	volume = {@tuhh.container.volume@},
         number = {@tuhh.container.issue@},
 	booktitle = {@dc.relation.ispartofbook@},
+	booktitle = {@dc.relation.conference@},
 	abstract = {@dc.description.abstract@},
 	keywords = {@virtual.keywords.all@},
 	url = {@dc.identifier.uri@},
