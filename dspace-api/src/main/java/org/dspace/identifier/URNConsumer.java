@@ -10,8 +10,10 @@ package org.dspace.identifier;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import org.dspace.content.Collection;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
+import org.dspace.content.Metadatum;
 import org.dspace.content.WorkspaceItem;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
@@ -56,6 +58,12 @@ public class URNConsumer implements Consumer
         return prefix;
     }
 
+    protected static String getCollectionException()
+    {
+        String ignorecollection = (new DSpace()).getSingletonService(ConfigurationService.class).getProperty("identifier.urn.ignorecollection");
+        return ignorecollection;
+    }
+
     @Override
     public void initialize() throws Exception {
         // nothing to do
@@ -86,15 +94,46 @@ public class URNConsumer implements Consumer
         }
         Item item = (Item) dso;
 
-        String urn = null;
+        Metadatum[] urnFields = item.getMetadata("tuhh", "identifier", "urn", Item.ANY);
+        if (urnFields.length == 0) {
 
-        String value = getPrefix()+item.getID();
-        char cs = this.calculateChecksum(value);
-        urn = value + cs;
-        item.addMetadata("tuhh", "identifier", "urn", null, urn, null, -1);
-        item.updateMetadata();
-        item.update();
-        ctx.getDBConnection().commit(); 
+            Collection col = item.getOwningCollection();
+            if (col == null)
+            {
+                // check if we have a workspace item, they store the collection separately.
+                WorkspaceItem wsi = WorkspaceItem.findByItem(ctx, item);
+                if (wsi != null)
+                {
+                    col = wsi.getCollection();
+                }
+                if (col == null)
+                {
+                    // same for the workflow item
+                    WorkflowItem wfi = WorkflowItem.findByItem(ctx, item);
+                    if (wfi != null)
+                    {
+                        col = wfi.getCollection();
+                    }
+                }
+            }
+            String ch = col.getHandle();
+            String ignorecoll = getCollectionException();
+
+            log.debug("Collection Handle is "+ch+". Will ignore "+ignorecoll+"\n");
+
+            if (!ch.equals(ignorecoll)) {
+                log.info("Calculating and storing URN for item "+item.getID()+" to tuhh.identifier.urn\n");
+                String urn = null;
+
+                String value = getPrefix()+item.getID();
+                char cs = this.calculateChecksum(value);
+                urn = value + cs;
+                item.addMetadata("tuhh", "identifier", "urn", null, urn, null, -1);
+                item.updateMetadata();
+                item.update();
+                ctx.getDBConnection().commit();
+            }
+        }
     }
 
     @Override
