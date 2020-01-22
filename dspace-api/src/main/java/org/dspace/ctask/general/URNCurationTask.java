@@ -8,15 +8,20 @@
 package org.dspace.ctask.general;
 
 import org.apache.log4j.Logger;
+import org.dspace.content.Collection;
 import org.dspace.content.Metadatum;
 import org.dspace.content.MetadataValue;
 import org.dspace.content.Bitstream;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
+import org.dspace.content.WorkspaceItem;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.curate.AbstractCurationTask;
 import org.dspace.curate.Curator;
+import org.dspace.workflow.WorkflowItem;
+import org.dspace.services.ConfigurationService;
+import org.dspace.utils.DSpace;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -50,6 +55,12 @@ public class URNCurationTask extends AbstractCurationTask
     // The log4j logger for this class
     private static Logger log = Logger.getLogger(TypeSetter.class);
 
+
+    protected static String getCollectionException()
+    {
+        String ignorecollection = (new DSpace()).getSingletonService(ConfigurationService.class).getProperty("identifier.urn.ignorecollection");
+        return ignorecollection;
+    }
 
     /**
      * Perform the link checking.
