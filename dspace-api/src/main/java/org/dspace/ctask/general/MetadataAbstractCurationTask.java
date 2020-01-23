@@ -138,11 +138,14 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
                 if (done == false) {
                     results.append("Nothing to do for ").append(getItemHandle(item)).append("\n");
                 }
+                else {
+                    item.updateMetadata();
+                    item.update();
+                    context.getDBConnection().commit();
+                }
+
                 status = Curator.CURATE_SUCCESS;
 
-                item.updateMetadata();
-                item.update();
-                context.getDBConnection().commit();
             } catch (AuthorizeException ae) {
                 // Something went wrong
                 logDebugMessage(ae.getMessage());
