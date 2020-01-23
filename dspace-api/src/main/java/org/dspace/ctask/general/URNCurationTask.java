@@ -124,6 +124,7 @@ public class URNCurationTask extends AbstractCurationTask
                             if (!dcurnField.value.contains("urn:nbn:de:gbv:830")) {
                                 item.addMetadata("dc", "identifier", "urn", dcurnField.language, dcurnField.value, null, dcurnField.confidence);
                             }
+                        }
                     }
                     item.updateMetadata();
                     item.update();
