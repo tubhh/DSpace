@@ -112,20 +112,20 @@ public class URNCurationTask extends AbstractCurationTask
                 String ch = col.getHandle();
                 String ignorecoll = getCollectionException();
 
-                log.debug("Collection Handle is "+ch+". Will ignore "+ignorecoll+"\n");
+                log.debug("Collection Handle is "+ch+". Will ignore "+ignorecoll);
 
                 if (ch.equals(ignorecoll) && urnFields.length > 0) {
+                    results.append("Deleting URN from ").append(getItemHandle(item));
                     item.clearMetadata("tuhh", "identifier", "urn", Item.ANY);
-                    results.append("Deleting URN from ").append(getItemHandle(item)).append("\n");
+                    item.updateMetadata();
+                    item.update();
+                    context.getDBConnection().commit();
                 }
                 else {
-                    results.append("Nothing to do for ").append(getItemHandle(item)).append("\n");
+                    results.append("Nothing to do for ").append(getItemHandle(item));
                 }
                 status = Curator.CURATE_SUCCESS;
 
-                item.updateMetadata();
-                item.update();
-                context.getDBConnection().commit();
             } catch (AuthorizeException ae) {
                 // Something went wrong
                 logDebugMessage(ae.getMessage());
