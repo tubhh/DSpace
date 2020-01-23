@@ -171,7 +171,7 @@
 
         <!-- license element: dc.rights -->
         <xsl:if test="./@epdcx:propertyURI='http://purl.org/eprint/terms/JournalName'">
-            <dim:field mdschema="tuhh" element="relation" qualifier="ispartof">
+            <dim:field mdschema="dc" element="relation" qualifier="ispartof">
                 <xsl:value-of select="epdcx:valueString"/>
             </dim:field>
         </xsl:if>

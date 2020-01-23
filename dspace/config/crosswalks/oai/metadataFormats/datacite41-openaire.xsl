@@ -20,11 +20,11 @@
 	<xsl:output omit-xml-declaration="yes" method="xml" indent="yes" />
 	
 	<xsl:template match="/">
-		<oai_datacite xsi:schemaLocation="http://schema.datacite.org/oai/oai-1.1/ http://schema.datacite.org/oai/oai-1.1/oai.xsd" >
+		<oai_datacite xmlns="http://schema.datacite.org/oai/oai-1.1/" xsi:schemaLocation="http://schema.datacite.org/oai/oai-1.1/ http://schema.datacite.org/oai/oai-1.1/oai.xsd" >
 			<schemaVersion>4.1</schemaVersion>
 			<!-- <datacentreSymbol>XXXX</datacentreSymbol>  -->
 			<payload>
-				<resource xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.1/metadata.xsd" >
+				<resource xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.1/metadata.xsd" >
 					
 					
 					<!-- placeholder variable contains the value of the placeholder -->
@@ -186,12 +186,16 @@
 			     	
 			     	<!-- select the publisher -->
 			     	<xsl:variable name="publisher" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='publisher']/doc:element[@name='name']//doc:field[@name='value']"/>
-					
-					<xsl:if test="$publisher!=''">
 				     	<publisher>
+					<xsl:choose>
+					<xsl:when test="$publisher!=''">
 				     		<xsl:value-of select="$publisher"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>Hamburg University of Technology</xsl:text>
+                                        </xsl:otherwise>
+			     	</xsl:choose>
 				     	</publisher>
-			     	</xsl:if>
 			     	
 			     	
 			     	
@@ -443,9 +447,11 @@
 			     		
 			     		<xsl:otherwise>
 			     			<xsl:if test="$date_issued!=''">
+                                                    <dates>
 				     			<date dateType="Issued">
 				     				<xsl:value-of select="$date_issued"/>
 				     			</date>
+                                                    </dates>
 				     		</xsl:if>
 			     		</xsl:otherwise>
 		     		</xsl:choose>
