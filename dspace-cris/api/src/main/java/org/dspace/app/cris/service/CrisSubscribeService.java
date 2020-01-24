@@ -39,7 +39,7 @@ public class CrisSubscribeService
         }
     }
     
-    public void subscribe(EPerson e, String uuid)
+    public void subscribe(EPerson e, String uuid, int type)
     {
         
         CrisSubscription rpsub = applicationService.getSubscription(e.getID(),
@@ -48,8 +48,7 @@ public class CrisSubscribeService
         {
             rpsub = new CrisSubscription();
             rpsub.setEpersonID(e.getID());
-            ACrisObject aco = applicationService.getEntityByUUID(uuid);
-            rpsub.setTypeDef(aco.getType());
+            rpsub.setTypeDef(type);
             rpsub.setUuid(uuid);
             applicationService.saveOrUpdate(CrisSubscription.class, rpsub);
         }
