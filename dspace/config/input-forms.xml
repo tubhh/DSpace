@@ -15,11 +15,10 @@
 
  <form-map>
    <name-map collection-handle="default" form-name="pubwithfulltext" />
-<!--   <name-map collection-handle="11420/2" form-name="tubdokwitheu" /> -->
-   <name-map collection-handle="123456789/5" form-name="fdm" />
-   <name-map collection-handle="123456789/4" form-name="pubwithoutfulltext" />
-   <name-map collection-handle="123456789/35" form-name="fdm-nontuhh" />
-   <name-map collection-handle="123456789/40" form-name="fdm-nontuhh" />
+<!--
+   <name-map collection-handle="NO_FULLTEXT-COLLECTION-Handle" form-name="pubwithoutfulltext" />
+   <name-map collection-handle="FDM-COLLECTION-Handle" form-name="fdm-nontuhh" />
+-->
  </form-map>
 
 
