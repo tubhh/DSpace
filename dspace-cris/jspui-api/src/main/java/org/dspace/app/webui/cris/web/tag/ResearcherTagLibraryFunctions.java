@@ -337,7 +337,6 @@ public class ResearcherTagLibraryFunctions
     public static boolean isBoxHidden(HttpServletRequest request, ResearcherPage anagrafica,
             BoxResearcherPage box)
     {
-
         Researcher researcher = new Researcher();
 
         Map<String, ICRISComponent> rpComponent = researcher.getRPComponents();

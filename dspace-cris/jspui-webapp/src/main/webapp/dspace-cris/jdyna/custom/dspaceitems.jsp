@@ -54,11 +54,11 @@
 	ComponentInfoDTO info = ((Map<String, ComponentInfoDTO>)(request.getAttribute("componentinfomap"))).get(holder.getShortName());
 	
 	String relationName = info.getRelationName();
-	
+
 	String crisID = info.getCrisID();
 	boolean addRelations = info.isAddRelations();
 	boolean removeRelations = info.isRemoveRelations();
-	
+
 	List<String[]> subLinks = (List<String[]>) request.getAttribute("activeTypes"+relationName);
 	
 	DiscoverResult qResults = (DiscoverResult) request.getAttribute("qResults"+relationName);

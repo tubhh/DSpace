@@ -298,5 +298,4 @@ public abstract class AFacetedQueryConfigurerComponent<T extends DSpaceObject>
 
         return false;
     }
-
 }
