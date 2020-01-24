@@ -49,7 +49,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -74,6 +73,7 @@ import org.dspace.app.cris.discovery.CrisSearchService;
 import org.dspace.app.cris.discovery.OwnerRPAuthorityIndexer;
 import org.dspace.app.cris.integration.CrisComponentsService;
 import org.dspace.app.cris.integration.ICRISComponent;
+import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.cris.model.CrisConstants;
 import org.dspace.app.cris.model.CrisSubscription;
 import org.dspace.app.cris.service.ApplicationService;
@@ -138,6 +138,16 @@ public class ScriptCrisSubscribe
         List<String> relationField = new LinkedList<String>();
         for (CrisSubscription rpSubscription : rpSubscriptions)
         {
+        	ACrisObject entityByUUID = applicationService
+			        .getEntityByUUID(rpSubscription.getUuid());
+        	
+        	if (entityByUUID == null) {
+        		// found a subscription for a removed object
+				log.warn("Deleting subscription " + rpSubscription.getId() + " related to the deleted object "
+						+ rpSubscription.getUuid());
+				applicationService.delete(CrisSubscription.class, rpSubscription.getId());
+				continue;
+        	}
             // Does this row relate to the same e-person as the last?
             if ((currentEPerson == null)
                     || (rpSubscription.getEpersonID() != currentEPerson.getID()))
@@ -161,11 +171,18 @@ public class ScriptCrisSubscribe
 
                 currentEPerson = EPerson.find(context,
                         rpSubscription.getEpersonID());
+                if (currentEPerson == null) {
+            		// found a subscription from a removed user
+					log.warn("Deleting subscription from a deleted user " + rpSubscription.getEpersonID()
+							+ " about the object " + rpSubscription.getUuid());
+    				applicationService.delete(CrisSubscription.class, rpSubscription.getId());
+    				continue;
+            	}
                 rpkeys = new ArrayList<String>();
             }
-            rpkeys.add(ResearcherPageUtils
-                    .getPersistentIdentifier(applicationService
-                            .getEntityByUUID(rpSubscription.getUuid())));
+            
+			rpkeys.add(ResearcherPageUtils
+                    .getPersistentIdentifier(entityByUUID));
         }
         // Process the last person
         if (currentEPerson != null)
@@ -385,13 +402,6 @@ public class ScriptCrisSubscribe
             options.addOption(opt);        	
         }
 
-        {
-            Option opt = new Option("c", "clean", false,
-                    "First to process Daily Notification, clean subscriptions with inexistent CRIS entity");
-            opt.setRequired(false);
-            options.addOption(opt);
-        }
-
         try
         {
             line = new PosixParser().parse(options, argv);
@@ -423,8 +433,6 @@ public class ScriptCrisSubscribe
             Researcher researcher = new Researcher();
             ApplicationService applicationService = researcher
                     .getApplicationService();
-            CrisSubscribeService crisSubscribeService = researcher.
-                    getCrisSubscribeService();
             
             if(line.hasOption("s")) {
         
@@ -435,11 +443,12 @@ public class ScriptCrisSubscribe
                 query.addFilterQuery("{!field f=search.resourcetype}"
                         + CrisConstants.RP_TYPE_ID);
                 query.setRows(Integer.MAX_VALUE);
-   				query.setQuery("*:*");
+   				query.setQuery(OwnerRPAuthorityIndexer.OWNER_I + ":[* TO *]");
 
                 QueryResponse qResponse = searchService.search(query);
                 SolrDocumentList results = qResponse.getResults();
-
+                CrisSubscribeService crisSubscribeService = researcher.getCrisSubscribeService();
+                
                 if (results.getNumFound() > 0)
                 {
                     for (SolrDocument solrDoc : results)
@@ -450,27 +459,12 @@ public class ScriptCrisSubscribe
                     	if(oo!=null) {
 	                    	EPerson eperson = EPerson.find(context, oo);
 	                    	if(eperson!=null && StringUtils.isNotBlank(uuid)) {
-	                    		crisSubscribeService.subscribe(eperson, uuid);
+	                    		crisSubscribeService.subscribe(eperson, uuid, CrisConstants.RP_TYPE_ID);
 	                    	}
                     	}
                     }
                 }
             	
-            }
-
-            if(line.hasOption("c")) {
-                List<CrisSubscription> rpSubscriptions = applicationService
-                        .getList(CrisSubscription.class);
-                HashSet<String> rpUUIDs = new HashSet<>();
-                for (CrisSubscription rpSubscription : rpSubscriptions) {
-                    rpUUIDs.add(rpSubscription.getUuid());
-                }
-                for (String rpUUID : rpUUIDs) {
-                    if (applicationService
-                            .getEntityByUUID(rpUUID) == null) {
-                        crisSubscribeService.unsubscribe(rpUUID);
-                    }
-                }
             }
 
             List<CrisComponentsService> serviceComponent = researcher
