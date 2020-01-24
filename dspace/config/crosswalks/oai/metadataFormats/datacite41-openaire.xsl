@@ -147,12 +147,12 @@
 				     					<xsl:when test="../../@name='alternative'">
 				     						<xsl:choose>
 				     							<xsl:when test="../@name!='none' and ../@name!='*' and ../@name!=''">
-				     								<title xml:lang="{../@name}" titleType="Alternative Title">
+				     								<title xml:lang="{../@name}" titleType="AlternativeTitle">
 										     			<xsl:value-of select="."/>
 										     		</title>
 										     	</xsl:when>
 										     	<xsl:otherwise>
-										     		<title titleType="Alternative Title">
+										     		<title titleType="AlternativeTitle">
 										     			<xsl:value-of select="."/>
 										     		</title>
 										     	</xsl:otherwise>
