@@ -133,7 +133,7 @@
 				     </xsl:if>
 			     	
 					<!-- select the language -->
-					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']//doc:field[@name='value']"/>
 			     	
 			     	
 			     	<!-- select all titles -->
@@ -275,7 +275,7 @@
 			     	
 			     	
 			     	<!-- select all subjects -->
-			     	<xsl:variable name="subject" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='subject']/doc:element/doc:field[@name='value']"/>
+			     	<xsl:variable name="subject" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='subject']//doc:field[@name='value']"/>
 					
 					<xsl:if test="$subject!=''">
 				     	<subjects>
