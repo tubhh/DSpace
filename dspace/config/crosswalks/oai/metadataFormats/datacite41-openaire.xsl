@@ -91,8 +91,10 @@
 					<xsl:variable name="department" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='department']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="orcid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='author']/doc:element[@name='orcid']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="gndid" select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorGND']/doc:element/doc:field[@name='authority']"/>
-					
-					<xsl:if test="$author!=''">
+					<xsl:variable name="editor" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='editor']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="other" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='other']/doc:element/doc:field[@name='value']"/>
+					<xsl:choose>
+					<xsl:when test="$author!=''">
 						<creators>
 							<xsl:for-each select="$author">
 								<xsl:if test=".!=''">
@@ -130,7 +132,48 @@
 						         </xsl:if>
 					     	</xsl:for-each>
 				     	</creators>
-				     </xsl:if>
+				     </xsl:when>
+                                     <xsl:otherwise>
+                <xsl:choose>
+                    <xsl:when test="$editor">
+                        <xsl:for-each select="$editor">
+                            <creator>
+                                <creatorName>
+                                    <xsl:attribute name="nameType">Personal</xsl:attribute>
+                                    <xsl:value-of select="." />
+                                </creatorName>
+                                <givenName><xsl:value-of select="substring-after(., ',')"/></givenName>
+                                <familyName><xsl:value-of select="substring-before(., ',')"/></familyName>
+                            </creator>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test="$other">
+                                <xsl:for-each select="$other">
+                                    <creator>
+                                        <creatorName>
+                                            <xsl:attribute name="nameType">Personal</xsl:attribute>
+                                            <xsl:value-of select="." />
+                                        </creatorName>
+                                        <givenName><xsl:value-of select="substring-after(., ',')"/></givenName>
+                                        <familyName><xsl:value-of select="substring-before(., ',')"/></familyName>
+                                    </creator>
+                                </xsl:for-each>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <creator>
+                                    <creatorName>
+                                        <xsl:attribute name="nameType">Personal</xsl:attribute>
+                                        <xsl:text>(:unkn) unknown</xsl:text>
+                                    </creatorName>
+                                </creator>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+                                </xsl:otherwise>
+                                </xsl:choose>
 			     	
 					<!-- select the language -->
 					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']//doc:field[@name='value']"/>
