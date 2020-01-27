@@ -39,15 +39,15 @@ public class CrisSubscribeService
         }
     }
     
-    public void subscribe(EPerson e, String uuid, int type)
+    public void subscribe(int epersonID, String uuid, int type)
     {
         
-        CrisSubscription rpsub = applicationService.getSubscription(e.getID(),
+        CrisSubscription rpsub = applicationService.getSubscription(epersonID,
                 uuid);
         if (rpsub == null)
         {
             rpsub = new CrisSubscription();
-            rpsub.setEpersonID(e.getID());
+            rpsub.setEpersonID(epersonID);
             rpsub.setTypeDef(type);
             rpsub.setUuid(uuid);
             applicationService.saveOrUpdate(CrisSubscription.class, rpsub);

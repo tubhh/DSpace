@@ -18,6 +18,7 @@ import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.dspace.core.Context;
 import org.jdom.JDOMException;
@@ -64,13 +65,13 @@ public class CrossRefOnlineDataLoader extends NetworkSubmissionLookupDataLoader
             List<Record> items = null;
             List<Record> results = new ArrayList<Record>();
             
-            if (apiKey == null){
+            if (StringUtils.isNotBlank(getApiKey())){
             	throw new RuntimeException("No CrossRef API key is specified!");
             }
             
             try
             {
-                items = crossrefService.search(context, dois, apiKey);
+                items = crossrefService.search(context, dois, getApiKey());
             }
             catch (JDOMException e)
             {
@@ -97,7 +98,7 @@ public class CrossRefOnlineDataLoader extends NetworkSubmissionLookupDataLoader
     public List<Record> search(Context context, String title, String author,
             int year) throws HttpException, IOException
     {
-    	if (getApiKey() == null){
+    	if (StringUtils.isNotBlank(getApiKey())){
         	throw new RuntimeException("No CrossRef API key is specified!");
         }
     	

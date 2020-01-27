@@ -46,13 +46,15 @@ package org.dspace.app.cris.batch;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.mail.MessagingException;
 
@@ -79,63 +81,72 @@ import org.dspace.app.cris.model.CrisSubscription;
 import org.dspace.app.cris.service.ApplicationService;
 import org.dspace.app.cris.service.CrisSubscribeService;
 import org.dspace.app.cris.util.Researcher;
-import org.dspace.app.cris.util.ResearcherPageUtils;
-import org.dspace.content.Metadatum;
 import org.dspace.content.Item;
+import org.dspace.content.Metadatum;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.core.Email;
 import org.dspace.core.I18nUtil;
 import org.dspace.core.LogManager;
+import org.dspace.discovery.SearchService;
 import org.dspace.discovery.SearchServiceException;
 import org.dspace.eperson.EPerson;
 import org.dspace.eperson.Subscribe;
 import org.dspace.handle.HandleManager;
+import org.dspace.utils.DSpace;
 
 /**
  * Class defining methods for sending new item e-mail alerts to users. Based on
  * {@link Subscribe} written by Robert Tansley
  * 
  * @author Luigi Andrea Pascarelli
+ * @author Andrea Bollini
  */
 public class ScriptCrisSubscribe
 {
     /** log4j logger */
     private static Logger log = Logger.getLogger(ScriptCrisSubscribe.class);
     
-    private static Map<Integer, List<String>> mapRelationFields = new HashMap<Integer, List<String>>();
-
-    /**
-     * Process subscriptions. This must be invoked only once a day. Messages are
-     * only sent out when a rp has actually received new items, so that people's
-     * mailboxes are not clogged with many "no new items" mails.
-     * <P>
-     * Yesterday's newly available items are included. If this is run at for
-     * example midday, any items that have been made available during the
-     * current day will not be included, but will be included in the next day's
-     * run.
-     * <P>
-     * For example, if today's date is 2002-10-10 (in UTC) items made available
-     * during 2002-10-09 (UTC) will be included.
-     * 
-     * @param applicationService
-     * 
-     * @param context
-     *            DSpace context object
-     * @param test
-     * @throws SearchServiceException
-     */
+	/**
+	 * Process subscriptions. This must be invoked only once a day. Messages are
+	 * only sent out when a subscribed cris object has actually received new or
+	 * updated related items, so that people's mailboxes are not clogged with many
+	 * "no new items" mails.
+	 * <P>
+	 * Yesterday's newly available items are included. If this is run at for example
+	 * midday, any items that have been made available during the current day will
+	 * not be included, but will be included in the next day's run.
+	 * <P>
+	 * For example, if today's date is 2002-10-10 (in UTC) items made available
+	 * during 2002-10-09 (UTC) will be included.
+	 * 
+	 * The eperson.subscription.onlynew configuration can be set to true to force
+	 * notification only about new item, by default updated items are included as
+	 * well
+	 * 
+	 * @param researcher         the CRIS Researcher spring service
+	 * @param applicationService
+	 * 
+	 * @param context            DSpace context object * @param mapRelationFields a
+	 *                           map where the key is the integer representing the
+	 *                           cris object type and the values are all the
+	 *                           RelationConfiguration available for such type. For
+	 *                           ResearcherObject all the relations are exposed
+	 *                           under the start type ID
+	 * 
+	 * @param test               if true the email content is printed in the log
+	 *                           instead than send any real email
+	 * @throws SearchServiceException, IOException, SQLException
+	 */
     public static void processDaily(Researcher researcher,
-            ApplicationService applicationService, Context context, boolean test)
+            ApplicationService applicationService, Context context, Map<Integer, Set<RelationConfiguration>> mapRelationFields, boolean test)
             throws SQLException, IOException, SearchServiceException
     {
-
         List<CrisSubscription> rpSubscriptions = applicationService
                 .getList(CrisSubscription.class);
         EPerson currentEPerson = null;
-        List<String> rpkeys = null; // List of rp keys
-        List<String> relationField = new LinkedList<String>();
+        List<ACrisObject> crisObjects = new ArrayList<ACrisObject>();
         for (CrisSubscription rpSubscription : rpSubscriptions)
         {
         	ACrisObject entityByUUID = applicationService
@@ -157,9 +168,8 @@ public class ScriptCrisSubscribe
                 {
                     try
                     {
-                        relationField = mapRelationFields.get(rpSubscription.getTypeDef());
-                        sendEmail(researcher, context, currentEPerson, rpkeys,
-                                test, relationField);
+                        sendEmail(context, mapRelationFields, currentEPerson, crisObjects,
+	                                test);
                     }
                     catch (MessagingException me)
                     {
@@ -176,21 +186,33 @@ public class ScriptCrisSubscribe
 					log.warn("Deleting subscription from a deleted user " + rpSubscription.getEpersonID()
 							+ " about the object " + rpSubscription.getUuid());
     				applicationService.delete(CrisSubscription.class, rpSubscription.getId());
-    				continue;
             	}
-                rpkeys = new ArrayList<String>();
+                crisObjects.clear();
             }
-            
-			rpkeys.add(ResearcherPageUtils
-                    .getPersistentIdentifier(entityByUUID));
+
+            Integer typeDef = rpSubscription.getTypeDef();
+            if (typeDef == null) {
+            	log.error("Found wrong subscription " + rpSubscription.getId() + " no target type defined -- skip it");
+            	continue;
+            }
+            int typeToUse = typeDef;
+            if (typeToUse > CrisConstants.CRIS_DYNAMIC_TYPE_ID_START) {
+            	typeToUse = CrisConstants.CRIS_DYNAMIC_TYPE_ID_START;
+            }
+			Set<RelationConfiguration> relationsQueries = mapRelationFields.get(typeDef);
+            if (relationsQueries == null || relationsQueries.size() == 0) {
+        		log.error("No relations defined to satisfy the subscription request " + rpSubscription.getId());
+        	}
+            else {
+            	crisObjects.add(entityByUUID);
+            }
         }
         // Process the last person
         if (currentEPerson != null)
         {
             try
             {
-                sendEmail(researcher, context, currentEPerson, rpkeys, test,
-                        relationField);
+                sendEmail(context, mapRelationFields, currentEPerson, crisObjects, test);
             }
             catch (MessagingException me)
             {
@@ -201,62 +223,73 @@ public class ScriptCrisSubscribe
         }
     }
 
-    /**
-     * Sends an email to the given e-person with details of new items in the
-     * given dspace object (MUST be a community or a collection), items that
-     * appeared yesterday. No e-mail is sent if there aren't any new items in
-     * any of the dspace objects.
-     * 
-     * @param context
-     *            DSpace context object
-     * @param eperson
-     *            eperson to send to
-     * @param rpkeys
-     *            List of DSpace Objects
-     * @param test
-     * @throws SearchServiceException
-     */
-    public static void sendEmail(Researcher researcher, Context context,
-            EPerson eperson, List<String> rpkeys, boolean test,
-            List<String> relationFields) throws IOException,
+	/**
+	 * Sends an email to the given e-person with details of new items in the given
+	 * dspace object (MUST be a community or a collection), items that appeared
+	 * yesterday. No e-mail is sent if there aren't any new items in any of the
+	 * dspace objects.
+	 * 
+	 * @param context      DSpace context object
+	 * @param mapRelations a map where the key is the integer representing the cris
+	 *                     object type and the values are all the
+	 *                     RelationConfiguration available for such type. For
+	 *                     ResearcherObject all the relations are exposed under the
+	 *                     start type ID
+	 * @param eperson      eperson to send to
+	 * @param crisObjects  List of CRIS Objects
+	 * @param test         print the email content instead than send out a real
+	 *                     email
+	 * @throws SearchServiceException
+	 */
+    public static void sendEmail(Context context, Map<Integer, Set<RelationConfiguration>> mapRelations,
+            EPerson eperson, List<ACrisObject> crisObjects, boolean test) throws IOException,
             MessagingException, SQLException, SearchServiceException
     {
-
-        CrisSearchService searchService = researcher.getCrisSearchService();
-
         // Get a resource bundle according to the eperson language preferences
         Locale supportedLocale = I18nUtil.getEPersonLocale(eperson);
 
+        SearchService searchService = new DSpace().getSingletonService(SearchService.class);
         StringBuffer emailText = new StringBuffer();
         boolean isFirst = true;
 
-        for (String rpkey : rpkeys)
+        for (ACrisObject rp : crisObjects)
         {
             SolrQuery query = new SolrQuery();
             query.setFields("search.resourceid");
             query.addFilterQuery("{!field f=search.resourcetype}"
-                    + Constants.ITEM, "{!field f=inarchive}true");
+                    + Constants.ITEM, "{!field f=read}g0","-withdrawn:true","-discoverable:false");
 
-            for (String tmpRelations : relationFields)
-            {
-                String fq = "{!field f=" + tmpRelations + "}" + rpkey;
-                query.addFilterQuery(fq);
+            StringBuffer q = new StringBuffer();
+            int type = rp.getType();
+            if (type > CrisConstants.CRIS_DYNAMIC_TYPE_ID_START) {
+            	type = CrisConstants.CRIS_DYNAMIC_TYPE_ID_START;
             }
-
+			Set<RelationConfiguration> relations = mapRelations.get(type);
+			
+			if (relations == null) {
+				log.debug("No relations defined for type " + type);
+				log.debug("the relation map contains the following types " + StringUtils.join(mapRelations.keySet(), ", " ));
+			}
+            for (RelationConfiguration rel : relations)
+            {
+            	if (q.length() > 0) {
+            		q.append(" OR ");
+            	}
+                q.append("(").append(MessageFormat.format(rel.getQuery(), rp.getCrisID(), rp.getUuid())).append(")");
+            }
+            query.setQuery(q.toString());
             query.setRows(Integer.MAX_VALUE);
 
             if (ConfigurationManager.getBooleanProperty(
                     "eperson.subscription.onlynew", false))
             {
                 // get only the items archived yesterday
-				query.setQuery("dateaccessioned_dt:[NOW/DAY-1DAY TO NOW/DAY]");
+				query.addFilterQuery("dateaccessioned_dt:[NOW/DAY-1DAY TO NOW/DAY]");
             }
             else
             {
-                // get all item modified yesterday but not published the day
-                // before
-                // and all the item modified today and archived yesterday
-				query.setQuery("(itemLastModified_dt:[NOW/DAY-1DAY TO NOW/DAY] AND dateaccessioned_dt:[NOW/DAY-1DAY TO NOW/DAY]) OR ((itemLastModified_dt:[NOW/DAY TO NOW] AND dateaccessioned_dt:[NOW/DAY-1DAY TO NOW/DAY]))");
+                // get all item modified or archived yesterday 
+				query.addFilterQuery("itemLastModified_dt:[NOW/DAY-1DAY TO NOW/DAY] OR dateaccessioned_dt:[NOW/DAY-1DAY TO NOW/DAY]");
             }
 
             QueryResponse qResponse = searchService.search(query);
@@ -279,7 +312,7 @@ public class ScriptCrisSubscribe
                 emailText
                         .append(I18nUtil.getMessage(
                                 "org.dspace.eperson.Subscribe.new-items",
-                                supportedLocale)).append(" ").append(rpkey)
+                                supportedLocale)).append(" ").append(rp.getName())
                         .append(": ").append(results.getNumFound())
                         .append("\n\n");
 
@@ -307,6 +340,8 @@ public class ScriptCrisSubscribe
                                 supportedLocale));
                     }
 
+					// TODO: these are more properly all the contributors of the items as for some
+					// item type the authors are not so relevant/sufficient 
                     Metadatum[] authors = item.getDC("contributor", Item.ANY,
                             Item.ANY);
 
@@ -433,11 +468,9 @@ public class ScriptCrisSubscribe
             Researcher researcher = new Researcher();
             ApplicationService applicationService = researcher
                     .getApplicationService();
+            CrisSearchService searchService = researcher.getCrisSearchService();
             
             if(line.hasOption("s")) {
-        
-            	CrisSearchService searchService = researcher.getCrisSearchService();
-            	
                 SolrQuery query = new SolrQuery();
                 query.setFields("cris-uuid", OwnerRPAuthorityIndexer.OWNER_I);
                 query.addFilterQuery("{!field f=search.resourcetype}"
@@ -455,18 +488,13 @@ public class ScriptCrisSubscribe
                     {
                     	String uuid = (String) solrDoc.getFieldValue("cris-uuid");
                     	Integer oo = (Integer) solrDoc.getFieldValue(OwnerRPAuthorityIndexer.OWNER_I);
-                    	
-                    	if(oo!=null) {
-	                    	EPerson eperson = EPerson.find(context, oo);
-	                    	if(eperson!=null && StringUtils.isNotBlank(uuid)) {
-	                    		crisSubscribeService.subscribe(eperson, uuid, CrisConstants.RP_TYPE_ID);
-	                    	}
-                    	}
+                		crisSubscribeService.subscribe(oo, uuid, CrisConstants.RP_TYPE_ID);
                     }
                 }
             	
             }
 
+            Map<Integer, Set<RelationConfiguration>> mapRelationFields = new HashMap<Integer, Set<RelationConfiguration>>();
             List<CrisComponentsService> serviceComponent = researcher
                     .getAllCrisComponents();
             for (CrisComponentsService service : serviceComponent)
@@ -479,19 +507,18 @@ public class ScriptCrisSubscribe
                     if (Item.class.isAssignableFrom(relationConfiguration.getRelationClass()))
                     {
                         Integer key = CrisConstants.getEntityType(component.getTarget());
-                        String query = relationConfiguration.getQuery();
                         if(!mapRelationFields.containsKey(key)) {
-                            List<String> rels = new LinkedList<String>();
-                            rels.add(query);
+                            Set<RelationConfiguration> rels = new HashSet<RelationConfiguration>();
+                            rels.add(relationConfiguration);
                             mapRelationFields.put(key, rels);
                         }
                         else {
-                            mapRelationFields.get(key).add(query);
+                            mapRelationFields.get(key).add(relationConfiguration);
                         }
                     }
                 }
             }
-            processDaily(researcher, applicationService, context, test);
+            processDaily(researcher, applicationService, context, mapRelationFields, test);
         }
         catch (Exception e)
         {

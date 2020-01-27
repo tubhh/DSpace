@@ -271,7 +271,6 @@ public class Authenticate
             // Shibboleth stores information about special groups in the session. Preserve these information.
             Boolean shibbolethAuthenticated = (Boolean) session.getAttribute("shib.authenticated");
             int[] shibbolethSpecialGroups = (int[]) session.getAttribute("shib.specialgroup");
-
             // Invalidate session unless dspace.cfg says not to
             if(ConfigurationManager.getBooleanProperty("webui.session.invalidate", true))
             {
@@ -294,13 +293,13 @@ public class Authenticate
             }
 
             // Restore shibboleth special groups
-        if (shibbolethAuthenticated != null) {
-	    session.setAttribute("shib.authenticated", shibbolethAuthenticated.booleanValue());
-        }
+            if (shibbolethAuthenticated != null) {
+                session.setAttribute("shib.authenticated", shibbolethAuthenticated.booleanValue());
+            }
             if (shibbolethSpecialGroups != null) {
                 session.setAttribute("shib.specialgroup", shibbolethSpecialGroups);
             }
-
+            
 			List<PostLoggedInAction> postLoggedInActions = new DSpace().getServiceManager().getServicesByType(
 					PostLoggedInAction.class);
 
