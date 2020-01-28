@@ -306,7 +306,7 @@
 	    <property name="fieldKeys">
 	        <list>
 	        	<value>title</value>
-	        	<value>authors</value>
+<!--	        	<value>authors</value> -->
 	        </list>
 	    </property>
 	</bean>
@@ -1189,6 +1189,7 @@
 				<entry key="authors" value="authors" />
 				<entry key="citationCount" value="wosCitation" />
 				<entry key="keywords" value="keywords" />
+				<entry key="keywordsPlus" value="keywords" />
 				<entry key="language" value="language" />
 				<entry key="abstracts" value="abstract" />
 				<entry key="abstractita" value="abstractita" />
