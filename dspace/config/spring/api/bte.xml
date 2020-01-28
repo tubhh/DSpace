@@ -304,7 +304,7 @@
 	    <property name="fieldKeys">
 	        <list>
 	        	<value>title</value>
-	        	<value>authors</value>
+<!--	        	<value>authors</value> -->
 	        </list>
 	    </property>
 	</bean>
