@@ -557,8 +557,8 @@
 					<xsl:variable name="resourcetype_values"> Audiovisual Collection DataPaper Dataset Event Image InteractiveResource Model PhysicalObject Service Software Sound Text Workflow Other </xsl:variable>
 					
                                         <resourceType>
-                                            <xsl:attribute name="resourceTypeGeneral"><xsl:value-of select="$resourcetype_general/doc:field[@name='value']" /></xsl:attribute>
-                                            <xsl:value-of select="$resourcetype/doc:field[@name='value']" />
+                                            <xsl:attribute name="resourceTypeGeneral"><xsl:value-of select="$resourcetype_general/doc:element/doc:field[@name='value']" /></xsl:attribute>
+                                            <xsl:value-of select="$resourcetype//doc:field[@name='value']" />
                                         </resourceType>
                                         <!--
 					<xsl:if test="$resourcetype/doc:element/doc:field[@name='value']!=''">
