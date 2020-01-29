@@ -136,6 +136,7 @@
                                      <xsl:otherwise>
                 <xsl:choose>
                     <xsl:when test="$editor">
+                    <creators>
                         <xsl:for-each select="$editor">
                             <creator>
                                 <creatorName>
@@ -146,8 +147,10 @@
                                 <familyName><xsl:value-of select="substring-before(., ',')"/></familyName>
                             </creator>
                         </xsl:for-each>
+                    </creators>
                     </xsl:when>
                     <xsl:otherwise>
+                    <creators>
                         <xsl:choose>
                             <xsl:when test="$other">
                                 <xsl:for-each select="$other">
@@ -170,6 +173,7 @@
                                 </creator>
                             </xsl:otherwise>
                         </xsl:choose>
+                    </creators>
                     </xsl:otherwise>
                 </xsl:choose>
                                 </xsl:otherwise>
