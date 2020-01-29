@@ -2327,6 +2327,10 @@
        <stored-value>es</stored-value>
      </pair>
      <pair>
+       <displayed-value>Portugiesisch</displayed-value>
+       <stored-value>pt</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Französisch</displayed-value>
        <stored-value>fr</stored-value>
      </pair>
