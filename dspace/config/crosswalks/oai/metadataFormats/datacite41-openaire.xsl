@@ -552,9 +552,15 @@
 					
 					
 					<!-- select the resource type -->
-					<xsl:variable name="resourcetype" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='type']"/>
+					<xsl:variable name="resourcetype" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element[@name='casrai']"/>
+                                        <xsl:variable name="resourcetype_general" select="doc:metadata/doc:element[@name='dcterms']/doc:element[@name='DCMIType']"/>
 					<xsl:variable name="resourcetype_values"> Audiovisual Collection DataPaper Dataset Event Image InteractiveResource Model PhysicalObject Service Software Sound Text Workflow Other </xsl:variable>
 					
+                                        <resourceType>
+                                            <xsl:attribute name="resourceTypeGeneral"><xsl:value-of select="$resourcetype_general/doc:field[@name='value']" /></xsl:attribute>
+                                            <xsl:value-of select="$resourcetype/doc:field[@name='value']" />
+                                        </resourceType>
+                                        <!--
 					<xsl:if test="$resourcetype/doc:element/doc:field[@name='value']!=''">
 						<xsl:choose>
 							<xsl:when test="contains($resourcetype_values, $resourcetype/doc:element/@name)">
@@ -582,7 +588,7 @@
 							 </xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
-					
+					-->
 					
 					
 					<!-- select all alternate identifiers -->
