@@ -6,8 +6,13 @@
 #
 Subject: TORE - You have works to send to the Orcid Registry
 
-One or more of your publications on TORE has been changed and it may be necessary to push it to ORCID again.
+Dear TORE User,
+
+you are recieving this message, because one or more of your publications on TORE 
+have been changed and it may be necessary to push it to ORCID again.
+
 Your settings require a manual push.
+
 Please login {0} to send the "works" to the Orcid Registry.
 In order to do that, please click on the ORCID tab in your profile and check the synchronization queue.
 
