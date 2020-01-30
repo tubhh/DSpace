@@ -333,21 +333,6 @@ td > ul {
     color: #2dc6c6;
 }
 
-.fa-user.staff {
-    color: #2dc6c6;
-}
-.fa-user.exstaff {
-/*     color: #229e9e; */
-    color: #2edcdc;
-}
-.fa-user.externalstaff {
-    color: #999999;
-}
-.fa-user.undefinedstaff {
-    color: #afafaf;
-}
-
-
 /* Abstand Text-Buttonrand */
 .btn-default.col-md-6 , .btn-primary.col-md-6 {
     padding-left: 12px;
