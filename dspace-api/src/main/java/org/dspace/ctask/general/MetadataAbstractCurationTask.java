@@ -81,15 +81,17 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
                 Metadatum[] abstractGerman = item.getMetadata("tuhh", "abstract", "german", Item.ANY);
                 Metadatum[] abstractEnglish = item.getMetadata("tuhh", "abstract", "english", Item.ANY);
                 Metadatum[] abstractDc = item.getMetadata("dc", "description", "abstract", Item.ANY);
+                Metadatum[] abstractDcGerman = item.getMetadata("dc", "description", "abstract", "de");
+                Metadatum[] abstractDcEnglish = item.getMetadata("dc", "description", "abstract", "en");
                 // Case 1: get the abstracts from local fields and transfer them into dc field
-                if (abstractGerman.length > 0) {
+                if (abstractGerman.length > 0 && abstractDcGerman.length == 0) {
                     item.clearMetadata("dc", "description", "abstract", "de");
                     item.clearMetadata("dc", "description", "abstract", "de_DE");
                     item.addMetadata("dc", "description", "abstract", "de", abstractGerman[0].value, null, -1);
                     results.append("Set german abstract from local abstract field into dc.abstract");
                     done = true;
                 }
-                if (abstractEnglish.length > 0) {
+                if (abstractEnglish.length > 0 && abstractDcEnglish.length == 0) {
                     item.clearMetadata("dc", "description", "abstract", "en");
                     item.clearMetadata("dc", "description", "abstract", "en_US");
                     item.clearMetadata("dc", "description", "abstract", "en_GB");
@@ -116,6 +118,13 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
                                     results.append("Set english abstract from dc.abstract into local abstract field");
                                     done = true;
                                 }
+                            } else if (language.equals("")) {
+                                item.addMetadata("tuhh", "abstract", "english", "en", abs.value, null, -1);
+                                results.append("Set unqualified abstract from dc.abstract into local abstract field");
+                                item.clearMetadata("dc", "description", "abstract", Item.ANY);
+                                item.addMetadata("dc", "description", "abstract", "en", abs.value, null, -1);
+                                results.append("Set language english to abstract in dc.abstract");
+                                done = true;
                             }
                         }
                         catch (NullPointerException npe) {
