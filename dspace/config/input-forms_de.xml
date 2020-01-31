@@ -144,9 +144,23 @@
        </field>
 
        <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>abstract</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
+         <repeatable>true</repeatable>
+         <label>Zusammenfassung</label>
+         <input-type>textarea</input-type>
+         <hint>Bitte geben Sie hier eine Zusammenfassung des Dokuments ein und wählen Sie die passende Sprache. </hint>
+         <required></required>
+       </field>
+
+<!--
+       <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>abstract</dc-element>
          <dc-qualifier>german</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
          <repeatable>false</repeatable>
          <label>Zusammenfassung (deutsch)</label>
          <input-type>textarea</input-type>
@@ -158,13 +172,14 @@
          <dc-schema>tuhh</dc-schema>
          <dc-element>abstract</dc-element>
          <dc-qualifier>english</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
          <repeatable>false</repeatable>
          <label>Zusammenfassung (englisch)</label>
          <input-type>textarea</input-type>
          <hint>Bitte geben Sie hier eine Zusammenfassung des Dokuments in englischer Sprache ein. </hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>publication</dc-element>
@@ -754,11 +769,25 @@
          <hint></hint>
          <required></required>
        </field>
-         
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>abstract</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
+         <repeatable>true</repeatable>
+         <label>Zusammenfassung</label>
+         <input-type>textarea</input-type>
+         <hint>Bitte geben Sie hier eine Zusammenfassung des Dokuments ein und wählen Sie die passende Sprache. </hint>
+         <required></required>
+       </field>
+
+<!--
        <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>abstract</dc-element>
          <dc-qualifier>english</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
          <repeatable>false</repeatable>
          <label>Beschreibung (englisch)</label>
          <input-type>textarea</input-type>
@@ -770,13 +799,14 @@
          <dc-schema>tuhh</dc-schema>
          <dc-element>abstract</dc-element>
          <dc-qualifier>german</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
          <repeatable>false</repeatable>
          <label>Beschreibung (deutsch)</label>
          <input-type>textarea</input-type>
          <hint></hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>subject</dc-element>
@@ -1044,9 +1074,23 @@
        </field>
 
        <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>abstract</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
+         <repeatable>true</repeatable>
+         <label>Zusammenfassung</label>
+         <input-type>textarea</input-type>
+         <hint>Bitte geben Sie hier eine Zusammenfassung des Dokuments ein und wählen Sie die passende Sprache. </hint>
+         <required></required>
+       </field>
+
+<!--
+       <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>abstract</dc-element>
          <dc-qualifier>german</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
          <repeatable>false</repeatable>
          <label>Zusammenfassung (deutsch)</label>
          <input-type>textarea</input-type>
@@ -1058,13 +1102,14 @@
          <dc-schema>tuhh</dc-schema>
          <dc-element>abstract</dc-element>
          <dc-qualifier>english</dc-qualifier>
+         <language value-pairs-name="common_iso_languages">true</language>
          <repeatable>false</repeatable>
          <label>Zusammenfassung (englisch)</label>
          <input-type>textarea</input-type>
          <hint>Bitte geben Sie hier eine Zusammenfassung des Dokuments in englischer Sprache ein. </hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>publication</dc-element>
@@ -2288,6 +2333,55 @@
         "en_US", "en", "es", "de", "fr", "it", "ja", "zh", "other", ""
      -->
    <value-pairs value-pairs-name="common_iso_languages_de" dc-term="language_iso">
+     <pair>
+       <displayed-value>keine Angabe</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Deutsch</displayed-value>
+       <stored-value>de</stored-value>
+     </pair>
+<!--
+     <pair>
+       <displayed-value>Englisch (United States)</displayed-value>
+       <stored-value>en_US</stored-value>
+      </pair>
+-->
+     <pair>
+       <displayed-value>Englisch</displayed-value>
+       <stored-value>en</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Spanisch</displayed-value>
+       <stored-value>es</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Französisch</displayed-value>
+       <stored-value>fr</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Italienisch</displayed-value>
+       <stored-value>it</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Japanisch</displayed-value>
+       <stored-value>ja</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Chinesisch</displayed-value>
+       <stored-value>zh</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Mehrere Sprachen</displayed-value>
+       <stored-value>mul</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>(Andere)</displayed-value>
+       <stored-value>other</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="common_iso_languages" dc-term="language_iso">
      <pair>
        <displayed-value>keine Angabe</displayed-value>
        <stored-value></stored-value>
