@@ -273,7 +273,6 @@ public class Authenticate
             int[] shibbolethSpecialGroups = (int[]) session.getAttribute("shib.specialgroup");
             // Also our improved LDAP authentication stores special groups in the session.
             int[] ldapSpecialGroups = (int[]) session.getAttribute("ldap.specialgroups");
-
             // Invalidate session unless dspace.cfg says not to
             if(ConfigurationManager.getBooleanProperty("webui.session.invalidate", true))
             {
@@ -301,13 +300,13 @@ public class Authenticate
             }
 
             // Restore shibboleth special groups
-        if (shibbolethAuthenticated != null) {
-	    session.setAttribute("shib.authenticated", shibbolethAuthenticated.booleanValue());
-        }
+            if (shibbolethAuthenticated != null) {
+                session.setAttribute("shib.authenticated", shibbolethAuthenticated.booleanValue());
+            }
             if (shibbolethSpecialGroups != null) {
                 session.setAttribute("shib.specialgroup", shibbolethSpecialGroups);
             }
-
+            
 			List<PostLoggedInAction> postLoggedInActions = new DSpace().getServiceManager().getServicesByType(
 					PostLoggedInAction.class);
 

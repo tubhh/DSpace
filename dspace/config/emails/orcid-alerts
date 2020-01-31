@@ -4,9 +4,11 @@
 #
 # See org.dspace.core.Email for information on the format of this file.
 #
-Subject: You have works to send to the Orcid Registry
+Subject: TORE ORCID Push erforderlich
 
-Please login {0} to send the "works" to the Orcid Registry
+Einer oder mehrere Ihrer Publikationen auf TORE wurden geändert und müssen ggf. neu zu ORCID übertragen werden.
+Ihre Einstellung der Pushfunktion zu ORCID erfordert einen manuellen Push.
+Bitte melden Sie sich auf TORE an, um die Publikationen aus {0} an ORCID zu senden.
+Klicken Sie dazu auf den ORCID-Reiter in Ihrem Profil und gehen Sie die Synchronisationsliste durch.
 
-The DSpace Team
-
+TORE-Team

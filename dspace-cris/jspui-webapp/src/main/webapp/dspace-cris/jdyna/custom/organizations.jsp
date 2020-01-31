@@ -47,11 +47,11 @@
 	Box holder = (Box)request.getAttribute("holder");
 	ComponentInfoDTO info = ((Map<String, ComponentInfoDTO>)(request.getAttribute("componentinfomap"))).get(holder.getShortName());
 	String relationName = info.getRelationName();
-	
+
 	String crisID = info.getCrisID();
 	boolean addRelations = info.isAddRelations();
 	boolean removeRelations = info.isRemoveRelations();
-	
+
 	List<String[]> subLinks = (List<String[]>) request.getAttribute("activeTypes"+relationName);
 	
 	DiscoverResult qResults = (DiscoverResult) request.getAttribute("qResults"+relationName);
@@ -200,6 +200,7 @@ sb.append("</ul></div>");
 	<jsp:include page="common/commonComponentFilterApplied.jsp"></jsp:include>
 <% } %>
 <div align="center" class="browse_range">
+
 	<p align="center">
 	<% if (info.getTotal() > 0) { %>
 	<fmt:message key="jsp.search.results.results">

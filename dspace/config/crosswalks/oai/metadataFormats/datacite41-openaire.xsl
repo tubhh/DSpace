@@ -32,10 +32,10 @@
 					
 					
 					<!-- select only one identifier -->
-					<xsl:variable name="doi" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']//doc:field[@name='value']"/>
-					<xsl:variable name="handle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='hdl']//doc:field[@name='value']"/>
-					<xsl:variable name="url" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='url']//doc:field[@name='value']"/>
-					<xsl:variable name="urn" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']//doc:field[@name='value']"/>
+					<xsl:variable name="doi" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="handle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='hdl']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="url" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='url']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="urn" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']"/>
 					<!-- <xsl:variable name="ark" select=""/> -->
 					<!-- <xsl:variable name="purl" select=""/> -->
 					
@@ -87,12 +87,14 @@
 					
 					
 					<!-- select all names and relative affiliations -->
-					<xsl:variable name="author" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='author']//doc:field[@name='value']"/>
-					<xsl:variable name="department" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='department']//doc:field[@name='value']"/>
-					<xsl:variable name="orcid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='author']/doc:element[@name='orcid']//doc:field[@name='value']"/>
-					<xsl:variable name="gndid" select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorGND']//doc:field[@name='authority']"/>
-					
-					<xsl:if test="$author!=''">
+					<xsl:variable name="author" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='author']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="department" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='department']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="orcid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='author']/doc:element[@name='orcid']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="gndid" select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorGND']/doc:element/doc:field[@name='authority']"/>
+					<xsl:variable name="editor" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='editor']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="other" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='other']/doc:element/doc:field[@name='value']"/>
+					<xsl:choose>
+					<xsl:when test="$author!=''">
 						<creators>
 							<xsl:for-each select="$author">
 								<xsl:if test=".!=''">
@@ -130,14 +132,59 @@
 						         </xsl:if>
 					     	</xsl:for-each>
 				     	</creators>
-				     </xsl:if>
+				     </xsl:when>
+                                     <xsl:otherwise>
+                <xsl:choose>
+                    <xsl:when test="$editor">
+                    <creators>
+                        <xsl:for-each select="$editor">
+                            <creator>
+                                <creatorName>
+                                    <xsl:attribute name="nameType">Personal</xsl:attribute>
+                                    <xsl:value-of select="." />
+                                </creatorName>
+                                <givenName><xsl:value-of select="substring-after(., ',')"/></givenName>
+                                <familyName><xsl:value-of select="substring-before(., ',')"/></familyName>
+                            </creator>
+                        </xsl:for-each>
+                    </creators>
+                    </xsl:when>
+                    <xsl:otherwise>
+                    <creators>
+                        <xsl:choose>
+                            <xsl:when test="$other">
+                                <xsl:for-each select="$other">
+                                    <creator>
+                                        <creatorName>
+                                            <xsl:attribute name="nameType">Personal</xsl:attribute>
+                                            <xsl:value-of select="." />
+                                        </creatorName>
+                                        <givenName><xsl:value-of select="substring-after(., ',')"/></givenName>
+                                        <familyName><xsl:value-of select="substring-before(., ',')"/></familyName>
+                                    </creator>
+                                </xsl:for-each>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <creator>
+                                    <creatorName>
+                                        <xsl:attribute name="nameType">Personal</xsl:attribute>
+                                        <xsl:text>(:unkn) unknown</xsl:text>
+                                    </creatorName>
+                                </creator>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </creators>
+                    </xsl:otherwise>
+                </xsl:choose>
+                                </xsl:otherwise>
+                                </xsl:choose>
 			     	
 					<!-- select the language -->
 					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']//doc:field[@name='value']"/>
 			     	
 			     	
 			     	<!-- select all titles -->
-			     	<xsl:variable name="title" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='title']//doc:field[@name='value']"/>
+			     	<xsl:variable name="title" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='title']/doc:element/doc:field[@name='value']"/>
 					
 					<xsl:if test="$title!=''">
 				     	<titles>
@@ -147,12 +194,12 @@
 				     					<xsl:when test="../../@name='alternative'">
 				     						<xsl:choose>
 				     							<xsl:when test="../@name!='none' and ../@name!='*' and ../@name!=''">
-				     								<title xml:lang="{../@name}" titleType="Alternative Title">
+				     								<title xml:lang="{../@name}" titleType="AlternativeTitle">
 										     			<xsl:value-of select="."/>
 										     		</title>
 										     	</xsl:when>
 										     	<xsl:otherwise>
-										     		<title titleType="Alternative Title">
+										     		<title titleType="AlternativeTitle">
 										     			<xsl:value-of select="."/>
 										     		</title>
 										     	</xsl:otherwise>
@@ -185,7 +232,7 @@
 			     	
 			     	
 			     	<!-- select the publisher -->
-			     	<xsl:variable name="publisher" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='publisher']/doc:element[@name='name']//doc:field[@name='value']"/>
+			     	<xsl:variable name="publisher" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='publisher']/doc:element[@name='name']/doc:element/doc:field[@name='value']"/>
 				     	<publisher>
 					<xsl:choose>
 					<xsl:when test="$publisher!=''">
@@ -201,8 +248,8 @@
 			     	
 			     	<!-- select the publication year -->
 			     	<!-- grantfulltext variable is used to checking if there is an embargo period -->
-			     	<xsl:variable name="grantfulltext" select="doc:metadata/doc:element[@name='item']/doc:element[@name='grantfulltext']//doc:field[@name='value']"/>
-			     	<xsl:variable name="date_issued" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']//doc:field[@name='value']"/>
+			     	<xsl:variable name="grantfulltext" select="doc:metadata/doc:element[@name='item']/doc:element[@name='grantfulltext']/doc:element/doc:field[@name='value']"/>
+			     	<xsl:variable name="date_issued" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
 			     	
 			     	<xsl:choose>
 			     		<xsl:when test="contains($grantfulltext, 'embargo_')">
@@ -223,48 +270,48 @@
 				     	<xsl:when test="$check_date!=''">
 			     			<publicationYear>
 			     				<xsl:choose>
-			     					<xsl:when test="contains($publicationyear/doc:element[@name='available']//doc:field[@name='value'], '-')">
-			     						<xsl:value-of select="substring-before($publicationyear/doc:element[@name='available']//doc:field[@name='value'], '-')"/>
+			     					<xsl:when test="contains($publicationyear/doc:element[@name='available']/doc:element/doc:field[@name='value'], '-')">
+			     						<xsl:value-of select="substring-before($publicationyear/doc:element[@name='available']/doc:element/doc:field[@name='value'], '-')"/>
 			     					</xsl:when>
 			     					<xsl:otherwise>
-			     						<xsl:value-of select="$publicationyear/doc:element[@name='available']//doc:field[@name='value']"/>
+			     						<xsl:value-of select="$publicationyear/doc:element[@name='available']/doc:element/doc:field[@name='value']"/>
 			     					</xsl:otherwise>
 			     				</xsl:choose>
 					     	</publicationYear>
 				     		<xsl:for-each select="$date">
 			     				<xsl:if test="@name='available'">
 				     				<publicationYear>
-					     				<xsl:if test="contains(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='available']//doc:field[@name='value'], '-')">
-						     				<xsl:value-of select="substring-before(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='available']//doc:field[@name='value'], '-')"/>
+					     				<xsl:if test="contains(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='available']/doc:element/doc:field[@name='value'], '-')">
+						     				<xsl:value-of select="substring-before(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='available']/doc:element/doc:field[@name='value'], '-')"/>
 						     			</xsl:if>
-						     			<xsl:if test="contains(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='available']//doc:field[@name='value'], '-')=false">
-						     				<xsl:value-of select="doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='available']//doc:field[@name='value']"/>
+						     			<xsl:if test="contains(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='available']/doc:element/doc:field[@name='value'], '-')=false">
+						     				<xsl:value-of select="doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='available']/doc:element/doc:field[@name='value']"/>
 						     			</xsl:if>
 					     			</publicationYear>
 						     	</xsl:if>
 					     	</xsl:for-each>
 				     	</xsl:when>
 				     	<xsl:otherwise>
-				     		<xsl:if test="$publicationyear/doc:element[@name='issued']//doc:field[@name='value']!=''">
+				     		<xsl:if test="$publicationyear/doc:element[@name='issued']/doc:element/doc:field[@name='value']!=''">
 				     			<publicationYear>
 					     			<xsl:choose>
-						     			<xsl:when test="contains($publicationyear/doc:element[@name='issued']//doc:field[@name='value'], '-')">
-						     				<xsl:value-of select="substring-before($publicationyear/doc:element[@name='issued']//doc:field[@name='value'], '-')"/>
+						     			<xsl:when test="contains($publicationyear/doc:element[@name='issued']/doc:element/doc:field[@name='value'], '-')">
+						     				<xsl:value-of select="substring-before($publicationyear/doc:element[@name='issued']/doc:element/doc:field[@name='value'], '-')"/>
 					     				</xsl:when>
 					     				<xsl:otherwise>
-					     					<xsl:value-of select="$publicationyear/doc:element[@name='issued']//doc:field[@name='value']"/>
+					     					<xsl:value-of select="$publicationyear/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
 					     				</xsl:otherwise>
 					     			</xsl:choose>
 				     			</publicationYear>
 				     		</xsl:if>
 			     			<xsl:for-each select="$date">
-			     				<xsl:if test="@name='issued' and .//doc:field[@name='value']!=''">
+			     				<xsl:if test="@name='issued' and ./doc:element/doc:field[@name='value']!=''">
 					     			<publicationYear>
-										<xsl:if test="contains(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='issued']//doc:field[@name='value'], '-')">
-						     				<xsl:value-of select="substring-before(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='issued']//doc:field[@name='value'], '-')"/>
+										<xsl:if test="contains(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='issued']/doc:element/doc:field[@name='value'], '-')">
+						     				<xsl:value-of select="substring-before(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='issued']/doc:element/doc:field[@name='value'], '-')"/>
 						     			</xsl:if>
-						     			<xsl:if test="contains(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='issued']//doc:field[@name='value'], '-')=false">
-						     				<xsl:value-of select="doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='issued']//doc:field[@name='value']"/>
+						     			<xsl:if test="contains(doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='issued']/doc:element/doc:field[@name='value'], '-')=false">
+						     				<xsl:value-of select="doc:metadata/doc:element['dc']/doc:element['date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']"/>
 						     			</xsl:if>
 					     			</publicationYear>
 					     		</xsl:if>
@@ -302,14 +349,14 @@
 			     	
 			     	<!-- select all contributors -->
 			     	<xsl:variable name="contributor" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element"/>
-					<xsl:variable name="editordepartment" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='editordepartment']//doc:field[@name='value']"/>
-			     	<xsl:variable name="advisordepartment" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='advisordepartment']//doc:field[@name='value']"/>
+					<xsl:variable name="editordepartment" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='editordepartment']/doc:element/doc:field[@name='value']"/>
+			     	<xsl:variable name="advisordepartment" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='advisordepartment']/doc:element/doc:field[@name='value']"/>
 			     	
 					<!-- variable check_contributors is used to control if there are other contributors -->
 					<xsl:variable name="check_contributors">
 				     	<xsl:for-each select="$contributor">
 			     			<xsl:if test="@name!='authorall' and @name!='author' and @name!='department'">
-		     					<xsl:for-each select=".//doc:field[@name='value']">
+		     					<xsl:for-each select="./doc:element/doc:field[@name='value']">
 		     						<xsl:if test=".!=''">
 		     							<xsl:value-of select="."/>
 		     						</xsl:if>
@@ -323,7 +370,7 @@
 				    	 	<xsl:for-each select="$contributor">
 				    	 		<xsl:choose>
 				    	 			<xsl:when test="@name='editor'">
-				    	 				<xsl:for-each select=".//doc:field[@name='value']">
+				    	 				<xsl:for-each select="./doc:element/doc:field[@name='value']">
 				    	 					<xsl:if test=".!=''">
 				    	 						<!-- I can use nameIdentifier with nameIdentifierScheme attribute -->
 						     					<contributor contributorType="Editor">
@@ -350,7 +397,7 @@
 				    	 			</xsl:when>
 				    	 			
 				    	 			<xsl:when test="@name='advisor'">
-				    	 				<xsl:for-each select=".//doc:field[@name='value']">
+				    	 				<xsl:for-each select="./doc:element/doc:field[@name='value']">
 				    	 					<xsl:if test=".!=''">
 				    	 						<!-- I can use nameIdentifier with nameIdentifierScheme attribute -->
 						     					<contributor contributorType="Supervisor">
@@ -378,7 +425,7 @@
 				    	 			
 				    	 			<!-- 'authorall' only on INGV -->
 				    	 			<xsl:when test="not(contains(@name, 'all')) and not(contains(@name, 'department')) and not(contains(@name, 'author'))">
-				    	 				<xsl:for-each select=".//doc:field[@name='value']">
+				    	 				<xsl:for-each select="./doc:element/doc:field[@name='value']">
 					     					<xsl:if test=".!=''">
 				    	 						<!-- I can use nameIdentifier with nameIdentifierScheme attribute -->
 						     					<contributor contributorType="Other">
@@ -399,7 +446,7 @@
 				    	 			</xsl:when>
 				    	 		</xsl:choose>
 				     			<!-- <xsl:if test="@name!='authorall' and @name!='author' and @name!='department'">
-				     				<xsl:for-each select=".//doc:field[@name='value']">
+				     				<xsl:for-each select="./doc:element/doc:field[@name='value']">
 				     					<contributor contributorType="{./../../@name}">
 					     					<contributorName>
 					     						<xsl:value-of select="."/>
@@ -461,11 +508,11 @@
 				     			<xsl:for-each select="$date">
 				     				<xsl:if test="@name='accessioned' or @name='available'">
 						     			<date dateType="{concat(translate(substring(@name, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring(@name, 2))}">
-						     				<xsl:if test="contains(.//doc:field[@name='value'], 'T')">
-							     				<xsl:value-of select="substring-before(.//doc:field[@name='value'], 'T')"/>
+						     				<xsl:if test="contains(./doc:element/doc:field[@name='value'], 'T')">
+							     				<xsl:value-of select="substring-before(./doc:element/doc:field[@name='value'], 'T')"/>
 							     			</xsl:if>
-							     			<xsl:if test="contains(.//doc:field[@name='value'], 'T')=false">
-							     				<xsl:value-of select=".//doc:field[@name='value']"/>
+							     			<xsl:if test="contains(./doc:element/doc:field[@name='value'], 'T')=false">
+							     				<xsl:value-of select="./doc:element/doc:field[@name='value']"/>
 							     			</xsl:if>
 						     			</date>
 						     		</xsl:if>
@@ -473,17 +520,17 @@
 				     		</dates>
 				     	</xsl:when>
 				     	<xsl:otherwise>
-				     		<xsl:if test="$date//doc:field[@name='value']!=''">
+				     		<xsl:if test="$date/doc:element/doc:field[@name='value']!=''">
 					     		<dates>
 					     			<xsl:for-each select="$date">
-					     				<xsl:if test="@name='issued' and .//doc:field[@name='value']!=''">
+					     				<xsl:if test="@name='issued' and ./doc:element/doc:field[@name='value']!=''">
 							     			ADD dateInformation attribute.
 							     			<date dateType="{concat(translate(substring(@name, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring(@name, 2))}">
-							     				<xsl:if test="contains(.//doc:field[@name='value'], 'T')">
-								     				<xsl:value-of select="substring-before(.//doc:field[@name='value'], 'T')"/>
+							     				<xsl:if test="contains(./doc:element/doc:field[@name='value'], 'T')">
+								     				<xsl:value-of select="substring-before(./doc:element/doc:field[@name='value'], 'T')"/>
 								     			</xsl:if>
-								     			<xsl:if test="contains(.//doc:field[@name='value'], 'T')=false">
-								     				<xsl:value-of select=".//doc:field[@name='value']"/>
+								     			<xsl:if test="contains(./doc:element/doc:field[@name='value'], 'T')=false">
+								     				<xsl:value-of select="./doc:element/doc:field[@name='value']"/>
 								     			</xsl:if>
 							     			</date>
 							     		</xsl:if>
@@ -505,37 +552,43 @@
 					
 					
 					<!-- select the resource type -->
-					<xsl:variable name="resourcetype" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='type']"/>
+					<xsl:variable name="resourcetype" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element[@name='casrai']"/>
+                                        <xsl:variable name="resourcetype_general" select="doc:metadata/doc:element[@name='dcterms']/doc:element[@name='DCMIType']"/>
 					<xsl:variable name="resourcetype_values"> Audiovisual Collection DataPaper Dataset Event Image InteractiveResource Model PhysicalObject Service Software Sound Text Workflow Other </xsl:variable>
 					
-					<xsl:if test="$resourcetype//doc:field[@name='value']!=''">
+                                        <resourceType>
+                                            <xsl:attribute name="resourceTypeGeneral"><xsl:value-of select="$resourcetype_general/doc:element/doc:field[@name='value']" /></xsl:attribute>
+                                            <xsl:value-of select="$resourcetype//doc:field[@name='value']" />
+                                        </resourceType>
+                                        <!--
+					<xsl:if test="$resourcetype/doc:element/doc:field[@name='value']!=''">
 						<xsl:choose>
 							<xsl:when test="contains($resourcetype_values, $resourcetype/doc:element/@name)">
 								<resourceType resourceTypeGeneral="{$resourcetype/doc:element/@name}">
-									<xsl:value-of select="$resourcetype//doc:field[@name='value']"/>
+									<xsl:value-of select="$resourcetype/doc:element/doc:field[@name='value']"/>
 							 	</resourceType>
 							</xsl:when>
 							
 							<xsl:when test="contains($resourcetype/doc:element/@name, 'Book') or contains($resourcetype/doc:element/@name, 'Article')">
 								<resourceType resourceTypeGeneral="Text">
-									<xsl:value-of select="$resourcetype//doc:field[@name='value']"/>
+									<xsl:value-of select="$resourcetype/doc:element/doc:field[@name='value']"/>
 							 	</resourceType>
 							</xsl:when>
 							
 							<xsl:when test="contains($resourcetype/doc:element/@name, 'Recording')">
 								<resourceType resourceTypeGeneral="Sound">
-									<xsl:value-of select="$resourcetype//doc:field[@name='value']"/>
+									<xsl:value-of select="$resourcetype/doc:element/doc:field[@name='value']"/>
 							 	</resourceType>
 							 </xsl:when>
 							 
 							 <xsl:otherwise>
 							 	<resourceType resourceTypeGeneral="Other">
-									<xsl:value-of select="$resourcetype//doc:field[@name='value']"/>
+									<xsl:value-of select="$resourcetype/doc:element/doc:field[@name='value']"/>
 							 	</resourceType>
 							 </xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
-					
+					-->
 					
 					
 					<!-- select all alternate identifiers -->
@@ -596,9 +649,9 @@
 					
 					
 					<!-- select all related identifiers -->
-					<xsl:variable name="ispartof" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='journal']/doc:element[@name='journalissn']//doc:field[@name='value']"/>
-					<xsl:variable name="isreferencedby" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='publication']//doc:field[@name='authority']"/>
-					<xsl:variable name="references" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='dataset']//doc:field[@name='authority']"/>
+					<xsl:variable name="ispartof" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='journal']/doc:element[@name='journalissn']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="isreferencedby" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='publication']/doc:element/doc:field[@name='authority']"/>
+					<xsl:variable name="references" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='dataset']/doc:element/doc:field[@name='authority']"/>
 					
 					<xsl:if test="($ispartof!='' and $ispartof!=$placeholder) or $isreferencedby!='' or $references!=''">
 						<relatedIdentifiers>
@@ -634,8 +687,8 @@
 					
 					
 					<!-- select all sizes and formats -->
-					<xsl:variable name="size" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='extent']//doc:field[@name='value']"/>
-					<xsl:variable name="format" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='mimetype']//doc:field[@name='value']"/>
+					<xsl:variable name="size" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='extent']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="format" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='mimetype']/doc:element/doc:field[@name='value']"/>
 					
 					<!-- enable that to avoid size and format when multiple bitstreams are present -->
 					<!-- <xsl:variable name="check_sf">
@@ -655,9 +708,9 @@
 							<xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']">
 								<xsl:if test="./doc:field[@name='name']='ORIGINAL'">
 									<xsl:for-each select="./doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
-										<xsl:if test=".//doc:field[@name='size']!=''">
+										<xsl:if test="./doc:element/doc:field[@name='size']!=''">
 											<size>
-												<xsl:value-of select=".//doc:field[@name='size']"/>
+												<xsl:value-of select="./doc:element/doc:field[@name='size']"/>
 											</size>
 										</xsl:if>
 									</xsl:for-each>
@@ -669,9 +722,9 @@
 							<xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']">
 								<xsl:if test="./doc:field[@name='name']='ORIGINAL'">
 								<xsl:for-each select="./doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
-										<xsl:if test=".//doc:field[@name='format']!=''">
+										<xsl:if test="./doc:element/doc:field[@name='format']!=''">
 											<format>
-												<xsl:value-of select=".//doc:field[@name='format']"/>
+												<xsl:value-of select="./doc:element/doc:field[@name='format']"/>
 											</format>
 										</xsl:if>
 									</xsl:for-each>
@@ -684,7 +737,7 @@
 					
 					<!-- select the version -->
 					<!-- versionnumber is typically not available --> 
-					<xsl:variable name="version" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='versionnumber']//doc:field[@name='value']"/>
+					<xsl:variable name="version" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='versionnumber']/doc:element/doc:field[@name='value']"/>
 					
 					<xsl:if test="$version!=''">
 						<version>
@@ -701,7 +754,7 @@
 			     		restricted, embargo_restricted_, mixedrestricted = info:eu-repo/semantics/restrictedAccess
 			     		reserved = info:eu-repo/semantics/closedAccess -->
 			     	<xsl:variable name="rights" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']"/>
-					<xsl:variable name="rightsuri" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='uri']//doc:field[@name='value']"/>
+					<xsl:variable name="rightsuri" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='uri']/doc:element/doc:field[@name='value']"/>
 					
 					<xsl:if test="$grantfulltext!=''">
 						<rightsList>
@@ -727,15 +780,15 @@
 								<!--<xsl:choose>
 									<xsl:when test="$rights/doc:element/@name!='none' and $rights/doc:element/@name!='*' and $rights/doc:element/@name!=''">
 										<rights xml:lang="{$rights/doc_element/@name}" rightsURI="{$rightsuri}">
-											<xsl:if test="$rights/doc:element//doc:field[@name='value']!=''">
-												<xsl:value-of select="$rights/doc:element//doc:field[@name='value']"/>
+											<xsl:if test="$rights/doc:element/doc:element/doc:field[@name='value']!=''">
+												<xsl:value-of select="$rights/doc:element/doc:element/doc:field[@name='value']"/>
 											</xsl:if>
 										</rights>
 									</xsl:when>
 									<xsl:otherwise>-->
 										<rights rightsURI="{$rightsuri}">
-											<xsl:if test="$rights/doc:element//doc:field[@name='value']!=''">
-												<xsl:value-of select="$rights/doc:element//doc:field[@name='value']"/>
+											<xsl:if test="$rights/doc:element/doc:element/doc:field[@name='value']!=''">
+												<xsl:value-of select="$rights/doc:element/doc:element/doc:field[@name='value']"/>
 											</xsl:if>
 										</rights>
 									<!--</xsl:otherwise>
@@ -747,7 +800,7 @@
 					
 					
 					<!-- select the Abstract description -->
-					<xsl:variable name="abstract" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='abstract']//doc:field[@name='value']"/>
+					<xsl:variable name="abstract" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='abstract']/doc:element/doc:field[@name='value']"/>
 					
 					<xsl:if test="$abstract!=''">
 						<descriptions>
@@ -771,10 +824,10 @@
 					
 					
 					<!-- select all funding references -->
-					<xsl:variable name="funder" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funder']//doc:field[@name='value']"/>
-					<xsl:variable name="funderid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funderid']//doc:field[@name='value']"/>
-					<xsl:variable name="grantno" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='grantno']//doc:field[@name='value']"/>
-					<xsl:variable name="awarduri" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='awardURL']//doc:field[@name='value']"/>
+					<xsl:variable name="funder" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funder']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="funderid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funderid']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="grantno" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='grantno']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="awarduri" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='awardURL']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awardtitle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element/doc:field[@name='value']"/>
 					
 					<xsl:variable name="check_fundingreference">

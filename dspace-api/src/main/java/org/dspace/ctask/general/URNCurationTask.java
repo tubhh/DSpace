@@ -89,6 +89,7 @@ public class URNCurationTask extends AbstractCurationTask
                 Context context = Curator.curationContext();
 
                 Metadatum[] urnFields = item.getMetadata("tuhh", "identifier", "urn", Item.ANY);
+                Metadatum[] dcurnFields = item.getMetadata("dc", "identifier", "urn", Item.ANY);
 
                 Collection col = item.getOwningCollection();
                 if (col == null)
@@ -117,6 +118,14 @@ public class URNCurationTask extends AbstractCurationTask
                 if (ch.equals(ignorecoll) && urnFields.length > 0) {
                     results.append("Deleting URN from ").append(getItemHandle(item));
                     item.clearMetadata("tuhh", "identifier", "urn", Item.ANY);
+                    item.clearMetadata("dc", "identifier", "urn", Item.ANY);
+                    if (dcurnFields.length > 0) {
+                        for (Metadatum dcurnField : dcurnFields) {
+                            if (!dcurnField.value.contains("urn:nbn:de:gbv:830")) {
+                                item.addMetadata("dc", "identifier", "urn", dcurnField.language, dcurnField.value, null, dcurnField.confidence);
+                            }
+                        }
+                    }
                     item.updateMetadata();
                     item.update();
                     context.getDBConnection().commit();

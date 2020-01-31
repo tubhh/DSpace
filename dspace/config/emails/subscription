@@ -4,9 +4,19 @@
 # Parameters: {0} is the details of the new collections and items
 # See org.dspace.core.Email for information on the format of this file.
 #
-Subject: DSpace Subscription
-New items are available in the collections you have subscribed to:
+Subject: TORE-Benachrichtigung über neue Publikationen
+Sie erhalten diese E-Mail, weil neue Publikationen in TORE bei Instituten oder Personen eingetragen wurden, die Sie abonniert haben.
+Für Ihr eigenes Personenprofil ist die Benachrichtigung in der Grundeinstellung aktiviert. Sie können die Benachrichtigung jederzeit aktivieren oder deaktivieren.
 
+Details:
 {0}
 
-DSpace
+Hinweise zur Funktion "E-Mail-Benachrichtigung bei neuen Publikationen" finden Sie hier:
+https://tore.tuhh.de/hilfe/132_benachrichtigungen.html
+
+Für Verbesserungen an Metadaten zu Publikation nutzen Sie gerne die "Feedback"-Funktion von TORE.
+Den Button finden Sie nach Ihrer Anmeldung rechts neben der Publikation.
+https://tore.tuhh.de/hilfe/211_publikationen_reklamieren.html
+
+Mit freundlichen Grüßen
+TORE-Team
