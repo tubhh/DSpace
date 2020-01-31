@@ -38,3 +38,5 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * New OAI service featuring exposure of CRIS entities
 * Merge with latest DSpace CRIS 5 master
 * Improvement: show language for metadata fields in submission form (implemented by The Library Code)
+
+* PLEASE NOTE: New property in build.properties: set Sherpa/Romeo API key in local build.properties!
