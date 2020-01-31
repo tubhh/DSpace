@@ -802,7 +802,7 @@
             {
                 lang = ConfigurationManager.getProperty("default.language");
             }
-            sb.append("</div><div class=\"col-md-2\">");
+            sb.append("<div class=\"col-md-2\">");
             sb = doLanguageTag(sb, fieldNameIdx, valueLanguageList, lang);
             sb.append("</div>");
         }
@@ -1728,11 +1728,6 @@
        String dcQualifier = inputs[z].getQualifier();
        String dcSchema = inputs[z].getSchema();
        boolean language = inputs[z].getLanguage();
-       if (language) {
-           System.out.println("Field " + dcElement + "." + dcQualifier + ((dcSchema == null) ? "" : new String("." + dcSchema)) + " wants a language dropdown!");
-       } else {
-           System.out.println("Field " + dcElement + "." + dcQualifier + ((dcSchema == null) ? "" : new String("." + dcSchema)) + " does not require lang.");
-       }
        
        String fieldName;
        int fieldCountIncr;

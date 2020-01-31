@@ -970,17 +970,18 @@ public class DescribeStep extends AbstractProcessingStep
             String s = entry.getValue();
             int key = entry.getKey();
             if ((s != null) && !s.equals(""))
-            {if (hasLanguageTag && !repeated && key == 0)
             {
-                // the field is like dc_title[lang] for none repeatable element,
-                // dc_title_alternative_2[lang] otherwise
-                lang = request.getParameter(metadataField + "[lang]");
-    
-            }
-            else if (hasLanguageTag && repeated)
-            {
-                lang = request.getParameter(metadataField + "_" + key + "[lang]");
-            }
+                if (hasLanguageTag && (!repeated || key == 0))
+                {
+                    // the field is like dc_title[lang] for none repeatable element,
+                    // dc_title_alternative_2[lang] otherwise
+                    lang = request.getParameter(metadataField + "[lang]");
+        
+                }
+                else if (hasLanguageTag && repeated)
+                {
+                    lang = request.getParameter(metadataField + "_" + key + "[lang]");
+                }
                 
                 if (isAuthorityControlled)
                 {
@@ -1339,6 +1340,9 @@ public class DescribeStep extends AbstractProcessingStep
             if (s==null)
             {
                 s = request.getParameter(param);
+                // we need to set the index 0, so that we can recognize to load
+                // the language tag without any index
+                i = 0;
                 //this will be the last value added
                 foundLast = true;
             }
