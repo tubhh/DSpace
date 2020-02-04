@@ -182,7 +182,6 @@
 					<!-- select the language -->
 					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']//doc:field[@name='value']"/>
 			     	
-			     	
 			     	<!-- select all titles -->
 			     	<xsl:variable name="title" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='title']//doc:field[@name='value']"/>
 					
