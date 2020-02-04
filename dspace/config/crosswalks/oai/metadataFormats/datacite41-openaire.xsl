@@ -135,9 +135,8 @@
 					<!-- select the language -->
 					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']//doc:field[@name='value']"/>
 			     	
-			     	
 			     	<!-- select all titles -->
-			     	<xsl:variable name="title" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='title']/doc:element/doc:field[@name='value']"/>
+			     	<xsl:variable name="title" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='title']//doc:field[@name='value']"/>
 					
 					<xsl:if test="$title!=''">
 				     	<titles>
@@ -147,12 +146,12 @@
 				     					<xsl:when test="../../@name='alternative'">
 				     						<xsl:choose>
 				     							<xsl:when test="../@name!='none' and ../@name!='*' and ../@name!=''">
-				     								<title xml:lang="{../@name}" titleType="Alternative Title">
+				     								<title xml:lang="{../@name}" titleType="AlternativeTitle">
 										     			<xsl:value-of select="."/>
 										     		</title>
 										     	</xsl:when>
 										     	<xsl:otherwise>
-										     		<title titleType="Alternative Title">
+										     		<title titleType="AlternativeTitle">
 										     			<xsl:value-of select="."/>
 										     		</title>
 										     	</xsl:otherwise>
