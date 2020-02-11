@@ -396,6 +396,7 @@
 	            <entry key="allkeywords">
 	                <list>
 						<value>keywords</value>
+						<value>bibtexKeywords</value>
 						<value>meshheadings</value>
 						<value>meshqualifiers</value>
 						<value>arxivCategory</value>
@@ -545,6 +546,7 @@
 			<map>
 				<entry key="title" value="title" />
 				<entry key="author" value="authors" />
+				<entry key="editor" value="editors" />
 				<entry key="journal" value="journal" />
 				<entry key="year" value="issued" />
 				<entry key="issn" value="jissn" />
@@ -558,7 +560,7 @@
 				<entry key="document_type" value="subtype" />
 				<entry key="url" value="url" />
 				<entry key="publisher" value="publisher" />
-                                <entry key="booktitle" value="sourceTitle" />
+                                <entry key="booktitle" value="conference" />
                                 <entry key="keywords" value="bibtexKeywords" />
 			</map>
 		</property>
@@ -973,10 +975,11 @@
 				<entry value="language" key="dc.language.iso" />
 				<entry value="subtype" key="dc.type" />
 				<entry value="authors" key="dc.contributor.author" />
-				<entry value="editors" key="dc.contributor.editor" />
+				<entry value="editors" key="local.contributorPerson.editor" />
 				<entry value="others" key="dc.contributor.other" />
 				<entry value="abstract" key="tuhh.abstract.english" />
                                 <entry value="description" key="dc.description" />
+                                <entry value="conference" key="dc.relation.conference" />
 				<entry value="allkeywords" key="dc.subject" />
 				<entry value="doi" key="tuhh.publisher.doi" />
 				<entry value="publisher" key="dc.publisher" />
