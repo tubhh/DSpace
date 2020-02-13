@@ -228,7 +228,7 @@
                         <!-- dc.rights.cc -->
                         <xsl:choose>
                             <xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='cc']/doc:element/doc:field[@name='value']">
-                                <dc:rights>https://creativecommons.org/licenses/<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='cc']/doc:element/doc:field[@name='value']" />/<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='ccversion']/doc:element/doc:field[@name='value']" /></dc:rights>
+                                <dc:rights><xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='cc']/doc:element/doc:field[@name='value']" /></dc:rights>
                             </xsl:when>
                             <xsl:otherwise>
 			        <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='uri']/doc:element/doc:field[@name='value']">
