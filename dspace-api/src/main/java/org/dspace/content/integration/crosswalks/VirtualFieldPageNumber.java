@@ -40,15 +40,25 @@ public class VirtualFieldPageNumber implements VirtualFieldDisseminator, Virtual
                 String fieldEndpage = "dc.relation.lastpage";
                 if (ConfigurationManager.getProperty("crosswalk.virtual.field.endpage") != null)
                     fieldEndpage = ConfigurationManager.getProperty("crosswalk.virtual.field.endpage");
+                String fieldArticleNumber = "dc.relation.articlenumber";
+                if (ConfigurationManager.getProperty("crosswalk.virtual.field.articlenumber") != null)
+                    fieldArticleNumber = ConfigurationManager.getProperty("crosswalk.virtual.field.articlenumber");
 
 		Metadatum[] dcvs = item.getMetadataValueInDCFormat(fieldStartpage);
 		Metadatum[] dcvs2 = item.getMetadataValueInDCFormat(fieldEndpage);
+		Metadatum[] dcvsa = item.getMetadataValueInDCFormat(fieldArticleNumber);
 
 		if ((dcvs != null && dcvs.length > 0) && (dcvs2 != null && dcvs2.length > 0)) {
 			String value = dcvs[0].value + separator + dcvs2[0].value;
 			fieldCache.put(fieldName, value);
 			return new String[] { value };
 		}
+                if (dcvsa != null && dcvsa.length > 0) {
+			String value = dcvsa[0].value;
+			fieldCache.put(fieldName, value);
+			return new String[] { value };
+		}
+
 
 		return null;
 	}
