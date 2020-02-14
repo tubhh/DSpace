@@ -21,6 +21,5 @@
 	keywords = {@virtual.keywords.all@},
 	url = {@dc.identifier.uri@},
 	doi = {@dc.identifier.doi@},	
-	pages = {@virtual.fullpage.bibtex@},
-	organization ={@dc.description.sponsorship@}
+	pages = {@virtual.fullpage.bibtex@}
 }
