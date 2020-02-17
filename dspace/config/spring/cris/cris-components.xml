@@ -525,7 +525,7 @@
             <property name="relationConfiguration" ref="relationPJVSPJConfiguration" />
             <property name="commonFilter"><util:constant static-field="org.dspace.app.webui.cris.util.RelationPreferenceUtil.HIDDEN_FILTER" /></property>
             <property name="target" value="org.dspace.app.cris.model.Project" />
-            <property name="facets" ref="facetsOUConfiguration"/>
+<!--            <property name="facets" ref="facetsOUConfiguration"/> -->
             <property name="types">
                 <map>
                     <entry key="subprojects" value-ref="projectsForPJComponent" />
