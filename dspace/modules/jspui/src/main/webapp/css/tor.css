@@ -958,5 +958,8 @@ p.text-muted > a:hover, p.text-muted > a:focus {
     word-wrap:break-word;
     font-size:10px;
     }
+    .table-responsive > .table > tbody > tr > td {
+    white-space:normal; !important;
+    }
 
 }
