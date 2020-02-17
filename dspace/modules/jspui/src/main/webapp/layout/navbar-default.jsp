@@ -182,7 +182,7 @@
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("author")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=author&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.author"/></a></li>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("lcAdvisor")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=lcAdvisor&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.advisor"/></a></li>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("journals")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=journals&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.journals"/></a></li>
-                  <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("crisseries")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=crisseries&rpp=100"><fmt:message key="jsp.layout.navbar-default.tuhh.crisseries"/></a></li>
+<%--                  <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("crisseries")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=crisseries&rpp=100"><fmt:message key="jsp.layout.navbar-default.tuhh.crisseries"/></a></li> --%>
                   <li class="<%= (currentPage.endsWith("/browse") && request.getParameter("type").equals("tuhhseries")) ? "active" : "" %>"><a href="<%= request.getContextPath() %>/browse?type=tuhhseries&rpp=50"><fmt:message key="jsp.layout.navbar-default.tuhh.tuhhseries"/></a></li>
               </ul>
           </li>
