@@ -60,10 +60,19 @@
 				<dc:subject><xsl:value-of select="." /></dc:subject>
 			</xsl:for-each>
                         <!-- DINI Certificate 2013: marking ddc code field -->
+                        <xsl:choose>
+                            <xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='subject']/doc:element[@name='ddccode']/doc:element/doc:field[@name='value']">
                         <!-- dc.subject.ddccode -->
                         <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='subject']/doc:element[@name='ddccode']/doc:element/doc:field[@name='value']">
                             <dc:subject><xsl:text>ddc:</xsl:text><xsl:value-of select="." /></dc:subject>
                         </xsl:for-each>
+                            </xsl:when>
+                            <xsl:otherwise>
+                        <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='subject']/doc:element[@name='ddc']/doc:element/doc:field[@name='value']">
+                            <dc:subject><xsl:text>ddc:</xsl:text><xsl:value-of select="substring-before(., ':')" /></dc:subject>
+                        </xsl:for-each>
+                            </xsl:otherwise>
+                        </xsl:choose>
 <!--
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='subject']/doc:element">
                             <xsl:choose>
