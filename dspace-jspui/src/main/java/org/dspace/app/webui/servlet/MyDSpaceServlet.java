@@ -606,19 +606,6 @@ public class MyDSpaceServlet extends DSpaceServlet
         {
             String reason = request.getParameter("reason");
 
-            // Is this an "add fulltext" item? if so, remove the pending files
-            if (workflowItem.isAddFulltext()) {
-                String pendingBundle = ConfigurationManager.getProperty("submit.fulltext.bundle.pending");
-                if (pendingBundle == null) {
-                    pendingBundle = "PENDING";
-                }
-                workflowItem.getItem().getBundles(pendingBundle);
-                for (Bundle b : workflowItem.getItem().getBundles(pendingBundle)) {
-                    workflowItem.getItem().removeBundle(b);
-                }
-                workflowItem.getItem().update();
-            }
-
             WorkspaceItem wsi = WorkflowManager.reject(context, workflowItem,
                     context.getCurrentUser(), reason);
 

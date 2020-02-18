@@ -39,6 +39,7 @@ import org.dspace.content.Collection;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
+import org.dspace.eperson.EPerson;
 import org.dspace.handle.HandleManager;
 import org.dspace.submit.step.PendingUploadStep;
 import org.dspace.workflow.WorkflowItem;
@@ -675,12 +676,10 @@ public class SubmissionController extends DSpaceServlet
                 // Special handling for add fulltext - we now need to make a new workflow item
                 if (subInfo.isAddingFulltext()) {
                     log.debug("Submission is in add files mode, making workspace/flow items for review");
+                    log.debug("before creating scratch workspace and workflow items, submitter is "
+                            + subInfo.getSubmissionItem().getSubmitter().getEmail());
                     Collection collection = (Collection)HandleManager.resolveToObject(context, subInfo.getCollectionHandle());
-
-                    // If we want to do this part we have to fudge a lot with workspace items, workflow items
-                    WorkspaceItem workspaceItem = WorkspaceItem.create(context, collection, false);
-                    workspaceItem.setItem(subInfo.getSubmissionItem().getItem());
-                    WorkflowItem workflowItem = WorkflowManager.start(context, workspaceItem);
+                    WorkflowItem workflowItem = WorkflowManager.startFromSub(context, subInfo.getSubmissionItem());
 
                     context.commit();
                 }
@@ -1002,6 +1001,21 @@ public class SubmissionController extends DSpaceServlet
                     // Save submission for later - just show message
                     saveSubmissionInfo(request, subInfo);
                     if (subInfo.isAddingFulltext()) {
+                        // Cancelling from 'add fulltext' submission, so resetting submitter
+                        // Fetch previous submitter
+                        List<String> v = subInfo.getSubmissionItem().getItem()
+                                .getMetadataValue("tuhh.submitter.previous");
+                        if (v != null && v.size() > 0) {
+                            EPerson previous = EPerson.find(context, Integer.parseInt(v.get(0)));
+                            if (previous != null) {
+                                log.debug("Found previous submitter when cancelling: " + previous.getEmail());
+                            }
+                            // Revert submitter
+                            subInfo.getSubmissionItem().getItem().setSubmitter(previous);
+                            // Clear metadata
+                            WorkflowManager.clearSubmitterMetadata(subInfo.getSubmissionItem().getItem());
+                            subInfo.getSubmissionItem().update();
+                        }
                         backToItemPage(request, response, subInfo);
                     } else {
                         exitFromSubmissionPage(request, response, subInfo);

@@ -88,6 +88,11 @@ public class AddFulltextItem extends EditItem {
 		return item.getSubmitter();
 	}
 
+	// New method to allow setting of
+	public void setSubmitter(EPerson submitter) throws SQLException {
+		item.setSubmitter(submitter);
+	}
+
 	@Override
 	public boolean hasMultipleFiles() {
 		return true;

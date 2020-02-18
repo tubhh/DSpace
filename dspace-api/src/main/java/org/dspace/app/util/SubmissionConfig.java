@@ -42,6 +42,7 @@ public class SubmissionConfig implements Serializable
 
     /** whether or not this submission process is being used to add fulltext by a user */
     private boolean isAddFullText = false;
+    private boolean isReviewFullText = false;
 
     /** log4j logger */
     private static Logger log = Logger.getLogger(SubmissionConfig.class);
@@ -61,19 +62,21 @@ public class SubmissionConfig implements Serializable
      *            are available for editing.
      */
     public SubmissionConfig(String submissionName, List<Map<String, String>> steps,
-            boolean isWorkflowProcess, boolean isAddFullText)
+            boolean isWorkflowProcess, boolean isAddFullText, boolean isReviewFullText)
     {
         this.submissionName = submissionName;
         this.isWorkflow = isWorkflowProcess;
         this.isAddFullText = isAddFullText;
+        this.isReviewFullText = isReviewFullText;
 
         log.debug("Creating new Submission Config");
         log.debug("this.isAddFullText = " + this.isAddFullText);
+        log.debug("this.isReviewFullText = " + this.isReviewFullText);
 
         // initialize a vector of SubmissionStepConfig objects
         List<SubmissionStepConfig> stepConfigs = new ArrayList<SubmissionStepConfig>();
 
-        // loop through our steps, and create SubmissionStepConfig objects
+        // loop through our steps, and create SubmissionStepConfig objubmit?workflow=87ects
         for (int stepNum = 0; stepNum < steps.size(); stepNum++)
         {
             Map<String, String> stepInfo = steps.get(stepNum);
@@ -84,8 +87,9 @@ public class SubmissionConfig implements Serializable
             // (b) this is a workflow process, and this step is editable in a
             // workflow
             // (c) this is an "add item" process
-            if (this.isAddFullText) {
+            if (this.isAddFullText && !this.isReviewFullText) {
                 if(step.isInAddFullText() || step.isAddFullTextOnly()) {
+                    // We're just submitting
                     step.setStepNumber(stepConfigs.size());
                     stepConfigs.add(step);
                     log.debug("Added (fulltext) step '" + step.getProcessingClassName()
@@ -93,16 +97,25 @@ public class SubmissionConfig implements Serializable
                             + " of submission process " + submissionName);
                 }
             }
-            else if (((!this.isWorkflow) || ((this.isWorkflow) && step.isWorkflowEditable())) && !step.isAddFullTextOnly() )
-            {
-                // set the number of the step (starts at 0) and add it
-                step.setStepNumber(stepConfigs.size());
-                stepConfigs.add(step);
+            else if (this.isReviewFullText) {
+                if (step.isReviewFullTextOnly() || step.isInReviewFullText()) {
+                    // we're *reviewing* add fulltext, not just submitting it
+                    step.setStepNumber(stepConfigs.size());
+                    stepConfigs.add(step);
+                    log.debug("Added (fulltext review) step '" + step.getProcessingClassName()
+                            + "' as step #" + step.getStepNumber()
+                            + " of submission process " + submissionName);
+                }
+            }
+            else if (((!this.isWorkflow) || ((this.isWorkflow) && (step.isWorkflowEditable())))
+                    && !step.isReviewFullTextOnly() && !step.isAddFullTextOnly()) {
+                    // set the number of the step (starts at 0) and add it
+                    step.setStepNumber(stepConfigs.size());
+                    stepConfigs.add(step);
 
-                log.debug("Added (workflow-editable) step '" + step.getProcessingClassName()
-                        + "' as step #" + step.getStepNumber()
-                        + " of submission process " + submissionName);
-
+                    log.debug("Added (workflow-editable) step '" + step.getProcessingClassName()
+                            + "' as step #" + step.getStepNumber()
+                            + " of submission process " + submissionName);
             }
         }
 

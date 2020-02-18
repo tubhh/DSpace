@@ -233,6 +233,7 @@
            <jspui-binding>org.dspace.app.webui.submit.step.JSPPendingUploadStep</jspui-binding>
            <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadStep</xmlui-binding>
            <add-fulltext-step>only</add-fulltext-step>
+           <review-fulltext-step>only</review-fulltext-step>
        </step>
 
        <!-- Step 4 Upload Item with Embargo Features

@@ -58,6 +58,12 @@ public class SubmissionStepConfig implements Serializable
     /** whether or not to include this step in non-fulltext submissions */
     private boolean addFullTextOnly = false;
 
+    /** whether or not to include this step in reviews of add fulltext submissions */
+    private boolean inReviewFullText = false;
+
+    /** whether or not to include this step in non-fulltext reviews */
+    private boolean reviewFullTextOnly = false;
+
     /** 
      * The full name of the JSP-UI binding class for this step. This field is
      * ONLY used by the JSP-UI.
@@ -111,6 +117,18 @@ public class SubmissionStepConfig implements Serializable
                 inAddFullText = true;
                 if ("only".equals(addFulltextStep)) {
                    addFullTextOnly = true;
+                }
+            }
+        }
+
+        // Fetch new 'review-fulltext-step' configuration
+        String reviewFulltextStep = stepMap.get("review-fulltext-step");
+        if (reviewFulltextStep != null && reviewFulltextStep.length() > 0) {
+            inReviewFullText = Boolean.parseBoolean(reviewFulltextStep);
+            if ("only".equals(reviewFulltextStep) || "true".equals(reviewFulltextStep)) {
+                inReviewFullText = true;
+                if ("only".equals(reviewFulltextStep)) {
+                    reviewFullTextOnly = true;
                 }
             }
         }
@@ -238,6 +256,14 @@ public class SubmissionStepConfig implements Serializable
 
     public boolean isAddFullTextOnly() {
         return addFullTextOnly;
+    }
+
+    public boolean isInReviewFullText() {
+        return inReviewFullText;
+    }
+
+    public boolean isReviewFullTextOnly() {
+        return reviewFullTextOnly;
     }
 
     /**

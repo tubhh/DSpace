@@ -151,11 +151,11 @@ public class SubmissionConfigReader
      *             if no default submission process configuration defined
      */
     public SubmissionConfig getSubmissionConfig(String collectionHandle, boolean isWorkflow) throws ServletException {
-        return getSubmissionConfig(collectionHandle, isWorkflow, false);
+        return getSubmissionConfig(collectionHandle, isWorkflow, false, false);
     }
 
     public SubmissionConfig getSubmissionConfig(String collectionHandle,
-            boolean isWorkflow, boolean isAddFulltext) throws ServletException
+            boolean isWorkflow, boolean isAddFulltext, boolean isReviewFullText) throws ServletException
     {
         // get the name of the submission process config for this collection
         String submitName = collectionToSubmissionConfig
@@ -175,9 +175,10 @@ public class SubmissionConfigReader
                 + "'");
 
         // check mini-cache, and return if match
+        // Note - NEVER cache or load from cache for addfulltext!
         if (lastSubmissionConfig != null
                 && lastSubmissionConfig.getSubmissionName().equals(submitName)
-                && lastSubmissionConfig.isWorkflow() == isWorkflow)
+                && lastSubmissionConfig.isWorkflow() == isWorkflow && !isAddFulltext)
         {
             log.debug("Found submission process config '" + submitName
                     + "' in cache.");
@@ -185,7 +186,7 @@ public class SubmissionConfigReader
             return lastSubmissionConfig;
         }
 
-        // cache miss - construct new SubmissionConfig
+        // cache miss - construct new Submubmit?workflow=87issionConfig
         List<Map<String, String>> steps = submitDefns.get(submitName);
 
         if (steps == null)
@@ -199,7 +200,7 @@ public class SubmissionConfigReader
                 + "' not in cache. Reloading from scratch.");
 
         lastSubmissionConfig = new SubmissionConfig(submitName, steps,
-                isWorkflow, isAddFulltext);
+                isWorkflow, isAddFulltext, isReviewFullText);
 
         log.debug("Submission process config has "
                 + lastSubmissionConfig.getNumberOfSteps() + " steps listed.");
