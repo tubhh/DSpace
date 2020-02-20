@@ -691,11 +691,11 @@
                 <Custom ref="ddc610Condition"/>
             </Definition>
         </Filter>
-		<Set id="ddc620Set">
-			<Spec>ddc:620</Spec>
-			<Name>Engineering &amp; allied operations</Name>
-			<Filter ref="ddc620Filter"/>
-		</Set>
+        <Filter id="ddc620Filter">
+            <Definition>
+                <Custom ref="ddc620Condition"/>
+            </Definition>
+        </Filter>
         <Filter id="ddc621.3Filter">
             <Definition>
                 <Custom ref="ddc621.3Condition"/>
