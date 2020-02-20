@@ -691,6 +691,11 @@
                 <Custom ref="ddc610Condition"/>
             </Definition>
         </Filter>
+        <Filter id="ddc620Filter">
+            <Definition>
+                <Custom ref="ddc620Condition"/>
+            </Definition>
+        </Filter>
         <Filter id="ddc621.3Filter">
             <Definition>
                 <Custom ref="ddc621.3Condition"/>
@@ -1342,791 +1347,799 @@
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
                 <string name="field">dc.subject.ddc</string>
-				<string name="operator">equal</string>
+				<string name="operator">starts_with</string>
 				<string name="value">000</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc004Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">004</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc010Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">010</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc020Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">020</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc030Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">030</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc050Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">050</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc060Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">060</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc070Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">070</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc080Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">080</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc090Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">090</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc100Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">100</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc130Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">130</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc150Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">150</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc200Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">200</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc220Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">220</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc230Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">230</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc290Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">290</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc300Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">300</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc310Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">310</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc320Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">320</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc330Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">330</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc333.7Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">333.7</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc340Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">340</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc350Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">350</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc355Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">355</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc360Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">360</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc370Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">370</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc380Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">380</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc390Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">390</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc400Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">400</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc420Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">420</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc430Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">430</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc439Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">439</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc440Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">440</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc450Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">450</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc460Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">460</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc470Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">470</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc480Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">ddc480Condition</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc490Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">490</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc491.8Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">491.8</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc500Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">500</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc510Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">510</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc520Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">520</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc530Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">530</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc540Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">540</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc550Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">550</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc560Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">560</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc570Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">570</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc580Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">580</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc590Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">590</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc600Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">600</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc610Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">610</string>
+            </Configuration>
+        </CustomCondition>
+		<CustomCondition id="ddc620Condition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
+				<string name="value">620</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc621.3Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">621.3</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc624Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">624</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc630Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">630</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc640Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">640</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc650Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">650</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc660Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">660</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc670Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">670</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc690Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">690</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc700Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">700</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc710Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">710</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc720Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">720</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc730Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">730</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc740Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">740</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc741.5Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">741.5</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc750Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">750</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc760Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">760</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc770Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">770</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc780Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">780</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc790Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">790</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc791Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">791</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc792Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">792</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc793Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">793</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc796Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">796</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc800Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">800</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc810Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">810</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc820Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">820</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc830Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">830</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc839Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">839</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc840Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">840</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc850Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">850</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc860Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">860</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc870Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">870</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc880Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">880</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc890Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">890</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc891.8Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">891.8</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc900Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">900</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc910Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">910</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc914.3Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">914.3</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc920Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">920</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc930Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">930</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc940Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">940</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc943Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">943</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc950Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">950</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc960Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">960</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc970Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">970</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc980Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">980</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="ddc990Condition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.subject.ddccode</string>
-				<string name="operator">equal</string>
+                <string name="field">dc.subject.ddc</string>
+				<string name="operator">starts_with</string>
 				<string name="value">990</string>
             </Configuration>
         </CustomCondition>
