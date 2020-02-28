@@ -156,18 +156,8 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                     T cris = (T) dso;
 
                     Map<String, String> extras = getExtra(cris, field);
-                    if (extras != null && !extras.isEmpty())
-                    {
-                        choiceList.add(new Choice(ResearcherPageUtils
-                                .getPersistentIdentifier(cris), getDisplayEntry(cris, locale),
-                                getValue(cris), extras));
-                    }
-                    else
-                    {
-                        choiceList.add(new Choice(ResearcherPageUtils
-                                .getPersistentIdentifier(cris), getValue(cris),
-                                getDisplayEntry(cris, locale)));
-                    }
+                    List<Choice> choices = getChoicesFromCrisObject(locale, cris, extras);
+					choiceList.addAll(choices);
                 }
 
                 Choice[] results = new Choice[choiceList.size()];
@@ -263,9 +253,8 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                 for (DSpaceObject dso : result.getDspaceObjects())
                 {
                     T cris = (T) dso;
-                    choiceList.add(new Choice(ResearcherPageUtils
-                            .getPersistentIdentifier(cris), cris.getName(),
-                            getDisplayEntry(cris, locale)));
+                    List<Choice> choices = getChoicesFromCrisObject(locale, cris, null);
+					choiceList.addAll(choices);
                 }
             }
 
@@ -296,6 +285,24 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
             return new Choices(true);
         }
     }
+
+	protected List<Choice> getChoicesFromCrisObject(String locale, T cris, Map<String, String> extras) {
+		List<Choice> choices = new ArrayList<Choice>();
+		if (extras != null && !extras.isEmpty())
+        {
+			Choice choice = new Choice(ResearcherPageUtils
+			        .getPersistentIdentifier(cris), getDisplayEntry(cris, locale), 
+			        cris.getName(), extras);
+			choices.add(choice);
+        }
+		else {
+			Choice choice = new Choice(ResearcherPageUtils
+			        .getPersistentIdentifier(cris), cris.getName(),
+			        getDisplayEntry(cris, locale));
+			choices.add(choice);
+		}
+		return choices;
+	}
 
     /**
      * Will return the name of the CRIS Object FullName value
@@ -402,6 +409,8 @@ public abstract class CRISAuthority<T extends ACrisObject> implements ChoiceAuth
                 }
             }
         }
+        // make sure that the extra cannot override the selected value
+        extras.remove("data-" + field);
         return extras;
     }
 

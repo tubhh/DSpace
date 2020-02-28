@@ -15,9 +15,11 @@ import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.LocaleUtils;
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.app.cris.model.ResearchObject;
+import org.dspace.app.cris.util.ResearcherPageUtils;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.zdb.ZDBAuthorityValue;
 import org.dspace.authority.zdb.ZDBService;
@@ -38,7 +40,7 @@ public abstract class ZDBAuthority extends DOAuthority {
 	private static final String ZDB_IDENTIFIER_FIELD = "journalIssn";
 	private static final String ZDB_RELATION_FIELD = "journalRelation";
 	private static final String ZDB_TYPE_FIELD = "journalType";
-	private static final String JOURNALS_IDENTIFIER_FIELD = "crisjournals.journalsissn";
+	private static final String JOURNALS_IDENTIFIER_FIELD = "journalsissn";
 	private static final String MESSAGE_IDENTIFIER_NOT_FOUND_KEY = "zdbauthority.identifier.notfound";
 	private static final String MESSAGE_TYPE_KEY = "zdbauthority.type";
 	private static final String MESSAGE_RELATION_KEY = "zdbauthority.relation";
@@ -81,7 +83,7 @@ public abstract class ZDBAuthority extends DOAuthority {
 		return choices.values;
 	}
 
-    private String getLabel(AuthorityValue val, String locale)
+	private String getLabel(AuthorityValue val, String locale)
     {
         return getIssn(val, locale) + val.getValue() + getOtherInformation(val, locale);
     }
@@ -125,15 +127,57 @@ public abstract class ZDBAuthority extends DOAuthority {
                 extras.putAll(extrasTmp);
             }
         }
+        // make sure that the extra cannot override the selected value
+        extras.remove("data-" + field);
         return extras;
 	}
 
 	protected abstract String getZDBValue(String searchField, AuthorityValue val);
 
 	@Override
-	protected String getDisplayEntry(ResearchObject cris, String locale)
+	protected List<Choice> getChoicesFromCrisObject(String locale, ResearchObject cris, Map<String, String> extras) {
+		List<CRISExtraBasicMetadataGenerator> ggs = new DSpace().getServiceManager().getServicesByType(CRISExtraBasicMetadataGenerator.class);
+		String extraIssn = null;
+		for (CRISExtraBasicMetadataGenerator gg : ggs) {
+			if (gg.getRelatedMetadata().equalsIgnoreCase("crisjournals." +JOURNALS_IDENTIFIER_FIELD)) {
+				extraIssn = gg.getRelatedInputformMetadata();
+				break;
+			}
+		}
+		if (extras == null) {
+			extras = new HashMap<String,String>();
+		}
+		List<Choice> choices = new ArrayList<Choice>();
+		List<String> issns = ResearcherPageUtils.getStringValues(cris, JOURNALS_IDENTIFIER_FIELD);
+		if (issns.size() > 0) {
+			for (String issn : issns) {
+				Map<String, String> currExtras = extras;
+				if (StringUtils.isNotBlank(extraIssn)) {
+					currExtras = new HashMap<String, String>();
+					currExtras.putAll(extras);
+					currExtras.put("data-" + extraIssn, issn);
+				}
+				Choice choice = new Choice(ResearcherPageUtils
+				        .getPersistentIdentifier(cris), 
+				        getDisplayEntry(issn, cris, locale), 
+				        cris.getName(), currExtras);
+				
+				choices.add(choice);
+			}
+		}
+		else {
+			Choice choice = new Choice(ResearcherPageUtils
+			        .getPersistentIdentifier(cris),
+			        getDisplayEntry(null, cris, locale), 
+			        cris.getName(),extras);
+			choices.add(choice);	
+		}
+		return choices;
+	}
+	
+	protected String getDisplayEntry(String issn, ResearchObject cris, String locale)
 	{
-		return getIssn(cris, locale)
+		return getIssnOrDefault(issn, locale)
 				+ super.getDisplayEntry(cris, locale);
 	}
 
@@ -161,21 +205,6 @@ public abstract class ZDBAuthority extends DOAuthority {
         {
             Collections.sort(issns);
             issn = StringUtils.join(issns, "|");
-        }
-        return getIssnOrDefault(issn, locale);
-    }
-
-    private String getIssn(ResearchObject cris, String locale)
-    {
-        String issn = "";
-        Metadatum[] mm = cris.getMetadataByMetadataString(JOURNALS_IDENTIFIER_FIELD);
-        if (mm != null && mm.length > 0)
-        {
-            for (Metadatum m : mm)
-            {
-                issn += m.value + "|";
-            }
-            issn = issn.substring(0, issn.length()-1);
         }
         return getIssnOrDefault(issn, locale);
     }
