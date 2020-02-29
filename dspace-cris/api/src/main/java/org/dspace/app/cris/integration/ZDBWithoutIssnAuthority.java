@@ -29,11 +29,19 @@ public class ZDBWithoutIssnAuthority extends DOAuthority {
 	private ZDBWithoutIssnService source = new DSpace().getServiceManager().getServiceByName("ZDBSource", ZDBWithoutIssnService.class);
 
 	@Override
-	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
-		Choices choices = super.getMatches(field, query, collection, start, limit, locale);		
-		return new Choices(addExternalResults(field, query, choices, start, limit<=0?DEFAULT_MAX_ROWS:limit), choices.start, choices.total, choices.confidence, choices.more);
+	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale, boolean extra) {
+		Choices choices = super.getMatches(field, query, collection, start, limit, locale);
+		if (extra) {
+			choices = new Choices(addExternalResults(field, query, choices, start, limit<=0?DEFAULT_MAX_ROWS:limit), choices.start, choices.total, choices.confidence, choices.more); 
+		}
+		return choices;
 	}
 
+	@Override
+	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
+		return getMatches(field, query, collection, start, limit, locale, false);
+	}
+	
 	protected Choice[] addExternalResults(String field, String text, Choices choices, int start, int max) {
 		if (source != null) {
 			try {

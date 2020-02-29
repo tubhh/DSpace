@@ -47,11 +47,19 @@ public abstract class ZDBAuthority extends DOAuthority {
 	
 
 	@Override
-	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
-		Choices choices = super.getMatches(field, query, collection, start, limit, locale);		
-		return new Choices(addExternalResults(field, query, choices, start, limit<=0?DEFAULT_MAX_ROWS:limit, locale), choices.start, choices.total, choices.confidence, choices.more);
+	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale, boolean extra) {
+		Choices choices = super.getMatches(field, query, collection, start, limit, locale);
+		if (extra) {
+			choices = new Choices(addExternalResults(field, query, choices, start, limit<=0?DEFAULT_MAX_ROWS:limit, locale), choices.start, choices.total, choices.confidence, choices.more); 
+		}
+		return choices;
 	}
 
+	@Override
+	public Choices getMatches(String field, String query, int collection, int start, int limit, String locale) {
+		return getMatches(field, query, collection, start, limit, locale, true);
+	}
+	
 	protected Choice[] addExternalResults(String field, String text, Choices choices, int start, int max, String locale) {
 		if (source != null) {
 			try {
