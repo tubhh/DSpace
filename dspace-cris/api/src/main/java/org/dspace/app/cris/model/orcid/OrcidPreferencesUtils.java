@@ -1083,16 +1083,18 @@ public class OrcidPreferencesUtils
                         .getExternalIdentifiers();
                 if (eids != null)
                 {
+                	HashSet<String> extIdAllowedInThisIteration = new HashSet<String>();
                     for (ExternalId eid : eids.getExternalIdentifier())
                     {
-                        if (mapMetadata.containsKey("external-identifier-"
-                                + eid.getExternalIdValue()) && checkSyncAllowed(crisObject, mapMetadata.get("external-identifier-"
-                                        + eid.getExternalIdValue()), propsToReplace))
+                        String extIdKey = "external-identifier-"
+                                + eid.getExternalIdType();
+						if (extIdAllowedInThisIteration.contains(extIdKey) || (mapMetadata.containsKey(extIdKey)
+								&& checkSyncAllowed(crisObject, mapMetadata.get(extIdKey), propsToReplace)))
                         {
+							extIdAllowedInThisIteration.add(extIdKey);
                             ResearcherPageUtils.buildTextValue(crisObject,
-                                    eid.getExternalIdType(),
-                                    mapMetadata.get("external-identifier-"
-                                            + eid.getExternalIdValue()),
+                                    eid.getExternalIdValue(),
+                                    mapMetadata.get(extIdKey),
                                     eid.getVisibility() == Visibility.PUBLIC
                                             ? VisibilityConstants.PUBLIC
                                             : VisibilityConstants.HIDE);
