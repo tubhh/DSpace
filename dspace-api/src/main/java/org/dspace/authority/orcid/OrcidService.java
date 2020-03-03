@@ -439,7 +439,7 @@ public class OrcidService extends RestSource
         {
             query.append( (query.length() > 0 
             		? " AND given-names:(" : "given-names:(") )
-            			.append(tmpPersonName.getFirstNames().trim()).append("*)");
+            			.append(firstName).append("*)");
         }
 
         query.append(" OR other-names:(").append(text).append(")");
