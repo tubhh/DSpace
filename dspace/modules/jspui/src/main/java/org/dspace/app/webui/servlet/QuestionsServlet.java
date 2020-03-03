@@ -42,6 +42,7 @@ import org.dspace.content.Bundle;
 import org.dspace.content.Collection;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
+import org.dspace.content.Metadatum;
 import org.dspace.content.crosswalk.CrosswalkException;
 import org.dspace.content.crosswalk.StreamDisseminationCrosswalk;
 import org.dspace.content.integration.crosswalks.FileNameDisseminator;
@@ -88,14 +89,58 @@ public class QuestionsServlet extends DSpaceServlet
         int item_id = UIUtil.getIntParameter(request, "item_id");
         Item item = Item.find(context, item_id);
 
+        String sTitle = "";
+        String sDate = "";
+        String sAuthor = "";
+        String sLink = "";
+        Metadatum[] mTitle = null;
+        Metadatum[] mDate = null;
+        Metadatum[] mLink = null;
+
+        mTitle = item.getDC("title", null, Item.ANY);
+        if (mTitle.length > 0)
+        {
+          sTitle = mTitle[0].value;
+        }
+        else
+        {
+          sTitle = "";
+        }
+
+        mDate = item.getDC("date", "issued", Item.ANY);
+        if (mDate.length> 0)
+        {
+          sDate = mDate[0].value;
+        }
+        else
+        {
+          sDate = "";
+        }
+
+        for (Metadatum ma : item.getDC("contributor", "author", Item.ANY))
+        {
+          sAuthor = ("".equals(sAuthor) ? "" : sAuthor + " ; ") + ma.value;
+        }
+
+        mLink = item.getDC("identifier", "uri", Item.ANY);
+        if (mLink.length > 0)
+        {
+          sLink = mLink[0].value;
+        }
+        else
+        {
+          sLink = "";
+        }
+
         try
         {
-            Email email = Email.getEmail("publication_question");
+            Email email = Email.getEmail(I18nUtil.getEmailFilename(context.getCurrentLocale(), "publication_question"));
             email.addRecipient(ConfigurationManager.getProperty("mail.publication-question.mailto"));
-            email.addArgument(item.getDC("title", null, Item.ANY)); // Title
-            email.addArgument(item.getDC("date", "issued", Item.ANY)); // issued
-            email.addArgument(item.getDC("contributor", "author", Item.ANY)); // Authors
-            email.addArgument(item.getDC("identifier", "uri", Item.ANY)); // Link
+            // Eventually you need to change the order of the arguments when editing the template
+            email.addArgument(sTitle); // Title
+            email.addArgument(sDate); // issued
+            email.addArgument(sAuthor); // Authors
+            email.addArgument(sLink); // Link
             email.addArgument(request.getParameter("q")); // Question
             email.addArgument(request.getParameter("name")); // Name
             email.addArgument(request.getParameter("mail")); // E-MAil
@@ -107,8 +152,8 @@ public class QuestionsServlet extends DSpaceServlet
         }
         catch (Exception e)
         {
-            log.warn(LogManager.getHeader(context, "emailSuccessMessage",
-                    "cannot notify user of export"), e);
+            log.warn(LogManager.getHeader(context, "emailError",
+                    e.getMessage()), e);
             response.setStatus(500);
         }
     }

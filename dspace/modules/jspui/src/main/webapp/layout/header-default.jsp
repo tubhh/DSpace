@@ -46,6 +46,8 @@
     String dsVersion = Util.getSourceVersion();
     String generator = dsVersion == null ? "DSpace" : "DSpace "+dsVersion;
     String analyticsKey = ConfigurationManager.getProperty("jspui.google.analytics.key");
+
+    boolean cookiesPolicyEnabled = ConfigurationManager.getBooleanProperty("cookies.policy.enabled", false);
 %>
 
 <!DOCTYPE html>
@@ -264,6 +266,32 @@
 <%    	
     }
 %>
+<% if(cookiesPolicyEnabled) { %>
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/cookieconsent/cookieconsent.min.css" />
+<script src="<%= request.getContextPath() %>/static/js/cookieconsent/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#edeff5",
+      "text": "#838391"
+    },
+    "button": {
+      "background": "#4b81e8"
+    }
+  },
+  "position": "bottom-right",
+  "theme": "classic",
+  "content": {
+    "message": "<%= LocaleSupport.getLocalizedMessage(pageContext, "jsp.layout.navbar-default.cookies.info.message") %>",
+    "dismiss": "<%= LocaleSupport.getLocalizedMessage(pageContext, "jsp.layout.navbar-default.cookies.button") %>",
+    "link": "<%= LocaleSupport.getLocalizedMessage(pageContext, "jsp.layout.navbar-default.cookies.info.link") %>",
+    "href": "<%= LocaleSupport.getLocalizedMessage(pageContext, "jsp.layout.navbar-default.cookies.href") %>"
+  }
+})});
+</script>
+<% } %>
 </header>
 </div>
 <main id="content" role="main">

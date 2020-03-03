@@ -182,6 +182,11 @@ public class MultipleSubmissionLookupDataLoader implements DataLoader
                     continue;
                 }
 
+                if (true)
+                {
+                    continue;
+                }
+
                 // if (evictProviders != null
                 // && evictProviders.contains(provider.getShortName())) {
                 // continue;

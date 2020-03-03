@@ -62,7 +62,14 @@
     boolean admin_button = (admin_b == null ? false : admin_b.booleanValue());
     Boolean submitter_b = (Boolean) request.getAttribute("submitter_button");
     boolean submitter_button = (submitter_b == null ? false : submitter_b.booleanValue());
-    
+
+    // can we display the "Add Files" button here?
+    Boolean add_fulltext_allowed_b = (Boolean)request.getAttribute("add_fulltext_allowed");
+    boolean add_fulltext_allowed = (add_fulltext_allowed_b != null && add_fulltext_allowed_b);
+    // are there pending files under review?
+    Boolean fulltext_under_reviewed_b = (Boolean)request.getAttribute("fulltext_under_review");
+    boolean fulltext_under_review = (fulltext_under_reviewed_b != null && fulltext_under_reviewed_b);
+
     // get the workspace id if one has been passed
     Integer workspace_id = (Integer) request.getAttribute("workspace_id");
 
@@ -99,6 +106,58 @@
 			title = "Item " + handle;
 		}
 	}
+    String authors = "";
+    int authorAuthority = 0;
+    if (handle != null)
+    {
+      Metadatum[] mAuthors = item.getDC("contributor", "author", Item.ANY);
+      for (Metadatum m : mAuthors)
+      {
+        authors += (!authors.equals("") ? " ; " : "") + m.value;
+        if (authorAuthority == 0) {
+            authorAuthority = Integer.parseInt(m.authority.substring(2));
+        }
+      }
+    }
+
+    int ouAuthority = 0;
+    if (handle != null)
+    {
+      Metadatum[] mOus = item.getMetadata("tuhh", "publication", "institute", Item.ANY);
+      for (Metadatum o : mOus)
+      {
+        if (ouAuthority == 0) {
+            ouAuthority = Integer.parseInt(o.authority.substring(2));
+        }
+      }
+    }
+
+    String issued = "";
+    if (handle != null)
+    {
+      Metadatum[] mIssued = item.getDC("date", "issued", Item.ANY);
+      if (mIssued.length != 0)
+      {
+        issued = mIssued[0].value;
+      }
+    }
+
+    String creator = "";
+    if (handle != null)
+    {
+      Metadatum[] mCreators = item.getDC("description", "provenance", Item.ANY);
+      for (Metadatum m : mCreators)
+      {
+        if (m.value.startsWith("Submitted by"))
+        {
+          int iStart = m.value.indexOf("(") + 1;
+          int iEnd = m.value.indexOf(")");
+          creator = m.value.substring(iStart, iEnd);
+          break;
+        }
+      }
+    }
+
     boolean pmcEnabled = ConfigurationManager.getBooleanProperty("cris","pmc.enabled",false);
     boolean scopusEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.elsevier.scopus.enabled",false);
     boolean wosEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.thomsonreuters.wos.enabled",false);
@@ -132,6 +191,8 @@
 	String cfg = ConfigurationManager.getProperty("exportcitation.options");
 	boolean coreRecommender = ConfigurationManager.getBooleanProperty("core-aggregator","core-aggregator.enabled");
 	String coreCredentials = ConfigurationManager.getProperty("core-aggregator", "core-aggregator.credentials");
+
+        String odataPath = ConfigurationManager.getProperty("cris","odataPath");
 	
 	String crisID = (String)request.getAttribute("crisID");
 %>
@@ -551,6 +612,37 @@ j(document).ready(function() {
 <div class="col-lg-3">
 <div class="row">
 <%
+    if (add_fulltext_allowed) {
+%>
+    <div class="col-lg-12 col-md-4 col-sm-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading"><fmt:message key="jsp.general.editaddfulltext.heading"/></div>
+            <div class="panel-body">
+                <form method="get" action="<%= request.getContextPath() %>/submit">
+                    <input type="hidden" name="edit_item" value="<%= item.getID() %>" />
+                    <input type="hidden" name="pageCallerID" value="0" />
+                    <input type="hidden" name="add_fulltext" value="true"/>
+                    <input class="btn btn-default col-md-12" type="submit" name="submit" value="<fmt:message key="jsp.general.editaddfulltext.button"/>" />
+                </form>
+            </div>
+        </div>
+    </div>
+    <%
+        }
+        else if (fulltext_under_review) {
+    %>
+    <div class="col-lg-12 col-md-4 col-sm-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading"><fmt:message key="jsp.general.editaddfulltext.heading"/></div>
+            <div class="panel-body">
+                <span class="review-message"><fmt:message key="jsp.general.editaddfulltext.review"/></span>
+            </div>
+        </div>
+    </div>
+    <%
+        }
+
+
 if (dedupEnabled && admin_button) { %>	
 <div class="col-lg-12 col-md-4 col-sm-6">
 <div class="media dedup">
@@ -754,8 +846,11 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
-<%--------- Feedback Box from Bamberg University ---------
-      <div class="col-lg-12 col-md-4 col-sm-6">
+<%--------- Feedback Box from Bamberg University ---------%>
+    <%
+    if (user!=null) {
+    %>
+      <div class="col-sm-5 col-md-4 col-lg-3">
         <div class="panel panel-info">
           <div class="panel-heading">
             <h3 class="panel-title larger-panel-title">
@@ -767,7 +862,79 @@ if (dedupEnabled && admin_button) { %>
           </div>
         </div>
       </div>
------- End Feedback Box from Bamberg University -------------%>
+    <%
+    }
+    %>
+<%------ End Feedback Box from Bamberg University -------------%>
+
+<%------ CSL-Einbindung -----%>
+<%
+if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
+%>
+    <script>
+        function csl_select() {
+            if (window.XMLHttpRequest) {
+                httpodata = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                httpodata = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            if (httpodata != null) {
+            <%
+                if (authorAuthority != 0) {
+            %>
+                    httpodata.open( "GET" , "<%=odataPath%>/cslforresearcher(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=authorAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
+                <%
+                }
+                else if (ouAuthority != 0) {
+                %>
+                    httpodata.open( "GET" , "<%=odataPath%>/cslfororgunit(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=ouAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
+                <%
+                }
+                %>
+
+                httpodata.onreadystatechange = setcsl;
+                httpodata.send( null );
+            }
+        }
+
+        function setcsl() {
+            if ( httpodata.readyState == 4 ) {
+                var jsonResponse = httpodata.responseText;
+                var data = JSON.parse(jsonResponse);
+                var xx = document.getElementById("citationbox");
+                xx.innerHTML = data['value'][0]['csl'];
+            }
+        }
+    </script>
+      <div class="col-sm-5 col-md-4 col-lg-3">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title larger-panel-title">
+              <fmt:message key="jsp.display-item.csl.title" />
+            </h3>
+          </div>
+          <div class="panel-list">
+              <form action="#" name="csl_selector">
+                  <select name="citationstyle" onchange="javascript:csl_select()">
+                      <option value=""></option>
+                      <option value="apa">APA</option>
+                      <option value="ieee">IEEE</option>
+                      <option value="chicago-author-date">Chicago</option>
+                      <option value="acm-siggraph">ACM</option>
+                      <option value="council-of-science-editors">CSE</option>
+                      <option value="modern-language-association">MLA</option>
+                  </select>
+              </form>
+          </div>
+          <div id="citationbox" class="panel-list">
+          </div>
+        </div>
+      </div>
+<%
+}
+%>
+<%------ Ende CSL-Einbindung -----%>
 
 
 <%-- As there is now only one possible User Tools button (create new version) it can be included
