@@ -59,7 +59,7 @@ public class CrisSubscribeController<T extends ACrisObject> extends MultiActionC
             return null;
         }        
         ACrisObject acrisobject = applicationService.getEntityByUUID(uuid);
-        rpSubService.subscribe(UIUtil.obtainContext(arg0).getCurrentUser(), uuid, acrisobject.getType());
+        rpSubService.subscribe(UIUtil.obtainContext(arg0).getCurrentUser().getID(), uuid, acrisobject.getType());
         return new ModelAndView(getViewName()+ "/" + acrisobject.getPublicPath() +"/"+ acrisobject.getCrisID() +"?subscribe=true");
     }
 

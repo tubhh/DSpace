@@ -376,6 +376,12 @@
             case WorkflowManager.WFSTATE_STEP2: %><fmt:message key="jsp.mydspace.main.sub2"/><% break;
             case WorkflowManager.WFSTATE_STEP3: %><fmt:message key="jsp.mydspace.main.sub3"/><% break;
             }
+            if (owned[i].isAddFulltext())
+            {
+            %>
+                    <br/><fmt:message key="jsp.general.workflow.addfulltext"/>
+            <%
+            }
 %>
                 </td>
                 <td headers="t2" class="<%= row %>RowEvenCol"><%= Utils.addEntities(title) %></td>
@@ -446,6 +452,12 @@
             case WorkflowManager.WFSTATE_STEP1POOL: %><fmt:message key="jsp.mydspace.main.sub1"/><% break;
             case WorkflowManager.WFSTATE_STEP2POOL: %><fmt:message key="jsp.mydspace.main.sub2"/><% break;
             case WorkflowManager.WFSTATE_STEP3POOL: %><fmt:message key="jsp.mydspace.main.sub3"/><% break;
+            }
+            if (pooled[i].isAddFulltext())
+            {
+            %>
+            <br/><fmt:message key="jsp.general.workflow.addfulltext"/>
+            <%
             }
 %>
                     </td>

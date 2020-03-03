@@ -34,14 +34,7 @@ import org.dspace.app.util.SubmissionConfigReader;
 import org.dspace.app.webui.util.JSPManager;
 import org.dspace.app.webui.util.UIUtil;
 import org.dspace.authorize.AuthorizeException;
-import org.dspace.content.Collection;
-import org.dspace.content.Community;
-import org.dspace.content.EPersonCRISIntegration;
-import org.dspace.content.InProgressSubmission;
-import org.dspace.content.Item;
-import org.dspace.content.ItemIterator;
-import org.dspace.content.SupervisedItem;
-import org.dspace.content.WorkspaceItem;
+import org.dspace.content.*;
 import org.dspace.content.authority.Choices;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
@@ -616,20 +609,24 @@ public class MyDSpaceServlet extends DSpaceServlet
             WorkspaceItem wsi = WorkflowManager.reject(context, workflowItem,
                     context.getCurrentUser(), reason);
 
-            // Load the Submission Process for the collection this WSI is
-            // associated with
-            Collection c = wsi.getCollection();
-            SubmissionConfigReader subConfigReader = new SubmissionConfigReader();
-            SubmissionConfig subConfig = subConfigReader.getSubmissionConfig(c
-                    .getHandle(), false);
+            // If this was an 'add files' reject, there will be no workspace item
+            // so we need an extra null check
+            if (wsi != null) {
+                // Load the Submission Process for the collection this WSI is
+                // associated with
+                Collection c = wsi.getCollection();
+                SubmissionConfigReader subConfigReader = new SubmissionConfigReader();
+                SubmissionConfig subConfig = subConfigReader.getSubmissionConfig(c
+                        .getHandle(), false);
 
-            // Set the "stage_reached" column on the workspace item
-            // to the LAST page of the LAST step in the submission process
-            // (i.e. the page just before "Complete")
-            int lastStep = subConfig.getNumberOfSteps() - 2;
-            wsi.setStageReached(lastStep);
-            wsi.setPageReached(AbstractProcessingStep.LAST_PAGE_REACHED);
-            wsi.update();
+                // Set the "stage_reached" column on the workspace item
+                // to the LAST page of the LAST step in the submission process
+                // (i.e. the page just before "Complete")
+                int lastStep = subConfig.getNumberOfSteps() - 2;
+                wsi.setStageReached(lastStep);
+                wsi.setPageReached(AbstractProcessingStep.LAST_PAGE_REACHED);
+                wsi.update();
+            }
 
             JSPManager
                     .showJSP(request, response, "/mydspace/task-complete.jsp");

@@ -1321,7 +1321,7 @@
 	        	</oai_cerif:OriginatesFrom>					
 	        </xsl:for-each>
 
-	        <xsl:for-each select="doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='equipment']/doc:element">
+	        <xsl:for-each select="doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='equipment']/doc:element/doc:field[@name='value']">
 	        	<oai_cerif:GeneratedBy>	        
 		        	<xsl:variable name="generatedby_id">
 	             		<xsl:value-of select="../doc:element[@name='authority']/doc:element[@name='others']/doc:field[@name='handle']/text()" />
@@ -1344,7 +1344,7 @@
 	        	</oai_cerif:GeneratedBy>					
 	        </xsl:for-each>
 
-	        <xsl:for-each select="doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='conference']/doc:element/doc:element[@name='value']">
+	        <xsl:for-each select="doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='conference']/doc:element/doc:field[@name='value']">
 				<oai_cerif:PresentedAt>
 		        	<xsl:variable name="dc_relation_conference_id">
 	             		<xsl:value-of select="../doc:element[@name='authority']/doc:element[@name='others']/doc:field[@name='handle']/text()" />
@@ -1571,7 +1571,7 @@
     <xsl:template match="/">
 
         <!-- item -->
-        <xsl:if test="doc:metadata/doc:element[@name='others']/doc:field[@name='type']/text()='item'">
+        <xsl:if test="doc:metadata/doc:element[@name='others']/doc:field[@name='type']/text()='cfitem'">
         	<!-- check type (is a publication or a product or ...) -->
         	<xsl:call-template name="item_chooser">
 				<xsl:with-param name="selector" select="." />

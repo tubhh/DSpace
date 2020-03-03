@@ -303,7 +303,11 @@ public class IndexBrowse
      */
     public void indexItem(Item item) throws BrowseException
     {
-        indexItem(item, false);
+        try {
+            indexItem(item, false);
+        } catch (NullPointerException e) {
+            log.error("Caught NPE indexing item changes: " + item.getHandle());
+        }
     }
 
     void indexItem(Item item, boolean addingNewItem) throws BrowseException

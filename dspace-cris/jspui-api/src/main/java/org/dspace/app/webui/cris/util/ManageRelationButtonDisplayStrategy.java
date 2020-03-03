@@ -12,8 +12,6 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.webui.util.IDisplayMetadataValueStrategy;
 import org.dspace.browse.BrowseDSpaceObject;
@@ -25,10 +23,6 @@ import org.dspace.discovery.IGlobalSearchResult;
 
 public class ManageRelationButtonDisplayStrategy implements IDisplayMetadataValueStrategy
 {
-
-    public static final Log log = LogFactory
-            .getLog(ManageRelationButtonDisplayStrategy.class);
-
     @Override
     public String getMetadataDisplay(HttpServletRequest hrq, int limit, boolean viewFull, String browseType, int colIdx,
             String field, Metadatum[] metadataArray, BrowseItem item, boolean disableCrossLinks, boolean emph)

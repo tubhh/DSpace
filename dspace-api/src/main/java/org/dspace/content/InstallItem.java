@@ -10,11 +10,13 @@ package org.dspace.content;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.embargo.EmbargoManager;
 import org.dspace.event.Event;
+import org.dspace.handle.HandleManager;
 import org.dspace.identifier.IdentifierException;
 import org.dspace.identifier.IdentifierService;
 import org.dspace.utils.DSpace;
@@ -27,6 +29,8 @@ import org.dspace.utils.DSpace;
  */
 public class InstallItem
 {
+    private static final Logger log = Logger.getLogger(InstallItem.class);
+
     /**
      * Take an InProgressSubmission and turn it into a fully-archived Item,
      * creating a new Handle.
@@ -44,7 +48,7 @@ public class InstallItem
         return installItem(c, is, null);
     }
 
-    /**
+    /**mydspace
      * Take an InProgressSubmission and turn it into a fully-archived Item.
      * 
      * @param c  current context
@@ -84,6 +88,49 @@ public class InstallItem
         // the default policies from the collection.
         item.inheritCollectionDefaultPolicies(collection);
         
+        return item;
+    }
+
+    /**
+     * For the new Add New Files workflow handling, this will finalise the last workflow state without
+     * re-archiving the item, skipping unnecessary steps such as adding all metadata, identifiers, etc.
+     */
+    public static Item installNewFiles(Context c, InProgressSubmission is)
+            throws SQLException, IOException, AuthorizeException {
+        Item item = is.getItem();
+
+        // Get a new instance of the target collection rather than pointing to the wrapper, which will be deleted
+        Collection collection = Collection.find(c, is.getCollection().getID());
+
+        // Timestamp for provenance and notifications
+        DCDate now = DCDate.getCurrent();
+
+        // remove in-progress submission
+        is.deleteWrapper();
+
+        String provDescription = "New fulltext files made available in DSpace on " + now
+                + " (GMT). " + getBitstreamProvenanceMessage(item);
+
+        // Add provenance description
+        item.addDC("description", "provenance", "en", provDescription);
+
+        log.debug("Moving from " + item.getOwningCollection() + " to " + collection);
+        item.move(item.getOwningCollection(), collection, true);
+
+        // set in_archive=true
+        item.setArchived(true);
+
+        // save changes ;-)
+        item.update();
+
+        // For now, we are suppressing this event: it is not a *real* install
+        // and item.update() will fire the item update event.
+        // But, TUHH may wish to perform some special events since it is now a fulltext item?
+        //c.addEvent(new Event(Event.INSTALL, Constants.ITEM, item.getID(), item.getHandle(), item.getIdentifiers(c)));
+
+        // set embargo lift date and take away read access if indicated.
+        EmbargoManager.setEmbargo(c, item);
+
         return item;
     }
 

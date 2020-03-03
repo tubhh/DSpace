@@ -1,0 +1,20 @@
+# Rejection email message
+#
+# {0}  Title of submission
+# {1}  Name of collection
+# {2}  Name of the rejector
+# {3}  Reason for the rejection
+# {4}  Link to Item Page
+#
+Subject: DSpace: New Files Rejected
+
+You submitted fulltext for your item: {0}
+
+To collection: {1}
+
+Your submission has been rejected by {2}
+with the following explanation:
+
+{3}
+
+The original item has not been deleted.  You can can re-submit files from the item page at {4}

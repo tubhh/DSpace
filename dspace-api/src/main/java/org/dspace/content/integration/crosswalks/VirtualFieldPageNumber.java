@@ -40,7 +40,7 @@ public class VirtualFieldPageNumber implements VirtualFieldDisseminator, Virtual
                 String fieldEndpage = "dc.relation.lastpage";
                 if (ConfigurationManager.getProperty("crosswalk.virtual.field.endpage") != null)
                     fieldEndpage = ConfigurationManager.getProperty("crosswalk.virtual.field.endpage");
-                String fieldArticleNumber = "dc.relation.articlenumber";
+                String fieldArticleNumber = "dc.relation.firstpage";
                 if (ConfigurationManager.getProperty("crosswalk.virtual.field.articlenumber") != null)
                     fieldArticleNumber = ConfigurationManager.getProperty("crosswalk.virtual.field.articlenumber");
 
