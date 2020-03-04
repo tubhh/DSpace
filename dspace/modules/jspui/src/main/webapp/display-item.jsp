@@ -619,7 +619,7 @@ j(document).ready(function() {
             <div class="panel-heading"><fmt:message key="jsp.general.editaddfulltext.heading"/></div>
             <div class="panel-body">
                 <form method="get" action="<%= request.getContextPath() %>/submit">
-                    <input type="hidden" name="edit_item" value="<%= item.getID() %>" />
+                    <input type="hidden" name="add_fulltext_item" value="<%= item.getID() %>" />
                     <input type="hidden" name="pageCallerID" value="0" />
                     <input type="hidden" name="add_fulltext" value="true"/>
                     <input class="btn btn-default col-md-12" type="submit" name="submit" value="<fmt:message key="jsp.general.editaddfulltext.button"/>" />

@@ -88,7 +88,7 @@ public class VerifyStep extends AbstractProcessingStep
 
         request.setAttribute("validationMessages", validationMessages);
 
-        if (validationMessages.isEmpty() || subInfo.isEditing() || subInfo.isInWorkflow()) {
+        if (validationMessages.isEmpty() || subInfo.isEditing() || subInfo.isAddingFulltext() ||subInfo.isInWorkflow()) {
             return STATUS_COMPLETE;
         }
         
