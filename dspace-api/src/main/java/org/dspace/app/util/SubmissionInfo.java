@@ -115,9 +115,9 @@ public class SubmissionInfo extends HashMap
      */
     public static SubmissionInfo load(Context context, HttpServletRequest request, InProgressSubmission subItem) throws ServletException, AuthorizeException, SQLException
     {
-        //boolean forceReload = false;
-        boolean forceReload = true;
-        
+        // Fetch forceReload from config, now (default: false as per original default value)
+        boolean forceReload = ConfigurationManager.getBooleanProperty("submit.fulltext.force-reload");
+
     	SubmissionInfo subInfo = new SubmissionInfo();
     	
         // load SubmissionConfigReader only the first time
@@ -310,7 +310,8 @@ public class SubmissionInfo extends HashMap
         this.setCollectionHandle(collectionHandle);
 
         // force a reload of the submission process configuration
-        loadSubmissionConfig(request, this, context, true);
+        boolean forceReload = ConfigurationManager.getBooleanProperty("submit.fulltext.force-reload");
+        loadSubmissionConfig(request, this, context, forceReload);
     }
 
     /**
@@ -699,9 +700,9 @@ public class SubmissionInfo extends HashMap
             throws ServletException, SQLException
     {
 
-        log.debug("LOAD SUBMISSION CONFIG: Loading Submission Config information. Full text mode is " + subInfo.isAddingFulltext());
-        log.debug("LOAD SUBMISSION CONFIG: Does submission have pending files? " + subInfo.hasPending());
-        log.debug("LOAD SUBMISSION CONFIG: Is this both in adding mode, *and* strictly a review?" + subInfo.isReviewingFulltext(context));
+        log.debug("LOAD SUBMISSION CONFIG: isAddingFulltext = " + subInfo.isAddingFulltext());
+        log.debug("LOAD SUBMISSION CONFIG: hasPending = " + subInfo.hasPending());
+        log.debug("LOAD SUBMISSION CONFIG: isReviewingFulltext = " + subInfo.isReviewingFulltext(context));
 
         if (!forceReload)
         {
@@ -729,7 +730,6 @@ public class SubmissionInfo extends HashMap
         else
         {
             log.debug("Found Submission Config in session cache!");
-
             // try and reload progress bar from cache
             loadProgressBar(request, subInfo, false);
         }
@@ -782,6 +782,7 @@ public class SubmissionInfo extends HashMap
     private static SubmissionConfig loadSubmissionConfigFromCache(
             HttpSession session, String collectionHandle, boolean isWorkflow, boolean isAddingFulltext, boolean isReviewingFulltext)
     {
+        log.debug("Loading submission from cache (session attributes)");
         // attempt to load submission process config
         // from cache for the current collection
         String cachedHandle = (String) session

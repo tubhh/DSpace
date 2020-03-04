@@ -231,9 +231,7 @@ public class SubmissionController extends DSpaceServlet
         }
         else if (itemID != null && addFulltext) {
             try {
-
-                log.debug("Loading item in add fulltext mode...");
-
+                log.debug("Loading item in add fulltext mode: " + itemID);
                 // load the item
                 Item item = Item.find(context, Integer.parseInt(itemID));
 
@@ -256,14 +254,14 @@ public class SubmissionController extends DSpaceServlet
         {
             try {
 
-                log.debug("Loading item in Edit Submission mode...");
+                log.debug("Loading item in Edit Submission mode: " + itemID);
                 // load the item
                 Item item = Item.find(context, Integer.parseInt(itemID));
 
                 boolean isAddingFiles = UIUtil.getBoolParameter(request, "add_fulltext");
                 EditItem editItem;
                 if(isAddingFiles) {
-                    log.debug("Recovering from request params in Add Files mode");
+                    log.debug("Recovering from request params in Add Files mode (this should never happen? this is edit mode");
                     editItem = new AddFulltextItem(item);
                 } else {
                     editItem = new EditItem(item);
@@ -367,8 +365,7 @@ public class SubmissionController extends DSpaceServlet
 
                                 UploadStep us;
                                 if (si.isAddingFulltext() || UIUtil.getBoolParameter(request, "add_fulltext")) {
-                                    // We're in adding fulltext mode
-                                    log.debug("Adding fulltext mode detected - using PendingUploadStep");
+                                    // We're in adding fulltext mode, use the special pending upload step
                                     us = new PendingUploadStep();
                                 } else {
                                     us = new UploadStep();
@@ -536,8 +533,6 @@ public class SubmissionController extends DSpaceServlet
             AuthorizeException
     {
     	SubmissionStepConfig currentStepConfig = null;
-
-    	log.debug("doStep: subInfo says 'is adding fulltext' is " + subInfo.isAddingFulltext());
     	
         if (subInfo.getSubmissionConfig() != null)
         {
@@ -567,8 +562,6 @@ public class SubmissionController extends DSpaceServlet
        
         // save current step to request attribute
         saveCurrentStepConfig(request, currentStepConfig);
-        log.debug("doStep: after calling saveCurrentStepConfig(), subInfo says 'is adding fulltext' is " + subInfo.isAddingFulltext());
-
 
         log.debug("Calling Step Class: '"
                 + currentStepConfig.getProcessingClassName() + "'");
@@ -593,8 +586,6 @@ public class SubmissionController extends DSpaceServlet
                 
                 //retrieve any changes to the SubmissionInfo object
                 subInfo = getSubmissionInfo(context, request);
-                log.debug("doStep: after retrieving changes with getSubmissionInfo(), subInfo says 'is adding fulltext' is " + subInfo.isAddingFulltext());
-
 
                 //do the next step!
                 doNextStep(context, request, response, subInfo, currentStepConfig);
@@ -602,7 +593,7 @@ public class SubmissionController extends DSpaceServlet
             else
             {
                 //commit & close context
-                context.complete();
+                context.commit();
             }
         }
         catch (Exception e)
@@ -630,8 +621,6 @@ public class SubmissionController extends DSpaceServlet
             throws ServletException, IOException, SQLException,
             AuthorizeException
     {
-        log.debug("doNextStep: subInfo says 'is adding fulltext' is " + subInfo.isAddingFulltext());
-
         // find current Step number
         int currentStepNum;
         if (currentStepConfig == null)
@@ -676,16 +665,17 @@ public class SubmissionController extends DSpaceServlet
                 // Special handling for add fulltext - we now need to make a new workflow item
                 if (subInfo.isAddingFulltext()) {
                     log.debug("Submission is in add files mode, making workspace/flow items for review");
-                    log.debug("before creating scratch workspace and workflow items, submitter is "
+                    log.debug("previous submitter = "
                             + subInfo.getSubmissionItem().getSubmitter().getEmail());
-                    Collection collection = (Collection)HandleManager.resolveToObject(context, subInfo.getCollectionHandle());
+                    // WorkflowItem object is not used here, but can be inspected for debugging
+                    // The startFromSub() call is necessary, to kick off the artificial workflow process
                     WorkflowItem workflowItem = WorkflowManager.startFromSub(context, subInfo.getSubmissionItem());
 
                     context.commit();
                 }
 
                 if (subInfo.isEditing()) {
-                    log.debug("Submission is in edit mode, exiting from submission page");
+                    log.debug("Submission is in edit or fulltext mode, exiting from submission page");
                     if (subInfo.isAddingFulltext()) {
                         backToItemPage(request, response, subInfo);
                     }
@@ -1196,17 +1186,16 @@ public class SubmissionController extends DSpaceServlet
             HttpServletRequest request) throws SQLException, ServletException, AuthorizeException
     {
         SubmissionInfo info = null;
-        
-        // Is full Submission Info in Request Attribute?
-        if (request.getAttribute("submission.info") != null)
+        boolean forceReload = ConfigurationManager.getBooleanProperty("submit.fulltext.force-reload");
+
+        // Is full Submission Info in Request Attribute? And we are allowed to load from cache?
+        if (request.getAttribute("submission.info") != null && !forceReload)
         {
             // load from cache
             info = (SubmissionInfo) request.getAttribute("submission.info");
         }
         else
         {
-            
-            
             // Need to rebuild Submission Info from Request Parameters
             if (request.getParameter("workflow_id") != null)
             {
@@ -1230,7 +1219,6 @@ public class SubmissionController extends DSpaceServlet
                 boolean isAddingFiles = UIUtil.getBoolParameter(request, "add_fulltext");
                 EditItem editItem;
                 if(isAddingFiles) {
-                    log.debug("Recovering from request params in Add Files mode");
                     editItem = new AddFulltextItem(item);
                 } else {
                     editItem = new EditItem(item);
