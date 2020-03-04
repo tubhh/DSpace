@@ -144,56 +144,56 @@ public class SubmissionInfo extends HashMap
             collectionHandle = subItem.getCollection().getHandle();
             Item item = subItem.getItem();
             if (subItem instanceof EditItem) {
-                // If we are adding fulltext, we don't need to be the owner or an auth'd editor of the item
-                // But we do need to have permission to submit to the new collection
-                if (subItem instanceof AddFulltextItem) {
-
-                    String previousSubmitterField = ConfigurationManager.getProperty("submit.fulltext.submitter.field");
-                    if(previousSubmitterField == null) {
-                        previousSubmitterField = "tuhh.submitter.previous";
-                    }
-
-                    // We might be loading submission info for an existing submission (eg expired session) so test
-                    // for existing tuhh.submitter.previous
-                    EPerson originalSubmitter = item.getSubmitter();
-                    List<String> v = item.getMetadataValue(previousSubmitterField);
-                    if (v != null && v.size() > 0) {
-                        EPerson previous = EPerson.find(context, Integer.parseInt(v.get(0)));
-                        if (previous != null) {
-                            log.debug("Found previous submitter when loading subInfo " + previous.getEmail());
-                        }
-                    }
-                    else {
-                        // no previous submitter metadata found, set it now
-                        String[] psParts = previousSubmitterField.split("\\.", 3);
-                        if (psParts.length > 1) {
-                            item.addMetadata((psParts[0]), (psParts[1]), (psParts.length > 2 ? psParts[2] : null),
-                                    Item.ANY, String.valueOf(originalSubmitter.getID()));
-
-                            log.debug("In load() method, set previous submitter to " + originalSubmitter.getEmail());
-                        } else {
-                            log.error("Previous submitter metadata field missing or invalid: " + previousSubmitterField);
-                        }
-                    }
-
-                    // We need to here make sure that the submission item is owned by the new user
-                    log.debug("Setting submitter of subItem to " + context.getCurrentUser().getEmail());
-                    ((AddFulltextItem) subItem).setSubmitter(context.getCurrentUser());
-                    Collection[] authorizedCollections = Collection.findAuthorizedOptimized(context, Constants.ADD);
-                    boolean authorized = false;
-                    for (Collection authorizedCollection : authorizedCollections) {
-                        if (collectionHandle.equals(authorizedCollection.getHandle())) {
-                            authorized = true;
-                        }
-                    }
-                    if (!authorized) {
-                        throw new AuthorizeException("Unauthorized attempt to submit new files for ItemID " + item.getID());
-                    }
-                }
                 // If we are using the previous "edit in submission mode" functionality, then just check for item
                 // admin or edit capability
-                else if (!AuthorizeManager.isAdmin(context) && !item.canEdit()) {
+                if (!AuthorizeManager.isAdmin(context) && !item.canEdit()) {
                     throw new AuthorizeException("Unauthorized attempt to edit ItemID " + item.getID());
+                }
+                context.turnOffAuthorisationSystem();
+            }
+            else if (subItem instanceof AddFulltextItem) {
+                // If we are adding fulltext, we don't need to be the owner or an auth'd editor of the item
+                // But we do need to have permission to submit to the new collection
+                String previousSubmitterField = ConfigurationManager.getProperty("submit.fulltext.submitter.field");
+                if(previousSubmitterField == null) {
+                    previousSubmitterField = "tuhh.submitter.previous";
+                }
+
+                // We might be loading submission info for an existing submission (eg expired session) so test
+                // for existing tuhh.submitter.previous
+                EPerson originalSubmitter = item.getSubmitter();
+                List<String> v = item.getMetadataValue(previousSubmitterField);
+                if (v != null && v.size() > 0) {
+                    EPerson previous = EPerson.find(context, Integer.parseInt(v.get(0)));
+                    if (previous != null) {
+                        log.debug("Found previous submitter when loading subInfo " + previous.getEmail());
+                    }
+                }
+                else {
+                    // no previous submitter metadata found, set it now
+                    String[] psParts = previousSubmitterField.split("\\.", 3);
+                    if (psParts.length > 1) {
+                        item.addMetadata((psParts[0]), (psParts[1]), (psParts.length > 2 ? psParts[2] : null),
+                                Item.ANY, String.valueOf(originalSubmitter.getID()));
+
+                        log.debug("In load() method, set previous submitter to " + originalSubmitter.getEmail());
+                    } else {
+                        log.error("Previous submitter metadata field missing or invalid: " + previousSubmitterField);
+                    }
+                }
+
+                // We need to here make sure that the submission item is owned by the new user
+                log.debug("Setting submitter of subItem to " + context.getCurrentUser().getEmail());
+                ((AddFulltextItem) subItem).setSubmitter(context.getCurrentUser());
+                Collection[] authorizedCollections = Collection.findAuthorizedOptimized(context, Constants.ADD);
+                boolean authorized = false;
+                for (Collection authorizedCollection : authorizedCollections) {
+                    if (collectionHandle.equals(authorizedCollection.getHandle())) {
+                        authorized = true;
+                    }
+                }
+                if (!authorized) {
+                    throw new AuthorizeException("Unauthorized attempt to submit new files for ItemID " + item.getID());
                 }
                 context.turnOffAuthorisationSystem();
             }

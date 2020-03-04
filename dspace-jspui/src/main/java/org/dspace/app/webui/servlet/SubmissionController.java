@@ -150,10 +150,13 @@ public class SubmissionController extends DSpaceServlet
         String workflowID = request.getParameter("workflow");
         String resumableFilename = request.getParameter("resumableFilename");
         String itemID = request.getParameter("edit_item");
+        String addFullTextItemID = request.getParameter("add_fulltext_item");
         boolean addFulltext = UIUtil.getBoolParameter(request,"add_fulltext");
         int codeCallerPage = Util.getIntParameter(request, "pageCallerID");
         request.setAttribute("pageCallerID", codeCallerPage);
-        
+        // Reset the "adding.fulltext" attribute which only applies (and is set) at PendingUploadStep
+        request.removeAttribute("adding.fulltext");
+
         if (!StringUtils.isEmpty(resumableFilename)) // if resumable.js asks whether a part of af file was received
         {
             if (request.getMethod().equals("GET"))
@@ -229,11 +232,11 @@ public class SubmissionController extends DSpaceServlet
                         .showInvalidIDError(request, response, workflowID, -1);
             }
         }
-        else if (itemID != null && addFulltext) {
+        else if (addFullTextItemID != null && addFulltext) {
             try {
-                log.debug("Loading item in add fulltext mode: " + itemID);
+                log.debug("Loading item in add fulltext mode: " + addFullTextItemID);
                 // load the item
-                Item item = Item.find(context, Integer.parseInt(itemID));
+                Item item = Item.find(context, Integer.parseInt(addFullTextItemID));
 
                 AddFulltextItem addFulltextItem = new AddFulltextItem(item);
 
@@ -242,7 +245,6 @@ public class SubmissionController extends DSpaceServlet
 
                 // start over at beginning of first workflow step
                 setBeginningOfStep(request, true);
-                request.setAttribute("add_fulltext_mode", true);
 
                 doStep(context, request, response, si, WORKFLOW_FIRST_STEP);
             } catch (NumberFormatException nfe) {
@@ -253,20 +255,11 @@ public class SubmissionController extends DSpaceServlet
         else if (itemID != null) // if editing an item
         {
             try {
-
                 log.debug("Loading item in Edit Submission mode: " + itemID);
                 // load the item
                 Item item = Item.find(context, Integer.parseInt(itemID));
 
-                boolean isAddingFiles = UIUtil.getBoolParameter(request, "add_fulltext");
-                EditItem editItem;
-                if(isAddingFiles) {
-                    log.debug("Recovering from request params in Add Files mode (this should never happen? this is edit mode");
-                    editItem = new AddFulltextItem(item);
-                } else {
-                    editItem = new EditItem(item);
-
-                }
+                EditItem editItem = new EditItem(item);
                 SubmissionInfo si = SubmissionInfo.load(context, request, editItem);
 
                 // start over at beginning of first workflow step
@@ -375,9 +368,6 @@ public class SubmissionController extends DSpaceServlet
                                 request.setAttribute(fileName + "-inputstream", fileInputStream);
                                 request.setAttribute(fileName + "-description", request.getParameter("description"));
 
-                                if(si.isAddingFulltext()) {
-                                    request.setAttribute("add_fulltext", true);
-                                }
                                 int uploadResult = us.processUploadFile(context, request, response, si);
 
                                 // cleanup our temporary file
@@ -533,6 +523,8 @@ public class SubmissionController extends DSpaceServlet
             AuthorizeException
     {
     	SubmissionStepConfig currentStepConfig = null;
+        // Reset the "adding.fulltext" attribute which only applies (and is set) at PendingUploadStep
+        request.removeAttribute("adding.fulltext");
     	
         if (subInfo.getSubmissionConfig() != null)
         {
@@ -549,7 +541,8 @@ public class SubmissionController extends DSpaceServlet
         }
 
         // if this is the furthest step the user has been to, save that info
-        if (!subInfo.isInWorkflow() && !subInfo.isEditing() && (currentStepConfig.getStepNumber() > getStepReached(subInfo)))
+        if (!subInfo.isInWorkflow() && !subInfo.isEditing() && !subInfo.isAddingFulltext()
+                && (currentStepConfig.getStepNumber() > getStepReached(subInfo)))
         {
             // update submission info
             userHasReached(subInfo, currentStepConfig.getStepNumber());
@@ -672,16 +665,14 @@ public class SubmissionController extends DSpaceServlet
                     WorkflowItem workflowItem = WorkflowManager.startFromSub(context, subInfo.getSubmissionItem());
 
                     context.commit();
-                }
 
-                if (subInfo.isEditing()) {
-                    log.debug("Submission is in edit or fulltext mode, exiting from submission page");
-                    if (subInfo.isAddingFulltext()) {
-                        backToItemPage(request, response, subInfo);
-                    }
-                    else {
-                        exitFromSubmissionPage(request, response, subInfo);
-                    }
+                    // Going straight back to item page
+                    log.debug("Submission is in fulltext mode, exiting from submission page");
+                    backToItemPage(request, response, subInfo);
+                }
+                else if (subInfo.isEditing()) {
+                    log.debug("Submission is in edit mode, exiting from submission page");
+                    exitFromSubmissionPage(request, response, subInfo);
                 }
                 else {
                     // forward to completion JSP
@@ -730,7 +721,7 @@ public class SubmissionController extends DSpaceServlet
             // default value if we are in workflow
             double stepAndPageReached = -1;
             
-            if (!subInfo.isInWorkflow() && !subInfo.isEditing())
+            if (!subInfo.isInWorkflow() && !subInfo.isEditing() && !subInfo.isAddingFulltext())
             {
                 stepAndPageReached = Double.parseDouble(getStepReached(subInfo)+"."+JSPStepManager.getPageReached(subInfo));
             }
@@ -851,7 +842,8 @@ public class SubmissionController extends DSpaceServlet
 
             // Integrity check: make sure they aren't going
             // forward or backward too far
-            if ((!subInfo.isEditing() && !subInfo.isInWorkflow() && nextStep < FIRST_STEP) ||
+            if ((!subInfo.isEditing() && !subInfo.isAddingFulltext()
+                    && !subInfo.isInWorkflow() && nextStep < FIRST_STEP) ||
                     (subInfo.isInWorkflow() && nextStep < WORKFLOW_FIRST_STEP))
             {
                 nextStep = -1;
@@ -859,7 +851,8 @@ public class SubmissionController extends DSpaceServlet
             }
 
             // if trying to jump to a step you haven't been to yet
-            if (!subInfo.isEditing() && !subInfo.isInWorkflow() && (nextStep > getStepReached(subInfo)))
+            if (!subInfo.isEditing() && !subInfo.isAddingFulltext() &&
+                    !subInfo.isInWorkflow() && (nextStep > getStepReached(subInfo)))
             {
                 nextStep = -1;
             }
@@ -896,7 +889,7 @@ public class SubmissionController extends DSpaceServlet
                 // default value if we are in workflow
                 double stepAndPageReached = -1;
                 
-                if (!subInfo.isInWorkflow() && !subInfo.isEditing())
+                if (!subInfo.isInWorkflow() && !subInfo.isEditing() && !subInfo.isAddingFulltext())
                 {
                     stepAndPageReached = Double.parseDouble(getStepReached(subInfo)+"."+JSPStepManager.getPageReached(subInfo));
                 }
@@ -975,6 +968,39 @@ public class SubmissionController extends DSpaceServlet
                 JSPManager.showJSP(request, response,
                         "/submit/cancelled-removed.jsp");
             }
+            else if (subInfo.isAddingFulltext()) {
+                int result = doSaveCurrentState(context, request, response, subInfo, stepConfig);
+
+                if (request instanceof FileUploadRequest) {
+                    FileUploadRequest fur = (FileUploadRequest) request;
+                    request = fur.getOriginalRequest();
+                }
+
+                if (result != AbstractProcessingStep.STATUS_COMPLETE) {
+                    int currStep = stepConfig.getStepNumber();
+                    doStep(context, request, response, subInfo, currStep);
+                } else {
+                    // Save submission for later - just show message
+                    saveSubmissionInfo(request, subInfo);
+                    // Cancelling from 'add fulltext' submission, so resetting submitter
+                    // Fetch previous submitter
+                    List<String> v = subInfo.getSubmissionItem().getItem()
+                            .getMetadataValue("tuhh.submitter.previous");
+                    if (v != null && v.size() > 0) {
+                        EPerson previous = EPerson.find(context, Integer.parseInt(v.get(0)));
+                        if (previous != null) {
+                            log.debug("Found previous submitter when cancelling: " + previous.getEmail());
+                        }
+                        // Revert submitter
+                        subInfo.getSubmissionItem().getItem().setSubmitter(previous);
+                        // Clear metadata
+                        WorkflowManager.clearSubmitterMetadata(subInfo.getSubmissionItem().getItem());
+                        subInfo.getSubmissionItem().update();
+                    }
+                    // Back to the item page
+                    backToItemPage(request, response, subInfo);
+                }
+            }
             else if (subInfo.isEditing()) 
             {
                 int result = doSaveCurrentState(context, request, response, subInfo, stepConfig);
@@ -990,28 +1016,8 @@ public class SubmissionController extends DSpaceServlet
                 } else {
                     // Save submission for later - just show message
                     saveSubmissionInfo(request, subInfo);
-                    if (subInfo.isAddingFulltext()) {
-                        // Cancelling from 'add fulltext' submission, so resetting submitter
-                        // Fetch previous submitter
-                        List<String> v = subInfo.getSubmissionItem().getItem()
-                                .getMetadataValue("tuhh.submitter.previous");
-                        if (v != null && v.size() > 0) {
-                            EPerson previous = EPerson.find(context, Integer.parseInt(v.get(0)));
-                            if (previous != null) {
-                                log.debug("Found previous submitter when cancelling: " + previous.getEmail());
-                            }
-                            // Revert submitter
-                            subInfo.getSubmissionItem().getItem().setSubmitter(previous);
-                            // Clear metadata
-                            WorkflowManager.clearSubmitterMetadata(subInfo.getSubmissionItem().getItem());
-                            subInfo.getSubmissionItem().update();
-                        }
-                        backToItemPage(request, response, subInfo);
-                    } else {
-                        exitFromSubmissionPage(request, response, subInfo);
-                    }
+                    exitFromSubmissionPage(request, response, subInfo);
                 }
-
             }
             else
             {
@@ -1210,20 +1216,25 @@ public class SubmissionController extends DSpaceServlet
                 
                 info = SubmissionInfo.load(context, request, WorkspaceItem.find(context, workspaceID));
             }
+            else if (UIUtil.getBoolParameter(request, "add_fulltext")
+                    && request.getParameter("add_fulltext_item") != null) {
+
+                int itemID = UIUtil.getIntParameter(request, "add_fulltext_item");
+
+                // load the item
+                Item item = Item.find(context, itemID);
+                AddFulltextItem addFulltextItem = new AddFulltextItem(item);
+
+                // load submission information
+                info = SubmissionInfo.load(context, request, addFulltextItem);
+            }
             else if (request.getParameter("edit_item") != null) 
             {
                 int itemID = UIUtil.getIntParameter(request, "edit_item");
                 // load the item
                 Item item = Item.find(context, itemID);
 
-                boolean isAddingFiles = UIUtil.getBoolParameter(request, "add_fulltext");
-                EditItem editItem;
-                if(isAddingFiles) {
-                    editItem = new AddFulltextItem(item);
-                } else {
-                    editItem = new EditItem(item);
-
-                }
+                EditItem editItem = new EditItem(item);
 
                 // load submission information
                 info = SubmissionInfo.load(context, request, editItem);
@@ -1540,10 +1551,12 @@ public class SubmissionController extends DSpaceServlet
         if ((si.getSubmissionItem() != null) && si.isEditing()) {
             info = info + "<input type=\"hidden\" name=\"edit_item\" value=\"" + si.getSubmissionItem().getID()
                     + "\"/>";
-            if(si.isAddingFulltext()) {
-                info = info + "<input type=\"hidden\" name=\"add_fulltext\" value=\"true\"/>";
-            }
-        } 
+        }
+        else if (si.getSubmissionItem() != null && si.isAddingFulltext()) {
+            info = info + "<input type=\"hidden\" name=\"add_fulltext\" value=\"true\"/>";
+            info = info + "<input type=\"hidden\" name=\"add_fulltext_item\" value=\"" + si.getSubmissionItem().getID()
+                    + "\"/>";
+        }
         else if ((si.getSubmissionItem() != null) && si.isInWorkflow())
         {
             info = info
@@ -1607,7 +1620,8 @@ public class SubmissionController extends DSpaceServlet
     private void userHasReached(SubmissionInfo subInfo, int step)
             throws SQLException, AuthorizeException, IOException
     {
-        if (!subInfo.isInWorkflow() && !subInfo.isEditing() && subInfo.getSubmissionItem() != null)
+        if (!subInfo.isInWorkflow() && !subInfo.isEditing() && !subInfo.isAddingFulltext()
+                && subInfo.getSubmissionItem() != null)
         {
             WorkspaceItem wi = (WorkspaceItem) subInfo.getSubmissionItem();
 
@@ -1655,7 +1669,8 @@ public class SubmissionController extends DSpaceServlet
      */
     public static int getStepReached(SubmissionInfo subInfo)
     {
-        if (subInfo == null || subInfo.isEditing() || subInfo.isInWorkflow() || subInfo.getSubmissionItem() == null)
+        if (subInfo == null || subInfo.isEditing() || subInfo.isAddingFulltext() ||
+                subInfo.isInWorkflow() || subInfo.getSubmissionItem() == null)
         {
             return -1;
         }

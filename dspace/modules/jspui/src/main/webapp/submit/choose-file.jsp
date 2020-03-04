@@ -462,15 +462,14 @@
                                 query:{workflow_id:'<%= subInfo.getSubmissionItem().getID()%>'}
                             <%
                             } else if (subInfo.isEditing()) {
-                				if (subInfo.isAddingFulltext() || isAddingFulltext) {
-                				    %>
-                            query:{edit_item:'<%= subInfo.getSubmissionItem().getID()%>', add_fulltext: 'true'}
+                            %>
+                                query:{edit_item:'<%= subInfo.getSubmissionItem().getID()%>'}
                             <%
-                           }
-                           else { %>
-                            query:{edit_item:'<%= subInfo.getSubmissionItem().getID()%>'}
-                            <% }
-                            } else {
+                           } else if (subInfo.isAddingFulltext() || isAddingFulltext) {
+                           %>
+                                query:{add_fulltext_item:'<%= subInfo.getSubmissionItem().getID()%>', add_fulltext: 'true'}
+                            <%
+                           } else {
                             %>
                                 query:{workspace_item_id:'<%= subInfo.getSubmissionItem().getID()%>'}
                             <%}%>
