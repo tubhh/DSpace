@@ -93,6 +93,7 @@
 						</property>
 					</bean>
 				</entry>
+-->
 				<entry key="dc.relation.ispartof">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
@@ -110,6 +111,7 @@
 						</property>
 					</bean>
 				</entry>
+<!--
 				<entry key="dc.relation">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
