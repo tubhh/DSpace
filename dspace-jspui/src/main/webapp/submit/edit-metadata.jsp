@@ -302,6 +302,7 @@
                     sb.insert(0, inputBlock);
                 
                 Boolean onlyLocal = org.dspace.core.ConfigurationManager.getBooleanProperty("choices.extralookup." + fieldName);
+                String iconClass = org.dspace.core.ConfigurationManager.getProperty("choices.extralookup." + fieldName + ".iconclass");
                 if(onlyLocal)
                 {
                 	sb.append("<button class=\"btn btn-default\" name=\"").append(fieldInput).append("_lookup\" ")
@@ -327,7 +328,11 @@
                 	.append(" title=\"")
                 	.append(LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup"))
                 	.append("\"><span class=\"glyphicon ");
-                	sb.append("glyphicon-zoom-in");
+                        if (!iconClass.equals("")) {
+                            sb.append(iconClass);
+                        } else {
+                	    sb.append("glyphicon-zoom-in");
+                        }
                 }
                 else {
 	                sb.append("&nbsp<button class=\"btn btn-default\" name=\"").append(fieldInput).append("_lookup\" ")
@@ -343,7 +348,7 @@
 	                	.append("\"><span class=\"glyphicon ");
 	                sb.append("glyphicon-search");
                 }
-                sb.append("\"></span></button>");
+                sb.append("\">    </span></button>");
             }
             
         }
