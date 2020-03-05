@@ -398,4 +398,9 @@ a:hover, a:focus {
 .tubdoklogosmall {
     display: none;
 }
-
+.orcid {
+height: 16px;
+width: 16px;
+background-image:url('../image/orcid_16x16.png');
+background-repeat:no-repeat;
+}
