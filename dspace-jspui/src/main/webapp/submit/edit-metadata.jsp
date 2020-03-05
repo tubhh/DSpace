@@ -328,8 +328,12 @@
                 	.append(" title=\"")
                 	.append(LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup"))
                 	.append("\"><span class=\"glyphicon ");
-                        if (!iconClass.equals("")) {
-                            sb.append(iconClass);
+                        if (iconClass != null) {
+                            if (!iconClass.equals("")) {
+                                sb.append(iconClass);
+                            } else {
+                	        sb.append("glyphicon-zoom-in");
+                            }
                         } else {
                 	    sb.append("glyphicon-zoom-in");
                         }
