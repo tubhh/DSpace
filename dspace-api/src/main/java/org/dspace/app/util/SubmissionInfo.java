@@ -115,6 +115,13 @@ public class SubmissionInfo extends HashMap
      */
     public static SubmissionInfo load(Context context, HttpServletRequest request, InProgressSubmission subItem) throws ServletException, AuthorizeException, SQLException
     {
+        log.debug("Calling initial SubmissionInfo load");
+        if (subItem != null) {
+            log.debug("subItem instanceof " + subItem.getClass().getName());
+        } else {
+            log.debug("subItem is NULL");
+        }
+
         // Fetch forceReload from config, now (default: false as per original default value)
         boolean forceReload = ConfigurationManager.getBooleanProperty("submit.fulltext.force-reload");
 
@@ -225,12 +232,15 @@ public class SubmissionInfo extends HashMap
     }
 
     public boolean isAddingFulltext() {
-        return ((this.submissionItem != null) && (this.submissionItem instanceof AddFulltextItem || hasPending()));
+        //return ((this.submissionItem != null) && (this.submissionItem instanceof AddFulltextItem || hasPending()));
+        return ((this.submissionItem != null) && (this.submissionItem instanceof AddFulltextItem));
     }
 
     public boolean hasPending() {
         try {
-            return ((this.submissionItem != null) && WorkflowManager.isPendingFulltext(this.submissionItem.getItem()));
+            // Try not to affect Edit Item (Submission mode) by forcing false if isEditing == true
+            return ((this.submissionItem != null) && WorkflowManager.isPendingFulltext(this.submissionItem.getItem())
+                    && !isEditing());
         } catch(SQLException e) {
             log.error("Error trying to detect pending fulltext for item: " + this.submissionItem.getItem());
             return false;
@@ -241,7 +251,9 @@ public class SubmissionInfo extends HashMap
 
         if (this.submissionItem != null && this.submissionItem.getItem() != null) {
             try {
-                return (hasPending() && (WorkflowItem.findByItem(context, this.submissionItem.getItem()) != null));
+                // Try not to affect Edit Item (Submission mode) by forcing false if isEditing == true
+                return (hasPending() && (WorkflowItem.findByItem(context, this.submissionItem.getItem()) != null)
+                        && !isEditing());
             } catch (SQLException e) {
                 log.error("SQL exception looking for item in workflow: " + this.submissionItem.getItem().getHandle());
                 return false;
@@ -716,12 +728,14 @@ public class SubmissionInfo extends HashMap
             // (by reading the XML config file)
             subInfo.submissionConfig = submissionConfigReader
                     .getSubmissionConfig(subInfo.getCollectionHandle(), subInfo
-                            .isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext(), subInfo.isReviewingFulltext(context));
+                            .isInWorkflow() || subInfo.isEditing(),
+                            subInfo.isAddingFulltext(), subInfo.isReviewingFulltext(context), subInfo.isEditing());
 
             // cache this new submission process configuration
             saveSubmissionConfigToCache(request.getSession(),
                     subInfo.submissionConfig, subInfo.getCollectionHandle(),
-                    subInfo.isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext(), subInfo.isReviewingFulltext(context));
+                    subInfo.isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext(),
+                    subInfo.isReviewingFulltext(context), subInfo.isEditing());
 
             // also must force reload Progress Bar info,
             // since it's based on the Submission config
@@ -752,7 +766,7 @@ public class SubmissionInfo extends HashMap
      */
     private static void saveSubmissionConfigToCache(HttpSession session,
             SubmissionConfig subConfig, String collectionHandle,
-            boolean isWorkflow, boolean isAddingFulltext, boolean isReviewingFulltext)
+            boolean isWorkflow, boolean isAddingFulltext, boolean isReviewingFulltext, boolean isEditing)
     {
         // cache the submission process config
         // and the collection it corresponds to
@@ -762,6 +776,7 @@ public class SubmissionInfo extends HashMap
                 isWorkflow));
         session.setAttribute("submission.config.isAddingFulltext", isAddingFulltext);
         session.setAttribute("submission.config.isReviewingFulltext", isReviewingFulltext);
+        session.setAttribute("submission.config.isEditing", isEditing);
     }
 
     /**
