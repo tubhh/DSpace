@@ -786,8 +786,7 @@ public class DescribeStep extends AbstractProcessingStep
             String element, String qualifier, String lang, DCInput dcInput)
     {
         boolean repeated = dcInput.getRepeatable();
-        // FIXME: Of course, language should be part of form, or determined
-        // some other way
+        boolean hasLanguageTag = dcInput.getLanguage();
         String metadataField = MetadataField
                 .formKey(schema, element, qualifier);
 
