@@ -323,7 +323,17 @@ public class DCInput
     {
         return label;
     }
-
+    
+    /**
+     * Get the language for this form row.
+     *
+     * @return the language state
+     */
+    public boolean getLanguage()
+    {
+        return language;
+    }
+    
     /**
      * Get the name of the pairs type
      * 
@@ -343,7 +353,18 @@ public class DCInput
     {
         return valueList;
     }
-
+    
+    /**
+     * Get the list of language tags
+     *
+     * @return the list of language
+     */
+    
+    public List<String> getValueLanguageList()
+    {
+        return valueLanguageList;
+    }
+    
     /**
      * Get the name of the controlled vocabulary that is associated with this
      * field
