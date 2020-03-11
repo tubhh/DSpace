@@ -803,7 +803,7 @@
                 lang = ConfigurationManager.getProperty("default.language");
             }
             sb.append("<div class=\"col-md-2\">");
-            sb = doLanguageTag(sb, fieldNameIdx, valueLanguageList, lang);
+            sb = doLanguageTag(sb, fieldName, count, fieldCount, repeatable, valueLanguageList, lang);
             sb.append("</div>");
         }
         
@@ -1047,7 +1047,7 @@
                 lang = ConfigurationManager.getProperty("default.language");
             }
             sb.append("<div class=\"col-md-2\">");
-            sb = doLanguageTag(sb, fieldNameIdx, valueLanguageList, lang);
+            sb = doLanguageTag(sb, fieldName, count, fieldCount, repeatable, valueLanguageList, lang);
             sb.append("</div>");
         }
         
@@ -1140,7 +1140,7 @@
                 lang = ConfigurationManager.getProperty("default.language");
             }
             sb.append("<span class=\"col-md-4\">");
-            sb = doLanguageTag(sb, fieldParam, valueLanguageList, lang);
+            sb = doLanguageTag(sb, fieldName, i+1, fieldCount, repeatable, valueLanguageList, lang);
             sb.append("</span>");
           }
           
@@ -1170,7 +1170,7 @@
            if (language) {
              String lang = ConfigurationManager.getProperty("default.language");
              sb.append("<span class=\"col-md-4\">");
-             sb = doLanguageTag(sb, fieldParam, valueLanguageList, lang);
+             sb = doLanguageTag(sb, fieldName, i+1, fieldCount, repeatable, valueLanguageList, lang);
              sb.append("</span>");
            }
 
@@ -1565,8 +1565,16 @@
           }//end doList
     
     /** Display language tags **/
-    StringBuffer doLanguageTag(StringBuffer sb, String fieldNameIdx, List<String> valueLanguageList, String lang) {
-        sb.append("<select class=\"form-control\" name=\"").append(fieldNameIdx + "[lang]").append("\"").append(">");
+    StringBuffer doLanguageTag(StringBuffer sb, String fieldName, int idx, int fieldCount, boolean repeatable,
+                               List<String> valueLanguageList, String lang)
+    {
+        // if this is not the only or last input, append index to input @names
+        String langName = fieldName + "_lang";
+        if (repeatable && idx != fieldCount-1)
+        {
+            langName += '_'+String.valueOf(idx+1);
+        }
+        sb.append("<select class=\"form-control\" name=\"").append(langName).append("\"").append(">");
         for (int j = 0; j < valueLanguageList.size(); j += 2) {
             String display = (String) valueLanguageList.get(j);
             String value = (String) valueLanguageList.get(j + 1);

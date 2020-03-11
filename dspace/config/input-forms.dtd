@@ -21,6 +21,7 @@
  <!ELEMENT dc-element (#PCDATA) >
  <!ELEMENT dc-qualifier (#PCDATA) >
  <!ELEMENT language (#PCDATA) >
+ <!ATTLIST language value-pairs-name CDATA #IMPLIED >
  <!ELEMENT parent (#PCDATA) >
  <!ELEMENT type-bind (#PCDATA) >
  
