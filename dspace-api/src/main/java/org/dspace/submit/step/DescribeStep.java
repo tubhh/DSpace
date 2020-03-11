@@ -804,6 +804,7 @@ public class DescribeStep extends AbstractProcessingStep
 
         // Values to add
         List<String> vals = null;
+        List<String> langs = null;
         List<String> auths = null;
         List<String> confs = null;
 
@@ -831,6 +832,9 @@ public class DescribeStep extends AbstractProcessingStep
                 
             
             vals = getRepeatedParameterParent(request, metadataField, metadataField,parentMetadataField,parentMetadataFieldParam);
+            if (hasLanguageTag) {
+                langs = vals = getRepeatedParameterParent(request, metadataField, metadataField + "_lang", parentMetadataField,parentMetadataFieldParam);
+            }
             if (isAuthorityControlled)
             {
                 auths = getRepeatedParameterParent(request, metadataField, metadataField+"_authority",parentMetadataField,parentMetadataFieldParam);
@@ -848,8 +852,12 @@ public class DescribeStep extends AbstractProcessingStep
             {
                 int valToRemove = Integer.parseInt(buttonPressed
                         .substring(removeButton.length()));
-
+    
                 vals.remove(valToRemove);
+                if(hasLanguageTag)
+                {
+                    langs.remove(valToRemove);
+                }
                 if(isAuthorityControlled)
                 {
                    auths.remove(valToRemove);
@@ -859,6 +867,10 @@ public class DescribeStep extends AbstractProcessingStep
         }
         else if(!dcInput.hasParent() && repeated ){
             vals = getRepeatedParameter(request, metadataField, metadataField);
+            if (hasLanguageTag)
+            {
+                langs = getRepeatedParameter(request, metadataField, metadataField+ "_lang");
+            }
             if (isAuthorityControlled)
             {
                 auths = getRepeatedParameter(request, metadataField, metadataField+"_authority");
@@ -876,8 +888,12 @@ public class DescribeStep extends AbstractProcessingStep
             {
                 int valToRemove = Integer.parseInt(buttonPressed
                         .substring(removeButton.length()));
-
+    
                 vals.remove(valToRemove);
+                if(hasLanguageTag)
+                {
+                    langs.remove(valToRemove);
+                }
                 if(isAuthorityControlled)
                 {
                    auths.remove(valToRemove);
@@ -918,6 +934,16 @@ public class DescribeStep extends AbstractProcessingStep
                     vals.add(MetadataValue.PARENT_PLACEHOLDER_VALUE);
                 }
                 
+                if (hasLanguageTag)
+                {
+                    langs = new LinkedList<String>();
+                    if (request.getParameter(metadataField + "_lang") != null) {
+                        langs.add(request.getParameter(metadataField + "_lang").trim());
+                    } else {
+                        langs.add("");
+                    }
+                }
+                
                 if (isAuthorityControlled)
                 {
                     auths = new LinkedList<String>();
@@ -938,6 +964,14 @@ public class DescribeStep extends AbstractProcessingStep
             if (value != null)
             {
                 vals.add(value.trim());
+            }
+            if (hasLanguageTag) {
+                langs = new LinkedList<String>();
+                if (request.getParameter(metadataField + "_lang") != null) {
+                    langs.add(request.getParameter(metadataField + "_lang").trim());
+                } else {
+                    langs.add("");
+                }
             }
             if (isAuthorityControlled)
             {
@@ -960,6 +994,11 @@ public class DescribeStep extends AbstractProcessingStep
             String s = vals.get(i);
             if ((s != null) && !s.equals(""))
             {
+                if (hasLanguageTag && langs.size() > i)
+                {
+                    lang = langs.get(i);
+                }
+                
                 if (isAuthorityControlled)
                 {
                     String authKey = auths.size() > i ? auths.get(i) : null;
@@ -1279,8 +1318,8 @@ public class DescribeStep extends AbstractProcessingStep
 
         return vals;
     }
-
-   
+    
+    
     protected List<String> getDateRepeatedParameterParent(HttpServletRequest request,
             String metadataField, String param,String parentMetadataField, String parentParam)
     {
