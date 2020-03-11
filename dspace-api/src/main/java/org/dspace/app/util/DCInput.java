@@ -40,7 +40,7 @@ public class DCInput
     private boolean language = false;
     
     /** the language code use for the input */
-    private static final String LanguageName = "common_iso_languages";
+    private String LanguageName = "common_iso_languages";
     
     /** the language list and their value */
     private List<String> valueLanguageList = null;
@@ -132,6 +132,7 @@ public class DCInput
         valueLanguageList = new ArrayList();
         if (language)
         {
+            LanguageName = fieldMap.get("value-pairs-name");
             valueLanguageList = listMap.get(LanguageName);
         }
 
