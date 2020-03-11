@@ -837,6 +837,18 @@
           .append(val)
           .append("</textarea>")
           .append(doControlledVocabulary(fieldNameIdx, pageContext, vocabulary, readonly));
+    
+        if (language)
+        {
+            if (null == lang)
+            {
+                lang = ConfigurationManager.getProperty("default.language");
+            }
+            sb.append("<div class=\"col-md-2\">");
+            sb = doLanguageTag(sb, fieldName, count, fieldCount, repeatable, valueLanguageList, lang);
+            sb.append("</div>");
+        }
+        
         if (authorityType != null)
         {
        	 sb.append("</div><div class=\"col-md-2\">");
@@ -1062,6 +1074,15 @@
 			 .append(doControlledVocabulary(fieldNameIdx, pageContext, vocabulary, readonly))             
           .append("</div>");
         
+        if (language) {
+            if (null == lang) {
+                lang = ConfigurationManager.getProperty("default.language");
+            }
+            sb.append("<div class=\"col-md-2\">");
+            sb = doLanguageTag(sb, fieldName, count, fieldCount, repeatable, valueLanguageList, lang);
+            sb.append("</div>");
+        }
+        
         if (authorityType != null)
         {
      	   sb.append("<div class=\"col-md-2\">");
@@ -1143,6 +1164,17 @@
           
            sb.append(doControlledVocabulary(fieldParam, pageContext, vocabulary, readonly));
            sb.append("</span>");
+    
+          if (language) {
+            String lang = defaults[i].language;
+            if (null == lang) {
+                lang = ConfigurationManager.getProperty("default.language");
+            }
+            sb.append("<span class=\"col-md-4\">");
+            sb = doLanguageTag(sb, fieldName, i+1, fieldCount, repeatable, valueLanguageList, lang);
+            sb.append("</span>");
+          }
+          
           if (!readonly)
           {
                        sb.append("<button class=\"btn btn-danger col-md-2\" name=\"submit_")
@@ -1165,8 +1197,16 @@
              .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" disabled=\"disabled\" ":"")
              .append("/>")
              .append(doControlledVocabulary(fieldParam, pageContext, vocabulary, readonly))
-             .append("</span>\n")
-             .append("<span class=\"col-md-2\">&nbsp;</span>");
+             .append("</span>\n");
+         
+           if (language) {
+             String lang = ConfigurationManager.getProperty("default.language");
+             sb.append("<span class=\"col-md-4\">");
+             sb = doLanguageTag(sb, fieldName, i+1, fieldCount, repeatable, valueLanguageList, lang);
+             sb.append("</span>");
+           }
+
+         sb.append("<span class=\"col-md-2\">&nbsp;</span>");
          }
          
          i++;
@@ -1555,6 +1595,27 @@
             
             out.write(sb.toString());
           }//end doList
+    
+    /** Display language tags **/
+    StringBuffer doLanguageTag(StringBuffer sb, String fieldName, int idx, int fieldCount, boolean repeatable,
+                               List<String> valueLanguageList, String lang)
+    {
+        // if this is not the only or last input, append index to input @names
+        String langName = fieldName + "_lang";
+        if (repeatable && idx != fieldCount-1)
+        {
+            langName += '_'+String.valueOf(idx+1);
+        }
+        sb.append("<select class=\"form-control\" name=\"").append(langName).append("\"").append(">");
+        for (int j = 0; j < valueLanguageList.size(); j += 2) {
+            String display = (String) valueLanguageList.get(j);
+            String value = (String) valueLanguageList.get(j + 1);
+            sb.append("<option ").append(value.equals(lang) ? " selected=\"selected\" " : "").append("value=\"")
+                    .append(value.replaceAll("\"", "&quot;")).append("\">").append(display).append("</option>");
+        }
+        sb.append("</select>");
+        return sb;
+    }
 %>
 
 <%
