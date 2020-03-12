@@ -15,7 +15,10 @@ import java.io.InputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +37,12 @@ import org.dspace.app.webui.util.JSONUploadResponse;
 import org.dspace.app.webui.util.JSPManager;
 import org.dspace.app.webui.util.UIUtil;
 import org.dspace.authorize.AuthorizeException;
-import org.dspace.content.*;
+import org.dspace.content.AddFulltextItem;
+import org.dspace.content.Bitstream;
+import org.dspace.content.Bundle;
+import org.dspace.content.EditItem;
+import org.dspace.content.Item;
+import org.dspace.content.WorkspaceItem;
 import org.dspace.content.Collection;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
@@ -306,15 +314,19 @@ public class SubmissionController extends DSpaceServlet
                     
                     // check if the POST request was send by resumable.js
                     String resumableFilename = request.getParameter("resumableFilename");
-                    Map<String, String[]> parameterMap = request.getParameterMap();
-                    for (String k : parameterMap.keySet()) {
+                    
+                    if (log.isDebugEnabled()) {
+                        Map<String, String[]> parameterMap = request.getParameterMap();
+                        for (String k : parameterMap.keySet()) {
                             log.debug("file assembly request param: " + k + " = " + parameterMap.get(k));
+                        }
+                        Enumeration<String> attrs = request.getAttributeNames();
+                        while (attrs.hasMoreElements()) {
+                            String attr = attrs.nextElement();
+                            log.debug("Attribute: " + attr + " = " + request.getAttribute(attr));
+                        }
                     }
-                    Enumeration<String> attrs = request.getAttributeNames();
-                    while (attrs.hasMoreElements()) {
-                        String attr = attrs.nextElement();
-                        log.debug("Attribute: " + attr + " = " + request.getAttribute(attr));
-                    }
+                    
                     if (!StringUtils.isEmpty(resumableFilename))
                     {
                         log.debug("resumable Filename: '" + resumableFilename + "'.");
