@@ -151,12 +151,15 @@ public class SubmissionConfigReader
      *             if no default submission process configuration defined
      */
     public SubmissionConfig getSubmissionConfig(String collectionHandle, boolean isWorkflow) throws ServletException {
-        return getSubmissionConfig(collectionHandle, isWorkflow, false, false);
+        return getSubmissionConfig(collectionHandle, isWorkflow, false, false, false);
     }
 
     public SubmissionConfig getSubmissionConfig(String collectionHandle,
-            boolean isWorkflow, boolean isAddFulltext, boolean isReviewFullText) throws ServletException
+            boolean isWorkflow, boolean isAddFulltext, boolean isReviewFullText, boolean isEditing) throws ServletException
     {
+
+        boolean forceReload = ConfigurationManager.getBooleanProperty("submit.fulltext.force-reload");
+
         // get the name of the submission process config for this collection
         String submitName = collectionToSubmissionConfig
                 .get(collectionHandle);
@@ -178,7 +181,11 @@ public class SubmissionConfigReader
         // Note - NEVER cache or load from cache for addfulltext!
         if (lastSubmissionConfig != null
                 && lastSubmissionConfig.getSubmissionName().equals(submitName)
-                && lastSubmissionConfig.isWorkflow() == isWorkflow && !isAddFulltext)
+                && lastSubmissionConfig.isWorkflow() == isWorkflow
+                && !isAddFulltext
+                && !isReviewFullText
+                && !isEditing
+                && !forceReload)
         {
             log.debug("Found submission process config '" + submitName
                     + "' in cache.");

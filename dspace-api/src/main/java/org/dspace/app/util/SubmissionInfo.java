@@ -115,9 +115,16 @@ public class SubmissionInfo extends HashMap
      */
     public static SubmissionInfo load(Context context, HttpServletRequest request, InProgressSubmission subItem) throws ServletException, AuthorizeException, SQLException
     {
-        //boolean forceReload = false;
-        boolean forceReload = true;
-        
+        log.debug("Calling initial SubmissionInfo load");
+        if (subItem != null) {
+            log.debug("subItem instanceof " + subItem.getClass().getName());
+        } else {
+            log.debug("subItem is NULL");
+        }
+
+        // Fetch forceReload from config, now (default: false as per original default value)
+        boolean forceReload = ConfigurationManager.getBooleanProperty("submit.fulltext.force-reload");
+
     	SubmissionInfo subInfo = new SubmissionInfo();
     	
         // load SubmissionConfigReader only the first time
@@ -144,56 +151,56 @@ public class SubmissionInfo extends HashMap
             collectionHandle = subItem.getCollection().getHandle();
             Item item = subItem.getItem();
             if (subItem instanceof EditItem) {
-                // If we are adding fulltext, we don't need to be the owner or an auth'd editor of the item
-                // But we do need to have permission to submit to the new collection
-                if (subItem instanceof AddFulltextItem) {
-
-                    String previousSubmitterField = ConfigurationManager.getProperty("submit.fulltext.submitter.field");
-                    if(previousSubmitterField == null) {
-                        previousSubmitterField = "tuhh.submitter.previous";
-                    }
-
-                    // We might be loading submission info for an existing submission (eg expired session) so test
-                    // for existing tuhh.submitter.previous
-                    EPerson originalSubmitter = item.getSubmitter();
-                    List<String> v = item.getMetadataValue(previousSubmitterField);
-                    if (v != null && v.size() > 0) {
-                        EPerson previous = EPerson.find(context, Integer.parseInt(v.get(0)));
-                        if (previous != null) {
-                            log.debug("Found previous submitter when loading subInfo " + previous.getEmail());
-                        }
-                    }
-                    else {
-                        // no previous submitter metadata found, set it now
-                        String[] psParts = previousSubmitterField.split("\\.", 3);
-                        if (psParts.length > 1) {
-                            item.addMetadata((psParts[0]), (psParts[1]), (psParts.length > 2 ? psParts[2] : null),
-                                    Item.ANY, String.valueOf(originalSubmitter.getID()));
-
-                            log.debug("In load() method, set previous submitter to " + originalSubmitter.getEmail());
-                        } else {
-                            log.error("Previous submitter metadata field missing or invalid: " + previousSubmitterField);
-                        }
-                    }
-
-                    // We need to here make sure that the submission item is owned by the new user
-                    log.debug("Setting submitter of subItem to " + context.getCurrentUser().getEmail());
-                    ((AddFulltextItem) subItem).setSubmitter(context.getCurrentUser());
-                    Collection[] authorizedCollections = Collection.findAuthorizedOptimized(context, Constants.ADD);
-                    boolean authorized = false;
-                    for (Collection authorizedCollection : authorizedCollections) {
-                        if (collectionHandle.equals(authorizedCollection.getHandle())) {
-                            authorized = true;
-                        }
-                    }
-                    if (!authorized) {
-                        throw new AuthorizeException("Unauthorized attempt to submit new files for ItemID " + item.getID());
-                    }
-                }
                 // If we are using the previous "edit in submission mode" functionality, then just check for item
                 // admin or edit capability
-                else if (!AuthorizeManager.isAdmin(context) && !item.canEdit()) {
+                if (!AuthorizeManager.isAdmin(context) && !item.canEdit()) {
                     throw new AuthorizeException("Unauthorized attempt to edit ItemID " + item.getID());
+                }
+                context.turnOffAuthorisationSystem();
+            }
+            else if (subItem instanceof AddFulltextItem) {
+                // If we are adding fulltext, we don't need to be the owner or an auth'd editor of the item
+                // But we do need to have permission to submit to the new collection
+                String previousSubmitterField = ConfigurationManager.getProperty("submit.fulltext.submitter.field");
+                if(previousSubmitterField == null) {
+                    previousSubmitterField = "tuhh.submitter.previous";
+                }
+
+                // We might be loading submission info for an existing submission (eg expired session) so test
+                // for existing tuhh.submitter.previous
+                EPerson originalSubmitter = item.getSubmitter();
+                List<String> v = item.getMetadataValue(previousSubmitterField);
+                if (v != null && v.size() > 0) {
+                    EPerson previous = EPerson.find(context, Integer.parseInt(v.get(0)));
+                    if (previous != null) {
+                        log.debug("Found previous submitter when loading subInfo " + previous.getEmail());
+                    }
+                }
+                else {
+                    // no previous submitter metadata found, set it now
+                    String[] psParts = previousSubmitterField.split("\\.", 3);
+                    if (psParts.length > 1) {
+                        item.addMetadata((psParts[0]), (psParts[1]), (psParts.length > 2 ? psParts[2] : null),
+                                Item.ANY, String.valueOf(originalSubmitter.getID()));
+
+                        log.debug("In load() method, set previous submitter to " + originalSubmitter.getEmail());
+                    } else {
+                        log.error("Previous submitter metadata field missing or invalid: " + previousSubmitterField);
+                    }
+                }
+
+                // We need to here make sure that the submission item is owned by the new user
+                log.debug("Setting submitter of subItem to " + context.getCurrentUser().getEmail());
+                ((AddFulltextItem) subItem).setSubmitter(context.getCurrentUser());
+                Collection[] authorizedCollections = Collection.findAuthorizedOptimized(context, Constants.ADD);
+                boolean authorized = false;
+                for (Collection authorizedCollection : authorizedCollections) {
+                    if (collectionHandle.equals(authorizedCollection.getHandle())) {
+                        authorized = true;
+                    }
+                }
+                if (!authorized) {
+                    throw new AuthorizeException("Unauthorized attempt to submit new files for ItemID " + item.getID());
                 }
                 context.turnOffAuthorisationSystem();
             }
@@ -225,12 +232,15 @@ public class SubmissionInfo extends HashMap
     }
 
     public boolean isAddingFulltext() {
-        return ((this.submissionItem != null) && (this.submissionItem instanceof AddFulltextItem || hasPending()));
+        //return ((this.submissionItem != null) && (this.submissionItem instanceof AddFulltextItem || hasPending()));
+        return ((this.submissionItem != null) && (this.submissionItem instanceof AddFulltextItem));
     }
 
     public boolean hasPending() {
         try {
-            return ((this.submissionItem != null) && WorkflowManager.isPendingFulltext(this.submissionItem.getItem()));
+            // Try not to affect Edit Item (Submission mode) by forcing false if isEditing == true
+            return ((this.submissionItem != null) && WorkflowManager.isPendingFulltext(this.submissionItem.getItem())
+                    && !isEditing());
         } catch(SQLException e) {
             log.error("Error trying to detect pending fulltext for item: " + this.submissionItem.getItem());
             return false;
@@ -241,7 +251,9 @@ public class SubmissionInfo extends HashMap
 
         if (this.submissionItem != null && this.submissionItem.getItem() != null) {
             try {
-                return (hasPending() && (WorkflowItem.findByItem(context, this.submissionItem.getItem()) != null));
+                // Try not to affect Edit Item (Submission mode) by forcing false if isEditing == true
+                return (hasPending() && (WorkflowItem.findByItem(context, this.submissionItem.getItem()) != null)
+                        && !isEditing());
             } catch (SQLException e) {
                 log.error("SQL exception looking for item in workflow: " + this.submissionItem.getItem().getHandle());
                 return false;
@@ -310,7 +322,8 @@ public class SubmissionInfo extends HashMap
         this.setCollectionHandle(collectionHandle);
 
         // force a reload of the submission process configuration
-        loadSubmissionConfig(request, this, context, true);
+        boolean forceReload = ConfigurationManager.getBooleanProperty("submit.fulltext.force-reload");
+        loadSubmissionConfig(request, this, context, forceReload);
     }
 
     /**
@@ -699,9 +712,9 @@ public class SubmissionInfo extends HashMap
             throws ServletException, SQLException
     {
 
-        log.debug("LOAD SUBMISSION CONFIG: Loading Submission Config information. Full text mode is " + subInfo.isAddingFulltext());
-        log.debug("LOAD SUBMISSION CONFIG: Does submission have pending files? " + subInfo.hasPending());
-        log.debug("LOAD SUBMISSION CONFIG: Is this both in adding mode, *and* strictly a review?" + subInfo.isReviewingFulltext(context));
+        log.debug("LOAD SUBMISSION CONFIG: isAddingFulltext = " + subInfo.isAddingFulltext());
+        log.debug("LOAD SUBMISSION CONFIG: hasPending = " + subInfo.hasPending());
+        log.debug("LOAD SUBMISSION CONFIG: isReviewingFulltext = " + subInfo.isReviewingFulltext(context));
 
         if (!forceReload)
         {
@@ -715,12 +728,14 @@ public class SubmissionInfo extends HashMap
             // (by reading the XML config file)
             subInfo.submissionConfig = submissionConfigReader
                     .getSubmissionConfig(subInfo.getCollectionHandle(), subInfo
-                            .isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext(), subInfo.isReviewingFulltext(context));
+                            .isInWorkflow() || subInfo.isEditing(),
+                            subInfo.isAddingFulltext(), subInfo.isReviewingFulltext(context), subInfo.isEditing());
 
             // cache this new submission process configuration
             saveSubmissionConfigToCache(request.getSession(),
                     subInfo.submissionConfig, subInfo.getCollectionHandle(),
-                    subInfo.isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext(), subInfo.isReviewingFulltext(context));
+                    subInfo.isInWorkflow() || subInfo.isEditing(), subInfo.isAddingFulltext(),
+                    subInfo.isReviewingFulltext(context), subInfo.isEditing());
 
             // also must force reload Progress Bar info,
             // since it's based on the Submission config
@@ -729,7 +744,6 @@ public class SubmissionInfo extends HashMap
         else
         {
             log.debug("Found Submission Config in session cache!");
-
             // try and reload progress bar from cache
             loadProgressBar(request, subInfo, false);
         }
@@ -752,7 +766,7 @@ public class SubmissionInfo extends HashMap
      */
     private static void saveSubmissionConfigToCache(HttpSession session,
             SubmissionConfig subConfig, String collectionHandle,
-            boolean isWorkflow, boolean isAddingFulltext, boolean isReviewingFulltext)
+            boolean isWorkflow, boolean isAddingFulltext, boolean isReviewingFulltext, boolean isEditing)
     {
         // cache the submission process config
         // and the collection it corresponds to
@@ -762,6 +776,7 @@ public class SubmissionInfo extends HashMap
                 isWorkflow));
         session.setAttribute("submission.config.isAddingFulltext", isAddingFulltext);
         session.setAttribute("submission.config.isReviewingFulltext", isReviewingFulltext);
+        session.setAttribute("submission.config.isEditing", isEditing);
     }
 
     /**
@@ -782,6 +797,7 @@ public class SubmissionInfo extends HashMap
     private static SubmissionConfig loadSubmissionConfigFromCache(
             HttpSession session, String collectionHandle, boolean isWorkflow, boolean isAddingFulltext, boolean isReviewingFulltext)
     {
+        log.debug("Loading submission from cache (session attributes)");
         // attempt to load submission process config
         // from cache for the current collection
         String cachedHandle = (String) session

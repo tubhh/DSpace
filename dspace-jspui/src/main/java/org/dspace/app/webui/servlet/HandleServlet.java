@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.hdfs.DFSClient;
 import org.apache.log4j.Logger;
 import org.dspace.app.util.GoogleMetadata;
 import org.dspace.app.webui.util.Authenticate;

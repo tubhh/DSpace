@@ -530,7 +530,8 @@ public class JSPStepManager
      */
     public static final int getPageReached(SubmissionInfo subInfo)
     {
-        if (subInfo.isInWorkflow() || subInfo.isEditing() || subInfo.getSubmissionItem() == null)
+        if (subInfo.isInWorkflow() || subInfo.isEditing() || subInfo.isAddingFulltext()
+                || subInfo.getSubmissionItem() == null)
         {
             return -1;
         }
@@ -557,7 +558,8 @@ public class JSPStepManager
     private void updatePageReached(SubmissionInfo subInfo, int page)
             throws SQLException, AuthorizeException, IOException
     {
-        if (!subInfo.isInWorkflow() && !subInfo.isEditing() && subInfo.getSubmissionItem() != null)
+        if (!subInfo.isInWorkflow() && !subInfo.isEditing() && !subInfo.isAddingFulltext()
+                && subInfo.getSubmissionItem() != null)
         {
             WorkspaceItem wi = (WorkspaceItem) subInfo.getSubmissionItem();
 

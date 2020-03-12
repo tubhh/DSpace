@@ -19,14 +19,13 @@ import org.mockito.internal.matchers.Null;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class AddFulltextItem extends EditItem {
+public class AddFulltextItem implements InProgressSubmission {
 
 	private static Logger log = Logger.getLogger(AddFulltextItem.class);
 
 	private Item item;
 
 	public AddFulltextItem(Item item) {
-		super(item);
 		this.item = item;
 	}
 
