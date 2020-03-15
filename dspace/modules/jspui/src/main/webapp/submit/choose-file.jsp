@@ -595,7 +595,8 @@
 			{
 				col++;
 			}
-			if (!fileRequired || subInfo.getSubmissionItem().getItem().hasUploadedFiles())
+			// Is file optional, OR is there at least original or pending file?
+			if (!fileRequired || (subInfo.getSubmissionItem().getItem().hasUploadedFiles() || subInfo.hasPending()))
             {
                     col++;
             }
@@ -609,8 +610,9 @@
 				<%  } %>
                         <input class="btn btn-default col-md-<%= 12 / (col + 2) %>" type="submit" name="<%=AbstractProcessingStep.CANCEL_BUTTON%>" value="<fmt:message key="jsp.submit.general.cancel-or-save.button"/>" />
                     <%
-                        //if upload is set to optional, or user returned to this page after pressing "Add Another File" button
-                    	if (!fileRequired || subInfo.getSubmissionItem().getItem().hasUploadedFiles())
+                        // if upload is set to optional, or user returned to this page after pressing "Add Another File" button
+                        // (ie. optional, or item has at least one original or pending file already)
+                    	if (!fileRequired || (subInfo.getSubmissionItem().getItem().hasUploadedFiles() || subInfo.hasPending()))
                         {
                     %>
                                 <input class="btn btn-warning col-md-<%= 12 / (col + 2) %>" type="submit" name="<%=UploadStep.SUBMIT_SKIP_BUTTON%>" value="<fmt:message key="jsp.submit.choose-file.skip"/>" />

@@ -159,8 +159,8 @@ public class PendingUploadStep extends UploadStep
         if (buttonPressed.startsWith(PROGRESS_BAR_PREFIX) || 
         		buttonPressed.startsWith(PREVIOUS_BUTTON))
         {
-            // check if a file is required to be uploaded
-            if (fileRequired && !item.hasUploadedFiles())
+            // check if a file is required to be uploaded (includes original and pending files)
+            if (fileRequired && !item.hasUploadedFiles() && !subInfo.hasPending())
             {
                 return STATUS_NO_FILES_ERROR;
             }
@@ -357,8 +357,8 @@ public class PendingUploadStep extends UploadStep
         // Step #6: Determine if there is an error because no
         // files have been uploaded.
         // ---------------------------------------------------
-        //check if a file is required to be uploaded
-        if (fileRequired && !item.hasUploadedFiles()
+        //check if a file is required to be uploaded (includes original and pending files)
+        if (fileRequired && !item.hasUploadedFiles() && !subInfo.hasPending()
                 && !buttonPressed.equals(SUBMIT_MORE_BUTTON))
         {
             return STATUS_NO_FILES_ERROR;
