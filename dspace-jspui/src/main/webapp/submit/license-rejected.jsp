@@ -41,7 +41,7 @@
     <dspace:include page="/components/contact-info.jsp" />
 
 	<%if (request.getAttribute("rejected_fulltext_license") != null) { %>
-	<p><a href="%<= request.getContextPath() %>"/<%= request.getAttribute("rejected_fulltext_license") %>>
+	<p><a href="<%= request.getContextPath() %>/handle/<%= request.getAttribute("rejected_fulltext_license") %>">
 		<fmt:message key="jsp.general.editaddfulltext.license_rejected_return"/>
 	</a></p><%
 	}
