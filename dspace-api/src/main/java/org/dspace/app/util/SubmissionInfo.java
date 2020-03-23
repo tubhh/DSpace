@@ -129,11 +129,19 @@ public class SubmissionInfo extends HashMap
     	
         // load SubmissionConfigReader only the first time
         // or if we're using a different UI now.
-        if (submissionConfigReader == null)
+
+        // Actually... always load SubmissionConfigReader. Because the "traditional" form can be dynamically
+        // changed depending on the context of the submission (adding files, reviewing files, submitting normally)
+        // we can't just rely on session attributes
+        submissionConfigReader = new SubmissionConfigReader();
+        forceReload = true;
+        /*
+        if (submissionConfigReader == null || subItem == null)
         {
             submissionConfigReader = new SubmissionConfigReader();
             forceReload=true;
         }
+         */
 
         int codeCallerPage = Util.getIntParameter(request, "pageCallerID");
         if(codeCallerPage==-1) {
@@ -715,6 +723,8 @@ public class SubmissionInfo extends HashMap
         log.debug("LOAD SUBMISSION CONFIG: isAddingFulltext = " + subInfo.isAddingFulltext());
         log.debug("LOAD SUBMISSION CONFIG: hasPending = " + subInfo.hasPending());
         log.debug("LOAD SUBMISSION CONFIG: isReviewingFulltext = " + subInfo.isReviewingFulltext(context));
+
+
 
         if (!forceReload)
         {
