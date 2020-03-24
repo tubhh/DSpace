@@ -27,13 +27,13 @@
 
 	<%if (request.getAttribute("rejected_fulltext_license") != null) { %>
 				<p><fmt:message key="jsp.general.editaddfulltext.license_rejected"/></p><%
-		}
+		} else {
 	%>
     <%-- <p>You have chosen not to grant the license to distribute your submission
     via the DSpace system.  Your submission has not been deleted and can be
     accessed from the My DSpace page.</p> --%>
 	<p><fmt:message key="jsp.submit.license-rejected.info1"/></p>
-    
+    <% } %>
     <%-- <p>If you wish to contact us to discuss the license, please use one
     of the methods below:</p> --%>
 	<p><fmt:message key="jsp.submit.license-rejected.info2"/></p>
