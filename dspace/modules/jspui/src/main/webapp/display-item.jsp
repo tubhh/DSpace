@@ -612,6 +612,7 @@ j(document).ready(function() {
 <div class="col-lg-3">
 <div class="row">
 <%
+    if (user!=null) {
     if (add_fulltext_allowed) {
 %>
     <div class="col-lg-12 col-md-4 col-sm-6">
@@ -641,6 +642,7 @@ j(document).ready(function() {
     </div>
     <%
         }
+    }
 
 
 if (dedupEnabled && admin_button) { %>	
