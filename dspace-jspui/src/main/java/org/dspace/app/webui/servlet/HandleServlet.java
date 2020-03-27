@@ -378,7 +378,23 @@ public class HandleServlet extends DSpaceServlet
                     // 2. not already in review
                     WorkflowItem workflowItem = WorkflowItem.findByItem(context, item);
                     if (workflowItem == null) {
-                        request.setAttribute("add_fulltext_allowed", true);
+                        // Since it's not in review, that's good, but does it have pending items?
+                        // (ie. a half-finished submission). And if so, is the current user the submitter?
+                        // Then we can display, so they can continue.
+                        if (WorkflowManager.isPendingFulltext(item)) {
+                            if(context.getCurrentUser() != null && context.getCurrentUser() == item.getSubmitter()) {
+                                request.setAttribute("add_fulltext_allowed", true);
+                                request.setAttribute("add_fulltext_continue", true);
+                            } else {
+                                // This is a different user. No button at all.
+                                // We *could*, at this point, delete the bundles and reset the submitter
+                                request.setAttribute("add_fulltext_allowed", false);
+                            }
+                        } else {
+                            // OK, it has no pending, and it's not in review, and it's in the right collection
+                            // so anybody may click Add Files
+                            request.setAttribute("add_fulltext_allowed", true);
+                        }
                     } else {
                         // 3. otherwise, is the current user the submitter? if so, we can show them a "pending" msg
                         if (context.getCurrentUser() != null && context.getCurrentUser() == workflowItem.getSubmitter()) {

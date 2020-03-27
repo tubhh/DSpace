@@ -66,9 +66,17 @@
     // can we display the "Add Files" button here?
     Boolean add_fulltext_allowed_b = (Boolean)request.getAttribute("add_fulltext_allowed");
     boolean add_fulltext_allowed = (add_fulltext_allowed_b != null && add_fulltext_allowed_b);
+    // are there *unfinished* submissions for this user?
+    Boolean fulltext_continue_b = (Boolean)request.getAttribute("add_fulltext_continue");
+    boolean fulltext_continue = (fulltext_continue_b != null && fulltext_continue_b);
     // are there pending files under review?
     Boolean fulltext_under_reviewed_b = (Boolean)request.getAttribute("fulltext_under_review");
     boolean fulltext_under_review = (fulltext_under_reviewed_b != null && fulltext_under_reviewed_b);
+
+    String addFilesButtonLabel = "jsp.general.editaddfulltext.button";
+    if (fulltext_continue) {
+        addFilesButtonLabel = "jsp.general.continueaddfulltext.button";
+    }
 
     // get the workspace id if one has been passed
     Integer workspace_id = (Integer) request.getAttribute("workspace_id");
@@ -622,7 +630,7 @@ j(document).ready(function() {
                     <input type="hidden" name="add_fulltext_item" value="<%= item.getID() %>" />
                     <input type="hidden" name="pageCallerID" value="0" />
                     <input type="hidden" name="add_fulltext" value="true"/>
-                    <input class="btn btn-default col-md-12" type="submit" name="submit" value="<fmt:message key="jsp.general.editaddfulltext.button"/>" />
+                    <input class="btn btn-default col-md-12" type="submit" name="submit" value="<fmt:message key="<%= addFilesButtonLabel %>"/>" />
                 </form>
             </div>
         </div>
