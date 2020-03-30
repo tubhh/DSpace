@@ -713,6 +713,9 @@ public class WorkflowManager
                 // Final bundle move of all pending bitstreams
                 for (Bundle pendingBundle : pendingBundles) {
                     for (Bitstream bitstream : pendingBundle.getBitstreams()) {
+                        // remove the old READ policies so the bitstream can
+                        AuthorizeManager.removePoliciesActionFilter(c, bitstream, Constants.READ);
+                        // the bitstream will now inherit policies from ORIGINAL
                         originalBundle.addBitstream(bitstream);
                         pendingBundle.removeBitstream(bitstream);// this should be treated as a pending fulltext review
                     }

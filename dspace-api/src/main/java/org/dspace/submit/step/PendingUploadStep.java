@@ -12,10 +12,14 @@ import org.apache.log4j.Logger;
 import org.dspace.app.util.SubmissionInfo;
 import org.dspace.app.util.Util;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.authorize.AuthorizeManager;
+import org.dspace.authorize.ResourcePolicy;
 import org.dspace.content.*;
 import org.dspace.core.ConfigurationManager;
+import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.curate.Curator;
+import org.dspace.eperson.Group;
 import org.dspace.submit.AbstractProcessingStep;
 
 import javax.servlet.ServletException;
@@ -536,17 +540,46 @@ public class PendingUploadStep extends UploadStep
 
                 // do we already have a bundle?
                 Bundle[] bundles = item.getBundles(bundleName);
+                Bundle pendingBundle;
 
-                if (bundles.length < 1)
-                {
-                    // set bundle's name to PENDING (or whichever name is configured)
-                    b = item.createSingleBitstream(fileInputStream, bundleName);
+                if (bundles.length < 1) {
+                    pendingBundle = item.createBundle(bundleName);
+                } else {
+                    pendingBundle = bundles[0];
                 }
-                else
-                {
-                    // we have a bundle already, just add bitstream
-                    b = bundles[0].createBitstream(fileInputStream);
+
+                // Remove read policies and add just current submitter and any workflow groups
+                AuthorizeManager.removePoliciesActionFilter(context, pendingBundle, Constants.READ);
+                AuthorizeManager.addPolicy(context, pendingBundle, Constants.READ, context.getCurrentUser(),
+                    ResourcePolicy.TYPE_SUBMISSION);
+
+                // Adding reviewer groups (similar to the logic in WorkspaceItem.create())
+                Group step1group = subInfo.getSubmissionItem().getCollection().getWorkflowGroup(1);
+                Group step2group = subInfo.getSubmissionItem().getCollection().getWorkflowGroup(2);
+                Group step3group = subInfo.getSubmissionItem().getCollection().getWorkflowGroup(3);
+                if (step1group != null) {
+                    log.debug("Adding policies for group " + step1group.getName());
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.READ, step1group, ResourcePolicy.TYPE_WORKFLOW);
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.ADD, step1group, ResourcePolicy.TYPE_WORKFLOW);
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.REMOVE, step1group, ResourcePolicy.TYPE_WORKFLOW);
                 }
+                if (step2group != null) {
+                    log.debug("Adding policies for group " + step2group.getName());
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.READ, step2group, ResourcePolicy.TYPE_WORKFLOW);
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.ADD, step2group, ResourcePolicy.TYPE_WORKFLOW);
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.REMOVE, step2group, ResourcePolicy.TYPE_WORKFLOW);
+                }
+                if (step3group != null) {
+                    log.debug("Adding policies for group " + step3group.getName());
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.READ, step3group, ResourcePolicy.TYPE_WORKFLOW);
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.ADD, step3group, ResourcePolicy.TYPE_WORKFLOW);
+                    AuthorizeManager.addPolicy(context, pendingBundle, Constants.REMOVE, step3group, ResourcePolicy.TYPE_WORKFLOW);
+                }
+
+                pendingBundle.update();
+
+                // add bitstream - it shoudl inherit bundle policies
+                b = pendingBundle.createBitstream(fileInputStream);
 
                 // Strip all but the last filename. It would be nice
                 // to know which OS the file came from.
