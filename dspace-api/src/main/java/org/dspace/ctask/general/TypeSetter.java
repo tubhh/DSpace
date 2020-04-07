@@ -234,6 +234,13 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("casrai", "Journal Article");
             ret.put("dcmi", "Text");
             break;
+        case "MagazineArticle":
+            ret.put("opus", "other");
+            ret.put("dini", "PeriodicalPart");
+            ret.put("driver", "contributionToPeriodical");
+            ret.put("casrai", "Magazine Article");
+            ret.put("dcmi", "Text");
+            break;
         case "Image":
             ret.put("opus", "Bild");
             ret.put("dini", "Image");
