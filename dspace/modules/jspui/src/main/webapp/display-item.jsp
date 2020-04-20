@@ -620,7 +620,6 @@ j(document).ready(function() {
 <div class="col-lg-3">
 <div class="row">
 <%
-    if (user!=null) {
     if (add_fulltext_allowed) {
 %>
     <div class="col-lg-12 col-md-4 col-sm-6">
@@ -649,7 +648,6 @@ j(document).ready(function() {
         </div>
     </div>
     <%
-        }
     }
 
 
@@ -857,9 +855,6 @@ if (dedupEnabled && admin_button) { %>
 %>
 
 <%--------- Feedback Box from Bamberg University ---------%>
-    <%
-    if (user!=null) {
-    %>
       <div class="col-sm-5 col-md-4 col-lg-3">
         <div class="panel panel-info">
           <div class="panel-heading">
@@ -872,9 +867,6 @@ if (dedupEnabled && admin_button) { %>
           </div>
         </div>
       </div>
-    <%
-    }
-    %>
 <%------ End Feedback Box from Bamberg University -------------%>
 
 <%------ CSL-Einbindung -----%>
