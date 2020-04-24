@@ -416,6 +416,10 @@ public class XOAI {
         doc.removeField("item.type");
         doc.addField("item.identifier", type +"/"+ handle);
         doc.addField("item.type", ITEMTYPE_SPECIAL);
+        if (verbose) {
+            println(String.format("Item %d with handle %s indexed with prefixed identifier",
+                    item.getID(), handle));
+        }
         return doc;
     }
 
