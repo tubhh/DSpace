@@ -375,9 +375,10 @@ public class XOAI {
                 	server.add(solrDoc);
                 	
                 	if(doublingSolrDocument) {
+                            SolrInputDocument newSolrDoc = null;
                 	    Item item = (Item)o;
-                	    solrDoc = this.indexResults(item, true);
-                	    server.add(solrDoc);
+                	    newSolrDoc = this.replaceIdentifier(item, solrDoc);
+                	    server.add(newSolrDoc);
                 	}
                     context.clearCache();
                 } catch (SQLException ex) {
@@ -402,6 +403,20 @@ public class XOAI {
         } catch (IOException ex) {
             throw new DSpaceSolrIndexerException(ex.getMessage(), ex);
         }
+    }
+
+    /***
+     * Set special identifier
+     * Improve performance by avoiding double indexing
+     **/
+    private SolrInputDocument replaceIdentifier(Item item, SolrInputDocument doc) {
+        String handle = item.getHandle();
+        String type = (String)item.getExtraInfo().get("item.cerifentitytype");
+        doc.removeField("item.identifier");
+        doc.removeField("item.type");
+        doc.addField("item.identifier", type +"/"+ handle);
+        doc.addField("item.type", ITEMTYPE_SPECIAL);
+        return doc;
     }
 
     /***
