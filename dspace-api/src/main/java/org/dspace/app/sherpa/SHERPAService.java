@@ -7,9 +7,11 @@
  */
 package org.dspace.app.sherpa;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 
+import jdk.internal.util.xml.impl.Input;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -102,15 +104,24 @@ public class SHERPAService
                 HttpEntity responseBody = response.getEntity();
 
                 if (null != responseBody) {
-                    InputStream content = responseBody.getContent();
-                    sherpaResponse = new SHERPAResponse(responseBody.getContent(), SHERPAResponse.SHERPAFormat.JSON);
-                    content.close();
+                    InputStream content = null;
+                    try {
+                        content = responseBody.getContent();
+                        sherpaResponse = new SHERPAResponse(responseBody.getContent(), SHERPAResponse.SHERPAFormat.JSON);
+                    } catch (IOException e) {
+                        log.error("Encountered exception parsing response from  SHERPA/RoMEO: "
+                            + e.getMessage(), e);
+                    } finally {
+                        if (content != null) {
+                            content.close();
+                        }
+                    }
                 }
                 else {
                     sherpaResponse = new SHERPAResponse("SHERPA/RoMEO returned no response");
                 }
             } catch (Exception e) {
-                log.warn("Encountered exception while contacting SHERPA/RoMEO: " + e.getMessage(), e);
+                log.error("Encountered exception while contacting SHERPA/RoMEO: " + e.getMessage(), e);
             } finally {
                 if (method != null) {
                     method.releaseConnection();
