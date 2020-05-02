@@ -36,7 +36,6 @@ import org.dspace.content.WorkspaceItem;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
-import org.dspace.core.Utils;
 import org.dspace.handle.HandleManager;
 import org.dspace.license.CreativeCommons;
 import org.dspace.workflow.WorkflowManager;
@@ -520,12 +519,24 @@ public class PackageUtils
             // (NOTICE: The specified handle is ignored, as Workflows *always* end in a new handle being assigned)
             if (ConfigurationManager.getProperty("workflow", "workflow.framework").equals("xmlworkflow")) {
                 try {
+                    // Check "send workflow notifications" parameter (default: false)
+                    if (params.workflowNotificationsEnabled()) {
+                        // We *should* send workflow notifications for this package
+                        return XmlWorkflowManager.start(context, wsi).getItem();
+                    }
+                    // Default to starting XML workflow without notifications
                     return XmlWorkflowManager.startWithoutNotify(context, wsi).getItem();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     return null;
                 }
             } else {
+                // Check "send workflow notifications" parameter (default: false)
+                if (params.workflowNotificationsEnabled()) {
+                    // We *should* send workflow notifications for this package
+                    return WorkflowManager.start(context, wsi).getItem();
+                }
+                // Default to starting simple workflow without notifications
                 return WorkflowManager.startWithoutNotify(context, wsi).getItem();
             }
         }
