@@ -17,10 +17,9 @@ import org.apache.commons.lang.StringUtils;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.Collection;
 import org.dspace.content.Metadatum;
-import org.dspace.content.DSpaceObject;
-import org.dspace.content.FormatIdentifier;
-import org.dspace.content.Item;
 import org.dspace.content.WorkspaceItem;
+import org.dspace.content.DSpaceObject;
+import org.dspace.content.Item;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.identifier.doi.DOIConnector;
@@ -34,7 +33,6 @@ import org.dspace.workflow.WorkflowItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
-import sun.security.krb5.Config;
 
 /**
  * Provide service for DOIs using DataCite.

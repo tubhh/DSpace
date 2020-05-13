@@ -301,20 +301,20 @@
                 if (inputBlock != null)
                     sb.insert(0, inputBlock);
                 
-                Boolean onlyLocal = org.dspace.core.ConfigurationManager.getBooleanProperty("choices.extralookup." + fieldName);
+                Boolean onlyLocal = ConfigurationManager.getBooleanProperty("choices.extralookup." + fieldName);
                 if(onlyLocal)
                 {
                 	sb.append("<button class=\"btn btn-default\" name=\"").append(fieldInput).append("_lookup\" ")
-          				.append("onclick=\"javascript: return DSpaceChoiceLookupOnlyLocal(true, '")
-          				.append(contextPath).append("/tools/lookup.jsp','")
-          				.append(fieldName).append("','edit_metadata','")
-          				.append(fieldInput).append("','").append(authorityName).append("','")
-          				.append(confIndID).append("',")
-          				.append(String.valueOf(collectionID)).append(",")
-          				.append(String.valueOf(isName)).append(",false);\"")
-          				.append(" title=\"")
-          				.append(LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup.local"))
-          				.append("\"><span class=\"glyphicon glyphicon-search\"></span></button>");
+          			.append("onclick=\"javascript: return DSpaceChoiceLookupOnlyLocal(true, '")
+          			.append(contextPath).append("/tools/lookup.jsp','")
+          			.append(fieldName).append("','edit_metadata','")
+          			.append(fieldInput).append("','").append(authorityName).append("','")
+          			.append(confIndID).append("',")
+          			.append(String.valueOf(collectionID)).append(",")
+          			.append(String.valueOf(isName)).append(",false);\"")
+          			.append(" title=\"")
+          			.append(LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup.local"))
+          			.append("\"><span class=\"glyphicon glyphicon-search\"></span></button>");
                 	
                 	sb.append("&nbsp<button class=\"btn btn-default\" name=\"").append(fieldInput).append("_lookup\" ")
                 	.append("onclick=\"javascript: return DSpaceChoiceLookupOnlyLocal(false, '")
@@ -789,7 +789,7 @@
     		String qualifier, boolean repeatable, boolean required, boolean readonly, int fieldCountIncr, PageContext pageContext,String vocabulary,
     		boolean closedVocabulary,int collectionID,boolean hasParent){
         StringBuffer sb = new StringBuffer();
-        
+        boolean doubleLookupEnabled = ConfigurationManager.getBooleanProperty("choices.extralookup."+fieldName);
         String auth,val;
         int conf=0;
     	if (count < defaults.length)
@@ -808,19 +808,27 @@
         sb.append("<div class=\"col-md-10\">");
         if (authorityType != null)
         {
-       	 sb.append("<div class=\"col-md-10\">");
+        	if(doubleLookupEnabled){
+       	 		sb.append("<div class=\"col-md-9\">");
+        	}else{
+        		sb.append("<div class=\"col-md-10\">");
+        	}        
         }
         sb.append("<textarea class=\"form-control\" name=\"").append(fieldNameIdx)
           .append("\" rows=\"4\" cols=\"45\" id=\"")
           .append(fieldNameIdx).append("_id\" ")
-          .append((hasVocabulary(vocabulary)&&closedVocabulary)||readonly?" disabled=\"disabled\" ":"")
+          .append((hasVocabulary(vocabulary)&&closedVocabulary)||readonly?" readonly=\"readonly\" ":"")
           .append(">")
           .append(val)
           .append("</textarea>")
           .append(doControlledVocabulary(fieldNameIdx, pageContext, vocabulary, readonly));
         if (authorityType != null)
         {
-       	 sb.append("</div><div class=\"col-md-2\">");
+        	if(doubleLookupEnabled){
+       	 		sb.append("</div><div class=\"col-md-3\">");
+        	}else{
+        		sb.append("</div><div class=\"col-md-2\">");
+        	}
 	         sb.append(doAuthority(pageContext, fieldName, count, fieldCount, fieldName,
                            auth, conf, false, repeatable,
                            defaults, null, collectionID));
@@ -899,6 +907,7 @@
     		int collectionID,boolean hasParent){
 
     	StringBuffer sb = new StringBuffer();
+    	boolean doubleLookupEnabled = ConfigurationManager.getBooleanProperty("choices.extralookup."+fieldName);
     	String val,auth;
     	int conf =0;
     	
@@ -921,7 +930,11 @@
         sb.append("<div class=\"col-md-10\">");
         if (authorityType != null)
         {
-     	   sb.append("<div class=\"row col-md-10\">");
+        	if(doubleLookupEnabled){
+       	 		sb.append("<div class=\"col-md-9\">");
+        	}else{
+        		sb.append("<div class=\"col-md-10\">");
+        	}        
         }
         
         sb.append("<div class=\"row col-md-4\">");
@@ -936,7 +949,11 @@
         
         if (authorityType != null)
         {
-     	   sb.append("<div class=\"col-md-2\">");
+        	if(doubleLookupEnabled){
+       	 		sb.append("</div><div class=\"col-md-3\">");
+        	}else{
+        		sb.append("</div><div class=\"col-md-2\">");
+        	}
 	           sb.append(doAuthority(pageContext, fieldName, count,  fieldCount,
                            fieldName, auth, conf, false, repeatable,
                            defaults, null, collectionID));
@@ -1009,6 +1026,7 @@
     		boolean repeatable, boolean required, boolean readonly, int fieldCountIncr, PageContext pageContext,String vocabulary, boolean closedVocabulary,int collectionID,boolean hasParent){
 
     	StringBuffer sb = new StringBuffer();
+    	boolean doubleLookupEnabled = ConfigurationManager.getBooleanProperty("choices.extralookup."+fieldName);
         String val, auth;
         int conf= 0;
 
@@ -1031,21 +1049,36 @@
         sb.append("<div class=\"col-md-10\">");
         if (authorityType != null)
         {
-     	   sb.append("<div class=\"row col-md-10\">");
+            if (authorityType != null)
+            {
+            	if(doubleLookupEnabled){
+           	 		sb.append("<div class=\"col-md-9\">");
+            	}else{
+            		sb.append("<div class=\"col-md-10\">");
+            	}        
+            }
         }
         sb.append("<input class=\"form-control\" type=\"text\" name=\"")
           .append(fieldNameIdx)
           .append("\" id=\"")
           .append(fieldNameIdx).append("\" size=\"50\" value=\"")
           .append(val +"\"")
-          .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" disabled=\"disabled\" ":"")
+          .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" readonly=\"readonly\" ":"")
           .append("/>")
 			 .append(doControlledVocabulary(fieldNameIdx, pageContext, vocabulary, readonly))             
           .append("</div>");
         
         if (authorityType != null)
         {
-     	   sb.append("<div class=\"col-md-2\">");
+            if (authorityType != null)
+            {
+            	if(doubleLookupEnabled){
+           	 		sb.append("<div class=\"col-md-3\">");
+            	}else{
+            		sb.append("<div class=\"col-md-2\">");
+            	}        
+            }
+
 	           sb.append(doAuthority(pageContext, fieldName, count,  fieldCount,
                            fieldName, auth, conf, false, repeatable,
                            defaults, null, collectionID));
@@ -1119,7 +1152,7 @@
              .append("\" size=\"15\" value=\"")
              .append(defaults[i].value.replaceAll("\"", "&quot;"))
              .append("\"")
-             .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" disabled=\"disabled\" ":"")
+             .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" readonly=\"readonly\" ":"")
              .append("\" />");
           
            sb.append(doControlledVocabulary(fieldParam, pageContext, vocabulary, readonly));
@@ -1143,7 +1176,7 @@
            sb.append("<span class=\"col-md-4\"><input class=\"form-control\" type=\"text\" name=\"")
              .append(fieldParam)
              .append("\" size=\"15\"")
-             .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" disabled=\"disabled\" ":"")
+             .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" readonly=\"readonly\" ":"")
              .append("/>")
              .append(doControlledVocabulary(fieldParam, pageContext, vocabulary, readonly))
              .append("</span>\n")
@@ -1170,7 +1203,7 @@
                      .append("\" size=\"15\" value=\"")
                      .append(defaults[i].value.replaceAll("\"", "&quot;"))
                          .append("\"")
-                         .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" disabled=\"disabled\" ":"")
+                         .append((hasVocabulary(vocabulary)&&closedVocabulary) || readonly?" readonly=\"readonly\" ":"")
                          .append("/>");
                    sb.append(doControlledVocabulary(fieldParam, pageContext, vocabulary, readonly));      
                    sb.append("</span>");
@@ -1193,7 +1226,7 @@
                    sb.append("<span class=\"col-md-4\"><input class=\"form-control\" type=\"text\" name=\"")
                      .append(fieldParam)
                      .append("\" size=\"15\"")
-                     .append((hasVocabulary(vocabulary)&&closedVocabulary)||readonly?" disabled=\"disabled\" ":"")
+                     .append((hasVocabulary(vocabulary)&&closedVocabulary)||readonly?" readonly=\"readonly\" ":"")
                      .append("/>")
                      .append(doControlledVocabulary(fieldParam, pageContext, vocabulary, readonly))
         			 .append("</span>\n");
