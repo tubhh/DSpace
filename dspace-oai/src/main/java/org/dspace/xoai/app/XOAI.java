@@ -377,7 +377,7 @@ public class XOAI {
                 	if (o instanceof Item) {
                 	    Item item = (Item)o;
                 	    String type = (String)item.getExtraInfo().get("item.cerifentitytype");
-                	    solrDoc = this.indexResults(item, false);
+                	    solrDoc = this.indexResults(item);
                 	    if(StringUtils.isNotBlank(type)) {
                 	        doublingSolrDocument = true;
                 	    }
@@ -514,7 +514,7 @@ public class XOAI {
      * @throws XMLStreamException
      * @throws WritingXmlException
      */
-    private SolrInputDocument indexResults(Item item, boolean specialIdentifier) throws SQLException, MetadataBindException, ParseException, XMLStreamException, WritingXmlException {
+    private SolrInputDocument indexResults(Item item) throws SQLException, MetadataBindException, ParseException, XMLStreamException, WritingXmlException {
         SolrInputDocument doc = new SolrInputDocument();
         doc.addField("item.id", item.getID());
         boolean pub = this.isPublic(item);
@@ -525,15 +525,8 @@ public class XOAI {
         }
         
         String type = (String)item.getExtraInfo().get("item.cerifentitytype");
-        if(StringUtils.isNotBlank(type) && specialIdentifier) {
-            doc.addField("item.identifier", type +"/"+ handle);
-            doc.addField("item.type", ITEMTYPE_SPECIAL);
-        }
-        else {
-            doc.addField("item.identifier", handle);
-            doc.addField("item.type", ITEMTYPE_DEFAULT);
-        }
-        
+        doc.addField("item.identifier", handle);
+        doc.addField("item.type", ITEMTYPE_DEFAULT);
         doc.addField("item.handle", handle);
         doc.addField("item.lastmodified", item.getLastModified());
         if (item.getSubmitter() != null) {
@@ -567,12 +560,7 @@ public class XOAI {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         XmlOutputContext xmlContext = XmlOutputContext.emptyContext(out, Second);
-        if(StringUtils.isNotBlank(type) && specialIdentifier) {
-            retrieveMetadata(context, item, true).write(xmlContext);
-        }
-        else {
-            retrieveMetadata(context, item, false).write(xmlContext);
-        }
+        retrieveMetadata(context, item).write(xmlContext);
         xmlContext.getWriter().flush();
         xmlContext.getWriter().close();
         doc.addField("item.compile", out.toString());

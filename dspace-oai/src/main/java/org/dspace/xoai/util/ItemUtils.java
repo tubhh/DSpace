@@ -190,8 +190,8 @@ public class ItemUtils
         return valueElem;
 
     }
-    public static Metadata retrieveMetadata (Context context, Item item, boolean specialIdentifier) {
-    	return retrieveMetadata(context, item, false, 0, specialIdentifier);
+    public static Metadata retrieveMetadata (Context context, Item item) {
+    	return retrieveMetadata(context, item, false, 0);
     }
     
     /***
@@ -201,11 +201,10 @@ public class ItemUtils
      * @param item The cris item
      * @param skipAutority is used to disable relation metadata inclusion.
      * @param deep the recursive dept
-     * @param specialIdentifier TODO
      * @return
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Metadata retrieveMetadata (Context context, Item item, boolean skipAutority, int deep, boolean specialIdentifier) {
+	public static Metadata retrieveMetadata (Context context, Item item, boolean skipAutority, int deep) {
         Metadata metadata;
         
         // read all metadata into Metadata Object
@@ -280,7 +279,7 @@ public class ItemUtils
                 			DSpaceObject dso = HandleManager.resolveToObject(context, val.authority);
                 			
                 			if (dso != null && dso instanceof Item) {
-                				Metadata itemMetadata = retrieveMetadata(context, (Item)dso, skipAutority, /*m, dso.getHandle(), Integer.toString(dso.getID()), true, */deep + 1, specialIdentifier);
+                				Metadata itemMetadata = retrieveMetadata(context, (Item)dso, skipAutority, deep + 1);
                 				if (itemMetadata != null && !itemMetadata.getElement().isEmpty()) {
                 					Element root = create(AUTHORITY);
                     				element.getElement().add(root);
@@ -416,18 +415,10 @@ public class ItemUtils
                 createValue("handle", item.getHandle()));
         
         String type = (String)item.getExtraInfo().get("item.cerifentitytype");
-        if(StringUtils.isNotBlank(type) && specialIdentifier) {
-            other.getField().add(
-                    createValue("identifier", DSpaceItem.buildIdentifier(item.getHandle(), type)));
-            other.getField().add(
-                    createValue("type", XOAI.ITEMTYPE_SPECIAL));
-        }
-        else {
-            other.getField().add(
-                    createValue("identifier", DSpaceItem.buildIdentifier(item.getHandle(), null)));
-            other.getField().add(
-                    createValue("type", XOAI.ITEMTYPE_DEFAULT));
-        }
+        other.getField().add(
+                createValue("identifier", DSpaceItem.buildIdentifier(item.getHandle(), null)));
+        other.getField().add(
+                createValue("type", XOAI.ITEMTYPE_DEFAULT));
         other.getField().add(
                 createValue("lastModifyDate", item
                         .getLastModified().toString()));
