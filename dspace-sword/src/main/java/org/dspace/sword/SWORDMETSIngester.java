@@ -80,6 +80,13 @@ public class SWORDMETSIngester implements SWORDIngester
             // Force package ingester to respect Collection workflows
             params.setWorkflowEnabled(true);
 
+            // Should workflow notifications be sent for SWORD deposits?
+			// (Default: false)
+			if (ConfigurationManager.getBooleanProperty("sword-server", "workflow-notify.enable",
+				false)) {
+				params.setWorkflowNotificationsEnabled(true);
+			}
+
             // Should restore mode be enabled, i.e. keep existing handle?
             if (ConfigurationManager.getBooleanProperty("sword-server", "restore-mode.enable",false))
             {

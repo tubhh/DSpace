@@ -33,12 +33,78 @@
 					
 					<!-- select only one identifier -->
 					<xsl:variable name="doi" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']"/>
-					<xsl:variable name="handle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='hdl']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="url" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='url']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="urn" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='urn']/doc:element/doc:field[@name='value']"/>
+                                        <xsl:variable name="uri" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='uri']/doc:element/doc:field[@name='value']"/>
 					<!-- <xsl:variable name="ark" select=""/> -->
 					<!-- <xsl:variable name="purl" select=""/> -->
 					
+                                        <xsl:variable name="handle">
+                                        <xsl:choose>
+                                            <xsl:when test="$uri!=''">
+                                            <xsl:choose>
+                                                <xsl:when test="contains($uri, 'http://hdl.handle.net/')">
+                                                    <xsl:value-of select="substring-after($uri, 'http://hdl.handle.net/')"/>
+                                                </xsl:when>
+                                                <xsl:when test="contains($uri, '/handle/')">
+                                                    <xsl:value-of select="substring-after($uri, '/handle/')"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="$uri"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='hdl']/doc:element/doc:field[@name='value']" />
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                        </xsl:variable>
+
+                                        <xsl:variable name="doiPrimary">
+                                            <xsl:choose>
+                                                <!-- DOI control identifier -->
+                                                <xsl:when test="$doi!=''">
+                                                    <xsl:value-of select="true()"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="false()"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:variable>
+
+                                        <xsl:variable name="hdlPrimary">
+                                            <xsl:choose>
+                                                <xsl:when test="$handle!=''">
+                                                    <xsl:value-of select="true()"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="false()"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:variable>
+
+                                        <xsl:variable name="urnPrimary">
+                                            <xsl:choose>
+                                                <xsl:when test="$urn!=''">
+                                                    <xsl:value-of select="true()"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="false()"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:variable>
+
+                                        <xsl:variable name="urlPrimary">
+                                            <xsl:choose>
+                                                <xsl:when test="$url!=''">
+                                                    <xsl:value-of select="true()"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="false()"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:variable>
+
 					<xsl:choose>
 						<!-- DOI control identifier -->
 						<xsl:when test="$doi!=''">
@@ -182,9 +248,8 @@
 					<!-- select the language -->
 					<xsl:variable name="language" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']//doc:field[@name='value']"/>
 			     	
-			     	
 			     	<!-- select all titles -->
-			     	<xsl:variable name="title" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='title']/doc:element/doc:field[@name='value']"/>
+			     	<xsl:variable name="title" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='title']//doc:field[@name='value']"/>
 					
 					<xsl:if test="$title!=''">
 				     	<titles>
@@ -232,7 +297,7 @@
 			     	
 			     	
 			     	<!-- select the publisher -->
-			     	<xsl:variable name="publisher" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='publisher']/doc:element[@name='name']/doc:element/doc:field[@name='value']"/>
+			     	<xsl:variable name="publisher" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='publisher']/doc:element[@name='name']//doc:field[@name='value']"/>
 				     	<publisher>
 					<xsl:choose>
 					<xsl:when test="$publisher!=''">
@@ -561,7 +626,7 @@
                                             <xsl:value-of select="$resourcetype//doc:field[@name='value']" />
                                         </resourceType>
                                         <!--
-					<xsl:if test="$resourcetype/doc:element/doc:field[@name='value']!=''">
+					<xsl:if test="$resourcetype//doc:field[@name='value']!=''">
 						<xsl:choose>
 							<xsl:when test="contains($resourcetype_values, $resourcetype/doc:element/@name)">
 								<resourceType resourceTypeGeneral="{$resourcetype/doc:element/@name}">
@@ -593,57 +658,76 @@
 					
 					<!-- select all alternate identifiers -->
 					<xsl:choose>
-						<xsl:when test="$doi!=''">
-							<xsl:if test="$handle!='' or $url!=''">
-								<alternateIdentifiers>
-									<!-- Handle control identifier -->
-									<xsl:if test="$handle!=''">
-										<alternateIdentifier alternateIdentifierType="Handle">
-											<xsl:value-of select="$handle"/>
-										</alternateIdentifier>
-									</xsl:if>
-									<!-- URL control identifier -->
-									<xsl:if test="$url != ''">
-										<alternateIdentifier alternateIdentifierType="URL">
-											<xsl:value-of select="$url"/>
-										</alternateIdentifier>
-									</xsl:if>
-									<!-- add ARK control identifier -->
-									<!-- add URN control identifier -->
-									<!-- add PURL control identifier -->
-								</alternateIdentifiers>
-							</xsl:if>
-						</xsl:when>
-						
-						<xsl:when test="$handle!=''">
-							<xsl:if test="$url!=''">
-								<alternateIdentifiers>
-									<!-- URL control identifier -->
-									<xsl:if test="$url!=''">
-										<alternateIdentifier alternateIdentifierType="URL">
-											<xsl:value-of select="$url"/>
-										</alternateIdentifier>
-									</xsl:if>
-									<!-- add ARK control identifier -->
-									<!-- add URN control identifier -->
-									<!-- add PURL control identifier -->
-								</alternateIdentifiers>
-							</xsl:if>
-						</xsl:when>
-						
-						<!-- if use URL identifier, select ARK, URN and PURL as alternate identifiers -->
-							<!-- add ARK control identifier -->
-							<!-- add URN control identifier -->
-							<!-- add PURL control identifier -->
-						
-						<!-- if use ARK identifier, select URN and PURL as alternate identifiers -->
-							<!-- add URN control identifier -->
-							<!-- add PURL control identifier -->
-						
-						<!-- if use URN identifier, select PURL as alternate identifier -->
-							<!-- add PURL control identifier -->
-						
-						<!-- if use PURL identifier, select nothing because there aren't other identifiers -->
+                                            <xsl:when test="$doiPrimary='true'">
+                                                <xsl:if test="$handle!='' or $url!='' or $urn!='' or $uri!=''">
+                                                    <alternateIdentifiers>
+                                                        <!-- Handle control identifier -->
+                                                        <xsl:if test="$handle!=''">
+                                                            <alternateIdentifier alternateIdentifierType="Handle">
+                                                                <xsl:value-of select="$handle"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                        <xsl:if test="$urn!=''">
+                                                            <alternateIdentifier alternateIdentifierType="URN">
+                                                                <xsl:value-of select="$urn"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                        <!-- URL control identifier -->
+                                                        <xsl:if test="$url != ''">
+                                                            <alternateIdentifier alternateIdentifierType="URL">
+                                                                <xsl:value-of select="$url"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                        <!-- URL control identifier -->
+                                                        <xsl:if test="$uri!=''">
+                                                            <alternateIdentifier alternateIdentifierType="URL">
+                                                                <xsl:value-of select="$uri"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                    </alternateIdentifiers>
+                                                </xsl:if>
+                                            </xsl:when>
+                                            <xsl:when test="$hdlPrimary='true'">
+                                                <xsl:if test="$url!='' or $urn!='' or $uri!=''">
+                                                    <alternateIdentifiers>
+                                                        <xsl:if test="$urn!=''">
+                                                            <alternateIdentifier alternateIdentifierType="URN">
+                                                                <xsl:value-of select="$urn"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                        <!-- URL control identifier -->
+                                                        <xsl:if test="$url != ''">
+                                                            <alternateIdentifier alternateIdentifierType="URL">
+                                                                <xsl:value-of select="$url"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                        <!-- URL control identifier -->
+                                                        <xsl:if test="$uri!=''">
+                                                            <alternateIdentifier alternateIdentifierType="URL">
+                                                                <xsl:value-of select="$uri"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                    </alternateIdentifiers>
+                                                </xsl:if>
+                                            </xsl:when>
+                                            <xsl:when test="$urnPrimary='true'">
+                                                <xsl:if test="$url!='' or $uri!=''">
+                                                    <alternateIdentifiers>
+                                                        <!-- URL control identifier -->
+                                                        <xsl:if test="$url != ''">
+                                                            <alternateIdentifier alternateIdentifierType="URL">
+                                                                <xsl:value-of select="$url"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                        <!-- URL control identifier -->
+                                                        <xsl:if test="$uri!=''">
+                                                            <alternateIdentifier alternateIdentifierType="URL">
+                                                                <xsl:value-of select="$uri"/>
+                                                            </alternateIdentifier>
+                                                        </xsl:if>
+                                                    </alternateIdentifiers>
+                                                </xsl:if>
+                                            </xsl:when>
 					</xsl:choose>
 					
 					
@@ -652,8 +736,9 @@
 					<xsl:variable name="ispartof" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='journal']/doc:element[@name='journalissn']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="isreferencedby" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='publication']/doc:element/doc:field[@name='authority']"/>
 					<xsl:variable name="references" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='dataset']/doc:element/doc:field[@name='authority']"/>
-					
-					<xsl:if test="($ispartof!='' and $ispartof!=$placeholder) or $isreferencedby!='' or $references!=''">
+					<xsl:variable name="ismetadatafor" select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publisher']/doc:element[@name='doi']//doc:field[@name='value']"/>
+
+					<xsl:if test="($ispartof!='' and $ispartof!=$placeholder) or $isreferencedby!='' or $references!='' or $ismetadatafor!=''">
 						<relatedIdentifiers>
 							<!-- select IsPartOf type -->
 							<xsl:if test="$ispartof!='' and $ispartof!=$placeholder">
@@ -681,6 +766,11 @@
 									<xsl:value-of select="$references"/>
 								</relatedIdentifier>
 							</xsl:if>
+                                                        <xsl:if test="$ismetadatafor!=''">
+                                                            <relatedIdentifier relatedIdentifierType="DOI" relationType="isMetadataFor">
+                                                                <xsl:value-of select="$ismetadatafor"/>
+                                                            </relatedIdentifier>
+                                                        </xsl:if>
 						</relatedIdentifiers>
 					</xsl:if>
 					

@@ -337,5 +337,28 @@ public class PackageParameters extends Properties
         addProperty("recursiveMode", String.valueOf(value));
     }
 
+    /**
+     * Check if workflow notifications should be sent when the package is ingested and installed
+     * Applies to items only. This is useful to enable in the SWORD packager configuration, but could generate
+     * too many emails if enabled for a batch import.
+     * This will only have an effect if "workflow enabled" is also true, otherwise the item will be installed
+     * without workflow entirely.
+     * @return boolean value (Default: false)
+     */
+    public boolean workflowNotificationsEnabled() {
+        return getBooleanProperty("workflowNotify", false);
+    }
+
+    /**
+     * Set whether notifications are to be sent on installation. This is useful to enable in the SWORD packager
+     * configuration, but could generate too many emails if enabled for a batch import.
+     * See getter above - the default return value will be false
+     * This will only have an effect if "workflow enabled" is also true, otherwise the item will be installed
+     * without workflow entirely.
+     * @param value boolean value (true = send notifications, false = don't send notifications)
+     */
+    public void setWorkflowNotificationsEnabled(boolean value) {
+        addProperty("workflowNotify", String.valueOf(value));
+    }
 
 }

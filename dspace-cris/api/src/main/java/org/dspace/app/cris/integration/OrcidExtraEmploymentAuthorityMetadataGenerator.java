@@ -11,7 +11,6 @@ import org.dspace.authority.orcid.OrcidAccessToken;
 import org.dspace.authority.orcid.OrcidAuthorityValue;
 import org.dspace.authority.orcid.OrcidService;
 import org.dspace.content.authority.Choice;
-import org.orcid.jaxb.model.record_v2.Employment;
 import org.orcid.jaxb.model.record_v2.EmploymentSummary;
 import org.orcid.jaxb.model.record_v2.Employments;
 
@@ -38,14 +37,15 @@ public class OrcidExtraEmploymentAuthorityMetadataGenerator
         
         String access_token = getAccessToken(source);
         
-        Employment employment = source.getEmployment(value, access_token, null);
-        if(employment != null) {
-            extras.put("data-" + getRelatedInputformMetadata(), employment.getOrganization().getName());    
-        }
-        else {
-            //manage value to empty html element
-            extras.put("data-" + getRelatedInputformMetadata(), "");
-        }
+        Employments employments = source.getEmployments(value, access_token);
+		if (employments != null) {
+			List<EmploymentSummary> empSummary = employments.getEmploymentSummary();
+			if (empSummary != null && !empSummary.isEmpty()) {
+				extras.put("data-" + getRelatedInputformMetadata(), empSummary.get(0).getOrganization().getName());
+				return extras;
+			}
+		}
+		extras.put("data-" + getRelatedInputformMetadata(), "");
         return extras;
     }
 

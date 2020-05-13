@@ -57,6 +57,9 @@
 
  	Boolean sherpa = (Boolean) request.getAttribute("sherpa");
     boolean bSherpa = sherpa != null?sherpa:false;
+
+    Boolean addingFulltext = (Boolean) request.getAttribute("adding.fulltext");
+    boolean isAddingFulltext = addingFulltext != null ? addingFulltext : false;
 %>
 
 
@@ -458,11 +461,15 @@
                             %>
                                 query:{workflow_id:'<%= subInfo.getSubmissionItem().getID()%>'}
                             <%
-            				} else if (subInfo.isEditing()) {
-				            %>
-                				query:{edit_item:'<%= subInfo.getSubmissionItem().getID()%>'}
-				            <%
-                            } else {
+                            } else if (subInfo.isEditing()) {
+                            %>
+                                query:{edit_item:'<%= subInfo.getSubmissionItem().getID()%>'}
+                            <%
+                           } else if (subInfo.isAddingFulltext() || isAddingFulltext) {
+                           %>
+                                query:{add_fulltext_item:'<%= subInfo.getSubmissionItem().getID()%>', add_fulltext: 'true'}
+                            <%
+                           } else {
                             %>
                                 query:{workspace_item_id:'<%= subInfo.getSubmissionItem().getID()%>'}
                             <%}%>
@@ -588,7 +595,8 @@
 			{
 				col++;
 			}
-			if (!fileRequired || subInfo.getSubmissionItem().getItem().hasUploadedFiles())
+			// Is file optional, OR is there at least original or pending file?
+			if (!fileRequired || (subInfo.getSubmissionItem().getItem().hasUploadedFiles() || subInfo.hasPending()))
             {
                     col++;
             }
@@ -602,8 +610,9 @@
 				<%  } %>
                         <input class="btn btn-default col-md-<%= 12 / (col + 2) %>" type="submit" name="<%=AbstractProcessingStep.CANCEL_BUTTON%>" value="<fmt:message key="jsp.submit.general.cancel-or-save.button"/>" />
                     <%
-                        //if upload is set to optional, or user returned to this page after pressing "Add Another File" button
-                    	if (!fileRequired || subInfo.getSubmissionItem().getItem().hasUploadedFiles())
+                        // if upload is set to optional, or user returned to this page after pressing "Add Another File" button
+                        // (ie. optional, or item has at least one original or pending file already)
+                    	if (!fileRequired || (subInfo.getSubmissionItem().getItem().hasUploadedFiles() || subInfo.hasPending()))
                         {
                     %>
                                 <input class="btn btn-warning col-md-<%= 12 / (col + 2) %>" type="submit" name="<%=UploadStep.SUBMIT_SKIP_BUTTON%>" value="<fmt:message key="jsp.submit.choose-file.skip"/>" />

@@ -639,6 +639,18 @@ return decorator.generateDisplayValue(alternativeName, rp);
 		return null;
 	}
 	
+	public static List<String> getStringValues(ACrisObject ro, String key) {
+		List<? extends Property> dpList = (List<? extends Property>) ro.getAnagrafica4view().get(key);
+		List<String> values = new ArrayList<String>();
+		if (dpList != null && dpList.size() > 0)
+		{
+			for (Property p : dpList) {
+				values.add(p.toString());
+			}
+		}
+		return values;
+	}
+	
 	public static Boolean getBooleanValue(ACrisObject ro, String key) {
 		List<? extends Property> dpList = (List<? extends Property>) ro.getAnagrafica4view().get(key);
 		if (dpList != null && dpList.size() > 0)

@@ -92,7 +92,7 @@
 							</map>
 						</property>
 					</bean>
-				</entry>							
+				</entry>
 				<entry key="dc.relation.ispartof">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
@@ -105,11 +105,12 @@
 										<property name="shortName" value="issn" />
 										<property name="visibility" value="1" />
 									</bean>
-								</entry>						
+								</entry>
 							</map>
 						</property>
 					</bean>
 				</entry>
+<!--
 				<entry key="dc.relation">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
@@ -122,11 +123,12 @@
 										<property name="shortName" value="grantidentifier" />
 										<property name="visibility" value="1" />
 									</bean>
-								</entry>						
+								</entry>
 							</map>
 						</property>
 					</bean>
-				</entry>								
+				</entry>
+-->
 			</map>	
 		</property>
 	</bean>

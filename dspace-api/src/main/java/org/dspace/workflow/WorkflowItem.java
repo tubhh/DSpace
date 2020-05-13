@@ -23,6 +23,7 @@ import org.dspace.eperson.EPerson;
 import org.dspace.storage.rdbms.DatabaseManager;
 import org.dspace.storage.rdbms.TableRow;
 import org.dspace.storage.rdbms.TableRowIterator;
+import org.dspace.xmlworkflow.state.Workflow;
 
 /**
  * Class representing an item going through the workflow process in DSpace
@@ -49,6 +50,9 @@ public class WorkflowItem implements InProgressSubmission
 
     /** EPerson owning the current state */
     private EPerson owner;
+
+    /** Is this an 'Add Fulltext' item? */
+    private boolean addFulltext;
 
     /**
      * Construct a workspace item corresponding to the given database row
@@ -350,6 +354,16 @@ public class WorkflowItem implements InProgressSubmission
     public void setState(int newstate)
     {
         wfRow.setColumn("state", newstate);
+    }
+
+
+    public boolean isAddFulltext() {
+        try {
+            return WorkflowManager.isPendingFulltext(item);
+        } catch(SQLException e) {
+            log.error("Error retrieving 'pending fulltext' state for workflow item");
+        }
+        return false;
     }
 
     /**

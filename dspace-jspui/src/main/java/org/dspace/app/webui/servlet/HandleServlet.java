@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -49,6 +50,8 @@ import org.dspace.plugin.CommunityHomeProcessor;
 import org.dspace.plugin.ItemHomeProcessor;
 import org.dspace.usage.UsageEvent;
 import org.dspace.utils.DSpace;
+import org.dspace.workflow.WorkflowItem;
+import org.dspace.workflow.WorkflowManager;
 import org.jdom.Element;
 import org.jdom.Text;
 import org.jdom.output.XMLOutputter;
@@ -362,6 +365,47 @@ public class HandleServlet extends DSpaceServlet
         {
             // set a variable to create a button to create a new item version
             request.setAttribute("submitter_button", Boolean.TRUE);
+        }
+
+        // is adding new files by users allowed here?
+        // 1. member of one of the configured 'from' (non-fulltext) collection:
+        String nonFulltextCollectionConfig = ConfigurationManager.getProperty("submit.fulltext.from-collections");
+        if (nonFulltextCollectionConfig != null) {
+            String[] nonFulltextCollectionHandles = nonFulltextCollectionConfig.split("\\s*,\\s*");
+            List<String> nonFulltextCollectionList = Arrays.asList(nonFulltextCollectionHandles);
+            try {
+                if (nonFulltextCollectionList.contains(item.getOwningCollection().getHandle())) {
+                    // 2. not already in review
+                    WorkflowItem workflowItem = WorkflowItem.findByItem(context, item);
+                    if (workflowItem == null) {
+                        // Since it's not in review, that's good, but does it have pending items?
+                        // (ie. a half-finished submission). And if so, is the current user the submitter?
+                        // Then we can display, so they can continue.
+                        if (WorkflowManager.isPendingFulltext(item)) {
+                            if(context.getCurrentUser() != null && context.getCurrentUser() == item.getSubmitter()) {
+                                request.setAttribute("add_fulltext_allowed", true);
+                                request.setAttribute("add_fulltext_continue", true);
+                            } else {
+                                // This is a different user. No button at all.
+                                // We *could*, at this point, delete the bundles and reset the submitter
+                                request.setAttribute("add_fulltext_allowed", false);
+                            }
+                        } else {
+                            // OK, it has no pending, and it's not in review, and it's in the right collection
+                            // so anybody may click Add Files
+                            request.setAttribute("add_fulltext_allowed", true);
+                        }
+                    } else {
+                        // 3. otherwise, is the current user the submitter? if so, we can show them a "pending" msg
+                        if (context.getCurrentUser() != null && context.getCurrentUser() == workflowItem.getSubmitter()) {
+                            request.setAttribute("fulltext_under_review", true);
+                        }
+                    }
+                }
+            } catch (NullPointerException e) {
+                log.error("Error resolving owning collection for item " + item.getHandle());
+            }
+
         }
 
         // Get the collections

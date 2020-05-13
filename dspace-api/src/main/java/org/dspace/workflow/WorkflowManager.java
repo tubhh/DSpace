@@ -24,14 +24,7 @@ import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
 import org.dspace.authorize.ResourcePolicy;
-import org.dspace.content.Bitstream;
-import org.dspace.content.Bundle;
-import org.dspace.content.Collection;
-import org.dspace.content.DCDate;
-import org.dspace.content.Metadatum;
-import org.dspace.content.InstallItem;
-import org.dspace.content.Item;
-import org.dspace.content.WorkspaceItem;
+import org.dspace.content.*;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
@@ -183,6 +176,43 @@ public class WorkflowManager
 
         // remove the WorkspaceItem
         wsi.deleteWrapper();
+
+        // now get the workflow started
+        wfi.setState(WFSTATE_SUBMIT);
+        advance(c, wfi, null);
+
+        // Return the workflow item
+        return wfi;
+    }
+
+    // This is used for adding fulltext as we want to create the workflow right from SubmissionController without
+    // making a new workspace item first
+    public static WorkflowItem startFromSub(Context c, InProgressSubmission sub)
+            throws SQLException, AuthorizeException, IOException {
+        Item myitem = sub.getItem();
+        Collection collection = sub.getCollection();
+
+        log.info(LogManager.getHeader(c, "start_workflow_from_sub", "workspace_item_id="
+                + sub.getID() + "item_id=" + myitem.getID() + "collection_id="
+                + collection.getID()));
+
+        // record the start of the workflow w/provenance message
+        recordStart(c, myitem);
+
+        // create the WorkflowItem
+        TableRow row = DatabaseManager.row("workflowitem");
+        row.setColumn("item_id", myitem.getID());
+        row.setColumn("collection_id", sub.getCollection().getID());
+        DatabaseManager.insert(c, row);
+
+        WorkflowItem wfi = new WorkflowItem(c, row);
+        logWorkflowEvent(c, myitem, wfi, myitem.getSubmitter(), WorkflowManager.WFSTATE_SUBMIT, myitem.getSubmitter(), collection, WorkflowManager.WFSTATE_SUBMIT, null);
+        wfi.setMultipleFiles(sub.hasMultipleFiles());
+        wfi.setMultipleTitles(sub.hasMultipleTitles());
+        wfi.setPublishedBefore(sub.isPublishedBefore());
+
+        // remove the WorkspaceItem
+        sub.deleteWrapper();
 
         // now get the workflow started
         wfi.setState(WFSTATE_SUBMIT);
@@ -557,8 +587,42 @@ public class WorkflowManager
                 + "collection_id=" + wi.getCollection().getID() + "eperson_id="
                 + e.getID()));
 
-        // convert into personal workspace
-        returnToWorkspace(c, wi);
+        // If this was adding fulltext, don't return to workspace, just strip PENDING and abort
+        boolean hasPending = isPendingFulltext(wi.getItem());
+        if (hasPending) {
+            log.debug("Aborting 'new files' workflow event");
+            String pendingBundle = ConfigurationManager.getProperty("submit.fulltext.bundle.pending");
+            if (pendingBundle == null) {
+                pendingBundle = "PENDING";
+            }
+            wi.getItem().getBundles(pendingBundle);
+            for (Bundle b : wi.getItem().getBundles(pendingBundle)) {
+                wi.getItem().removeBundle(b);
+            }
+            wi.getItem().update();
+
+            // Now, revert submitter to previous
+            List<String> v = wi.getItem().getMetadataValue("tuhh.submitter.previous");
+            if (v != null && v.size() > 0) {
+                EPerson previous = EPerson.find(c, Integer.parseInt(v.get(0)));
+                if (previous != null) {
+                    log.debug("Found previous submitter when loading subInfo " + previous.getEmail());
+                }
+                wi.getItem().setSubmitter(previous);
+                clearSubmitterMetadata(wi.getItem());
+                wi.update();
+            }
+
+            // Finally, ensure this workflow item isn't hanging around (since we don't call returnToWorkspace)
+            // Now remove the workflow object manually from the database
+            DatabaseManager.updateQuery(c,
+                    "DELETE FROM WorkflowItem WHERE workflow_id=" + wi.getID());
+            c.commit();
+        }
+        else {
+            // convert into personal workspace
+            returnToWorkspace(c, wi);
+        }
     }
 
     /**
@@ -616,25 +680,91 @@ public class WorkflowManager
             break;
 
         case WFSTATE_ARCHIVE:
+            log.debug("WFSTATE_ARCHIVE reached");
+
             // put in archive in one transaction
             // remove workflow tasks
             deleteTasks(c, wi);
             mycollection = wi.getCollection();
-            Item myItem = archive(c, wi);
 
-            // now email notification
-            notifyOfArchive(c, myItem, mycollection);
+            Item preArchiveItem = wi.getItem();
+            Boolean hasPending = isPendingFulltext(preArchiveItem);
 
-            // remove any workflow policies left
-            try {
+            if (hasPending) {
+                log.debug("Item has pending bitstreams, treating this as a special case, not full archival");
+                // Since we perform some admin actions here even though the reviewer might not have admin rights
+                // over the item yet, we have to disable authorisation
                 c.turnOffAuthorisationSystem();
+
+                String pendingBundleName = ConfigurationManager.getProperty("submit.fulltext.bundle.pending");
+                if (null == pendingBundleName) {
+                    pendingBundleName = "PENDING";
+                }
+                Item myItem = InstallItem.installNewFiles(c, wi);
+                Bundle[] pendingBundles = myItem.getBundles(pendingBundleName);
+
+                // Set up new ORIGINAL bundle, if it doesn't already exist
+                Bundle originalBundle;
+                if (myItem.getBundles("ORIGINAL").length <= 0) {
+                    myItem.createBundle("ORIGINAL");
+                }
+                originalBundle = myItem.getBundles("ORIGINAL")[0];
+
+                // Final bundle move of all pending bitstreams
+                for (Bundle pendingBundle : pendingBundles) {
+                    for (Bitstream bitstream : pendingBundle.getBitstreams()) {
+                        // remove the old READ policies so the bitstream can
+                        AuthorizeManager.removePoliciesActionFilter(c, bitstream, Constants.READ);
+                        // the bitstream will now inherit policies from ORIGINAL
+                        originalBundle.addBitstream(bitstream);
+                        pendingBundle.removeBitstream(bitstream);// this should be treated as a pending fulltext review
+                    }
+                    // One last check that it's empty, then remove the empty pending bundle
+                    if (pendingBundle.getBitstreams().length <= 0) {
+                        myItem.removeBundle(pendingBundle);
+                    }
+                }
+
+                // Set owner of item
+                log.debug("at last step, setting item submitter to same as wi: " + wi.getSubmitter().getEmail());
+                myItem.setSubmitter(wi.getSubmitter());
+
+                // Clear previous submitter metadata
+                clearSubmitterMetadata(myItem);
+
+                myItem.update();
+
+                c.commit();
+
+                notifyOfArchiveFulltext(c, myItem, mycollection);
+
+                // remove any workflow policies left
                 revokeReviewerPolicies(c, myItem);
-            } finally {
+
+                // Restore authorisation state
                 c.restoreAuthSystemState();
+
+            } else {
+                // This is a regular workflow submission, archive as normal
+                log.debug("Regular new submission - archiving item normally");
+
+                Item myItem = archive(c, wi);
+
+                // now email notification
+                notifyOfArchive(c, myItem, mycollection);
+
+                // remove any workflow policies left
+                try {
+                    c.turnOffAuthorisationSystem();
+                    revokeReviewerPolicies(c, myItem);
+                } finally {
+                    c.restoreAuthSystemState();
+                }
             }
 
             logWorkflowEvent(c, wi.getItem(), wi, c.getCurrentUser(), newstate,
                     newowner, mycollection, oldState, null);
+
             return true;
         default:
             throw new IllegalArgumentException("WorkflowManager cannot handle workflowItemState " + newstate);
@@ -914,6 +1044,57 @@ public class WorkflowManager
     /**
      * notify the submitter that the item is archived
      */
+    private static void notifyOfArchiveFulltext(Context c, Item i, Collection coll) throws SQLException, IOException {
+        if (ConfigurationManager.getBooleanProperty("workflow.disabled.notify.archive", false)) {
+            return;
+        }
+
+        try {
+            // Get submitter
+            EPerson ep = i.getSubmitter();
+            // Get the Locale
+            Locale supportedLocale = I18nUtil.getEPersonLocale(ep);
+            Email email = Email.getEmail(I18nUtil.getEmailFilename(supportedLocale, "submit_archive_fulltext"));
+
+            // Get the item handle to email to user
+            String handle = HandleManager.findHandle(c, i);
+
+            // Get title
+            Metadatum[] titles = i.getDC("title", null, Item.ANY);
+            String title = "";
+            try
+            {
+                title = I18nUtil.getMessage("org.dspace.workflow.WorkflowManager.untitled");
+            }
+            catch (MissingResourceException e)
+            {
+                title = "Untitled";
+            }
+            if (titles.length > 0)
+            {
+                title = titles[0].value;
+            }
+
+            email.addRecipient(ep.getEmail());
+            email.addArgument(title);
+            email.addArgument(coll.getMetadata("name"));
+            email.addArgument(HandleManager.getCanonicalForm(handle));
+
+            log.debug("Sending archive notice to " + ep.getEmail());
+
+            email.send();
+        }
+        catch (MessagingException e)
+        {
+            log.warn(LogManager.getHeader(c, "notifyOfArchive",
+                    "cannot email user; item_id=" + i.getID()
+                            + ":  " + e.getMessage()));
+        }
+    }
+
+    /**
+     * notify the submitter that the item is archived
+     */
     private static void notifyOfArchive(Context c, Item i, Collection coll)
             throws SQLException, IOException
     {
@@ -1052,18 +1233,57 @@ public class WorkflowManager
         myitem.addDC("description", "provenance", "en", provDescription);
         myitem.update();
 
-        // convert into personal workspace
-        WorkspaceItem wsi = returnToWorkspace(c, wi);
+        boolean hasPending = isPendingFulltext(wi.getItem());
+        if (hasPending) {
 
-        // notify that it's been rejected
-        notifyOfReject(c, wi, e, rejection_message);
+            // Is this an "add fulltext" item? if so, remove the pending files
+            String pendingBundle = ConfigurationManager.getProperty("submit.fulltext.bundle.pending");
+            if (pendingBundle == null) {
+                pendingBundle = "PENDING";
+            }
+            myitem.getBundles(pendingBundle);
+            for (Bundle b : myitem.getBundles(pendingBundle)) {
+                myitem.removeBundle(b);
+            }
 
-        log.info(LogManager.getHeader(c, "reject_workflow", "workflow_item_id="
-                + wi.getID() + "item_id=" + wi.getItem().getID()
-                + "collection_id=" + wi.getCollection().getID() + "eperson_id="
-                + e.getID()));
 
-        return wsi;
+            // This was an 'add files' workflow item, so don't return to workspace
+            log.debug("Rejecting a 'new files' item, not returning to workspace");
+            notifyOfFulltextReject(c, wi, e, rejection_message);
+            // Now, revert submitter to previous
+            List<String> v = myitem.getMetadataValue("tuhh.submitter.previous");
+            if (v != null && v.size() > 0) {
+                EPerson previous = EPerson.find(c, Integer.parseInt(v.get(0)));
+                if (previous != null) {
+                    log.debug("Found previous submitter when loading subInfo " + previous.getEmail());
+                }
+                myitem.setSubmitter(previous);
+                clearSubmitterMetadata(myitem);
+                wi.update();
+            }
+
+            // Now remove the workflow object manually from the database
+            DatabaseManager.updateQuery(c,
+                    "DELETE FROM WorkflowItem WHERE workflow_id=" + wi.getID());
+
+            c.commit();
+
+            return null;
+        }
+        else {
+            // convert into personal workspace
+            WorkspaceItem wsi = returnToWorkspace(c, wi);
+
+            // notify that it's been rejected
+            notifyOfReject(c, wi, e, rejection_message);
+
+            log.info(LogManager.getHeader(c, "reject_workflow", "workflow_item_id="
+                    + wi.getID() + "item_id=" + wi.getItem().getID()
+                    + "collection_id=" + wi.getCollection().getID() + "eperson_id="
+                    + e.getID()));
+
+            return wsi;
+        }
     }
 
     // creates workflow tasklist entries for a workflow
@@ -1212,6 +1432,53 @@ public class WorkflowManager
         return ConfigurationManager.getProperty("dspace.url") + "/mydspace";
     }
 
+    private static void notifyOfFulltextReject(Context c, WorkflowItem wi, EPerson e, String reason) {
+        try
+        {
+            // Get the item title
+            String title = getItemTitle(wi);
+
+            // Get the collection
+            Collection coll = wi.getCollection();
+
+            String baseUrl = ConfigurationManager.getProperty("dspace.url");
+            String itemUrl = baseUrl + "/handle/" + wi.getItem().getHandle();
+
+            // Get rejector's name
+            String rejector = getEPersonName(e);
+            Locale supportedLocale = I18nUtil.getEPersonLocale(e);
+            Email email = Email.getEmail(I18nUtil.getEmailFilename(supportedLocale,"submit_reject_fulltext"));
+            email.addRecipient(getSubmitterEPerson(wi).getEmail());
+            email.addArgument(title);
+            email.addArgument(coll.getMetadata("name"));
+            email.addArgument(rejector);
+            email.addArgument(reason);
+            email.addArgument(itemUrl);
+
+            log.debug("Sending reject notice to " + getSubmitterEPerson(wi).getEmail());
+
+            email.send();
+        }
+        catch (RuntimeException re)
+        {
+            // log this email error
+            log.warn(LogManager.getHeader(c, "notify_of_fulltext_reject",
+                    "cannot email submitter "
+                            + " workflow_item_id=" + wi.getID()
+                            + ":  " + re.getMessage()));
+
+            throw re;
+        }
+        catch (Exception ex)
+        {
+            // log this email error
+            log.warn(LogManager.getHeader(c, "notify_of_fulltext_reject",
+                    "cannot email submitter "
+                            + " workflow_item_id=" + wi.getID()
+                            + ":  " + ex.getMessage()));
+        }
+    }
+
     private static void notifyOfReject(Context c, WorkflowItem wi, EPerson e,
             String reason)
     {
@@ -1329,8 +1596,16 @@ public class WorkflowManager
         String now = DCDate.getCurrent().toString();
 
         // Here's what happened
-        String provDescription = "Approved for entry into archive by "
-                + usersName + " on " + now + " (GMT) ";
+        String provDescription = "Approved ";
+
+        // Change message slightly depending on what we are approving
+        if (isPendingFulltext(item)) {
+            provDescription += "new files into item by ";
+
+        } else {
+            provDescription += "entry into archive by ";
+        }
+         provDescription += usersName + " on " + now + " (GMT) ";
 
         // add bitstream descriptions (name, size, checksums)
         provDescription += InstallItem.getBitstreamProvenanceMessage(item);
@@ -1355,7 +1630,15 @@ public class WorkflowManager
 
         if (myitem.getSubmitter() != null)
         {
-            provmessage = "Submitted by " + myitem.getSubmitter().getFullName()
+            // Change provenance message depending on condition
+            provmessage = "";
+            if (!isPendingFulltext(myitem)) {
+                provmessage += "Submitted by " ;
+            } else {
+                provmessage += "New files submitted by ";
+            }
+
+            provmessage += myitem.getSubmitter().getFullName()
                     + " (" + myitem.getSubmitter().getEmail() + ") on "
                     + now.toString() + "\n";
         }
@@ -1484,5 +1767,30 @@ public class WorkflowManager
 
         // remove item level policies
         AuthorizeManager.removeAllPoliciesByDSOAndType(context, item, ResourcePolicy.TYPE_WORKFLOW);
+     }
+
+     public static boolean isPendingFulltext(Item item) throws SQLException {
+        String pendingBundleName = ConfigurationManager.getProperty("submit.fulltext.bundle.pending");
+        if (null == pendingBundleName) {
+           pendingBundleName = "PENDING";
+        }
+
+        Bundle[] pendingBundleCheck = item.getBundles(pendingBundleName);
+        if(pendingBundleCheck.length > 0 && pendingBundleCheck[0].getBitstreams().length > 0) {
+            return true;
+        }
+
+        return false;
+     }
+
+     public static void clearSubmitterMetadata(Item item) {
+         String previousSubmitterField = ConfigurationManager.getProperty("submit.fulltext.submitter.field");
+         String[] psParts = previousSubmitterField.split("\\.", 3);
+         if (psParts.length > 1) {
+             item.clearMetadata((psParts[0]), (psParts[1]), (psParts.length > 2 ? psParts[2] : null), Item.ANY);
+             log.debug("Clearing previous submitter metadata from item " + item.getHandle());
+         } else {
+             log.error("Previous submitter metadata field missing or invalid: " + previousSubmitterField);
+         }
      }
 }

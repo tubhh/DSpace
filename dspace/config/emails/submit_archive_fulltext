@@ -1,0 +1,21 @@
+# Item Archived email message
+#
+# {0}  Title of submission
+# {1}  Name of collection
+# {2}  handle 
+#
+Subject: DSpace: New Fulltext Approved and Archived
+
+You submitted fulltext for the item: {0}
+
+To collection: {1}
+
+Your submission has been accepted and archived in DSpace,
+and the new files are now available at the item page:
+{2}
+
+Please use this identifier when citing your submission.
+
+Many thanks!
+
+DSpace

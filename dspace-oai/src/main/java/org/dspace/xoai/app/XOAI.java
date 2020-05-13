@@ -11,6 +11,10 @@ import static com.lyncode.xoai.dataprovider.core.Granularity.Second;
 import static org.dspace.xoai.util.ItemUtils.retrieveMetadata;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.SQLException;
@@ -65,8 +69,17 @@ import org.dspace.xoai.services.api.solr.SolrServerResolver;
 import org.dspace.xoai.solr.DSpaceSolrSearch;
 import org.dspace.xoai.solr.exceptions.DSpaceSolrException;
 import org.dspace.xoai.solr.exceptions.DSpaceSolrIndexerException;
+import org.dspace.xoai.data.DSpaceItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
+
+import javax.xml.transform.stream.StreamResult;
 
 import com.lyncode.xoai.dataprovider.exceptions.ConfigurationException;
 import com.lyncode.xoai.dataprovider.exceptions.MetadataBindException;
@@ -375,9 +388,16 @@ public class XOAI {
                 	server.add(solrDoc);
                 	
                 	if(doublingSolrDocument) {
+/*
+            	    Item item = (Item)o;
+            	    solrDoc = this.indexResults(item, true);
+            	    server.add(solrDoc);
+*/
+
+                            SolrInputDocument newSolrDoc = null;
                 	    Item item = (Item)o;
-                	    solrDoc = this.indexResults(item, true);
-                	    server.add(solrDoc);
+                	    newSolrDoc = this.replaceIdentifier(item, solrDoc);
+                	    server.add(newSolrDoc);
                 	}
                     context.clearCache();
                 } catch (SQLException ex) {
@@ -402,6 +422,91 @@ public class XOAI {
         } catch (IOException ex) {
             throw new DSpaceSolrIndexerException(ex.getMessage(), ex);
         }
+    }
+
+    /***
+     * Set special identifier
+     * Improve performance by avoiding double indexing
+     **/
+    private SolrInputDocument replaceIdentifier(Item item, SolrInputDocument doc) {
+        Namespace ns = Namespace.getNamespace("http://www.lyncode.com/xoai");
+        String handle = item.getHandle();
+        String type = (String)item.getExtraInfo().get("item.cerifentitytype");
+        doc.removeField("item.identifier");
+        doc.removeField("item.type");
+        doc.addField("item.identifier", type+"/"+handle);
+        doc.addField("item.type", ITEMTYPE_SPECIAL);
+
+        try {
+            String compiled = (String) doc.getField("item.compile").getFirstValue();
+
+            Document xmldoc = null;
+
+            InputStream targetStream = new ByteArrayInputStream(compiled.getBytes());
+
+            // Das Dokument erstellen
+            SAXBuilder builder = new SAXBuilder();
+            xmldoc = builder.build(targetStream);
+
+            Element otherElement = null;
+            Element newOtherElement = null;
+            Element identifierElement = null;
+            Element typeElement = null;
+
+            Element rootElement = xmldoc.getRootElement();
+
+            List<Element> elemelements = new ArrayList<Element>(rootElement.getChildren() );
+            for ( Element elemElement : elemelements ) {
+                String elemName = elemElement.getAttributeValue("name");
+                if (elemName != null && elemName.equals("others")) {
+                    List<Element> fieldElements = new ArrayList<Element>(elemElement.getChildren() );
+
+                    for( Element element : fieldElements ) {
+                        String att = element.getAttributeValue("name");
+                        if(att.equals("identifier")) {
+                            elemElement.removeContent(element);
+                        }
+                        if(att.equals("type")) {
+                            elemElement.removeContent(element);
+                        }
+                    }
+                    Element newIdentifierElement = new Element("field", ns);
+                    newIdentifierElement.setAttribute("name", "identifier");
+                    Element newTypeElement = new Element("field", ns);
+                    newTypeElement.setAttribute("name", "type");
+
+                    newIdentifierElement.setText(DSpaceItem.buildIdentifier(handle, type));
+                    newTypeElement.setText(ITEMTYPE_SPECIAL);
+                    elemElement.addContent(newIdentifierElement);
+                    elemElement.addContent(newTypeElement);
+                }
+            }
+            xmldoc.setRootElement(rootElement);
+
+            XMLOutputter outputter = new XMLOutputter(  );
+            StringWriter writer = new StringWriter();
+            outputter.output(rootElement, writer);
+
+            String xmlString = writer.getBuffer().toString();
+
+            doc.removeField("item.compile");
+            doc.addField("item.compile", xmlString);
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        if (verbose) {
+            println(String.format("Item %d with handle %s indexed with prefixed identifier as "+DSpaceItem.buildIdentifier(handle, type),
+                    item.getID(), handle));
+        }
+
+        return doc;
     }
 
     /***

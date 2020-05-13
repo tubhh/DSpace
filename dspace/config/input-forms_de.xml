@@ -298,6 +298,17 @@
 
        <field>
          <dc-schema>tuhh</dc-schema>
+         <dc-element>container</dc-element>
+         <dc-qualifier>articlenumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Artikelnummer</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier die Artikelnummer des Artikels ein, wenn er eine hat.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartofseries</dc-qualifier>
          <repeatable>false</repeatable>
@@ -348,8 +359,7 @@
          <label>Publikationsdatum</label>
          <input-type>date</input-type>
          <hint>Geben Sie hier das Publikationsdatum einer Printpublikation oder vorherigen Veröffentlichung ein. Monat und/oder Tag sind optional, das Jahr obligatorisch.</hint>
-         <required></required>
-         <!--<required>Bitte geben Sie ein Publikationsdatum ein</required>-->
+         <required>Bitte geben Sie ein Publikationsdatum ein</required>
        </field>
 
 <!--
@@ -1195,6 +1205,17 @@
 
        <field>
          <dc-schema>tuhh</dc-schema>
+         <dc-element>container</dc-element>
+         <dc-qualifier>articlenumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Artikelnummer</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier die Artikelnummer des Artikels ein, wenn er eine hat.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartofseries</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1245,8 +1266,7 @@
          <label>Publikationsdatum</label>
          <input-type>date</input-type>
          <hint>Geben Sie hier das Publikationsdatum einer Printpublikation oder vorherigen Veröffentlichung ein. Monat und/oder Tag sind optional, das Jahr obligatorisch.</hint>
-         <required></required>
-         <!--<required>Bitte geben Sie ein Publikationsdatum ein</required>-->
+         <required>Bitte geben Sie ein Publikationsdatum ein</required>
        </field>
 
 <!--
@@ -1347,6 +1367,16 @@
      </page>
 
      <page number="3">
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>status</dc-element>
+         <dc-qualifier>inpress</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Inpress?</label>
+         <input-type value-pairs-name="nl">dropdown</input-type>
+         <hint>Ist dieser Datensatz noch "in press" (also noch nicht wirklich veröffentlicht)?</hint>
+         <visibility>workflow</visibility>
+        </field>
 <!--
        <field>
          <dc-schema>tuhh</dc-schema>
@@ -2310,6 +2340,7 @@
        <displayed-value>Artikel/Aufsatz</displayed-value>
        <stored-value>Article</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>Bild</displayed-value>
        <stored-value>Image</stored-value>
@@ -2318,6 +2349,7 @@
        <displayed-value>3-D-Bild</displayed-value>
        <stored-value>Image, 3-D</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>Buch</displayed-value>
        <stored-value>book</stored-value>
@@ -2349,6 +2381,10 @@
        <stored-value>Map</stored-value>
      </pair>
      <pair>
+       <displayed-value>Kommentar</displayed-value>
+       <stored-value>commentary</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Konferenzband</displayed-value>
        <stored-value>Proceedings</stored-value>
      </pair>
@@ -2365,9 +2401,15 @@
        <stored-value>Presentation</stored-value>
      </pair>
      <pair>
+       <displayed-value>Review</displayed-value>
+       <stored-value>article-review</stored-value>
+     </pair>
+<!--
+     <pair>
        <displayed-value>Software</displayed-value>
        <stored-value>Software</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>Technischer Report</displayed-value>
        <stored-value>Technical Report</stored-value>
@@ -2540,6 +2582,10 @@
      <pair>
        <displayed-value>Spanisch</displayed-value>
        <stored-value>es</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Portugiesisch</displayed-value>
+       <stored-value>pt</stored-value>
      </pair>
      <pair>
        <displayed-value>Französisch</displayed-value>

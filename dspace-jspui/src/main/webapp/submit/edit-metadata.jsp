@@ -300,17 +300,69 @@
             {
                 if (inputBlock != null)
                     sb.insert(0, inputBlock);
-                sb.append("<button class=\"btn btn-default\" name=\"").append(fieldInput).append("_lookup\" ")
-                  .append("onclick=\"javascript: return DSpaceChoiceLookup('")
-                  .append(contextPath).append("/tools/lookup.jsp','")
-                  .append(fieldName).append("','edit_metadata','")
-                  .append(fieldInput).append("','").append(authorityName).append("','")
-                  .append(confIndID).append("',")
-                  .append(String.valueOf(collectionID)).append(",")
-                  .append(String.valueOf(isName)).append(",false);\"")
-                  .append(" title=\"")
-                  .append(LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup"))
-                  .append("\"><span class=\"glyphicon glyphicon-search\"></span></button>");
+                 
+                 Boolean onlyLocal = org.dspace.core.ConfigurationManager.getBooleanProperty("choices.extralookup." + fieldName);
+                 String iconClass = org.dspace.core.ConfigurationManager.getProperty("choices.extralookup." + fieldName + ".iconclass");
+                 String lookupMouseoverLocal;
+                 lookupMouseoverLocal = LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup.local." + fieldName);
+                 if (lookupMouseoverLocal.startsWith("???")) {
+                     lookupMouseoverLocal = LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup.local");
+                 }
+                 String lookupMouseover;
+                 lookupMouseover = LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup." + fieldName);
+                 if (lookupMouseover.startsWith("???")) {
+                     lookupMouseover = LocaleSupport.getLocalizedMessage(pageContext, "jsp.tools.lookup.lookup");
+                 }
+                 if(onlyLocal)
+                 {
+                 	sb.append("<button class=\"btn btn-default\" name=\"").append(fieldInput).append("_lookup\" ")
+           				.append("onclick=\"javascript: return DSpaceChoiceLookupOnlyLocal(true, '")
+           				.append(contextPath).append("/tools/lookup.jsp','")
+           				.append(fieldName).append("','edit_metadata','")
+           				.append(fieldInput).append("','").append(authorityName).append("','")
+           				.append(confIndID).append("',")
+           				.append(String.valueOf(collectionID)).append(",")
+           				.append(String.valueOf(isName)).append(",false);\"")
+           				.append(" title=\"")
+           				.append(lookupMouseoverLocal)
+           				.append("\"><span class=\"glyphicon glyphicon-search\"></span></button>");
+                 	
+                 	sb.append("&nbsp<button class=\"btn btn-default\" name=\"").append(fieldInput).append("_lookup\" ")
+                 	.append("onclick=\"javascript: return DSpaceChoiceLookupOnlyLocal(false, '")
+                 	.append(contextPath).append("/tools/lookup.jsp','")
+                 	.append(fieldName).append("','edit_metadata','")
+                 	.append(fieldInput).append("','").append(authorityName).append("','")
+                 	.append(confIndID).append("',")
+                 	.append(String.valueOf(collectionID)).append(",")
+                 	.append(String.valueOf(isName)).append(",false);\"")
+                 	.append(" title=\"")
+                 	.append(lookupMouseover)
+                 	.append("\"><span class=\"glyphicon ");
+                         if (iconClass != null) {
+                             if (!iconClass.equals("")) {
+                                 sb.append(iconClass);
+                             } else {
+                 	        sb.append("glyphicon-zoom-in");
+                             }
+                         } else {
+                 	    sb.append("glyphicon-zoom-in");
+                         }
+                 }
+                 else {
+ 	                sb.append("&nbsp<button class=\"btn btn-default\" name=\"").append(fieldInput).append("_lookup\" ")
+ 	                	.append("onclick=\"javascript: return DSpaceChoiceLookup('")
+ 	                	.append(contextPath).append("/tools/lookup.jsp','")
+ 	                	.append(fieldName).append("','edit_metadata','")
+ 	                	.append(fieldInput).append("','").append(authorityName).append("','")
+ 	                	.append(confIndID).append("',")
+ 	                	.append(String.valueOf(collectionID)).append(",")
+ 	                	.append(String.valueOf(isName)).append(",false);\"")
+ 	                	.append(" title=\"")
+ 	                	.append(lookupMouseover)
+ 	                	.append("\"><span class=\"glyphicon ");
+ 	                sb.append("glyphicon-search");
+                 }
+                 sb.append("\">    </span></button>");
             }
             
         }

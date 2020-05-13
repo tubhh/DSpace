@@ -28,7 +28,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd https://www.openaire.eu/cerif-profile/1.1/ https://www.openaire.eu/schema/cris/1.1/openaire-cerif-profile.xsd"
     version="1.0">
-    <xsl:output omit-xml-declaration="yes" method="xml" indent="yes" />
+    <xsl:output omit-xml-declaration="yes" method="xml" indent="yes" cdata-section-elements="dc:description" />
 
 	<xsl:variable name="placeholder">#PLACEHOLDER_PARENT_METADATA_VALUE#</xsl:variable>
 

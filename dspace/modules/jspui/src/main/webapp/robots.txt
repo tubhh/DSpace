@@ -28,6 +28,7 @@ Disallow: /feedback
 Disallow: /forgot
 Disallow: /login
 Disallow: /register
+Disallow: /request-item
 Disallow: /password-login
 Disallow: /Shibboleth.sso
 Disallow: */simple-search*

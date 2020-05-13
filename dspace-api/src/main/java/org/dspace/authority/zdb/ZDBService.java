@@ -14,7 +14,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,6 +46,8 @@ public class ZDBService {
 	public String detailURL;
 	public String searchURL;
 	public String filter;
+	
+	private boolean splitByIssn = true;
 
 	public ZDBService(String searchURL, String detailsURL) {
 		this.searchURL = searchURL;
@@ -92,9 +96,9 @@ public class ZDBService {
 				
 				if("rdf:RDF".equals(xmlRoot.getNodeName())) {
 					//called details endpoint
-					ZDBAuthorityValue zdbItem = getRecord(xmlRoot);
+					List<ZDBAuthorityValue> zdbItems = getRecord(xmlRoot, true);
 
-					results.add(zdbItem);
+					results.addAll(zdbItems);
 					
 				}
 				else {
@@ -109,9 +113,9 @@ public class ZDBService {
 
 						Element rdfElementRoot = XMLUtils.getSingleElement(recordDataElement, "rdf:RDF");
 
-						ZDBAuthorityValue zdbItem = getRecord(rdfElementRoot);
+						List<ZDBAuthorityValue> zdbItems = getRecord(rdfElementRoot, false);
 
-						results.add(zdbItem);
+						results.addAll(zdbItems);
 					}
 				} 
 
@@ -131,10 +135,42 @@ public class ZDBService {
 		return results;
 	}
 
-	private ZDBAuthorityValue getRecord(Element rdfElementRoot) {
+	private List<ZDBAuthorityValue> getRecord(Element rdfElementRoot, boolean forceSingleRecord) {
 
 		Element rdfDescElementRoot = XMLUtils.getSingleElement(rdfElementRoot, "rdf:Description");
 
+		List<ZDBAuthorityValue> zdbItems = new ArrayList<ZDBAuthorityValue>(); 
+		
+        if (!forceSingleRecord && splitByIssn) {
+	        Set<String> issns = removeDup(XMLUtils.getElementValueList(rdfDescElementRoot, "bibo:issn"));
+			if (issns.size() > 0) {
+		        for (String issn : issns) {
+					ZDBAuthorityValue zdbItem = getCommonZDBAuthorityValue(rdfDescElementRoot);
+					zdbItem.addOtherMetadata("journalIssn", issn);
+					zdbItems.add(zdbItem);
+				}
+		        return zdbItems;
+			}
+        }
+
+        // this is executed both in the case that the split is not required than when no issn is present
+        ZDBAuthorityValue zdbItem = getCommonZDBAuthorityValue(rdfDescElementRoot);
+        Set<String> issns = removeDup(XMLUtils.getElementValueList(rdfDescElementRoot, "bibo:issn"));
+		for (String issn : issns) {
+			zdbItem.addOtherMetadata("journalIssn", issn);
+		}
+		zdbItems.add(zdbItem);
+
+		return zdbItems;
+	}
+
+	private Set<String> removeDup(List<String> elementValueList) {
+		Set<String> set = new HashSet<String>();
+		set.addAll(elementValueList);
+		return set;
+	}
+
+	private ZDBAuthorityValue getCommonZDBAuthorityValue(Element rdfDescElementRoot) {
 		ZDBAuthorityValue zdbItem = new ZDBAuthorityValue();
 
 		String rdfAboutAttribute = rdfDescElementRoot.getAttribute("rdf:about");
@@ -159,11 +195,6 @@ public class ZDBService {
 			zdbItem.addOtherMetadata("journalPublisher", publisher);
 		}
 
-		List<String> issns = XMLUtils.getElementValueList(rdfDescElementRoot, "bibo:issn");
-		for (String issn : issns) {
-			zdbItem.addOtherMetadata("journalIssn", issn);
-		}
-
 		List<String> alternativeTitles = XMLUtils.getElementValueList(rdfDescElementRoot, "dcterms:alternative");
 		for (String alternativeTitle : alternativeTitles) {
 			zdbItem.addOtherMetadata("journalAlternativeTitle", alternativeTitle);
@@ -176,10 +207,8 @@ public class ZDBService {
         for (Element relation : relations) {
             zdbItem.addOtherMetadata("journalRelation", relation.getAttribute("rdf:resource"));
         }
-        
-		return zdbItem;
+        return zdbItem;
 	}
-
 	public AuthorityValue details(String id) throws IOException {
 
 		String url = buildDetailsURL(id);
@@ -218,5 +247,9 @@ public class ZDBService {
 
 	public String getSearchURL() {
 		return searchURL;
+	}
+	
+	public void setSplitByIssn(boolean splitByIssn) {
+		this.splitByIssn = splitByIssn;
 	}
 }

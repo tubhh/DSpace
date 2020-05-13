@@ -15,8 +15,9 @@
 <xsl:stylesheet 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:doc="http://www.lyncode.com/xoai"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
 	version="1.0">
-	<xsl:output omit-xml-declaration="yes" method="xml" indent="yes" />
+	<xsl:output omit-xml-declaration="yes" method="xml" indent="yes" cdata-section-elements="dc:description" />
 	
 	<xsl:template match="/">
 		<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" 

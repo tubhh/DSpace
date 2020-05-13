@@ -57,6 +57,9 @@
 
  	Boolean sherpa = (Boolean) request.getAttribute("sherpa");
     boolean bSherpa = sherpa != null?sherpa:false;
+
+    Boolean addingFulltext = (Boolean) request.getAttribute("adding.fulltext");
+    boolean isAddingFulltext = addingFulltext != null ? addingFulltext : false;
 %>
 
 
@@ -89,7 +92,7 @@
                 var progressbarArea = $("#progressBarArea");
                 progressbarArea.show();
             }
-
+isAddingFulltext
             function updateProgressBar($, data){
                 $('#uploadForm').find('input').attr('disabled','disabled');
                 $('#spanFile').attr('disabled','disabled');
@@ -473,9 +476,13 @@
                                 query:{workflow_id:'<%= subInfo.getSubmissionItem().getID()%>'}
                             <%
             				} else if (subInfo.isEditing()) {
-				            %>
+                			%>
                 				query:{edit_item:'<%= subInfo.getSubmissionItem().getID()%>'}
-				            <%
+                            <%
+                            } else if (subInfo.isAddingFulltext() || isAddingFulltext) {
+                				    %>
+                                query:{add_fulltext_item:'<%= subInfo.getSubmissionItem().getID()%>', add_fulltext: 'true'}
+                            <%
                             } else {
                             %>
                                 query:{workspace_item_id:'<%= subInfo.getSubmissionItem().getID()%>'}

@@ -70,9 +70,17 @@
 <%
     }
 %>
-    
-    <dspace:item item="<%= item %>" />
-
+    <%
+    if (workflowItem.isAddFulltext()) {
+    %>
+        <dspace:pending-item item="<%= item %>" />
+    <%
+    } else {
+    %>
+        <dspace:item item="<%= item %>" />
+    <%
+    }
+    %>
     <form action="<%= request.getContextPath() %>/mydspace" method="post">
         <input type="hidden" name="workflow_id" value="<%= workflowItem.getID() %>"/>
         <input type="hidden" name="step" value="<%= MyDSpaceServlet.PREVIEW_TASK_PAGE %>"/>

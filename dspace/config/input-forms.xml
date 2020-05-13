@@ -339,6 +339,17 @@
 
        <field>
          <dc-schema>tuhh</dc-schema>
+         <dc-element>container</dc-element>
+         <dc-qualifier>articlenumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Article Number</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the article number of the article, if it has one.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartofseries</dc-qualifier>
          <repeatable>false</repeatable>
@@ -391,8 +402,7 @@
          <hint>Please give the date of previous publication or public distribution
                         below.  You can leave out the day and/or month if they aren't
                         applicable.</hint>
-         <!--<required>You must enter at least the year.</required>-->
-         <required></required>
+         <required>You must enter at least the year.</required>
        </field>
 
 <!--
@@ -1209,6 +1219,17 @@
 
        <field>
          <dc-schema>tuhh</dc-schema>
+         <dc-element>container</dc-element>
+         <dc-qualifier>articlenumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Article Number</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the article number of the article, if it has one.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartofseries</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1261,8 +1282,7 @@
          <hint>Please give the date of previous publication or public distribution
                         below.  You can leave out the day and/or month if they aren't
                         applicable.</hint>
-         <!--<required>You must enter at least the year.</required>-->
-         <required></required>
+         <required>You must enter at least the year.</required>
        </field>
 
 <!--
@@ -1363,6 +1383,16 @@
      </page>
 
      <page number="3">
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>status</dc-element>
+         <dc-qualifier>inpress</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Inpress?</label>
+         <input-type value-pairs-name="nl_en">dropdown</input-type>
+         <hint>Is this item in press (not yet really published)?</hint>
+         <visibility>workflow</visibility>
+        </field>
 <!--
        <field>
          <dc-schema>tuhh</dc-schema>
@@ -2303,9 +2333,18 @@
        <stored-value>inProceedings</stored-value>
      </pair>
      <pair>
+       <displayed-value>Commentary</displayed-value>
+       <stored-value>commentary</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Conference Proceedings</displayed-value>
        <stored-value>Proceedings</stored-value>
      </pair>
+     <pair>
+       <displayed-value>Editorial</displayed-value>
+       <stored-value>editorial</stored-value>
+     </pair>
+<!--
      <pair>
        <displayed-value>Image</displayed-value>
        <stored-value>Image</stored-value>
@@ -2314,6 +2353,7 @@
        <displayed-value>Image (3D)</displayed-value>
        <stored-value>Image, 3-D</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>Journal Volume</displayed-value>
        <stored-value>Journal</stored-value>
@@ -2352,10 +2392,12 @@
        <displayed-value>Research Paper</displayed-value>
        <stored-value>Working Paper</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>Software</displayed-value>
        <stored-value>Software</stored-value>
      </pair>
+-->
      <pair>
        <displayed-value>Technical Report</displayed-value>
        <stored-value>Technical Report</stored-value>
@@ -2516,6 +2558,10 @@
      <pair>
        <displayed-value>Spanish</displayed-value>
        <stored-value>es</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Portugese</displayed-value>
+       <stored-value>pt</stored-value>
      </pair>
      <pair>
        <displayed-value>French</displayed-value>

@@ -23,20 +23,19 @@ footer {
 }
 
 .staff {
-    color: #00CCCC;
+    color: #2dc6c6;
 }
 
 .exstaff {
-/*    color: goldenrod; */
-    color: green;
+    color: #2edcdc;
 }
 
 .externalstaff {
-    color: black;
+    color: #999999;
 }
 
 .undefinedstaff {
-    color: gray;
+    color: #afafaf;
 }
 
 
@@ -398,4 +397,9 @@ a:hover, a:focus {
 .tubdoklogosmall {
     display: none;
 }
-
+.orcid {
+height: 16px;
+width: 16px;
+background-image:url('../image/orcid_16x16.png');
+background-repeat:no-repeat;
+}

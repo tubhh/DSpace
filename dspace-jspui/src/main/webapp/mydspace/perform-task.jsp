@@ -70,9 +70,17 @@
     </fmt:message></p>
 <%
     }
-%>
-    
+
+    if (workflowItem.isAddFulltext()) {
+    %>
+    <dspace:pending-item item="<%= item %>" />
+    <%
+    } else {
+    %>
     <dspace:item item="<%= item %>" />
+    <%
+    }
+    %>
 
     <p>&nbsp;</p>
 

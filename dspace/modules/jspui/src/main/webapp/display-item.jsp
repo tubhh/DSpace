@@ -62,7 +62,22 @@
     boolean admin_button = (admin_b == null ? false : admin_b.booleanValue());
     Boolean submitter_b = (Boolean) request.getAttribute("submitter_button");
     boolean submitter_button = (submitter_b == null ? false : submitter_b.booleanValue());
-    
+
+    // can we display the "Add Files" button here?
+    Boolean add_fulltext_allowed_b = (Boolean)request.getAttribute("add_fulltext_allowed");
+    boolean add_fulltext_allowed = (add_fulltext_allowed_b != null && add_fulltext_allowed_b);
+    // are there *unfinished* submissions for this user?
+    Boolean fulltext_continue_b = (Boolean)request.getAttribute("add_fulltext_continue");
+    boolean fulltext_continue = (fulltext_continue_b != null && fulltext_continue_b);
+    // are there pending files under review?
+    Boolean fulltext_under_reviewed_b = (Boolean)request.getAttribute("fulltext_under_review");
+    boolean fulltext_under_review = (fulltext_under_reviewed_b != null && fulltext_under_reviewed_b);
+
+    String addFilesButtonLabel = "jsp.general.editaddfulltext.button";
+    if (fulltext_continue) {
+        addFilesButtonLabel = "jsp.general.continueaddfulltext.button";
+    }
+
     // get the workspace id if one has been passed
     Integer workspace_id = (Integer) request.getAttribute("workspace_id");
 
@@ -604,6 +619,7 @@ j(document).ready(function() {
 </div>
 <div class="col-lg-3">
 <div class="row">
+
 <%
 if (dedupEnabled && admin_button) { %>	
 <div class="col-lg-12 col-md-4 col-sm-6">
@@ -808,10 +824,42 @@ if (dedupEnabled && admin_button) { %>
     }
 %>
 
-<%--------- Feedback Box from Bamberg University ---------%>
+<div class="col-lg-3">
+<div class="row">
+<%
+    if (add_fulltext_allowed) {
+%>
+    <div class="col-lg-12 col-md-4 col-sm-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading"><fmt:message key="jsp.general.editaddfulltext.heading"/></div>
+            <div class="panel-body">
+                <form method="get" action="<%= request.getContextPath() %>/submit">
+                    <input type="hidden" name="add_fulltext_item" value="<%= item.getID() %>" />
+                    <input type="hidden" name="pageCallerID" value="0" />
+                    <input type="hidden" name="add_fulltext" value="true"/>
+                    <input class="btn btn-default col-md-12" type="submit" name="submit" value="<fmt:message key="<%= addFilesButtonLabel %>"/>" />
+                </form>
+            </div>
+        </div>
+    </div>
     <%
-    if (user!=null) {
+        }
+        else if (fulltext_under_review) {
     %>
+    <div class="col-lg-12 col-md-4 col-sm-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading"><fmt:message key="jsp.general.editaddfulltext.heading"/></div>
+            <div class="panel-body">
+                <span class="review-message"><fmt:message key="jsp.general.editaddfulltext.review"/></span>
+            </div>
+        </div>
+    </div>
+    <%
+    }
+%>
+</div>
+</div>
+<%--------- Feedback Box from Bamberg University ---------%>
       <div class="col-sm-5 col-md-4 col-lg-3">
         <div class="panel panel-info">
           <div class="panel-heading">
@@ -824,9 +872,6 @@ if (dedupEnabled && admin_button) { %>
           </div>
         </div>
       </div>
-    <%
-    }
-    %>
 <%------ End Feedback Box from Bamberg University -------------%>
 
 <%------ CSL-Einbindung -----%>

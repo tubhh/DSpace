@@ -23,9 +23,11 @@ import org.dspace.app.webui.submit.JSPStep;
 import org.dspace.app.webui.submit.JSPStepManager;
 import org.dspace.app.webui.util.JSPManager;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.content.Bundle;
 import org.dspace.content.Item;
 import org.dspace.content.LicenseUtils;
 import org.dspace.content.WorkspaceItem;
+import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
 import org.dspace.license.CreativeCommons;
@@ -159,8 +161,26 @@ public class JSPLicenseStep extends JSPStep
             if (!subInfo.isInWorkflow()
                     && (SubmissionController.getStepReached(subInfo) <= SubmissionController.FIRST_STEP))
             {
-                WorkspaceItem wi = (WorkspaceItem) subInfo.getSubmissionItem();
-                wi.deleteAll();
+                // One exception - if we are adding fulltext instead, just remove pending and return
+                if (subInfo.isAddingFulltext()) {
+                    String pendingBundle = ConfigurationManager.getProperty("submit.fulltext.bundle.pending");
+                    if (pendingBundle == null) {
+                        pendingBundle = "PENDING";
+                    }
+                    subInfo.getSubmissionItem().getItem().getBundles(pendingBundle);
+                    for (Bundle b : subInfo.getSubmissionItem().getItem().getBundles(pendingBundle)) {
+                        subInfo.getSubmissionItem().getItem().removeBundle(b);
+                    }
+                    subInfo.getSubmissionItem().getItem().update();
+                    // Set an attribute so we can display it conditionally in the JSP
+                    request.setAttribute("rejected_fulltext_license",
+                        subInfo.getSubmissionItem().getItem().getHandle());
+
+                } else {
+                    // If not adding files, delete from workspace as normal
+                    WorkspaceItem wi = (WorkspaceItem) subInfo.getSubmissionItem();
+                    wi.deleteAll();
+                }
 
                 // commit changes
                 context.commit();

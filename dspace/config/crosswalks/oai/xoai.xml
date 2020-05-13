@@ -1073,7 +1073,7 @@
                 <Custom ref="doctypeCarthographicMaterialCondition"/>
             </Definition>
         </Filter>
-        <Filter id="doctypeResearchDataFilterFilter">
+        <Filter id="doctypeResearchDataFilter">
             <Definition>
                 <Custom ref="doctypeResearchDataCondition"/>
             </Definition>
@@ -1318,9 +1318,9 @@
 		<CustomCondition id="doctypeResearchDataCondition">
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
-                <string name="field">dc.type.dini</string>
+                <string name="field">tuhh.type.rdm</string>
 				<string name="operator">equal</string>
-				<string name="value">ResearchData</string>
+				<string name="value">true</string>
             </Configuration>
         </CustomCondition>
 		<CustomCondition id="doctypeOtherCondition">
@@ -2287,6 +2287,7 @@
         </Filter>
         
         <!-- create a new filter for the openairedata Context -->
+        <!--
         <Filter id="openaireDataFilter">
             <Definition>
             	<And>
@@ -2327,6 +2328,20 @@
                 </And>
             </Definition>
         </Filter>
+        -->
+
+        <Filter id="openaireDataFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <Custom ref="researchDataCondition"/>
+                    </LeftCondition>
+                    <RightCondition>
+                        <Custom ref="dspaceItemCondition" />
+                    </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
 
         <Filter id="uketdDcFilter">
             <Definition>
@@ -2347,10 +2362,24 @@
             		<LeftCondition>
 		                <And>
 		                    <LeftCondition>
-		                        <Custom ref="oaioutputCondition"/>
+                                        <OR>
+                                            <LeftCondition>
+                                                <Custom ref="oaioutputCondition"/>
+                                            </LeftCondition>
+                                            <RightCondition>
+                                                <OR>
+                                                    <LeftCondition>
+                                                        <Custom ref="noFulltextCondition"/>
+                                                    </LeftCondition>
+                                                    <RightCondition>
+                                                        <Custom ref="researchDataCondition"/>
+                                                    </RightCondition>
+                                                </OR>
+                                            </RightCondition>
+                                        </OR>
 		                    </LeftCondition>
 		                    <RightCondition>
-		                        <Custom ref="bitstreamAccessCondition"/>
+                                        <Custom ref="bitstreamAccessCondition"/>
 		                    </RightCondition>
 		                </And>
 					</LeftCondition>
@@ -2389,14 +2418,18 @@
 
         <Filter id="hasNoPPNFilter">
             <Definition>
-                <And>
+                <OR>
                     <LeftCondition>
-                        <Custom ref="oaioutputCondition"/>
+                        <Custom ref="noPPNCondition"/>
                     </LeftCondition>
                     <RightCondition>
-                        <Custom ref="noPPNCondition"/>
+                        <Not>
+                            <Condition>
+                                <Custom ref="hasPPNCondition"/>
+                            </Condition>
+                        </Not>
                     </RightCondition>
-                </And>
+                </OR>
             </Definition>
         </Filter>
 
@@ -2438,6 +2471,13 @@
             </Configuration>
         </CustomCondition>
 
+        <CustomCondition id="hasPPNCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.gvk.hasppn</string>
+            </Configuration>
+        </CustomCondition>
+
         <CustomCondition id="urnCondition">
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Configuration>
@@ -2451,6 +2491,15 @@
                 <string name="field">tuhh.oai.show</string>
                 <string name="operator">ends_with</string>
                 <string name="value">true</string>
+            </Configuration>
+        </CustomCondition>
+
+        <CustomCondition id="noFulltextCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">item.fulltext</string>
+                <string name="operator">contains</string>
+                <string name="value">No Fulltext</string>
             </Configuration>
         </CustomCondition>
 
@@ -2640,7 +2689,16 @@
                 <string name="value">info:eu-repo/grantAgreement/</string>
             </Configuration>
         </CustomCondition>
-        
+
+        <CustomCondition id="researchDataCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.type.rdm</string>
+                <string name="operator">equal</string>
+                <string name="value">true</string>
+            </Configuration>
+        </CustomCondition>
+
         <Filter id="publicationOrJournalSetFilter">
             <Definition>
             	<Or>

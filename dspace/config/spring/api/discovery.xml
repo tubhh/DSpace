@@ -194,6 +194,7 @@
 					</key>
 					<list>
 						<value>dc.description.provenance</value>
+						<value>tuhh.submitter.previous</value>
 					</list>
 				</entry>
 			</map>
@@ -306,9 +307,9 @@
 		<!--Which sidebar facets are to be displayed -->
 		<property name="sidebarFacets">
 			<list>
-				<ref bean="searchFilterObjectPeople" />
-				<ref bean="searchFilterObjectOU" />
-				<ref bean="searchFilterFulltext" />
+				<!--<ref bean="searchFilterObjectPeople" />-->
+				<!--<ref bean="searchFilterObjectOU" />-->
+				<!--<ref bean="searchFilterFulltext" />-->
 			</list>
 		</property>
 		<!--The search filters which can be used on the discovery search page -->
@@ -708,7 +709,7 @@
 			queries done by discovery for this configuration -->
 		<property name="defaultFilterQueries">
 			<list>
-				<value>resourcetype_authority:publications</value>
+				<value>resourcetype_authority:publications OR resourcetype_authority:conferencematerials OR resourcetype_authority:theses OR resourcetype_authority:datasets</value>
 			</list>
 		</property>
 		<!--The configuration for the recent submissions -->
