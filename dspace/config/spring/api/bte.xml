@@ -121,7 +121,7 @@
 <!--
 	            <entry key="cinii" value-ref="ciniiOnlineDataLoader"/>
 			    <entry key="localduplicate" value-ref="localDuplicateDataLoader" />
-<!-- 	            depending on your apiKey you should use scopusOnlineDataLoader or scivalOnlineDataLoader or
+ 	            depending on your apiKey you should use scopusOnlineDataLoader or scivalOnlineDataLoader or
 					adsOnlineDataLoader 
 		    <entry key="scopus" value-ref="scopusOnlineDataLoader"/>
 	            <entry key="wos" value-ref="wosOnlineDataLoader"/> 
@@ -137,7 +137,7 @@
 	            <entry key="endnote" value-ref="endnoteDataLoader"/>
 	            <entry key="csv" value-ref="csvDataLoader"/>
 	            <entry key="tsv" value-ref="tsvDataLoader"/>
-	            <!-- <entry key="pdf" value-ref="grobidDataLoader" /> -->
+	            <entry key="pdf" value-ref="grobidDataLoader" /> -->
 		    <entry key="b3kat" value-ref="ISBNOnlineDataLoaderB3Kat" />
 		    <entry key="loc" value-ref="ISBNOnlineDataLoaderLOC" />
 			</map>
