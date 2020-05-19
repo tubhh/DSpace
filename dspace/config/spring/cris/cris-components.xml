@@ -233,6 +233,8 @@
 				<entry key="publication" value-ref="publicationlistforou" />				
 				<entry key="rppublication" value-ref="publicationlistforouviarp" />				
 				<entry key="projects" value-ref="projectlistforou" />				
+				<entry key="runningprojects" value-ref="runningprojectlistforou" />				
+				<entry key="finishedprojects" value-ref="finishedprojectlistforou" />				
 				<entry key="rpprojects" value-ref="projectlistinvestigatorforou" />
 				<entry key="rp" value-ref="personslist" />				
 				<entry key="organizations" value-ref="organizationslist" />
@@ -391,6 +393,30 @@
 		</property>
 	</bean>
 	
+	<!-- Project list for OU entity -->
+	<bean id="runningprojectlistforou"
+		class="org.dspace.app.webui.cris.components.CRISOUConfigurerComponent">
+		<property name="relationConfiguration" ref="relationOUVSPJConfiguration" />		
+		<property name="target" value="org.dspace.app.cris.model.OrganizationUnit" /> 
+		<property name="types">
+			<map>
+				<entry key="runningprojects" value-ref="RunningProjectsForOUComponent" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- Project list for OU entity -->
+	<bean id="finishedprojectlistforou"
+		class="org.dspace.app.webui.cris.components.CRISOUConfigurerComponent">
+		<property name="relationConfiguration" ref="relationOUVSPJConfiguration" />		
+		<property name="target" value="org.dspace.app.cris.model.OrganizationUnit" /> 
+		<property name="types">
+			<map>
+				<entry key="finishedprojects" value-ref="FinishedProjectsForOUComponent" />
+			</map>
+		</property>
+	</bean>
+
 	<bean id="selectedProjectForOUComponent"
 		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
 		<property name="componentIdentifier" value="selectedproject" />
