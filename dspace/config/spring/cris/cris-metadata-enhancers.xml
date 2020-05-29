@@ -285,6 +285,21 @@
 	</bean>
 
 	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="seriesref" />
+		<property name="metadata">
+			<list>
+				<value>tuhh.relation.ispartofseries</value>
+				<value>tuhh.relation.ispartofseriesnumber</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>
+			    <ref bean="enhancerSeriesRef"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="grantfulltext" />
 		<property name="metadata">
 			<list>
@@ -422,6 +437,9 @@
             <property name="applicationService" ref="applicationService" />
         </bean>
 	<bean name="enhancerGnd" class="org.dspace.content.integration.defaultvalues.GNDAuthorityGenerator">
+            <property name="applicationService" ref="applicationService" />
+        </bean>
+	<bean name="enhancerSeriesRef" class="org.dspace.content.integration.defaultvalues.SeriesRefGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>
 	<bean name="enhancerAuthorGnd" class="org.dspace.content.integration.defaultvalues.GNDAuthorAuthorityGenerator">
