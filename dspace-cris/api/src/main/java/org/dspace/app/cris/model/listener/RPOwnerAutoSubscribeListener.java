@@ -47,7 +47,7 @@ public class RPOwnerAutoSubscribeListener implements NativePostUpdateEventListen
 	                context = new Context();
 	                Integer ownerUserID = crisObj.getEpersonID();
 	                if(ownerUserID!=null) {
-                		getRpSubService().subscribe(ownerUserID, crisObj.getUuid(), crisObj.getType());
+	                	getRpSubService().subscribe(ownerUserID, crisObj.getUuid(), crisObj.getType());
 	                }
 	            } catch (Exception ex) {
 	                log.error(ex.getMessage(), ex);
