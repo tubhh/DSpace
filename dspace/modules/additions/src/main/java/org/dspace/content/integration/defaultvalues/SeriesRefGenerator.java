@@ -28,7 +28,7 @@ public class SeriesRefGenerator implements EnhancedValuesGenerator
 
     private ApplicationService applicationService;
     private static final Logger log = Logger
-            .getLogger(OpenAireFundingGenerator.class);
+            .getLogger(SeriesRefGenerator.class);
 
     public void setApplicationService(ApplicationService applicationService){
         this.applicationService = applicationService;
@@ -46,6 +46,7 @@ public class SeriesRefGenerator implements EnhancedValuesGenerator
         Metadatum[] m = item.getMetadata("tuhh", "relation", "ispartofseries", Item.ANY);
         Metadatum[] n = item.getMetadata("tuhh", "relation", "ispartofseriesnumber", Item.ANY);
         int num = m.length;
+log.debug("Found "+num+" series elements");
         String[] values = new String[num];
         for (int idx = 0; idx < num; idx++){
             if (n[idx] != null) {

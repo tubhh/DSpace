@@ -289,7 +289,6 @@
 		<property name="metadata">
 			<list>
 				<value>tuhh.relation.ispartofseries</value>
-				<value>tuhh.relation.ispartofseriesnumber</value>
 			</list>
 		</property>
 		<property name="generators">
