@@ -233,6 +233,8 @@
 				<entry key="publication" value-ref="publicationlistforou" />				
 				<entry key="rppublication" value-ref="publicationlistforouviarp" />				
 				<entry key="projects" value-ref="projectlistforou" />				
+				<entry key="runningprojects" value-ref="runningprojectlistforou" />				
+				<entry key="finishedprojects" value-ref="finishedprojectlistforou" />				
 				<entry key="rpprojects" value-ref="projectlistinvestigatorforou" />
 				<entry key="rp" value-ref="personslist" />				
 				<entry key="organizations" value-ref="organizationslist" />				
@@ -380,12 +382,39 @@
 		<property name="target" value="org.dspace.app.cris.model.OrganizationUnit" /> 
 		<property name="types">
 			<map>
-				<entry key="selectedproject" value-ref="selectedProjectForOUComponent" />				
-				<entry key="agencies" value-ref="agenciesComponent" />				
+				<entry key="selectedproject" value-ref="selectedProjectForOUComponent" />
+<!--				<entry key="agencies" value-ref="agenciesComponent" /> -->
+				<entry key="allprojects" value-ref="AllProjectsForOUComponent" />
+				<entry key="runningprojects" value-ref="RunningProjectsForOUComponent" />
+				<entry key="finishedprojects" value-ref="FinishedProjectsForOUComponent" />
 			</map>
 		</property>
 	</bean>
 	
+	<!-- Project list for OU entity -->
+	<bean id="runningprojectlistforou"
+		class="org.dspace.app.webui.cris.components.CRISOUConfigurerComponent">
+		<property name="relationConfiguration" ref="relationOUVSPJConfiguration" />		
+		<property name="target" value="org.dspace.app.cris.model.OrganizationUnit" /> 
+		<property name="types">
+			<map>
+				<entry key="runningprojects" value-ref="RunningProjectsForOUComponent" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- Project list for OU entity -->
+	<bean id="finishedprojectlistforou"
+		class="org.dspace.app.webui.cris.components.CRISOUConfigurerComponent">
+		<property name="relationConfiguration" ref="relationOUVSPJConfiguration" />		
+		<property name="target" value="org.dspace.app.cris.model.OrganizationUnit" /> 
+		<property name="types">
+			<map>
+				<entry key="finishedprojects" value-ref="FinishedProjectsForOUComponent" />
+			</map>
+		</property>
+	</bean>
+
 	<bean id="selectedProjectForOUComponent"
 		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
 		<property name="componentIdentifier" value="selectedproject" />
@@ -394,7 +423,52 @@
 		<property name="rpp"><value>20</value></property>
 		<property name="sortby"><value>5</value></property>		
 	</bean>
-	
+
+	<bean id="AllProjectsForOUComponent"
+		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
+		<property name="componentIdentifier" value="allprojects" />
+		<property name="facetQuery"><value>*:*</value></property>
+		<property name="order"><value>asc</value></property>
+		<property name="rpp"><value>20</value></property>
+		<property name="sortby"><value>5</value></property>		
+	</bean>
+<!--
+	<bean id="RunningProjectsForOUComponent"
+		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
+		<property name="componentIdentifier" value="runningprojects" />
+		<property name="facetQuery"><value>crisproject.expdate:[NOW TO *]</value></property>
+		<property name="order"><value>asc</value></property>
+		<property name="rpp"><value>20</value></property>
+		<property name="sortby"><value>5</value></property>		
+	</bean>
+
+	<bean id="FinishedProjectsForOUComponent"
+		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
+		<property name="componentIdentifier" value="finishedprojects" />
+		<property name="facetQuery"><value>crisproject.expdate:[* TO NOW]</value></property>
+		<property name="order"><value>asc</value></property>
+		<property name="rpp"><value>20</value></property>
+		<property name="sortby"><value>5</value></property>		
+	</bean>
+-->
+	<bean id="RunningProjectsForOUComponent"
+		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
+		<property name="componentIdentifier" value="runningprojects" />
+		<property name="facetQuery"><value>crisproject.statuschoice:2</value></property>
+		<property name="order"><value>asc</value></property>
+		<property name="rpp"><value>20</value></property>
+		<property name="sortby"><value>5</value></property>		
+	</bean>
+
+	<bean id="FinishedProjectsForOUComponent"
+		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
+		<property name="componentIdentifier" value="finishedprojects" />
+		<property name="facetQuery"><value>crisproject.statuschoice:3</value></property>
+		<property name="order"><value>asc</value></property>
+		<property name="rpp"><value>20</value></property>
+		<property name="sortby"><value>5</value></property>		
+	</bean>
+
 	<bean id="agenciesComponent"
 		class="org.dspace.app.webui.cris.components.BeanFacetComponent">
 		<property name="componentIdentifier" value="agencies" />

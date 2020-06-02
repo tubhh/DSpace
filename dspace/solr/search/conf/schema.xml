@@ -557,8 +557,13 @@
    <copyField source="crisrp.translatedName" dest="crisauthoritylookup"/>
    <copyField source="crisrp.variants" dest="crisauthoritylookup"/>
    <copyField source="crisproject.title" dest="crisauthoritylookup"/>
+   <copyField source="crisproject.title_en" dest="crisauthoritylookup"/>
    <copyField source="crisou.name" dest="crisauthoritylookup"/>
+   <copyField source="crisou.name_en" dest="crisauthoritylookup"/>
    <copyField source="crisou.instformernames" dest="crisauthoritylookup"/>
+   <copyField source="crisjournals.journalsalternativetitle" dest="crisauthoritylookup"/>
+   <copyField source="crisjournals.journalsshorttitle" dest="crisauthoritylookup"/>
+   <copyField source="crisevents.eventstitle" dest="crisauthoritylookup"/>
    <copyField source="crisdo.name" dest="crisauthoritylookup"/>
    <copyField source="crisrp.email" dest="cris-email"/>
    <copyField source="crisrp.email_private" dest="cris-email_private"/>
