@@ -47,6 +47,9 @@ This file monitors changes in TOR prototype. File starts from Release TOR protot
 * Bugfix: E-Mail notification for Sword Submissions (implemented by The Library Code)
 * Improvement: Accelerates building of OAI index
 * Update: Use API v2 for SHERPA/RoMEO integration (implemented by The Library Code)
-
+* Update: Use API v3 for ORCID-Integration (implemented by 4Science)
+* Fix: ORCID lookup also looks for name variants/aliases (implemented by 4Science)
+* Fix: show full series reference in XHTML Meta Tags (based on hardcoded local tuhh fields)
 
 * PLEASE NOTE: New property in build.properties: set Sherpa/Romeo API key in local build.properties!
+* PLEASE NOTE: in order to use ORCID API v3 change the ORCID Oauth settings in your build.properties!
