@@ -46,19 +46,23 @@ public class SeriesRefGenerator implements EnhancedValuesGenerator
         Metadatum[] m = item.getMetadata("tuhh", "relation", "ispartofseries", Item.ANY);
         Metadatum[] n = item.getMetadata("tuhh", "relation", "ispartofseriesnumber", Item.ANY);
         int num = m.length;
-log.debug("Found "+num+" series elements");
-        String[] values = new String[num];
-        for (int idx = 0; idx < num; idx++){
-            if (n[idx] != null) {
-                values[idx] = m[idx].value+";"+n[idx].value;
+        if (num > 0) {
+            log.debug("Found "+num+" series elements");
+            String[] values = new String[num];
+            for (int idx = 0; idx < num; idx++) {
+                if (n[idx] != null) {
+                    values[idx] = m[idx].value+";"+n[idx].value;
+                }
+                else {
+                    values[idx] = m[idx].value;
+                }
             }
-            else {
-                values[idx] = m[idx].value;
-            }
+
+            result.setValues(values);
+            return result;
         }
 
-        result.setValues(values);
-        return result;
+        return null;
     }
 
 }
