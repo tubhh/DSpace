@@ -61,11 +61,16 @@
 -->
 	<!-- Prefixing and Modifying dc.rights -->
 	<!-- Removing unwanted -->
-	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:element" />
-	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field[not (contains(., 'open access') or contains(., 'openAccess') or contains(., 'restrictedAccess') or contains(., 'embargoedAccess'))]" />
 
+	<!--<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:element" /> -->
+	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field[not (contains(., 'open access') or contains(., 'openAccess') or contains(., 'restrictedAccess') or contains(., 'embargoedAccess'))]" />
+<!--
+        <xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='cc']">
+            <dc:rights><xsl:value-of select="." /></dc:rights>
+        </xsl:template>
+-->
 	<!-- Replacing -->
-	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field/text()">
+	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name!='cc']/doc:field/text()">
 		<xsl:choose>
 			<xsl:when test="contains(., 'open access')">
 				<xsl:text>info:eu-repo/semantics/openAccess</xsl:text>

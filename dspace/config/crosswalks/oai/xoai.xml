@@ -248,7 +248,8 @@
             <Transformer ref="openaireTransformer"/>
             <!-- The driver filter -->
             <!-- <Filter ref="driverFilter"/> -->
-            <Filter ref="onlyDSpaceItemFilter"/>
+            <!-- <Filter ref="onlyDSpaceItemFilter"/> -->
+            <Filter ref="openAireTuhhFilter"/>
             <!-- Just an alias, in fact it returns all items within the driver context -->
             <!-- <Set ref="driverSet"/> -->
             <Set ref="openaireFundedResourcesSet"/>
@@ -2278,14 +2279,56 @@
 		                        </And>
 		                    </RightCondition>
 		                </And>
-					</LeftCondition>
+			</LeftCondition>
                 	<RightCondition>
                 		<Custom ref="dspaceItemCondition" />
                 	</RightCondition>
                 </And>		                
             </Definition>
         </Filter>
-        
+
+        <Filter id="openAireTuhhFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <And>
+                            <LeftCondition>
+                                <And>
+                                    <LeftCondition>
+                                        <Custom ref="titleExistsCondition"/>
+                                    </LeftCondition>
+                                    <RightCondition>
+                                        <Custom ref="authorExistsCondition"/>
+                                    </RightCondition>
+                                </And>
+                            </LeftCondition>
+                            <RightCondition>
+                                <And>
+                                    <LeftCondition>
+                                        <Not>
+                                            <Condition>
+                                                <Custom ref="noFulltextCondition"/>
+                                            </Condition>
+                                        </Not>
+                                    </LeftCondition>
+                                    <RightCondition>
+                                        <Not>
+                                            <Condition>
+                                                <Custom ref="researchDataCondition"/>
+                                            </Condition>
+                                        </Not>
+                                    </RightCondition>
+                                </And>
+                            </RightCondition>
+                        </And>
+                    </LeftCondition>
+                    <RightCondition>
+                        <Custom ref="dspaceItemCondition" />
+                    </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+
         <!-- create a new filter for the openairedata Context -->
         <!--
         <Filter id="openaireDataFilter">

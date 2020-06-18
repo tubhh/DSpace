@@ -6,19 +6,20 @@
 # {3}  Description of task
 # {4}  link to 'my DSpace' page 
 #
-Subject: DSpace: You have a new task
+Subject: TORE: Neue Aufgabe in Sammlung {1}
 
-A new item has been submitted:
+Ein neues Dokument wurde hochgeladen:
 
-Title:        {0}
-Collection:   {1}
-Submitted by: {2}
+Titel:           {0}
+Sammlung:        {1}
+Hochgeladen von: {2}
 
 {3}
 
-To claim this task, please visit your "My DSpace"
-page:  {4}
+Um die Aufgabe zu übernehmen, gehen Sie bitte auf
+die "Mein TORE"-Seite auf dem Echtsystem:
+  {4}
 
-Many thanks!
+Vielen Dank!
 
-DSpace
+TORE

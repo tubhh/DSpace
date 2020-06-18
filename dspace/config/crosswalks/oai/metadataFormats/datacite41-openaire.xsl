@@ -766,8 +766,13 @@
 									<xsl:value-of select="$references"/>
 								</relatedIdentifier>
 							</xsl:if>
-                                                        <xsl:if test="$ismetadatafor!=''">
-                                                            <relatedIdentifier relatedIdentifierType="DOI" relationType="isMetadataFor">
+                                                        <xsl:if test="$ismetadatafor!='' and not(contains($doi, '10.15480'))">
+                                                            <relatedIdentifier relatedIdentifierType="DOI" relationType="IsMetadataFor">
+                                                                <xsl:value-of select="$ismetadatafor"/>
+                                                            </relatedIdentifier>
+                                                        </xsl:if>
+                                                        <xsl:if test="$ismetadatafor!='' and contains($doi, '10.15480')">
+                                                            <relatedIdentifier relatedIdentifierType="DOI" relationType="IsVersionOf">
                                                                 <xsl:value-of select="$ismetadatafor"/>
                                                             </relatedIdentifier>
                                                         </xsl:if>
@@ -777,8 +782,8 @@
 					
 					
 					<!-- select all sizes and formats -->
-					<xsl:variable name="size" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='extent']/doc:element/doc:field[@name='value']"/>
-					<xsl:variable name="format" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='mimetype']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="size" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='extent']//doc:field[@name='value']"/>
+					<xsl:variable name="format" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='mimetype']//doc:field[@name='value']"/>
 					
 					<!-- enable that to avoid size and format when multiple bitstreams are present -->
 					<!-- <xsl:variable name="check_sf">
@@ -798,9 +803,9 @@
 							<xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']">
 								<xsl:if test="./doc:field[@name='name']='ORIGINAL'">
 									<xsl:for-each select="./doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
-										<xsl:if test="./doc:element/doc:field[@name='size']!=''">
+										<xsl:if test=".//doc:field[@name='size']!=''">
 											<size>
-												<xsl:value-of select="./doc:element/doc:field[@name='size']"/>
+												<xsl:value-of select=".//doc:field[@name='size']"/>
 											</size>
 										</xsl:if>
 									</xsl:for-each>
@@ -812,9 +817,9 @@
 							<xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']">
 								<xsl:if test="./doc:field[@name='name']='ORIGINAL'">
 								<xsl:for-each select="./doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
-										<xsl:if test="./doc:element/doc:field[@name='format']!=''">
+										<xsl:if test=".//doc:field[@name='format']!=''">
 											<format>
-												<xsl:value-of select="./doc:element/doc:field[@name='format']"/>
+												<xsl:value-of select=".//doc:field[@name='format']"/>
 											</format>
 										</xsl:if>
 									</xsl:for-each>
