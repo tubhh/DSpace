@@ -164,7 +164,7 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("dcmi", "Text");
                         break;
                     case "magisterThesis":
-                        ret.put("opus", "Diplomarbeit");
+                        ret.put("opus", "Magisterarbeit");
                         ret.put("dini", "masterThesis");
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
