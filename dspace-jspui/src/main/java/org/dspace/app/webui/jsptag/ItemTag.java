@@ -483,7 +483,6 @@ public class ItemTag extends TagSupport {
 				/////////
 				Context context = UIUtil.obtainContext(request);
 				EPerson user = context.getCurrentUser();
-/* do not show authorization required message
 				if (user == null) {
 					// if no user logged in and no anonymous read
 					Bitstream[] bitstreams = bunds[0].getBitstreams();
@@ -498,9 +497,9 @@ public class ItemTag extends TagSupport {
 						//out.print("</a>");
 						out.println("</th></tr>");
 					}
-				}else { */
+				}else {
 					out.print("</th><th>&nbsp;</th></tr>");
-				//}
+				}
 				// if primary bitstream is html, display a link for only that one to
 				// HTMLServlet
 				if (html) {
