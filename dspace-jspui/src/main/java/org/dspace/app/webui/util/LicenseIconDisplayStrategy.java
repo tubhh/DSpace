@@ -60,7 +60,7 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
 
         if (metadataArray.length > 0)
         {
-            String creativecommons = null;
+            String creativecommons = "";
             String creativecommonslink = null;
             for (Metadatum cc : metadataArray) {
                 if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
