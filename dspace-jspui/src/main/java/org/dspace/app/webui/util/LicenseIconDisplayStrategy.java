@@ -24,7 +24,7 @@ import org.dspace.core.I18nUtil;
 public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
 {
 	/** log4j category */
-    private static Logger log = Logger.getLogger(CCIconDisplayStrategy.class);
+    private static Logger log = Logger.getLogger(LicenseIconDisplayStrategy.class);
     
     public String getMetadataDisplay(HttpServletRequest hrq, int limit,
             boolean viewFull, String browseType, int colIdx, int itemid, String field,
