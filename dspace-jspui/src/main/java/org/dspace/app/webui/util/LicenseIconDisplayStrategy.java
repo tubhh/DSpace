@@ -30,7 +30,7 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
             boolean viewFull, String browseType, int colIdx, int itemid, String field,
             Metadatum[] metadataArray, boolean disableCrossLinks, boolean emph) throws JspException
     {
-        String metadata = null;
+        String metadata = "";
 /*
         if (metadataArray.length == 0) {
             try {
@@ -76,16 +76,16 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                 }
                 if (cc.value.equals("http://rightsstatements.org/vocab/InC/1.0/")) {
                     // copyright
-                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='In Copyright' style='height:21px' />In Copyright</a>";
+                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='In Copyright' style='height:21px' /> In Copyright</a>";
                 }
             }
             if (creativecommons != "") {
                 if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/cc0/") {
-                    metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/cc0/'><img src='http://i.creativecommons.org/p/zero/1.0/88x31.png' alt='CC Null' title='CC Null' /></a>";
+                    metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/cc0/'><img src='http://i.creativecommons.org/p/zero/1.0/88x31.png' alt='CC Null' title='CC Null' /> CC Null</a>";
                 } else if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/pdm/") {
-                    metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/pdm/'><img src='http://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain' title='Public Domain' /></a>";
+                    metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/pdm/'><img src='http://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain' title='Public Domain' /> Public Domain</a>";
                 } else {
-                    metadata = "<a href='"+creativecommonslink+"'><img src='https://licensebuttons.net/l/"+creativecommons+"/88x31.png' alt='"+creativecommonslink+"' title='"+creativecommonslink+"' /></a>";
+                    metadata = "<a href='"+creativecommonslink+"'><img src='https://licensebuttons.net/l/"+creativecommons+"/88x31.png' alt='"+creativecommonslink+"' title='"+creativecommonslink+"' /> "+creativecommons+"</a>";
                 }
             }
         }
