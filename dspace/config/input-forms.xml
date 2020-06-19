@@ -565,11 +565,11 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
-         <dc-qualifier>cc</dc-qualifier>
+         <dc-qualifier>uri</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>CreativeCommons License</label>
+         <label>License</label>
          <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>If your document is already or shall be under a CreativeCommons License, please select the license here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
+         <hint>Please select the license applicable for this record here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
          <required></required>
        </field>
 <!--
@@ -876,11 +876,11 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
-         <dc-qualifier>cc</dc-qualifier>
+         <dc-qualifier>uri</dc-qualifier>
          <repeatable>false</repeatable>
          <label>CreativeCommons Lizenz</label>
          <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>If your document is already or shall be under a CreativeCommons License, please select the license here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
+         <hint>Please select the license applicable for your work here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
          <required></required>
        </field>
 
@@ -1768,11 +1768,11 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
-         <dc-qualifier>cc</dc-qualifier>
+         <dc-qualifier>uri</dc-qualifier>
          <repeatable>false</repeatable>
          <label>CreativeCommons Lizenz</label>
          <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf https://creativecommons.org.</hint>
+         <hint>Wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf https://creativecommons.org.</hint>
          <required></required>
        </field>
          
@@ -2050,8 +2050,8 @@
 
    <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_rights_uri">
      <pair>
-       <displayed-value>No CC license</displayed-value>
-       <stored-value></stored-value>
+       <displayed-value>In Copyright</displayed-value>
+       <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
      </pair>
      <pair>
        <displayed-value>CC BY 4.0 (Attribution)</displayed-value>

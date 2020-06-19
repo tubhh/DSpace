@@ -57,8 +57,6 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
         }
 */
 
-        // License defaults to copyright
-        metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='In Copyright' style='height:21px' />In Copyright</a>";
 
         if (metadataArray.length > 0)
         {
@@ -75,6 +73,10 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                         creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1];
                     } 
                     creativecommonslink = cc.value;
+                }
+                if (cc.value.equals("http://rightsstatements.org/vocab/InC/1.0/")) {
+                    // copyright
+                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='In Copyright' style='height:21px' />In Copyright</a>";
                 }
             }
             if (creativecommons != "") {

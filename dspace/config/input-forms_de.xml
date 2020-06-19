@@ -522,11 +522,11 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
-         <dc-qualifier>cc</dc-qualifier>
+         <dc-qualifier>uri</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
+         <label>Lizenz</label>
          <input-type value-pairs-name="license_fdm_de">dropdown</input-type>
-         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
+         <hint>Wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
          <required></required>
        </field>
 <!--
@@ -847,11 +847,11 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
-         <dc-qualifier>cc</dc-qualifier>
+         <dc-qualifier>uri</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
+         <label>Lizenz</label>
          <input-type value-pairs-name="license_fdm_de">dropdown</input-type>
-         <hint>Wenn Ihr Dokument unter einer CreativeCommons Lizenz steht oder stehen soll, wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
+         <hint>Wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
          <required></required>
        </field>
          
@@ -2066,8 +2066,8 @@
 
    <value-pairs value-pairs-name="license_fdm_de" dc-term="dc_rights_uri">
      <pair>
-       <displayed-value>No CC license</displayed-value>
-       <stored-value></stored-value>
+       <displayed-value>Unter Copyright</displayed-value>
+       <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
      </pair>
      <pair>
        <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
