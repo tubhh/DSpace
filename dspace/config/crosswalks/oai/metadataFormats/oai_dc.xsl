@@ -202,10 +202,10 @@
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element/doc:element/doc:field[@name='value']">
 				<dc:relation><xsl:value-of select="." /></dc:relation>
 			</xsl:for-each>
-			<!-- dc.rights -->
+			<!-- dc.rights 
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field[@name='value']">
 				<dc:rights><xsl:value-of select="." /></dc:rights>
-			</xsl:for-each>
+			</xsl:for-each> -->
                         <!-- select all rights -->
                         <!-- RULES:
                             mixedopen, open = info:eu-repo/semantics/openAccess
