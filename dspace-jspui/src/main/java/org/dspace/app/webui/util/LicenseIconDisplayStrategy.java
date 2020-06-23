@@ -7,62 +7,159 @@
  */
 package org.dspace.app.webui.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dspace.content.DCDate;
-import org.dspace.core.Context;
+import org.dspace.app.util.DCInput;
+import org.dspace.app.util.DCInputSet;
+import org.dspace.app.util.DCInputsReader;
+import org.dspace.app.util.DCInputsReaderException;
+import org.dspace.content.Collection;
 import org.dspace.content.Item;
 import org.dspace.content.Metadatum;
+import org.dspace.content.authority.Choice;
+import org.dspace.content.authority.ChoiceAuthority;
+import org.dspace.content.authority.Choices;
+import org.dspace.core.Context;
 import org.dspace.core.I18nUtil;
+import org.dspace.core.PluginManager;
+import org.dspace.core.Utils;
 
 public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
 {
-	/** log4j category */
-    private static Logger log = Logger.getLogger(LicenseIconDisplayStrategy.class);
-    
-    public String getMetadataDisplay(HttpServletRequest hrq, int limit,
-            boolean viewFull, String browseType, int colIdx, int itemid, String field,
-            Metadatum[] metadataArray, boolean disableCrossLinks, boolean emph) throws JspException
+
+    private static final Logger log = Logger
+            .getLogger(LicenseIconDisplayStrategy.class);
+
+    private Map<String, DCInputsReader> dcInputsReader = new HashMap<>();
+
+    private void init() throws DCInputsReaderException
     {
-        String metadata = "";
-/*
-        if (metadataArray.length == 0) {
-            try {
-                // Virtual metadata is not in the metadataArray, so we have to obtain it newly
-                Context obtainContext = UIUtil.obtainContext(hrq);
-                Item item = Item.find(obtainContext, itemid);
-                String[] parts = field.split("\\.");
-                String schema = Item.ANY;
-                String element = Item.ANY;
-                String qualifier = Item.ANY;
-                if (parts.length > 0) {
-                    schema = parts[0];
-                }
-                if (parts.length > 1) {
-                    element = parts[1];
-                }
-                if (parts.length > 2) {
-                    qualifier = parts[2];
-                }
-                metadataArray = item.getMetadata(schema, element, qualifier, Item.ANY);
-            } catch (SQLException e) {
-                throw new JspException(e);
+        if(dcInputsReader.isEmpty()) {
+            for (Locale locale : I18nUtil.getSupportedLocales())
+            {
+                dcInputsReader.put(locale.getLanguage(),
+                    new DCInputsReader(I18nUtil.getInputFormsFileName(locale)));
             }
         }
-*/
+    }
 
+    @Override
+    public String getMetadataDisplay(HttpServletRequest hrq, int limit,
+            boolean viewFull, String browseType, int colIdx, int itemid,
+            String field, Metadatum[] metadataArray, boolean disableCrossLinks,
+            boolean emph) throws JspException
+    {
+        try
+        {
+            init();
+        }
+        catch (DCInputsReaderException e)
+        {
+            log.error(e.getMessage(), e);
+        }
 
+        String result = "";
+        try
+        {
+            Context obtainContext = UIUtil.obtainContext(hrq);
+            Collection collection = Collection.find(obtainContext, colIdx);
+            if (collection != null)
+            {
+                result = getResult(colIdx, field, metadataArray, result,
+                        obtainContext, collection);
+            }
+            else
+            {
+                Item item = Item.find(obtainContext, itemid);
+                collection = item.getParentObject();
+                result = getResult(colIdx, field, metadataArray, result,
+                        obtainContext, collection);
+            }
+
+            // workaround, a sort of fuzzy match search in all valuepairs (possible wrong result due to the same stored value in many valuepairs)
+            if (StringUtils.isBlank(result))
+            {
+                String language = I18nUtil.getSupportedLocale(obtainContext.getCurrentLocale()).getLanguage();
+                Map<String, List<String>> mappedValuePairs = dcInputsReader.get(language)
+                        .getMappedValuePairs();
+                List<String> pairsnames = new ArrayList<String>();
+                if (mappedValuePairs != null)
+                {
+                    for (String key : mappedValuePairs.keySet())
+                    {
+                        List<String> values = mappedValuePairs.get(key);
+                        for (String vv : values)
+                        {
+                            if (StringUtils.equals(field, vv))
+                            {
+                                pairsnames.add(key);
+                            }
+                        }
+                    }
+                }
+
+                for (String pairsname : pairsnames)
+                {
+                    ChoiceAuthority choice = (ChoiceAuthority) PluginManager
+                            .getNamedPlugin(ChoiceAuthority.class, pairsname);
+
+                    int ii = 0;
+                    for (Metadatum r : metadataArray)
+                    {
+                        if (ii > 0)
+                        {
+                            result += " ";
+                        }
+                        Choices choices = choice.getBestMatch(field, r.value,
+                                colIdx,
+                                obtainContext.getCurrentLocale().toString());
+                        if (choices != null)
+                        {
+                            for (Choice ch : choices.values)
+                            {
+                                result += ch.label;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        catch (SQLException | DCInputsReaderException e)
+        {
+            throw new JspException(e);
+        }
+
+        String metadata = "";
         if (metadataArray.length > 0)
         {
             String creativecommons = "";
             String creativecommonslink = null;
+            String fulllabel = result;
+            String[] splittedResult = StringUtils.split(result);
+            int indexSplit = 0;
+            String label = "";
+            String splitlabel = result;
+            String labelAll = "";
+            for (int idxs = 0; idxs < splittedResult.length; idxs++) {
+                labelAll += splittedResult[idxs];
+            }
             for (Metadatum cc : metadataArray) {
+                if(indexSplit < splittedResult.length) {
+                    label = splittedResult[indexSplit];
+                }
                 if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
                     String[] creativecommonsArray = cc.value.split("/");
                     if (creativecommonsArray[creativecommonsArray.length-1].equals("deed.de")) {
@@ -71,33 +168,80 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                         creativecommons = creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
                     } else {
                         creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1];
-                    } 
+                    }
                     creativecommonslink = cc.value;
                 }
                 if (cc.value.equals("http://rightsstatements.org/vocab/InC/1.0/")) {
                     // copyright
-                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='In Copyright' style='height:21px' /> In Copyright</a>";
+                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='"+label+"' style='height:21px' /> "+fulllabel+"</a>";
                 }
-            }
-            if (creativecommons != "") {
-                if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/cc0/") {
-                    metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/cc0/'><img src='http://i.creativecommons.org/p/zero/1.0/88x31.png' alt='CC Null' title='CC Null' /> CC Null</a>";
-                } else if (creativecommonslink == "https://creativecommons.org/share-your-work/public-domain/pdm/") {
-                    metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/pdm/'><img src='http://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain' title='Public Domain' /> Public Domain</a>";
-                } else {
-                    metadata = "<a href='"+creativecommonslink+"'><img src='https://licensebuttons.net/l/"+creativecommons+"/88x31.png' alt='"+creativecommonslink+"' title='"+creativecommonslink+"' /> "+creativecommons+"</a>";
+                else if (creativecommons != "") {
+                    if (creativecommonslink.equals("https://creativecommons.org/share-your-work/public-domain/cc0/")) {
+                        metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/cc0/'><img src='http://i.creativecommons.org/p/zero/1.0/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
+                    } else if (creativecommonslink.equals("https://creativecommons.org/share-your-work/public-domain/pdm/")) {
+                        metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/pdm/'><img src='http://i.creativecommons.org/p/mark/1.0/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
+                    } else {
+                        metadata = "<a href='"+creativecommonslink+"'><img src='https://licensebuttons.net/l/"+creativecommons+"/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
+                    }
                 }
+                indexSplit++;
             }
         }
         return metadata;
     }
 
-    public String getExtraCssDisplay(HttpServletRequest hrq, int limit,
-            boolean b, String string, int colIdx, int itemid, String field,
-            Metadatum[] metadataArray, boolean disableCrossLinks, boolean emph,
-            PageContext pageContext)
+    private String getResult(int colIdx, String field,
+            Metadatum[] metadataArray, String result, Context obtainContext,
+            Collection collection) throws DCInputsReaderException
     {
-        return "nowrap=\"nowrap\" align=\"right\"";
+        String language = I18nUtil.getSupportedLocale(obtainContext.getCurrentLocale()).getLanguage();
+        DCInputSet dcInputSet = dcInputsReader.get(language)
+                .getInputs(collection.getHandle());
+        for (int i = 0; i < dcInputSet.getNumberPages(); i++)
+        {
+            DCInput[] dcInput = dcInputSet.getPageRows(i, false, false);
+            for (DCInput myInput : dcInput)
+            {
+                String key = myInput.getPairsType();
+                if (StringUtils.isNotBlank(key))
+                {
+                    
+                    String inputField = Utils.standardize(myInput.getSchema(), myInput.getElement(), myInput.getQualifier(), ".");
+
+                    if (inputField.equals(field))
+                    {
+                        ChoiceAuthority choice = (ChoiceAuthority) PluginManager
+                                .getNamedPlugin(ChoiceAuthority.class, key);
+
+                        int ii = 0;
+                        for (Metadatum r : metadataArray)
+                        {
+                            if (ii > 0)
+                            {
+                                result += " ";
+                            }
+                            Choices choices = choice.getBestMatch(field,
+                                    r.value, colIdx, obtainContext
+                                            .getCurrentLocale().toString());
+                            if (choices != null)
+                            {
+                                int iii = 0;
+                                for (Choice ch : choices.values)
+                                {
+                                    result += ch.label;
+                                    if (iii > 0)
+                                    {
+                                        result += " ";
+                                    }
+                                    iii++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 
 }
