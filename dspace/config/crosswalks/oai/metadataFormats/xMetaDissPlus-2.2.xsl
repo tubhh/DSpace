@@ -3,9 +3,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:doc="http://www.lyncode.com/xoai" 
     xmlns:str="xalan://java.lang.String"
+    xmlns:dcterms="http://purl.org/dc/terms/"
     version="1.0">
 
-        <xsl:output omit-xml-declaration="yes" method="xml" indent="yes" />
+        <xsl:output omit-xml-declaration="yes" method="xml" indent="yes" cdata-section-elements="dcterms:abstract" />
 
         <!-- global variables-->
         <xsl:variable name="handle-prefix">http://tore.tuhh.de/handle/11420/</xsl:variable>
