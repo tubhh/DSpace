@@ -8,15 +8,20 @@
 package org.dspace.ctask.general;
 
 import org.apache.log4j.Logger;
+import org.dspace.content.Collection;
 import org.dspace.content.Metadatum;
 import org.dspace.content.MetadataValue;
 import org.dspace.content.Bitstream;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
+import org.dspace.content.WorkspaceItem;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.curate.AbstractCurationTask;
 import org.dspace.curate.Curator;
+import org.dspace.workflow.WorkflowItem;
+import org.dspace.services.ConfigurationService;
+import org.dspace.utils.DSpace;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -48,8 +53,14 @@ public class LicenseCurationTask extends AbstractCurationTask
     private static final String NEW_ITEM_HANDLE = "in workflow";
 
     // The log4j logger for this class
-    private static Logger log = Logger.getLogger(TypeSetter.class);
+    private static Logger log = Logger.getLogger(LicenseCurationTask.class);
 
+
+    protected static String getCollectionException()
+    {
+        String ignorecollection = (new DSpace()).getSingletonService(ConfigurationService.class).getProperty("license.ignorecollection");
+        return ignorecollection;
+    }
 
     /**
      * Perform the link checking.
@@ -73,29 +84,57 @@ public class LicenseCurationTask extends AbstractCurationTask
         if (dso.getType() == Constants.ITEM)
         {
             Item item = (Item)dso;
-            if (!getItemHandle(item).equals(NEW_ITEM_HANDLE)) {
             try {
                 Context context = Curator.curationContext();
-                Boolean done = false;
 
-                Metadatum[] ccLicense = item.getMetadata("dc", "rights", "cc", Item.ANY);
-                // Case 1: Record has a CC license
-                if (ccLicense.length > 0) {
-                    item.clearMetadata("dc", "rights", "cc", Item.ANY);
-                    item.addMetadata("dc", "rights", "uri", "", ccLicense[0].value, null, -1);
-                    results.append("Set license URI into dc.rights.uri");
+            if (!getItemHandle(item).equals(NEW_ITEM_HANDLE)) {
+                Collection col = item.getOwningCollection();
+                if (col == null)
+                {
+                    // check if we have a workspace item, they store the collection separately.
+                    WorkspaceItem wsi = WorkspaceItem.findByItem(context, item);
+                    if (wsi != null)
+                    {
+                        col = wsi.getCollection();
+                    }
+                    if (col == null)
+                    {
+                        // same for the workflow item
+                        WorkflowItem wfi = WorkflowItem.findByItem(context, item);
+                        if (wfi != null)
+                        {
+                            col = wfi.getCollection();
+                        }
+                    }
                 }
-                else {
-                    item.addMetadata("dc", "rights", "uri", "", "http://rightsstatements.org/vocab/InC/1.0/", null, -1);
-                    results.append("Item in copyright, setting copyright URI into dc.rights.uri");
+                String ch = col.getHandle();
+                String ignorecoll = getCollectionException();
+
+                log.debug("Collection Handle is "+ch+". Will ignore "+ignorecoll);
+
+                if (!ch.equals(ignorecoll)) {
+                    Boolean done = false;
+
+                    Metadatum[] ccLicense = item.getMetadata("dc", "rights", "cc", Item.ANY);
+                    // Case 1: Record has a CC license
+                    if (ccLicense.length > 0) {
+                        item.clearMetadata("dc", "rights", "cc", Item.ANY);
+                        item.addMetadata("dc", "rights", "uri", "", ccLicense[0].value, null, -1);
+                        results.append("Set license URI into dc.rights.uri");
+                    }
+                    else {
+                        item.addMetadata("dc", "rights", "uri", "", "http://rightsstatements.org/vocab/InC/1.0/", null, -1);
+                        results.append("Item in copyright, setting copyright URI into dc.rights.uri");
+                    }
+
+                    item.updateMetadata();
+                    item.update();
+                    context.getDBConnection().commit();
+                } else {
+                    results.append("Nothing to do for ").append(getItemHandle(item)).append(". Its in ignored collection!");
                 }
-
-                item.updateMetadata();
-                item.update();
-                context.getDBConnection().commit();
-
                 status = Curator.CURATE_SUCCESS;
-
+            }
             } catch (AuthorizeException ae) {
                 // Something went wrong
                 logDebugMessage(ae.getMessage());
@@ -104,7 +143,6 @@ public class LicenseCurationTask extends AbstractCurationTask
                 // Something went wrong
                 logDebugMessage(sqle.getMessage());
                 status = Curator.CURATE_ERROR;
-            }
             }
         }
 
