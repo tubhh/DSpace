@@ -1764,10 +1764,6 @@
 
    <value-pairs value-pairs-name="license_fdm_de" dc-term="dc_rights_uri">
      <pair>
-       <displayed-value>Unter Copyright</displayed-value>
-       <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
-     </pair>
-     <pair>
        <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
        <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
      </pair>
@@ -1794,6 +1790,10 @@
      <pair>
        <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
        <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Unter Copyright</displayed-value>
+       <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
      </pair>
    </value-pairs>
      
