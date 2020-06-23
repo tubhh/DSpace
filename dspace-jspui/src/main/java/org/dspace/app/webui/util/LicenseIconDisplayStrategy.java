@@ -40,7 +40,7 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
 {
 
     private static final Logger log = Logger
-            .getLogger(ValuePairsDisplayStrategy.class);
+            .getLogger(LicenseIconDisplayStrategy.class);
 
     private Map<String, DCInputsReader> dcInputsReader = new HashMap<>();
 
@@ -141,35 +141,53 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
         {
             throw new JspException(e);
         }
-        
-        StringBuffer sb = new StringBuffer();
-        if (!disableCrossLinks && StringUtils.isNotEmpty(browseType))
+
+        String metadata = "";
+        if (metadataArray.length > 0)
         {
+            String creativecommons = "";
+            String creativecommonslink = null;
+            String fulllabel = result;
             String[] splittedResult = StringUtils.split(result);
             int indexSplit = 0;
-            for (Metadatum mm : metadataArray)
-            {
-                try
-                {
-                    sb.append("<a href=\"" + hrq.getContextPath()
-                            + "/browse?type=" + browseType + "&amp;"
-                            + (viewFull ? "vfocus" : "value") + "="
-                            + URLEncoder.encode(mm.value, "UTF-8"));
-                    sb.append("\"\">");
-                    if(indexSplit < splittedResult.length) {
-                        sb.append(splittedResult[indexSplit]);
-                    }
-                    sb.append("</a>");
+            String label = "";
+            String splitlabel = result;
+            String labelAll = "";
+            for (int idxs = 0; idxs < splittedResult.length; idxs++) {
+                labelAll += splittedResult[idxs];
+            }
+            for (Metadatum cc : metadataArray) {
+                if(indexSplit < splittedResult.length) {
+                    label = splittedResult[indexSplit];
                 }
-                catch (UnsupportedEncodingException e)
-                {
-                    log.warn(e.getMessage());
+                if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
+                    String[] creativecommonsArray = cc.value.split("/");
+                    if (creativecommonsArray[creativecommonsArray.length-1].equals("deed.de")) {
+                        creativecommons = creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                    } else if (creativecommonsArray[creativecommonsArray.length-1].equals("de")) {
+                        creativecommons = creativecommonsArray[creativecommonsArray.length-3]+"/"+creativecommonsArray[creativecommonsArray.length-2];
+                    } else {
+                        creativecommons = creativecommonsArray[creativecommonsArray.length-2]+"/"+creativecommonsArray[creativecommonsArray.length-1];
+                    }
+                    creativecommonslink = cc.value;
+                }
+                if (cc.value.equals("http://rightsstatements.org/vocab/InC/1.0/")) {
+                    // copyright
+                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='"+label+"' style='height:21px' /> "+fulllabel+"</a>";
+                }
+                else if (creativecommons != "") {
+                    if (creativecommonslink.equals("https://creativecommons.org/share-your-work/public-domain/cc0/")) {
+                        metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/cc0/'><img src='http://i.creativecommons.org/p/zero/1.0/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
+                    } else if (creativecommonslink.equals("https://creativecommons.org/share-your-work/public-domain/pdm/")) {
+                        metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/pdm/'><img src='http://i.creativecommons.org/p/mark/1.0/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
+                    } else {
+                        metadata = "<a href='"+creativecommonslink+"'><img src='https://licensebuttons.net/l/"+creativecommons+"/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
+                    }
                 }
                 indexSplit++;
             }
-            return sb.toString();
         }
-        return result;
+        return metadata;
     }
 
     private String getResult(int colIdx, String field,
