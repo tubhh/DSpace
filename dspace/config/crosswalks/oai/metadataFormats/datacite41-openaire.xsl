@@ -16,8 +16,9 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:doc="http://www.lyncode.com/xoai"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://datacite.org/schema/kernel-4"
 	version="1.0">
-	<xsl:output omit-xml-declaration="yes" method="xml" indent="yes" />
+	<xsl:output omit-xml-declaration="yes" method="xml" indent="yes" cdata-section-elements="description" />
 	
 	<xsl:template match="/">
 		<oai_datacite xmlns="http://schema.datacite.org/oai/oai-1.1/" xsi:schemaLocation="http://schema.datacite.org/oai/oai-1.1/ http://schema.datacite.org/oai/oai-1.1/oai.xsd" >
