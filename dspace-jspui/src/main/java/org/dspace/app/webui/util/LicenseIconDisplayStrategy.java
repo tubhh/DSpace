@@ -148,18 +148,18 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
             String creativecommons = "";
             String creativecommonslink = null;
             String fulllabel = result;
-            String[] splittedResult = StringUtils.split(result);
-            int indexSplit = 0;
-            String label = "";
-            String splitlabel = result;
-            String labelAll = "";
-            for (int idxs = 0; idxs < splittedResult.length; idxs++) {
-                labelAll += splittedResult[idxs];
-            }
+//            String[] splittedResult = StringUtils.split(result);
+//            int indexSplit = 0;
+//            String label = "";
+//            String splitlabel = result;
+//            String labelAll = "";
+//            for (int idxs = 0; idxs < splittedResult.length; idxs++) {
+//                labelAll += splittedResult[idxs];
+//            }
             for (Metadatum cc : metadataArray) {
-                if(indexSplit < splittedResult.length) {
-                    label = splittedResult[indexSplit];
-                }
+//                if(indexSplit < splittedResult.length) {
+//                    label = splittedResult[indexSplit];
+//                }
                 if (cc.value.length() >= 27 && (cc.value.substring(7,26).equals("creativecommons.org") || cc.value.substring(8,27).equals("creativecommons.org"))) {
                     String[] creativecommonsArray = cc.value.split("/");
                     if (creativecommonsArray[creativecommonsArray.length-1].equals("deed.de")) {
@@ -173,7 +173,7 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                 }
                 if (cc.value.equals("http://rightsstatements.org/vocab/InC/1.0/")) {
                     // copyright
-                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='"+label+"' style='height:21px' /> "+fulllabel+"</a>";
+                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='"+fulllabel+"' style='height:21px' /> "+fulllabel+"</a>";
                 }
                 else if (creativecommons != "") {
                     if (creativecommonslink.equals("https://creativecommons.org/share-your-work/public-domain/cc0/")) {
@@ -184,7 +184,15 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                         metadata = "<a href='"+creativecommonslink+"'><img src='https://licensebuttons.net/l/"+creativecommons+"/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
                     }
                 }
-                indexSplit++;
+                else {
+                    // Generic License without Icon
+                    if (fulllabel.equals("")) {
+                        metadata = "<a href='"+cc.value+"' target='_blank'>"+cc.value+"</a>";
+                    } else {
+                        metadata = "<a href='"+cc.value+"' target='_blank'>"+fulllabel+"</a>";
+                    }
+                }
+//                indexSplit++;
             }
         }
         return metadata;
