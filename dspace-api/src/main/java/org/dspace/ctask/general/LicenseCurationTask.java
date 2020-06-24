@@ -116,11 +116,15 @@ public class LicenseCurationTask extends AbstractCurationTask
                     Boolean done = false;
 
                     Metadatum[] ccLicense = item.getMetadata("dc", "rights", "cc", Item.ANY);
+                    Metadatum[] rightsuri = item.getMetadata("dc", "rights", "uri", Item.ANY);
                     // Case 1: Record has a CC license
                     if (ccLicense.length > 0) {
                         item.clearMetadata("dc", "rights", "cc", Item.ANY);
                         item.addMetadata("dc", "rights", "uri", "", ccLicense[0].value, null, -1);
-                        results.append("Set license URI into dc.rights.uri");
+                        results.append("Moved license URI to dc.rights.uri");
+                    }
+                    else if (rightsuri.length > 0) {
+                        results.append("Keeping license URI "+rightsuri[0].value);
                     }
                     else {
                         item.addMetadata("dc", "rights", "uri", "", "http://rightsstatements.org/vocab/InC/1.0/", null, -1);
