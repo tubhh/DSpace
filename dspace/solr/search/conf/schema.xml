@@ -558,6 +558,7 @@
    <copyField source="crisrp.variants" dest="crisauthoritylookup"/>
    <copyField source="crisproject.title" dest="crisauthoritylookup"/>
    <copyField source="crisproject.title_en" dest="crisauthoritylookup"/>
+   <copyField source="crisproject.acronym" dest="crisauthoritylookup"/>
    <copyField source="crisou.name" dest="crisauthoritylookup"/>
    <copyField source="crisou.name_en" dest="crisauthoritylookup"/>
    <copyField source="crisou.instformernames" dest="crisauthoritylookup"/>
