@@ -214,6 +214,17 @@
 
        <field>
          <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>arxiv</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>ArXiv ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartof</dc-qualifier>
          <repeatable>false</repeatable>
@@ -579,6 +590,18 @@
          <label>Note about Alliance or National License</label>
          <input-type>textarea</input-type>
          <hint>Text to show for a national or alliance license.</hint>
+         <required></required>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>rights</dc-element>
+         <dc-qualifier>creditline</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Creditline</label>
+         <input-type>textarea</input-type>
+         <hint>Enter the creditline for AIP publications here.</hint>
          <required></required>
          <visibility>workflow</visibility>
        </field>
@@ -1167,6 +1190,17 @@
          <label>ISSN</label>
          <input-type>onebox</input-type>
          <hint>Enter the ISSN of the journal, where this article has been published.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>arxiv</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>ArXiv ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
          <required></required>
        </field>
 
@@ -1824,7 +1858,142 @@
      </pair>
    </value-pairs>
 
-   <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_rights_uri">
+   <value-pairs value-pairs-name="license_all_en" dc-term="dc_rights_uri">
+     <pair>
+       <displayed-value>Nutzungsbestimmungen für die Bereitstellung von Geodaten des Bundes (GeoNutzV)</displayed-value>
+       <stored-value>http://www.gesetze-im-internet.de/geonutzv/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>In Copyright</displayed-value>
+       <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 3.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 3.0 (Attribution-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 3.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 3.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 3.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 3.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 3.0 DE (Namensnennung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 3.0 DE (Namensnennung - Weitergabe unter gleichen Bedingungen)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 3.0 DE (Namensnennung-Keine Bearbeitung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 3.0 DE (Namensnennung-Nicht kommerziell)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 3.0 DE (Namensnennung - Nicht-kommerziell - Weitergabe unter gleichen Bedingungen)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 3.0 DE (Namensnennung - Nicht-kommerziell - Keine Bearbeitung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 2.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 2.0 (Attribution-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 2.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 2.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 2.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 2.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 2.0 DE (Namensnennung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 2.0 DE (Namensnennung - Weitergabe unter gleichen Bedingungen)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 2.0 DE (Namensnennung-Keine Bearbeitung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 2.0 DE (Namensnennung-Nicht kommerziell)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 2.0 DE (Namensnennung - Nicht-kommerziell - Weitergabe unter gleichen Bedingungen)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 2.0 DE (Namensnennung - Nicht-kommerziell - Keine Bearbeitung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
+       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_license">
      <pair>
        <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
        <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
@@ -1863,7 +2032,7 @@
      </pair>
    </value-pairs>
 
-   <value-pairs value-pairs-name="license_en" dc-term="dc_rights_uri">
+   <value-pairs value-pairs-name="license_en" dc-term="dc_license">
      <pair>
        <displayed-value>In Copyright</displayed-value>
        <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
