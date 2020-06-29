@@ -42,14 +42,16 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
     private static final Logger log = Logger
             .getLogger(LicenseIconDisplayStrategy.class);
 
-    private Map<String, DCInputsReader> dcInputsReader = new HashMap<>();
+    private Map<String, DCInputsReader> valuePairMap = new HashMap<>();
 
     private void init() throws DCInputsReaderException
     {
-        if(dcInputsReader.isEmpty()) {
+log.debug("Initializing...");
+        if(valuePairMap.isEmpty()) {
             for (Locale locale : I18nUtil.getSupportedLocales())
             {
-                dcInputsReader.put(locale.getLanguage(),
+log.debug("Reading Input file "+I18nUtil.getInputFormsFileName(locale)+" for language "+locale.getLanguage());
+                valuePairMap.put(locale.getLanguage(),
                     new DCInputsReader(I18nUtil.getInputFormsFileName(locale)));
             }
         }
@@ -70,29 +72,31 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
             log.error(e.getMessage(), e);
         }
 
-        String result = "";
+        String resultString = "";
         try
         {
             Context obtainContext = UIUtil.obtainContext(hrq);
             Collection collection = Collection.find(obtainContext, colIdx);
             if (collection != null)
             {
-                result = getResult(colIdx, field, metadataArray, result,
+                resultString = getResult(colIdx, field, metadataArray, resultString,
                         obtainContext, collection);
             }
             else
             {
                 Item item = Item.find(obtainContext, itemid);
                 collection = item.getParentObject();
-                result = getResult(colIdx, field, metadataArray, result,
+                resultString = getResult(colIdx, field, metadataArray, resultString,
                         obtainContext, collection);
             }
-
+log.debug("ResultString for DisplayStrategy is now "+resultString);
             // workaround, a sort of fuzzy match search in all valuepairs (possible wrong result due to the same stored value in many valuepairs)
-            if (StringUtils.isBlank(result))
+/*
+            if (StringUtils.isBlank(resultString))
             {
+log.debug("ResultString is empty, checking it again...");
                 String language = I18nUtil.getSupportedLocale(obtainContext.getCurrentLocale()).getLanguage();
-                Map<String, List<String>> mappedValuePairs = dcInputsReader.get(language)
+                Map<String, List<String>> mappedValuePairs = valuePairMap.get(language)
                         .getMappedValuePairs();
                 List<String> pairsnames = new ArrayList<String>();
                 if (mappedValuePairs != null)
@@ -120,7 +124,7 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                     {
                         if (ii > 0)
                         {
-                            result += " ";
+                            resultString += " ";
                         }
                         Choices choices = choice.getBestMatch(field, r.value,
                                 colIdx,
@@ -129,12 +133,14 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                         {
                             for (Choice ch : choices.values)
                             {
-                                result += ch.label;
+                                resultString += ch.label;
+log.debug("Found possible label "+ch.label);
                             }
                         }
                     }
                 }
             }
+*/
 
         }
         catch (SQLException | DCInputsReaderException e)
@@ -147,15 +153,17 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
         {
             String creativecommons = "";
             String creativecommonslink = null;
-            String fulllabel = result;
-//            String[] splittedResult = StringUtils.split(result);
-//            int indexSplit = 0;
-//            String label = "";
-//            String splitlabel = result;
-//            String labelAll = "";
-//            for (int idxs = 0; idxs < splittedResult.length; idxs++) {
-//                labelAll += splittedResult[idxs];
-//            }
+            String fulllabel = resultString;
+/*
+            String[] splittedResult = StringUtils.split(resultString);
+            int indexSplit = 0;
+            String label = "";
+            String splitlabel = resultString;
+            String labelAll = "";
+            for (int idxs = 0; idxs < splittedResult.length; idxs++) {
+                labelAll += " "+splittedResult[idxs];
+            }
+*/
             for (Metadatum cc : metadataArray) {
 //                if(indexSplit < splittedResult.length) {
 //                    label = splittedResult[indexSplit];
@@ -173,6 +181,7 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                 }
                 if (cc.value.equals("http://rightsstatements.org/vocab/InC/1.0/")) {
                     // copyright
+//                    metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='"+fulllabel+"' style='height:21px' /> Result before split: "+fulllabel+" Concatenated Split: "+labelAll+" Split: "+label+"</a>";
                     metadata = "<a href='http://rightsstatements.org/vocab/InC/1.0/' target='_blank'><img src='/image/InC.Icon-Only.dark.png' alt='"+fulllabel+"' style='height:21px' /> "+fulllabel+"</a>";
                 }
                 else if (creativecommons != "") {
@@ -181,6 +190,7 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                     } else if (creativecommonslink.equals("https://creativecommons.org/share-your-work/public-domain/pdm/")) {
                         metadata = "<a href='https://creativecommons.org/share-your-work/public-domain/pdm/'><img src='http://i.creativecommons.org/p/mark/1.0/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
                     } else {
+//                        metadata = "<a href='"+creativecommonslink+"'><img src='https://licensebuttons.net/l/"+creativecommons+"/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> Result before split: "+fulllabel+" Concatenated Split: "+labelAll+" Split: "+label+"</a>";
                         metadata = "<a href='"+creativecommonslink+"'><img src='https://licensebuttons.net/l/"+creativecommons+"/88x31.png' alt='"+fulllabel+"' title='"+fulllabel+"' /> "+fulllabel+"</a>";
                     }
                 }
@@ -189,7 +199,8 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                     if (fulllabel.equals("")) {
                         metadata = "<a href='"+cc.value+"' target='_blank'>"+cc.value+"</a>";
                     } else {
-                        metadata = "<a href='"+cc.value+"' target='_blank'>"+fulllabel+"</a>";
+//                        metadata = "<a href='"+cc.value+"' target='_blank'>Result before split: "+fulllabel+" Concatenated Split: "+labelAll+" Split: "+label+"</a>";
+                        metadata = "<a href='"+cc.value+"' target='_blank'>Result before split: "+fulllabel+"</a>";
                     }
                 }
 //                indexSplit++;
@@ -199,11 +210,12 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
     }
 
     private String getResult(int colIdx, String field,
-            Metadatum[] metadataArray, String result, Context obtainContext,
+            Metadatum[] metadataArray, String resultString, Context obtainContext,
             Collection collection) throws DCInputsReaderException
     {
         String language = I18nUtil.getSupportedLocale(obtainContext.getCurrentLocale()).getLanguage();
-        DCInputSet dcInputSet = dcInputsReader.get(language)
+log.debug("Using language "+language);
+        DCInputSet dcInputSet = valuePairMap.get(language)
                 .getInputs(collection.getHandle());
         for (int i = 0; i < dcInputSet.getNumberPages(); i++)
         {
@@ -216,40 +228,49 @@ public class LicenseIconDisplayStrategy extends ASimpleDisplayStrategy
                     
                     String inputField = Utils.standardize(myInput.getSchema(), myInput.getElement(), myInput.getQualifier(), ".");
 
+log.debug("Looking for resultString for field "+field+" in field "+inputField);
+
                     if (inputField.equals(field))
                     {
                         ChoiceAuthority choice = (ChoiceAuthority) PluginManager
                                 .getNamedPlugin(ChoiceAuthority.class, key);
+log.debug("Got my field!");
 
                         int ii = 0;
                         for (Metadatum r : metadataArray)
                         {
+log.debug("Looking for metadata value of "+r.value);
                             if (ii > 0)
                             {
-                                result += " ";
+                                resultString += " ";
                             }
                             Choices choices = choice.getBestMatch(field,
                                     r.value, colIdx, obtainContext
                                             .getCurrentLocale().toString());
+log.debug("Found "+choices.total+" values");
                             if (choices != null)
                             {
                                 int iii = 0;
                                 for (Choice ch : choices.values)
                                 {
-                                    result += ch.label;
+                                    resultString += ch.label;
+log.debug("Found possible label "+ch.label);
                                     if (iii > 0)
                                     {
-                                        result += " ";
+                                        resultString += " ";
                                     }
                                     iii++;
+                                    // Early exit when a match is found
+                                    return resultString;
                                 }
                             }
+                            ii++;
                         }
                     }
                 }
             }
         }
-        return result;
+        return resultString;
     }
 
 }

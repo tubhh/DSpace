@@ -112,6 +112,8 @@ public class DCInputAuthority extends SelfNamedPlugin implements ChoiceAuthority
         if(StringUtils.isNotBlank(locale)) {
             values = valuesMultilang.get(locale);
         }
+// Reset values to avoid caching trouble
+values = null;
         if (values == null)
         {
             String pname = this.getPluginInstanceName();
