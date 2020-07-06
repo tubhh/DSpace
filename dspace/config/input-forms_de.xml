@@ -214,17 +214,6 @@
 
        <field>
          <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>arxiv</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>arXiv ID</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier die ArXiv ID Ihrer Publikation ein, falls sie auf https://arxiv.org veröffentlicht ist.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartof</dc-qualifier>
          <repeatable>false</repeatable>
@@ -354,6 +343,17 @@
          <label>Verlagslink</label>
          <input-type value-pairs-name="common_uritypes_de">qualdrop_value</input-type>
          <hint>Geben Sie hier den Link zur Parallelpublikation an.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>arxiv</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>arXiv ID</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier die arXiv ID Ihrer Publikation ein, falls sie auf https://arxiv.org veröffentlicht ist.</hint>
          <required></required>
        </field>
 
@@ -1136,17 +1136,6 @@
 
        <field>
          <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>arxiv</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>arXiv ID</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier die ArXiv ID Ihrer Publikation ein, falls sie auf https://arxiv.org veröffentlicht ist.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartof</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1276,6 +1265,17 @@
          <label>Verlagslink</label>
          <input-type value-pairs-name="common_uritypes_de">qualdrop_value</input-type>
          <hint>Geben Sie hier den Link zur Parallelpublikation an.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>arxiv</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>arXiv ID</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier die arXiv ID Ihrer Publikation ein, falls sie auf https://arxiv.org veröffentlicht ist.</hint>
          <required></required>
        </field>
 

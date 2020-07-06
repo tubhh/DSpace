@@ -214,17 +214,6 @@
 
        <field>
          <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>arxiv</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>ArXiv ID</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartof</dc-qualifier>
          <repeatable>false</repeatable>
@@ -410,6 +399,17 @@
          <label>Publisher's version</label>
          <input-type value-pairs-name="common_uritypes_en">qualdrop_value</input-type>
          <hint>Enter the link to the publisher's version of this document.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>arxiv</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>arXiv ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
          <required></required>
        </field>
 
@@ -1195,17 +1195,6 @@
 
        <field>
          <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>arxiv</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>ArXiv ID</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartof</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1335,6 +1324,17 @@
          <label>Publisher's version</label>
          <input-type value-pairs-name="common_uritypes_en">qualdrop_value</input-type>
          <hint>Enter the link to the publisher's version of this document.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>arxiv</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>arXiv ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
          <required></required>
        </field>
 
