@@ -105,7 +105,7 @@
 		<property name="order"><value>desc</value></property>
 		<property name="rpp"><value>20</value></property>
                 <!-- selected component should be sorted by score (-1) -->
-		<property name="sortby"><value>-1</value></property>						
+		<property name="sortby"><value>2</value></property>						
 	</bean>
 	
 	<bean id="journalComponent"
