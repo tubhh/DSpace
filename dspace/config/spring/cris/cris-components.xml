@@ -291,7 +291,7 @@
 		<property name="components">
 			<map>				
 				<entry key="publication" value-ref="publicationlistforou" />				
-				<entry key="rppublication" value-ref="publicationlistforouviarp" />				
+				<!-- <entry key="rppublication" value-ref="publicationlistforouviarp" /> -->
 				<entry key="projects" value-ref="projectlistforou" />				
 				<entry key="runningprojects" value-ref="runningprojectlistforou" />				
 				<entry key="finishedprojects" value-ref="finishedprojectlistforou" />				
