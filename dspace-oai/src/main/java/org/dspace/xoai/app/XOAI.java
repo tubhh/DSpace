@@ -379,7 +379,7 @@ public class XOAI {
                 	if (o instanceof Item) {
                 	    Item item = (Item)o;
                 	    String type = (String)item.getExtraInfo().get("item.cerifentitytype");
-                	    solrDoc = this.indexResults(item);
+                	    solrDoc = this.indexResults(item,true);
                 	    if(StringUtils.isNotBlank(type)) {
                 	        doublingSolrDocument = true;
                 	    }
@@ -516,7 +516,7 @@ public class XOAI {
      * @throws XMLStreamException
      * @throws WritingXmlException
      */
-    private SolrInputDocument indexResults(Item item) throws SQLException, MetadataBindException, ParseException, XMLStreamException, WritingXmlException {
+    private SolrInputDocument indexResults(Item item, boolean specialIdentifier) throws SQLException, MetadataBindException, ParseException, XMLStreamException, WritingXmlException {
         SolrInputDocument doc = new SolrInputDocument();
         doc.addField("item.id", item.getID());
         boolean pub = this.isPublic(item);
