@@ -482,6 +482,8 @@ public class OrcidService extends RestSource
             query.append("other-names:*");
         }
 
+        log.debug("Lookup on ORCID with query "+query.toString());
+
         List<Result> results = search(query.toString(), start, max);
 
         return getAuthorityValuesFromOrcidResults(results);
