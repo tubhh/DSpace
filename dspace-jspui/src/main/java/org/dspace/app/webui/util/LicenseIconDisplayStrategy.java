@@ -200,7 +200,7 @@ log.debug("Found possible label "+ch.label);
                         metadata = "<a href='"+cc.value+"' target='_blank'>"+cc.value+"</a>";
                     } else {
 //                        metadata = "<a href='"+cc.value+"' target='_blank'>Result before split: "+fulllabel+" Concatenated Split: "+labelAll+" Split: "+label+"</a>";
-                        metadata = "<a href='"+cc.value+"' target='_blank'>Result before split: "+fulllabel+"</a>";
+                        metadata = "<a href='"+cc.value+"' target='_blank'>"+fulllabel+"</a>";
                     }
                 }
 //                indexSplit++;
