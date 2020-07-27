@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Utils;
+import org.dspace.content.Metadatum;
 
 public class ResolverDisplayStrategy extends AUniformDisplayStrategy
 {
@@ -68,7 +69,7 @@ public class ResolverDisplayStrategy extends AUniformDisplayStrategy
         }
     }
 
-    protected String getDisplayForValue(HttpServletRequest hrq, String value, int itemid)
+    protected String getLinkDisplayForValue(HttpServletRequest hrq, String value, int itemid, String field)
     {
         init();
         String url = null;
@@ -103,7 +104,7 @@ public class ResolverDisplayStrategy extends AUniformDisplayStrategy
             if (foundUrn != null)
             {
 
-                if (value.startsWith(foundUrn + ":"))
+                if (value.startsWith(foundUrn + ":") || field.endsWith(foundUrn))
                 {
                     value = value.substring(foundUrn.length() + 1).trim();
                 }
@@ -130,5 +131,75 @@ public class ResolverDisplayStrategy extends AUniformDisplayStrategy
         sb.append(Utils.addEntities(value!=""?value:url));
         sb.append(url != null?endLink:"");
         return sb.toString();
+    }
+
+    public String getMetadataDisplay(HttpServletRequest hrq, int limit,
+            boolean viewFull, String browseType, int colIdx, int itemid, String field,
+            Metadatum[] metadataArray, boolean disableCrossLinks, boolean emph)
+    {
+        String metadata;
+        // limit the number of records if this is the author field (if
+        // -1, then the limit is the full list)
+        boolean truncated = false;
+        int loopLimit = metadataArray.length;
+        if (limit != -1)
+        {
+            loopLimit = (limit > metadataArray.length ? metadataArray.length
+                    : limit);
+            truncated = (limit < metadataArray.length);
+            log.debug("Limiting output of field " + field + " to "
+                    + Integer.toString(loopLimit) + " from an original "
+                    + Integer.toString(metadataArray.length));
+        }
+
+        StringBuffer sb = new StringBuffer();
+        for (int j = 0; j < loopLimit; j++)
+        {
+            sb.append(getLinkDisplayForValue(hrq, metadataArray[j].value, itemid, field));
+            if (j < (loopLimit - 1))
+            {
+                if (colIdx != -1) // we are showing metadata in a table row
+                                  // (browse or item list)
+                {
+                    sb.append("; ");
+                }
+                else
+                {
+                    // we are in the item tag
+                    sb.append("<br />");
+                }
+            }
+        }
+        if (truncated)
+        {
+            if (colIdx != -1)
+            {
+                sb.append("; ...");
+            }
+            else
+            {
+                sb.append("<br />...");
+            }
+        }
+
+        if (colIdx != -1) // we are showing metadata in a table row (browse or
+                          // item list)
+        {
+            metadata = (emph ? "<strong><em>" : "<em>") + sb.toString()
+                    + (emph ? "</em></strong>" : "</em>");
+        }
+        else
+        {
+            // we are in the item tag
+            metadata = (emph ? "<strong>" : "") + sb.toString()
+                    + (emph ? "</strong>" : "");
+        }
+        
+        return metadata;
+    }
+
+    protected String getDisplayForValue(HttpServletRequest hrq, String value, int itemid)
+    {
+        return null;
     }
 }
