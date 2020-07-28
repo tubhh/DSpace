@@ -94,7 +94,7 @@ public class ResolverDisplayStrategy extends AUniformDisplayStrategy
             {
                 for (String checkUrn : urn2baseurl.keySet())
                 {
-                    if (value.startsWith(checkUrn))
+                    if (value.startsWith(checkUrn) || field.endsWith(checkUrn))
                     {
                         foundUrn = checkUrn;
                     }
@@ -104,9 +104,12 @@ public class ResolverDisplayStrategy extends AUniformDisplayStrategy
             if (foundUrn != null)
             {
 
-                if (value.startsWith(foundUrn + ":") || field.endsWith(foundUrn))
+                if (value.startsWith(foundUrn + ":"))
                 {
                     value = value.substring(foundUrn.length() + 1).trim();
+                }
+                if (field.endsWith(foundUrn)) {
+                    value = value.trim();
                 }
 
                 url = urn2baseurl.get(foundUrn);
