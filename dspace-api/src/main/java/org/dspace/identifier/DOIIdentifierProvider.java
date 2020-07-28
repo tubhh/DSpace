@@ -84,7 +84,8 @@ public class DOIIdentifierProvider
     public static final String MD_SCHEMA = "dc";
     public static final String DOI_ELEMENT = "identifier";
     public static final String DOI_QUALIFIER = "uri";
-    
+
+    public static final Integer IGNORED = -1;
     public static final Integer TO_BE_REGISTERED = 1;
     public static final Integer TO_BE_RESERVED = 2;
     public static final Integer IS_REGISTERED = 3;
@@ -206,8 +207,8 @@ public class DOIIdentifierProvider
                     + "is marked as DELETED.", DOIIdentifierException.DOI_IS_DELETED);
         }
 
-        // Check status of DOI
-        if (IS_REGISTERED == doiRow.getIntColumn("status"))
+        // Check status of DOI and set it only when status is -1 (persistence layer return -1 if status is null)
+        if (IGNORED != doiRow.getIntColumn("status"))
         {
             return;
         }
