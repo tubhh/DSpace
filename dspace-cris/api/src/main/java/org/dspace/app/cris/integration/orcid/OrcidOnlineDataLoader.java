@@ -59,6 +59,9 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
 
     public final static String PLACEHOLER_NO_DATA = "#NODATA#";
 
+    private int cooldown = 0;
+    private int numberOfThread = 1;
+    
     @Override
     public List<String> getSupportedIdentifiers()
     {
@@ -105,34 +108,40 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                         Works orcidWorks = orcidService.getWorks(orcid, null);
                         workgroup: for (WorkGroup orcidGroup : orcidWorks.getGroup())
                         {
-                            int higher = orcidService.higherDisplayIndex(orcidGroup);
-                            // take the Work with highest display index value (the preferred item)
-                            worksummary : for (final WorkSummary orcidSummary : orcidGroup
-                                    .getWorkSummary())
-                            {
-                                if (StringUtils.isNotBlank(orcidSummary.getDisplayIndex()))
+                            
+                            final Integer maxItems;
+                            List<WorkSummary> workSummaries = orcidGroup.getWorkSummary();
+                            if(workSummaries!=null) { 
+                                Double res = Math.ceil(workSummaries.size() / getNumberOfThread());
+                                maxItems = res.intValue();
+                                int higher = orcidService.higherDisplayIndex(orcidGroup);
+                                // take the Work with highest display index value (the preferred item)
+                                worksummary : for (final WorkSummary orcidSummary : workSummaries)
                                 {
-                                    int current = Integer.parseInt(orcidSummary.getDisplayIndex());
-                                    if (current < higher)
+                                    if (StringUtils.isNotBlank(orcidSummary.getDisplayIndex()))
                                     {
-                                        continue worksummary;
+                                        int current = Integer.parseInt(orcidSummary.getDisplayIndex());
+                                        if (current < higher)
+                                        {
+                                            continue worksummary;
+                                        }
                                     }
-                                }
-                                putCodes.add(orcidSummary.getPutCode().toString());
-                                SourceType source = orcidSummary.getSource();
-                                String sourceNameWork = "";
-                                if (source != null)
-                                {
-                                    sourceNameWork = source.getSourceName()
-                                            .getContent();
-                                }
-                                if (StringUtils.isBlank(sourceNameWork)
-                                        || !StringUtils.equals(sourceNameWork,
-                                                sourceName))
-                                {
-                                    if (putCodes.size() == 100) {
-                                        threads.add(populateWorkQueue(q, orcidService, profile, orcid, putCodes));
-                                        putCodes.clear();
+                                    putCodes.add(orcidSummary.getPutCode().toString());
+                                    SourceType source = orcidSummary.getSource();
+                                    String sourceNameWork = "";
+                                    if (source != null)
+                                    {
+                                        sourceNameWork = source.getSourceName()
+                                                .getContent();
+                                    }
+                                    if (StringUtils.isBlank(sourceNameWork)
+                                            || !StringUtils.equals(sourceNameWork,
+                                                    sourceName))
+                                    {
+                                        if (putCodes.size() == maxItems) {
+                                            threads.add(populateWorkQueue(q, orcidService, profile, orcid, putCodes));
+                                            putCodes.clear();
+                                        }
                                     }
                                 }
                             }
@@ -149,28 +158,54 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                 }
             }
         }
+
+        while (!threads.isEmpty())
+        {
+      		Thread t = threads.remove(0);
+       		t.start();
+
+
+        }
         
         List<Thread> threadsStarted = new ArrayList<Thread>();
         
         while (!threads.isEmpty() || !threadsStarted.isEmpty())
         {
-        	if (!threads.isEmpty() && threadsStarted.size() < 64)
-        	{
-        		Thread t = threads.remove(0);
-        		t.start();
-        		threadsStarted.add(t);
-        	}
-        	else
-        	{
-        		Thread t = threadsStarted.remove(0);
-        		try {
-					t.join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-        	}
-        }
+            if (!threads.isEmpty()
+                    && threadsStarted.size() < getNumberOfThread())
+            {
+                Thread t = threads.remove(0);
+                t.start();
+                threadsStarted.add(t);
+                // sleep only if there is a cooldown and if there are works left in queue
+                if (!threads.isEmpty() && getCooldown() != 0)
+                {
+                    try
+                    {
+                        Thread.sleep(getCooldown());
+                    }
+                    catch (InterruptedException e)
+                    {
+                        log.error(e);
+                    }
+                }
+            }
+            else
+            {
+                while (!threadsStarted.isEmpty())
+                {
+                    Thread t = threadsStarted.remove(0);
+                    try
+                    {
+                        t.join();
+                    }
+                    catch (InterruptedException e)
+                    {
+                        log.error(e);
+                    }
+                }
+            }            
+        }        
         
         while (!q.isEmpty())
         {
@@ -357,8 +392,6 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
         return new Thread() {
             @Override
             public void run() {
-                int count = 10;
-                while (count-- > 0) {
                     try {
                         List<Serializable> ss = workBulk.getWorkOrError();
                         for (Serializable s : ss) {
@@ -367,12 +400,33 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                                         profile, orcid, (Work) s));
                             }
                         }
-                        return;
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
                     }
-                }
             }
         };
+    }
+
+    public int getCooldown()
+    {
+        return cooldown;
+    }
+
+    public void setCooldown(int cooldown)
+    {
+        this.cooldown = cooldown;
+    }
+
+    public int getNumberOfThread()
+    {
+        if(numberOfThread<=0) {
+            numberOfThread=1;
+        }
+        return numberOfThread;
+    }
+
+    public void setNumberOfThread(int numberOfThread)
+    {
+        this.numberOfThread = numberOfThread;
     }
 }
