@@ -2,6 +2,7 @@ package org.dspace.app.cris.integration.orcid;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -14,6 +15,7 @@ import javax.ws.rs.NotFoundException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
+import org.apache.log4j.Logger;
 import org.dspace.app.itemimport.BTEBatchImportService;
 import org.dspace.authority.orcid.OrcidService;
 import org.dspace.core.Context;
@@ -24,22 +26,20 @@ import org.orcid.jaxb.model.common_v3.CreditName;
 import org.orcid.jaxb.model.common_v3.ExternalId;
 import org.orcid.jaxb.model.common_v3.ExternalIds;
 import org.orcid.jaxb.model.common_v3.FuzzyDate;
-import org.orcid.jaxb.model.utils.LanguageCode;
 import org.orcid.jaxb.model.common_v3.OrcidId;
 import org.orcid.jaxb.model.common_v3.SourceType;
 import org.orcid.jaxb.model.common_v3.Url;
 import org.orcid.jaxb.model.record_v3.Citation;
-import org.orcid.jaxb.model.utils.CitationType;
 import org.orcid.jaxb.model.record_v3.Contributor;
 import org.orcid.jaxb.model.record_v3.NameType;
 import org.orcid.jaxb.model.record_v3.NameType.GivenNames;
 import org.orcid.jaxb.model.record_v3.PersonalDetails;
 import org.orcid.jaxb.model.record_v3.Work;
+import org.orcid.jaxb.model.record_v3.WorkBulk;
 import org.orcid.jaxb.model.record_v3.WorkContributors;
 import org.orcid.jaxb.model.record_v3.WorkGroup;
 import org.orcid.jaxb.model.record_v3.WorkSummary;
 import org.orcid.jaxb.model.record_v3.WorkTitle;
-import org.orcid.jaxb.model.utils.WorkType;
 import org.orcid.jaxb.model.record_v3.Works;
 
 import com.google.api.client.util.Charsets;
@@ -55,6 +55,7 @@ import gr.ekt.bte.dataloader.FileDataLoader;
 
 public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
 {
+    private static final Logger log = Logger.getLogger(OrcidOnlineDataLoader.class);
 
     public final static String PLACEHOLER_NO_DATA = "#NODATA#";
 
@@ -94,13 +95,13 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
         {
             for (final String orcid : orcids)
             {
-
                 try
                 {
                     final PersonalDetails profile = orcidService
                             .getPersonalDetails(orcid, null);
                     if (profile != null)
                     {
+                        List<String> putCodes = new ArrayList<>();
                         Works orcidWorks = orcidService.getWorks(orcid, null);
                         workgroup: for (WorkGroup orcidGroup : orcidWorks.getGroup())
                         {
@@ -117,6 +118,7 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                                         continue worksummary;
                                     }
                                 }
+                                putCodes.add(orcidSummary.getPutCode().toString());
                                 SourceType source = orcidSummary.getSource();
                                 String sourceNameWork = "";
                                 if (source != null)
@@ -128,37 +130,16 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                                         || !StringUtils.equals(sourceNameWork,
                                                 sourceName))
                                 {
-                                    try
-                                    {
-                                    	threads.add(new Thread() {
-                                    		@Override
-                                    		public void run()
-                                    		{
-                                    			int count = 10;
-                                    			while (count-- > 0)
-                                    			{
-                                    				try {
-                                    					q.add(convertOrcidWorkToRecord(
-                                    							profile, orcid,
-                                    							orcidService.getWork(orcid,
-                                    									null,
-                                    									orcidSummary
-                                    									.getPutCode()
-                                    									.toString())));
-                                    					return;
-                                    				} catch (Exception e) {
-                                    					e.printStackTrace();
-                                    				}
-                                    			}
-                                    		}
-                                    	});
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        throw new IOException(e);
+                                    if (putCodes.size() == 100) {
+                                        threads.add(populateWorkQueue(q, orcidService, profile, orcid, putCodes));
+                                        putCodes.clear();
                                     }
                                 }
                             }
+                        }
+                        if (putCodes.size() > 0) {
+                            threads.add(populateWorkQueue(q, orcidService, profile, orcid, putCodes));
+                            putCodes.clear();
                         }
                     }
                 }
@@ -370,4 +351,28 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
         }
     }
 
+    private Thread populateWorkQueue(final ConcurrentLinkedQueue<Record> q, final OrcidService orcidService,
+            final PersonalDetails profile, final String orcid, final List<String> putCodes) {
+        final WorkBulk workBulk = orcidService.getWorkBulk(orcid, null, putCodes);
+        return new Thread() {
+            @Override
+            public void run() {
+                int count = 10;
+                while (count-- > 0) {
+                    try {
+                        List<Serializable> ss = workBulk.getWorkOrError();
+                        for (Serializable s : ss) {
+                            if (s instanceof Work) {
+                                q.add(convertOrcidWorkToRecord(
+                                        profile, orcid, (Work) s));
+                            }
+                        }
+                        return;
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
+            }
+        };
+    }
 }
