@@ -142,7 +142,7 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                                     {
                                         
                                         if (putCodes.size() == MAX_BULK_WORK) {
-                                            DTOBulkPutCode bulkObject = new DTOBulkPutCode(orcid, putCodes, profile);                                            
+                                            DTOBulkPutCode bulkObject = new DTOBulkPutCode(orcid, putCodes, profile);
                                             bulkCallList.add(bulkObject);
                                             putCodes.clear();
                                         }
@@ -166,7 +166,7 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
 
         
         if(bulkCallList!=null && !bulkCallList.isEmpty()) {
-            Double res = Math.ceil(bulkCallList.size() / getNumberOfThread());
+            Double res = Math.ceil((double)bulkCallList.size() / getNumberOfThread());
             Integer maxBulkCallForThread = res.intValue();
             
             List<List<DTOBulkPutCode>> bulkCallListPartitioned = ListUtils.partition(bulkCallList, maxBulkCallForThread);
@@ -459,7 +459,7 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                 PersonalDetails profile)
         {
             this.orcid = orcid;
-            this.putCode = putCodes;
+            this.putCode = new ArrayList<>(putCodes);
             this.profile = profile;
         }
         
