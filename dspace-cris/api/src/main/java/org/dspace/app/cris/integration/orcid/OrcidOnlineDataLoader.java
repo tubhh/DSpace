@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.ws.rs.NotFoundException;
 
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
@@ -55,6 +57,8 @@ import gr.ekt.bte.dataloader.FileDataLoader;
 
 public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
 {
+    private static final int MAX_BULK_WORK = 100;
+
     private static final Logger log = Logger.getLogger(OrcidOnlineDataLoader.class);
 
     public final static String PLACEHOLER_NO_DATA = "#NODATA#";
@@ -87,6 +91,7 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
             Map<String, Set<String>> keys) throws HttpException, IOException
     {
         Set<String> orcids = keys != null ? keys.get(ORCID) : null;
+        List<DTOBulkPutCode> bulkCallList = new ArrayList<DTOBulkPutCode>();
         List<Thread> threads = new ArrayList<Thread>();
         final ConcurrentLinkedQueue<Record> q = new ConcurrentLinkedQueue<Record>();
         List<Record> results = new ArrayList<Record>();
@@ -109,11 +114,8 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                         workgroup: for (WorkGroup orcidGroup : orcidWorks.getGroup())
                         {
                             
-                            final Integer maxItems;
                             List<WorkSummary> workSummaries = orcidGroup.getWorkSummary();
                             if(workSummaries!=null) { 
-                                Double res = Math.ceil(workSummaries.size() / getNumberOfThread());
-                                maxItems = res.intValue();
                                 int higher = orcidService.higherDisplayIndex(orcidGroup);
                                 // take the Work with highest display index value (the preferred item)
                                 worksummary : for (final WorkSummary orcidSummary : workSummaries)
@@ -138,8 +140,10 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                                             || !StringUtils.equals(sourceNameWork,
                                                     sourceName))
                                     {
-                                        if (putCodes.size() == maxItems) {
-                                            threads.add(populateWorkQueue(q, orcidService, profile, orcid, putCodes));
+                                        
+                                        if (putCodes.size() == MAX_BULK_WORK) {
+                                            DTOBulkPutCode bulkObject = new DTOBulkPutCode(orcid, putCodes, profile);                                            
+                                            bulkCallList.add(bulkObject);
                                             putCodes.clear();
                                         }
                                     }
@@ -147,7 +151,8 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
                             }
                         }
                         if (putCodes.size() > 0) {
-                            threads.add(populateWorkQueue(q, orcidService, profile, orcid, putCodes));
+                            DTOBulkPutCode bulkObject = new DTOBulkPutCode(orcid, putCodes, profile);
+                            bulkCallList.add(bulkObject);
                             putCodes.clear();
                         }
                     }
@@ -159,53 +164,88 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
             }
         }
 
-        while (!threads.isEmpty())
-        {
-      		Thread t = threads.remove(0);
-       		t.start();
-
-
-        }
         
-        List<Thread> threadsStarted = new ArrayList<Thread>();
-        
-        while (!threads.isEmpty() || !threadsStarted.isEmpty())
-        {
-            if (!threads.isEmpty()
-                    && threadsStarted.size() < getNumberOfThread())
+        if(bulkCallList!=null && !bulkCallList.isEmpty()) {
+            Double res = Math.ceil(bulkCallList.size() / getNumberOfThread());
+            Integer maxBulkCallForThread = res.intValue();
+            
+            List<List<DTOBulkPutCode>> bulkCallListPartitioned = ListUtils.partition(bulkCallList, maxBulkCallForThread);
+            
+            for (final List<DTOBulkPutCode> bulkCallListThread : bulkCallListPartitioned)
             {
-                Thread t = threads.remove(0);
-                t.start();
-                threadsStarted.add(t);
-                // sleep only if there is a cooldown and if there are works left in queue
-                if (!threads.isEmpty() && getCooldown() != 0)
+                threads.add(new Thread()
                 {
-                    try
+                    @Override
+                    public void run()
                     {
-                        Thread.sleep(getCooldown());
+                        try
+                        {
+                            for (DTOBulkPutCode bulkObject : bulkCallListThread)
+                            {
+                                final WorkBulk workBulk = orcidService.getWorkBulk(
+                                        bulkObject.getOrcid(), null,
+                                        bulkObject.getPutCode());
+                                List<Serializable> ss = workBulk.getWorkOrError();
+                                for (Serializable s : ss)
+                                {
+                                    if (s instanceof Work)
+                                    {
+                                        q.add(convertOrcidWorkToRecord(
+                                                bulkObject.getProfile(),
+                                                bulkObject.getOrcid(), (Work) s));
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e.getMessage(), e);
+                        }
                     }
-                    catch (InterruptedException e)
-                    {
-                        log.error(e);
-                    }
-                }
+                });
             }
-            else
+            
+            
+            List<Thread> threadsStarted = new ArrayList<Thread>();
+            
+            while (!threads.isEmpty() || !threadsStarted.isEmpty())
             {
-                while (!threadsStarted.isEmpty())
+                if (!threads.isEmpty()
+                        && threadsStarted.size() < getNumberOfThread())
                 {
-                    Thread t = threadsStarted.remove(0);
-                    try
+                    Thread t = threads.remove(0);
+                    t.start();
+                    threadsStarted.add(t);
+                    // sleep only if there is a cooldown and if there are works left in queue
+                    if (!threads.isEmpty() && getCooldown() != 0)
                     {
-                        t.join();
-                    }
-                    catch (InterruptedException e)
-                    {
-                        log.error(e);
+                        try
+                        {
+                            Thread.sleep(getCooldown());
+                        }
+                        catch (InterruptedException e)
+                        {
+                            log.error(e);
+                        }
                     }
                 }
-            }            
-        }        
+                else
+                {
+                    while (!threadsStarted.isEmpty())
+                    {
+                        Thread t = threadsStarted.remove(0);
+                        try
+                        {
+                            t.join();
+                        }
+                        catch (InterruptedException e)
+                        {
+                            log.error(e);
+                        }
+                    }
+                }            
+            }        
+        }
         
         while (!q.isEmpty())
         {
@@ -386,27 +426,6 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
         }
     }
 
-    private Thread populateWorkQueue(final ConcurrentLinkedQueue<Record> q, final OrcidService orcidService,
-            final PersonalDetails profile, final String orcid, final List<String> putCodes) {
-        final WorkBulk workBulk = orcidService.getWorkBulk(orcid, null, putCodes);
-        return new Thread() {
-            @Override
-            public void run() {
-                    try {
-                        List<Serializable> ss = workBulk.getWorkOrError();
-                        for (Serializable s : ss) {
-                            if (s instanceof Work) {
-                                q.add(convertOrcidWorkToRecord(
-                                        profile, orcid, (Work) s));
-                            }
-                        }
-                    } catch (Exception e) {
-                        log.error(e.getMessage(), e);
-                    }
-            }
-        };
-    }
-
     public int getCooldown()
     {
         return cooldown;
@@ -428,5 +447,46 @@ public class OrcidOnlineDataLoader extends NetworkSubmissionLookupDataLoader
     public void setNumberOfThread(int numberOfThread)
     {
         this.numberOfThread = numberOfThread;
+    }
+    
+    public class DTOBulkPutCode {
+        
+        private String orcid;
+        private List<String> putCode;
+        private PersonalDetails profile;
+        
+        public DTOBulkPutCode(String orcid, List<String> putCodes,
+                PersonalDetails profile)
+        {
+            this.orcid = orcid;
+            this.putCode = putCodes;
+            this.profile = profile;
+        }
+        
+        public String getOrcid()
+        {
+            return orcid;
+        }
+        public void setOrcid(String orcid)
+        {
+            this.orcid = orcid;
+        }
+        public List<String> getPutCode()
+        {
+            return putCode;
+        }
+        public void setPutCode(List<String> putCode)
+        {
+            this.putCode = putCode;
+        }
+        public PersonalDetails getProfile()
+        {
+            return profile;
+        }
+        public void setProfile(PersonalDetails profile)
+        {
+            this.profile = profile;
+        }
+        
     }
 }
