@@ -2,7 +2,7 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:doc="http://www.lyncode.com/xoai" 
-    xmlns:str="xalan://java.lang.String"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:dcterms="http://purl.org/dc/terms/"
     version="1.0">
 
@@ -121,11 +121,11 @@
                             </xsl:variable>
 				<dc:creator xsi:type="pc:MetaPers">
 					<pc:person>
-                                            <xsl:if test="../doc:field[@name='authority'][number($i)]!=''">
-                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($i)]" /></xsl:attribute>
+                                            <xsl:if test="../doc:field[@name='authority'][$i]!=''">
+                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][$i]" /></xsl:attribute>
                                             </xsl:if>
-                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]!=''">
-                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][number($i)]" /></ddb:ORCID>
+                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][$i]!=''">
+                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][$i]" /></ddb:ORCID>
                                             </xsl:if>
             					<pc:name type="nameUsedByThePerson">
 							<!-- handle names with "von", "van", "Van", and "de" -->
@@ -237,11 +237,11 @@
 						</xsl:otherwise>
 					</xsl:choose>
 					<pc:person>
-                                            <xsl:if test="../doc:field[@name='authority'][number($a)]!=''">
-                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][number($a)]" /></xsl:attribute>
+                                            <xsl:if test="../doc:field[@name='authority'][$a]!=''">
+                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][$a]" /></xsl:attribute>
                                             </xsl:if>
-                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]!=''">
-                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][number($a)]" /></ddb:ORCID>
+                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][$a]!=''">
+                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='advisorOrcid']//doc:field[@name='authority'][$a]" /></ddb:ORCID>
                                             </xsl:if>
 						<xsl:variable name="tail" select="substring-after(., ',')"/>
 						<!-- allowed academic titles: "Prof. Dr.", "PD Dr.", Prof. em.", "Dr.", "Prof. Dr.Dr.", "Prof. Dr. h.c.", "Dr. h.c." -->
@@ -531,7 +531,8 @@
 
                             <!-- 46. Transfer-URL -->
                             <ddb:transfer ddb:type="dcterms:URI">
-                                <xsl:value-of select="str:replaceAll(str:new(./doc:field[@name='url']/text()), '\+', '\%20')"/>
+<!--                                <xsl:value-of select="fn:replace(./doc:field[@name='url']/text(), '+', '%20')"/> -->
+                                <xsl:value-of select="./doc:field[@name='url']/text()"/>
                             </ddb:transfer>
                         </xsl:for-each>
 			<ddb:identifier ddb:type="URL"><xsl:value-of select="$handle"/></ddb:identifier>
