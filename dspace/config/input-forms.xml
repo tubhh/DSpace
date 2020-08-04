@@ -415,6 +415,18 @@
 
        <field>
          <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>scopus</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Scopus EID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the Scopus EID of the work, if it has one.</hint>
+         <required></required>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
          <dc-element>date</dc-element>
          <dc-qualifier>issued</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1335,6 +1347,18 @@
          <label>arXiv ID</label>
          <input-type>onebox</input-type>
          <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>scopus</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Scopus EID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the Scopus EID of the work, if it has one.</hint>
+         <visibility>workflow</visibility>
          <required></required>
        </field>
 

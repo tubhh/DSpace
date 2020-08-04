@@ -359,6 +359,18 @@
 
        <field>
          <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>scopus</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Scopus EID</label>
+         <input-type>onebox</input-type>
+         <hint>Falls diese Arbeit eine EID bei Scopus hat, geben Sie diese hier ein.</hint>
+         <required></required>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
          <dc-element>date</dc-element>
          <dc-qualifier>issued</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1277,6 +1289,18 @@
          <input-type>onebox</input-type>
          <hint>Geben Sie hier die arXiv ID Ihrer Publikation ein, falls sie auf https://arxiv.org veröffentlicht ist.</hint>
          <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>scopus</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Scopus EID</label>
+         <input-type>onebox</input-type>
+         <hint>Falls diese Arbeit eine EID bei Scopus hat, geben Sie diese hier ein.</hint>
+         <required></required>
+         <visibility>workflow</visibility>
        </field>
 
        <field>
