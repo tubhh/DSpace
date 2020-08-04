@@ -427,6 +427,17 @@
 
        <field>
          <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>pmid</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>PubMed ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the PubMed ID of the work, if it has one.</hint>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
          <dc-element>date</dc-element>
          <dc-qualifier>issued</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1360,6 +1371,17 @@
          <hint>Enter the Scopus EID of the work, if it has one.</hint>
          <visibility>workflow</visibility>
          <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>pmid</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>PubMed ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the PubMed ID of the work, if it has one.</hint>
+         <visibility>workflow</visibility>
        </field>
 
        <field>
