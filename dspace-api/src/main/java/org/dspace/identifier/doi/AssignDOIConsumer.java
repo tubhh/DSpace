@@ -12,6 +12,9 @@ import org.dspace.identifier.DOIIdentifierProvider;
 import org.dspace.identifier.IdentifierException;
 import org.dspace.utils.DSpace;
 
+/**
+ * Consumer used to internally register items without DOIs when they are moved between collections
+ */
 public class AssignDOIConsumer implements Consumer {
 	
 	// items to be updated with DOI
@@ -21,20 +24,24 @@ public class AssignDOIConsumer implements Consumer {
 	public void initialize() throws Exception {
 	}
 
+	/**
+	 * Store a list of all the items that need to have their DOI registered
+	 */
 	@Override
 	public void consume(Context ctx, Event event) throws Exception {
 		int subjectType = event.getSubjectType();
         int eventType = event.getEventType();
+        int objectType = event.getObjectType();
         
         if (itemIDs == null)
         {
         	itemIDs = new HashMap<Integer, Item>();
         }
         
-        if (subjectType == Constants.ITEM && eventType == Event.MODIFY)
+        if (subjectType == Constants.COLLECTION && eventType == Event.ADD && objectType == Constants.ITEM)
         {
         	// put Item ID and Item into the created map
-        	Item item = (Item)event.getSubject(ctx);
+        	Item item = (Item)event.getObject(ctx);
         	int itemID = item.getID();
         	if (item.isArchived() && !itemIDs.containsKey(itemID))
         	{
@@ -43,6 +50,9 @@ public class AssignDOIConsumer implements Consumer {
         }
 	}
 
+	/**
+	 * Register DOIs for all items to work
+	 */
 	@Override
 	public void end(Context ctx) throws Exception {
 		if (itemIDs != null && itemIDs.size() > 0)
