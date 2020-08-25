@@ -3,6 +3,8 @@ package org.dspace.identifier.doi;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.dspace.content.Item;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
@@ -17,6 +19,9 @@ import org.dspace.utils.DSpace;
  */
 public class AssignDOIConsumer implements Consumer {
 	
+    /** log4j logger */
+    private static Logger log = Logger.getLogger(AssignDOIConsumer.class);
+    
 	// items to be updated with DOI
 	private Map<Integer, Item> itemIDs = null;
     
@@ -57,16 +62,37 @@ public class AssignDOIConsumer implements Consumer {
 	public void end(Context ctx) throws Exception {
 		if (itemIDs != null && itemIDs.size() > 0)
 		{
-			DOIIdentifierProvider doiIdentifierService = new DSpace().getSingletonService(DOIIdentifierProvider.class);
+			DOIIdentifierProvider provider = new DSpace().getSingletonService(DOIIdentifierProvider.class);
 			
 			for (Map.Entry<Integer, Item> itemEntry : itemIDs.entrySet())
 			{
+			    Item item = itemEntry.getValue();
+			    
+			    String doi = null;
 				try
 				{
-					doiIdentifierService.register(ctx, itemEntry.getValue());
+				    doi = provider.register(ctx, item);
 				} catch (IdentifierException e)
 				{
-					throw new RuntimeException("Can't create an Identifier!", e);
+					log.warn("AssignDOIConsumer can't create an Identifier!", e);
+				}
+				
+				//try to force update metadata, to move doi in the correct status especially for DOI already registered 
+				if(StringUtils.isNotBlank(doi)) {
+    		        try
+    		        {
+    		            provider.updateMetadata(ctx, item, doi);
+    		        }
+    		        catch (IllegalArgumentException ex)
+    		        {
+    		            // should not happen, as we got the DOI from the DOIProvider
+    		            log.warn("AssignDOIConsumer caught an IdentifierException.", ex);
+    		        }
+    		        catch (IdentifierException ex)
+    		        {
+    		            log.warn("AssignDOIConsumer cannot update metadata for Item with ID "
+    		                    + item.getID() + " and DOI " + doi + ".", ex);
+    		        }
 				}
 			}
 			
