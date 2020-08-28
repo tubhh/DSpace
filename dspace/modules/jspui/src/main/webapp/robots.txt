@@ -1,8 +1,8 @@
 # The FULL URL to the DSpace sitemaps
 # The https://tubdok.tub.tuhh.de will be auto-filled with the value in dspace.cfg
 # XML sitemap is listed first as it is preferred by most search engines
-Sitemap: https://tubdok.tub.tuhh.de/sitemap
-Sitemap: https://tubdok.tub.tuhh.de/htmlmap
+Sitemap: https://tore.tuhh.de/sitemap
+Sitemap: https://tore.tuhh.de/htmlmap
 
 ##########################
 # Default Access Group
