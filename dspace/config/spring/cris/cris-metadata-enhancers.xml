@@ -45,7 +45,7 @@
 		<property name="alias" value="project" />
 		<property name="metadata">
 			<list>
-				<value>dc.relation</value>
+				<value>dc.relation.project</value>
 			</list>
 		</property>
 		<property name="clazz">
