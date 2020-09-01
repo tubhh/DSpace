@@ -946,7 +946,7 @@
 										</funderName>
 										<xsl:if test="$funderid[$counter]!='' and $funderid[$counter]!=$placeholder">
 											<funderIdentifier funderIdentifierType="Crossref Funder ID">
-												https://doi.org/10.13039/<xsl:value-of select="$funderid[$counter]"/>	
+												<xsl:text>https://doi.org/10.13039/</xsl:text><xsl:value-of select="$funderid[$counter]"/>	
 											</funderIdentifier>
 										</xsl:if>
 										<xsl:if test="$funderrorid[$counter]!='' and $funderrorid[$counter]!=$placeholder">
