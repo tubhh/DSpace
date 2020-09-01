@@ -25,7 +25,7 @@
 			<schemaVersion>4.1</schemaVersion>
 			<!-- <datacentreSymbol>XXXX</datacentreSymbol>  -->
 			<payload>
-				<resource xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.1/metadata.xsd" >
+				<resource xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.3/metadata.xsd" >
 					
 					
 					<!-- placeholder variable contains the value of the placeholder -->
