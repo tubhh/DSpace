@@ -922,6 +922,7 @@
 					<!-- select all funding references -->
 					<xsl:variable name="funder" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funder']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="funderid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funderid']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="funderrorid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funderrorid']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="grantno" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='grantno']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awarduri" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='awardURL']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awardtitle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element/doc:field[@name='value']"/>
@@ -946,6 +947,11 @@
 										<xsl:if test="$funderid[$counter]!='' and $funderid[$counter]!=$placeholder">
 											<funderIdentifier funderIdentifierType="Crossref Funder ID">
 												https://doi.org/10.13039/<xsl:value-of select="$funderid[$counter]"/>	
+											</funderIdentifier>
+										</xsl:if>
+										<xsl:if test="$funderrorid[$counter]!='' and $funderrorid[$counter]!=$placeholder">
+											<funderIdentifier funderIdentifierType="ROR">
+												<xsl:value-of select="$funderrorid[$counter]"/>	
 											</funderIdentifier>
 										</xsl:if>
 										<xsl:if test="$grantno[$counter]!='' and $grantno[$counter]!=$placeholder">

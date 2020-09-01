@@ -59,6 +59,9 @@
 				<entry key="funderid">
 					<value>funder.crossrefid</value>
 				</entry>
+				<entry key="funderrorid">
+					<value>funder.rorid</value>
+				</entry>
 				<entry key="grantno">
 					<value>code</value>
 				</entry>
