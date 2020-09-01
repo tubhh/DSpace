@@ -22,7 +22,7 @@
 	
 	<xsl:template match="/">
 		<oai_datacite xmlns="http://schema.datacite.org/oai/oai-1.1/" xsi:schemaLocation="http://schema.datacite.org/oai/oai-1.1/ http://schema.datacite.org/oai/oai-1.1/oai.xsd" >
-			<schemaVersion>4.1</schemaVersion>
+			<schemaVersion>4.3</schemaVersion>
 			<!-- <datacentreSymbol>XXXX</datacentreSymbol>  -->
 			<payload>
 				<resource xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.3/metadata.xsd" >
