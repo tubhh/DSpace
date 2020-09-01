@@ -925,7 +925,7 @@
 					<xsl:variable name="funderrorid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funderrorid']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="grantno" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='grantno']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awarduri" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='awardURL']/doc:element/doc:field[@name='value']"/>
-					<xsl:variable name="awardtitle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="awardtitle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='project']/doc:element/doc:field[@name='value']"/>
 					
 					<xsl:variable name="check_fundingreference">
 						<xsl:for-each select="$funder">
