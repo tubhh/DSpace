@@ -6,7 +6,7 @@
     Author     : pbecker, ffuerste
     Description: Converts metadata from DSpace Intermediat Format (DIM) into
                  metadata following the DataCite Schema for the Publication and
-                 Citation of Research Data, Version 4.3
+                 Citation of Research Data, Version 4.2
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dspace="http://www.dspace.org/xmlns/dspace/dim"
@@ -32,7 +32,9 @@
     
     <!-- Don't copy everything by default! -->
     <xsl:template match="@* | text()" />
-    
+
+    <xsl:variable name="placeholder">#PLACEHOLDER_PARENT_METADATA_VALUE#</xsl:variable>
+
     <xsl:template match="/dspace:dim[@dspaceType='ITEM']">
         <!--
             org.dspace.identifier.doi.DataCiteConnector uses this XSLT to
@@ -43,7 +45,7 @@
         -->
         <resource xmlns="http://datacite.org/schema/kernel-4"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.3/metadata.xsd">
+                  xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.2/metadata.xsd">
 
             <!-- 
                 MANDATORY PROPERTIES
@@ -990,14 +992,14 @@
                 <funderName>
                     <xsl:value-of select="." />
                 </funderName>
-                <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderid'][number($f)]!=''">
+                <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderid'][number($f)]!='' and //dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderid'][number($f)]!=$placeholder">
                     <funderIdentifier>
                         <xsl:attribute name="nameIdentifierScheme">Crossref Funder ID</xsl:attribute>
                         <xsl:attribute name="schemeURI">https://www.crossref.org/services/funder-registry/</xsl:attribute>
                         <xsl:text>https://doi.org/10.13039/</xsl:text><xsl:value-of select="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderid'][number($f)]" />
                     </funderIdentifier>
                 </xsl:if>
-                <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderrorid'][number($f)]!=''">
+                <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderrorid'][number($f)]!='' and //dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderrorid'][number($f)]!=$placeholder">
                     <funderIdentifier>
                         <xsl:attribute name="nameIdentifierScheme">ROR</xsl:attribute>
                         <xsl:attribute name="schemeURI">https://ror.org</xsl:attribute>
