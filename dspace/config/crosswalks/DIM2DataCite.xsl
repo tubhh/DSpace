@@ -6,7 +6,7 @@
     Author     : pbecker, ffuerste
     Description: Converts metadata from DSpace Intermediat Format (DIM) into
                  metadata following the DataCite Schema for the Publication and
-                 Citation of Research Data, Version 4.2
+                 Citation of Research Data, Version 4.3
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dspace="http://www.dspace.org/xmlns/dspace/dim"
@@ -43,7 +43,7 @@
         -->
         <resource xmlns="http://datacite.org/schema/kernel-4"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.2/metadata.xsd">
+                  xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.3/metadata.xsd">
 
             <!-- 
                 MANDATORY PROPERTIES
