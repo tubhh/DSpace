@@ -1910,6 +1910,10 @@
        <stored-value>http://www.gesetze-im-internet.de/geonutzv/</stored-value>
      </pair>
      <pair>
+       <displayed-value>Springer AAM Terms of Use</displayed-value>
+       <stored-value>https://www.springer.com/gp/open-access/publication-policies/aam-terms-of-use</stored-value>
+     </pair>
+     <pair>
        <displayed-value>In Copyright</displayed-value>
        <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
      </pair>
@@ -2214,6 +2218,10 @@
      <pair>
        <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
        <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Springer AAM Terms of Use</displayed-value>
+       <stored-value>https://www.springer.com/gp/open-access/publication-policies/aam-terms-of-use</stored-value>
      </pair>
    </value-pairs>
 
