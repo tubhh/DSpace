@@ -944,16 +944,20 @@
 										<funderName>
 											<xsl:value-of select="."/>
 										</funderName>
-										<xsl:if test="$funderid[$counter]!='' and $funderid[$counter]!=$placeholder">
+                                                                                <xsl:choose>
+                                                                                    <xsl:when test="$funderid[$counter]!='' and $funderid[$counter]!=$placeholder">
 											<funderIdentifier funderIdentifierType="Crossref Funder ID">
 												<xsl:text>https://doi.org/10.13039/</xsl:text><xsl:value-of select="$funderid[$counter]"/>	
 											</funderIdentifier>
-										</xsl:if>
-										<xsl:if test="$funderrorid[$counter]!='' and $funderrorid[$counter]!=$placeholder">
-											<funderIdentifier funderIdentifierType="ROR">
+                                                                                    </xsl:when>
+                                                                                    <xsl:otherwise>
+                                                                                        <xsl:if test="$funderrorid[$counter]!='' and $funderrorid[$counter]!=$placeholder">
+                                                                                            <funderIdentifier funderIdentifierType="ROR">
 												<xsl:value-of select="$funderrorid[$counter]"/>	
-											</funderIdentifier>
-										</xsl:if>
+                                                                                            </funderIdentifier>
+                                                                                        </xsl:if>
+                                                                                    </xsl:otherwise>
+                                                                                </xsl:choose>
 										<xsl:if test="$grantno[$counter]!='' and $grantno[$counter]!=$placeholder">
 											<awardNumber>
 												<xsl:value-of select="$grantno[$counter]"/>
