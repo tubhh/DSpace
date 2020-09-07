@@ -11,10 +11,6 @@ import static com.lyncode.xoai.dataprovider.core.Granularity.Second;
 import static org.dspace.xoai.util.ItemUtils.retrieveMetadata;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.SQLException;
@@ -63,30 +59,19 @@ import org.dspace.discovery.DiscoverQuery;
 import org.dspace.discovery.DiscoverResult;
 import org.dspace.discovery.SearchServiceException;
 import org.dspace.discovery.SearchUtils;
-import org.dspace.utils.DSpace;
 import org.dspace.xoai.services.api.config.ConfigurationService;
 import org.dspace.xoai.services.api.database.CollectionsService;
 import org.dspace.xoai.services.api.solr.SolrServerResolver;
 import org.dspace.xoai.solr.DSpaceSolrSearch;
 import org.dspace.xoai.solr.exceptions.DSpaceSolrException;
 import org.dspace.xoai.solr.exceptions.DSpaceSolrIndexerException;
-import org.dspace.xoai.data.DSpaceItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-
-import javax.xml.transform.stream.StreamResult;
 
 import com.lyncode.xoai.dataprovider.exceptions.ConfigurationException;
 import com.lyncode.xoai.dataprovider.exceptions.MetadataBindException;
 import com.lyncode.xoai.dataprovider.exceptions.WritingXmlException;
 import com.lyncode.xoai.dataprovider.xml.XmlOutputContext;
-import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
 
 /**
  * @author Lyncode Development Team <dspace@lyncode.com>
@@ -379,7 +364,7 @@ public class XOAI {
                 	if (o instanceof Item) {
                 	    Item item = (Item)o;
                 	    String type = (String)item.getExtraInfo().get("item.cerifentitytype");
-                	    solrDoc = this.indexResults(item,true);
+                	    solrDoc = this.indexResults(item, false);
                 	    if(StringUtils.isNotBlank(type)) {
                 	        doublingSolrDocument = true;
                 	    }
@@ -390,10 +375,9 @@ public class XOAI {
                 	server.add(solrDoc);
                 	
                 	if(doublingSolrDocument) {
-                		SolrInputDocument newSolrDoc = null;
                 	    Item item = (Item)o;
-                	    newSolrDoc = this.replaceIdentifier(item, solrDoc);
-                	    server.add(newSolrDoc);
+                	    solrDoc = this.indexResults(item, true);
+                	    server.add(solrDoc);
                 	}
                     context.clearCache();
                 } catch (SQLException ex) {
@@ -421,91 +405,6 @@ public class XOAI {
     }
 
     /***
-     * Set special identifier
-     * Improve performance by avoiding double indexing
-     **/
-    private SolrInputDocument replaceIdentifier(Item item, SolrInputDocument doc) {
-        Namespace ns = Namespace.getNamespace("http://www.lyncode.com/xoai");
-        String handle = item.getHandle();
-        String type = (String)item.getExtraInfo().get("item.cerifentitytype");
-        doc.removeField("item.identifier");
-        doc.removeField("item.type");
-        doc.addField("item.identifier", type+"/"+handle);
-        doc.addField("item.type", ITEMTYPE_SPECIAL);
-
-        try {
-            String compiled = (String) doc.getField("item.compile").getFirstValue();
-
-            Document xmldoc = null;
-
-            InputStream targetStream = new ByteArrayInputStream(compiled.getBytes());
-
-            // Das Dokument erstellen
-            SAXBuilder builder = new SAXBuilder();
-            xmldoc = builder.build(targetStream);
-
-            Element otherElement = null;
-            Element newOtherElement = null;
-            Element identifierElement = null;
-            Element typeElement = null;
-
-            Element rootElement = xmldoc.getRootElement();
-
-            List<Element> elemelements = new ArrayList<Element>(rootElement.getChildren() );
-            for ( Element elemElement : elemelements ) {
-                String elemName = elemElement.getAttributeValue("name");
-                if (elemName != null && elemName.equals("others")) {
-                    List<Element> fieldElements = new ArrayList<Element>(elemElement.getChildren() );
-
-                    for( Element element : fieldElements ) {
-                        String att = element.getAttributeValue("name");
-                        if(att.equals("identifier")) {
-                            elemElement.removeContent(element);
-                        }
-                        if(att.equals("type")) {
-                            elemElement.removeContent(element);
-                        }
-                    }
-                    Element newIdentifierElement = new Element("field", ns);
-                    newIdentifierElement.setAttribute("name", "identifier");
-                    Element newTypeElement = new Element("field", ns);
-                    newTypeElement.setAttribute("name", "type");
-
-                    newIdentifierElement.setText(DSpaceItem.buildIdentifier(handle, type));
-                    newTypeElement.setText(ITEMTYPE_SPECIAL);
-                    elemElement.addContent(newIdentifierElement);
-                    elemElement.addContent(newTypeElement);
-                }
-            }
-            xmldoc.setRootElement(rootElement);
-
-            XMLOutputter outputter = new XMLOutputter(  );
-            StringWriter writer = new StringWriter();
-            outputter.output(rootElement, writer);
-
-            String xmlString = writer.getBuffer().toString();
-
-            doc.removeField("item.compile");
-            doc.addField("item.compile", xmlString);
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        if (verbose) {
-            println(String.format("Item %d with handle %s indexed with prefixed identifier as "+DSpaceItem.buildIdentifier(handle, type),
-                    item.getID(), handle));
-        }
-
-        return doc;
-    }
-
-    /***
      * Index one item
      * 
      * @param item The item
@@ -527,8 +426,15 @@ public class XOAI {
         }
         
         String type = (String)item.getExtraInfo().get("item.cerifentitytype");
-        doc.addField("item.identifier", handle);
-        doc.addField("item.type", ITEMTYPE_DEFAULT);
+        if(StringUtils.isNotBlank(type) && specialIdentifier) {
+            doc.addField("item.identifier", type +"/"+ handle);
+            doc.addField("item.type", ITEMTYPE_SPECIAL);
+        }
+        else {
+            doc.addField("item.identifier", handle);
+            doc.addField("item.type", ITEMTYPE_DEFAULT);
+        }
+        
         doc.addField("item.handle", handle);
         doc.addField("item.lastmodified", item.getLastModified());
         if (item.getSubmitter() != null) {
@@ -562,22 +468,12 @@ public class XOAI {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         XmlOutputContext xmlContext = XmlOutputContext.emptyContext(out, Second);
-        Metadata metadata = null;
         if(StringUtils.isNotBlank(type) && specialIdentifier) {
-            metadata = retrieveMetadata(context, item, true);
+            retrieveMetadata(context, item, true).write(xmlContext);
         }
         else {
-            metadata = retrieveMetadata(context, item, false);
+            retrieveMetadata(context, item, false).write(xmlContext);
         }
-
-        //Do any additional content on "item.compile" field, depends on the plugins
-        List<XOAIItemCompilePlugin> xOAIItemCompilePlugins = new DSpace().getServiceManager().getServicesByType(XOAIItemCompilePlugin.class);
-        for (XOAIItemCompilePlugin xOAIItemCompilePlugin : xOAIItemCompilePlugins)
-        {
-            metadata = xOAIItemCompilePlugin.additionalMetadata(context, metadata, item);
-        }
-
-        metadata.write(xmlContext);
         xmlContext.getWriter().flush();
         xmlContext.getWriter().close();
         doc.addField("item.compile", out.toString());
