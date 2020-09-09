@@ -160,6 +160,8 @@
 			<Set ref="ddc980Set" />
 			<Set ref="ddc990Set" />
 
+            <Set ref="instM7Set" />
+
             <!-- formats to expose on default context -->
             <Format ref="oaidc"/>
             <Format ref="xmetadissplus" />
@@ -1116,7 +1118,22 @@
                 <Custom ref="doctypeTextCondition"/>
             </Definition>
         </Filter>
- 
+
+        <Filter id="institute-m7-filter">
+            <Definition>
+                <Custom ref="institute-m7-authorityCondition"/>
+            </Definition>
+        </Filter>
+
+        <CustomCondition id="institute-m7-authorityCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.publication.institute.authority</string>
+                <string name="operator">equal</string>
+                <string name="value">ou00021</string>
+            </Configuration>
+        </CustomCondition>
+
 		<!-- Eldorado Anpassung - DINI Zertifikat -->
 		<!-- customConditions fuer Publikationstypen -->
 		<CustomCondition id="doctypepreprintCondition">
@@ -3563,7 +3580,13 @@
 			<Name>General history of other areas</Name>
 			<Filter ref="ddc990Filter"/>
 		</Set>	
-        
+
+        <Set id="instM7Set">
+            <Spec>institute:m7</Spec>
+            <Name>Institute M-7</Name>
+            <Filter ref="institute-m7-filter"/>
+        </Set>
+
         <Set id="driverSet">
             <Spec>driver</Spec>
             <Name>Open Access DRIVERset</Name>
