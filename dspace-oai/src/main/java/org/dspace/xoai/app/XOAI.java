@@ -356,6 +356,7 @@ public class XOAI {
             throws DSpaceSolrIndexerException {
         try {
             int i = 0;
+            long itemstart = System.currentTimeMillis();
             SolrServer server = solrServerResolver.getServer();
             for (DSpaceObject o : result.getDspaceObjects()) {
                 try {
@@ -395,6 +396,7 @@ public class XOAI {
                 if ((i+subtotal) % 100 == 0) System.out.println((i+subtotal) + " items imported so far...");
             }
             System.out.println("Partial Total: " + (i+subtotal) + " items");
+            System.out.println("It took "+ ((System.currentTimeMillis()-itemstart) / 1000) +" seconds for this portion");
             server.commit();
             return i;
         } catch (SolrServerException ex) {
