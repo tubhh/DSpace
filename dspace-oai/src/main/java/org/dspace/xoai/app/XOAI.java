@@ -600,7 +600,7 @@ public class XOAI {
             case ITEMTYPE_DEFAULT:
             	eraseQuery = ConfigurationManager.getProperty("oai", "oai.erase.query.item");
             	if (eraseQuery == null || eraseQuery.trim().length() <= 0) {
-            		eraseQuery = "item.type:item";
+            		eraseQuery = "item.type:item OR item.type:cfitem";
             	}
     	        break;
             case "rp":
@@ -624,7 +624,7 @@ public class XOAI {
             case "other":
             	eraseQuery = ConfigurationManager.getProperty("oai", "oai.erase.query.crisother");
             	if (eraseQuery == null || eraseQuery.trim().length() <= 0) {
-            		eraseQuery = "NOT (item.type:item OR item.type:rp OR item.type:project OR item.type:ou)";
+            		eraseQuery = "NOT (item.type:item OR item.type:cfitem OR item.type:rp OR item.type:project OR item.type:ou)";
             	}
     	        break;
             case "all":
