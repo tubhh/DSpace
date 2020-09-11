@@ -17,7 +17,7 @@
 						<div class="panel-body">
     <c:if test="${(!entity.status)}">
         <p class="warning">
-            <fmt:message key="jsp.layout.hku.detail.researcher-disabled" />
+            <fmt:message key="jsp.layout.hku.detail.tuhh-researcher-disabled" />
         </p>
     </c:if>
 
