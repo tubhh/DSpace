@@ -548,6 +548,17 @@
 
      <page number="3">
        <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier>version</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publication Version (status for this item at a publisher)</label>
+         <input-type value-pairs-name="publication_version">dropdown</input-type>
+         <hint>Select the version of this publication, if it has been submitted or published at another publisher.</hint>
+         <required></required>
+        </field>
+
+       <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>oai</dc-element>
          <dc-qualifier>show</dc-qualifier>
@@ -1497,6 +1508,17 @@
      <page number="3">
        <field>
          <dc-schema>local</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier>version</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publication Version (status for this item at a publisher)</label>
+         <input-type value-pairs-name="publication_version">dropdown</input-type>
+         <hint>Select the version of this publication, if it has been submitted or published at another publisher.</hint>
+         <required></required>
+        </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
          <dc-element>status</dc-element>
          <dc-qualifier>inpress</dc-qualifier>
          <repeatable>false</repeatable>
@@ -1732,6 +1754,33 @@
  <!-- stores the associated stored-values in the database.                  -->
 
  <form-value-pairs>
+   <value-pairs value-pairs-name="publication_version" dc-term="publication_version">
+     <pair>
+       <displayed-value>not submitted to a publisher</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Draft</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Submitted Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Accepted Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Published Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Updated Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+
    <value-pairs value-pairs-name="relation_types_en" dc-term="datacite_relation">
 <!--
      <pair>
