@@ -883,8 +883,8 @@
 									</xsl:when>
 									<xsl:otherwise>-->
 										<rights rightsURI="{$rightsuri}">
-											<xsl:if test="$rights/doc:element/doc:element/doc:field[@name='value']!=''">
-												<xsl:value-of select="$rights/doc:element/doc:element/doc:field[@name='value']"/>
+											<xsl:if test="$rights/doc:element//doc:field[@name='value']!=''">
+												<xsl:value-of select="$rights/doc:element//doc:field[@name='value']"/>
 											</xsl:if>
 										</rights>
 									<!--</xsl:otherwise>
