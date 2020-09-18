@@ -385,9 +385,9 @@
          <dc-element>identifier</dc-element>
          <dc-qualifier>citation</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Citation</label>
+         <label>Citation/Source</label>
          <input-type>onebox</input-type>
-         <hint>Enter the standard citation for the previously issued instance of this item.</hint>
+         <hint>Enter the standard citation for the previously issued instance (source) of this item.</hint>
          <required></required>
        </field>
 
@@ -1333,9 +1333,9 @@
          <dc-element>identifier</dc-element>
          <dc-qualifier>citation</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Citation</label>
+         <label>Citation/Source</label>
          <input-type>onebox</input-type>
-         <hint>Enter the standard citation for the previously issued instance of this item.</hint>
+         <hint>Enter the standard citation for the previously issued instance (source) of this item.</hint>
          <required></required>
        </field>
 
