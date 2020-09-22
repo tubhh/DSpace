@@ -9,6 +9,8 @@ package org.dspace.identifier;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.dspace.content.Collection;
 import org.dspace.content.DSpaceObject;
@@ -117,11 +119,13 @@ public class URNConsumer implements Consumer
                 }
             }
             String ch = col.getHandle();
-            String ignorecoll = getCollectionException();
+            String[] ignorecollArray = getCollectionException().split(",");
 
-            log.debug("Collection Handle is "+ch+". Will ignore "+ignorecoll+"\n");
+            List<String> ignorecollList = Arrays.asList(ignorecollArray);
 
-            if (!ch.equals(ignorecoll)) {
+            log.debug("Collection Handle is "+ch+". Will ignore "+ignorecollList.toString()+"\n");
+
+            if (!ignorecollList.contains(ch)) {
                 log.info("Calculating and storing URN for item "+item.getID()+" to tuhh.identifier.urn\n");
                 String urn = null;
 
