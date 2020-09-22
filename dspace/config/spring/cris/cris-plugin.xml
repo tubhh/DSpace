@@ -97,7 +97,7 @@
 				<entry key="dc.relation.ispartof">
 					<bean
 						class="org.dspace.app.cris.integration.authority.ItemMetadataImportFillerConfiguration">
-						<property name="updateEnabled" value="true" />
+						<property name="updateEnabled" value="false" />
 						<property name="mapping">
 							<map>
 								<entry key="dc.identifier.issn">
