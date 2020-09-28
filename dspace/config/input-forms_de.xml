@@ -1445,6 +1445,7 @@
      </page>
 
      <page number="3">
+<!--
        <field>
          <dc-schema>local</dc-schema>
          <dc-element>type</dc-element>
@@ -1455,7 +1456,7 @@
          <hint>Bitte wählen Sie die Version dieser Publikation, falls sie bei einem Verlag eingereicht wurde.</hint>
          <required></required>
         </field>
-
+-->
        <field>
          <dc-schema>local</dc-schema>
          <dc-element>status</dc-element>
