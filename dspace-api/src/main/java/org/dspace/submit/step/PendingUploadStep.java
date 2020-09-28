@@ -8,6 +8,7 @@
 package org.dspace.submit.step;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.dspace.app.util.SubmissionInfo;
 import org.dspace.app.util.Util;
@@ -20,6 +21,7 @@ import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.curate.Curator;
 import org.dspace.eperson.Group;
+import org.dspace.handle.HandleManager;
 import org.dspace.submit.AbstractProcessingStep;
 
 import javax.servlet.ServletException;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +46,11 @@ import java.util.Map;
  * @see org.dspace.app.util.SubmissionConfig
  * @see org.dspace.app.util.SubmissionStepConfig
  * @see AbstractProcessingStep
+ * @see UploadWithEmbargoStep
  *
  * @author Tim Donohue
+ * @author Keiji Suzuki
+ * @author Kim Shepherd
  * @version $Revision$
  */
 public class PendingUploadStep extends UploadStep
@@ -91,6 +97,13 @@ public class PendingUploadStep extends UploadStep
 
     // return from editing file information
     public static final int STATUS_EDIT_COMPLETE = 25;
+
+    // From UploadWithEmbargoStep
+    public static final int STATUS_EDIT_POLICIES = 30;
+    public static final int STATUS_EDIT_POLICIES_ERROR_SELECT_GROUP = 31;
+    public static final int STATUS_EDIT_POLICIES_DUPLICATED_POLICY = 32;
+    public static final int STATUS_EDIT_POLICY_ERROR_SELECT_GROUP = 33;
+    public static final int STATUS_EDIT_POLICY_DUPLICATED_POLICY = 34;
 
     /** log4j logger */
     private static Logger log = Logger.getLogger(PendingUploadStep.class);
@@ -173,6 +186,11 @@ public class PendingUploadStep extends UploadStep
                 return STATUS_COMPLETE;
             }
         }
+
+        // From UploadWithEmbargoStep:
+        // POLICIES FORM MANAGEMENT
+        int result = editBitstreamPolicies(request, context, subInfo, buttonPressed);
+        if(result != -1) return result;
 
         // ---------------------------------------------
         // Step #1: Check if this was just a request to
@@ -342,6 +360,13 @@ public class PendingUploadStep extends UploadStep
                 return status;
             }
         }
+
+        // From UploadWithEmbargoStep:
+        // execute only if comes from EditBitstreamStep
+        if(buttonPressed.equals("submit_save")){
+            processAccessFields(context, request, subInfo, subInfo.getBitstream());
+        }
+
 
         // ---------------------------------------------------
         // Step #5: Check if primary bitstream has changed
@@ -607,6 +632,10 @@ public class PendingUploadStep extends UploadStep
                 b.update();
                 item.update();
 
+                // From UploadWithEmbargoStep - process access fields and commit
+                processAccessFields(context, request, subInfo, b);
+                context.commit();
+
                 if ((bf != null) && (bf.isInternal()))
                 {
                     log.warn("Attempt to upload file format marked as internal system use only");
@@ -655,6 +684,129 @@ public class PendingUploadStep extends UploadStep
         return STATUS_COMPLETE;
 
               
+    }
+
+    /**
+     * From UploadWithEmbargoStep:
+     * Process access fields set for embargo by the submitter
+     * @param context
+     * @param request
+     * @param subInfo
+     * @param b
+     * @throws SQLException
+     * @throws AuthorizeException
+     * @see UploadWithEmbargoStep
+     */
+    private void processAccessFields(Context context, HttpServletRequest request, SubmissionInfo subInfo, Bitstream b) throws SQLException, AuthorizeException {
+        // ResourcePolicy Management
+        boolean isAdvancedFormEnabled= ConfigurationManager.getBooleanProperty("webui.submission.restrictstep.enableAdvancedForm", false);
+        // if it is a simple form we should create the policy for Anonymous
+        // if Anonymous does not have right on this collection, create policies for any other groups with
+        // DEFAULT_ITEM_READ specified.
+        if(!isAdvancedFormEnabled){
+            Date startDate = null;
+            try {
+                startDate = DateUtils.parseDate(request.getParameter("embargo_until_date"), new String[]{"yyyy-MM-dd", "yyyy-MM", "yyyy"});
+            } catch (Exception e) {
+                //Ignore start date already null
+            }
+            String reason = request.getParameter("reason");
+            AuthorizeManager.generateAutomaticPolicies(context, startDate, reason, b, (Collection) HandleManager.resolveToObject(context, subInfo.getCollectionHandle()));
+        }
+    }
+
+    /**
+     * Copied from UploadWithEmbargoStep
+     * @param request
+     * @param context
+     * @param subInfo
+     * @param buttonPressed
+     * @return
+     * @throws SQLException
+     * @throws AuthorizeException
+     * @see UploadWithEmbargoStep
+     */
+    private int editBitstreamPolicies(HttpServletRequest request, Context context, SubmissionInfo subInfo, String buttonPressed)
+        throws SQLException, AuthorizeException {
+
+        // FORM: EditBitstreamPolicies SELECTED OPERATION: Return
+        if (buttonPressed.equals("bitstream_list_submit_return")){
+            return STATUS_COMPLETE;
+        }
+        // FORM: UploadStep SELECTED OPERATION: go to EditBitstreamPolicies
+        else if (buttonPressed.startsWith("submit_editPolicy_")){
+            String bitstreamID = buttonPressed.substring("submit_editPolicy_".length());
+            Bitstream b = Bitstream.find(context, Integer.parseInt(bitstreamID));
+            subInfo.setBitstream(b);
+            return STATUS_EDIT_POLICIES;
+        }
+        // FORM: EditBitstreamPolicies SELECTED OPERATION: Add New Policy.
+        else if (buttonPressed.startsWith(AccessStep.FORM_ACCESS_BUTTON_ADD)){
+            Bitstream b = Bitstream.find(context, Integer.parseInt(request.getParameter("bitstream_id")));
+            subInfo.setBitstream(b);
+
+            int result=-1;
+            if( (result = AccessStep.checkForm(request))!=0){
+                return result;
+            }
+            Date dateStartDate = AccessStep.getEmbargoUntil(request);
+            String reason = request.getParameter("reason");
+            String name = request.getParameter("name");
+
+            int groupID = 0;
+            if(request.getParameter("group_id")!=null){
+                try{
+                    groupID=Integer.parseInt(request.getParameter("group_id"));
+                }catch (NumberFormatException nfe){
+                    return STATUS_EDIT_POLICIES_ERROR_SELECT_GROUP;
+                }
+            }
+            ResourcePolicy rp = null;
+            if( (rp= AuthorizeManager.createOrModifyPolicy(null, context, name, groupID, null,
+                dateStartDate, org.dspace.core.Constants.READ, reason, b))==null){
+                return STATUS_EDIT_POLICIES_DUPLICATED_POLICY;
+            }
+            rp.update();
+            context.commit();
+            return STATUS_EDIT_POLICIES;
+        }
+        // FORM: EditBitstreamPolicies SELECTED OPERATION: go to EditPolicyForm
+        else if(org.dspace.submit.step.AccessStep.wasEditPolicyPressed(context, buttonPressed, subInfo)){
+            Bitstream b = Bitstream.find(context, Integer.parseInt(request.getParameter("bitstream_id")));
+            subInfo.setBitstream(b);
+            return org.dspace.submit.step.AccessStep.STATUS_EDIT_POLICY;
+        }
+        // FORM: EditPolicy SELECTED OPERATION: Save or Cancel.
+        else if(org.dspace.submit.step.AccessStep.comeFromEditPolicy(request)) {
+            Bitstream b = Bitstream.find(context, Integer.parseInt(request.getParameter("bitstream_id")));
+            subInfo.setBitstream(b);
+            String reason = request.getParameter("reason");
+            String name = request.getParameter("name");
+
+            int groupID = 0;
+            if(request.getParameter("group_id")!=null){
+                try{
+                    groupID=Integer.parseInt(request.getParameter("group_id"));
+                }catch (NumberFormatException nfe){
+                    return STATUS_EDIT_POLICIES_ERROR_SELECT_GROUP;
+                }
+            }
+            if(org.dspace.submit.step.AccessStep.saveOrCancelEditPolicy(context, request,
+                subInfo, buttonPressed, b, name, groupID, reason)==
+                 org.dspace.submit.step.AccessStep.EDIT_POLICY_STATUS_DUPLICATED_POLICY)
+                return STATUS_EDIT_POLICY_DUPLICATED_POLICY;
+
+            return STATUS_EDIT_POLICIES;
+        }
+        // FORM: EditBitstreamPolicies SELECTED OPERATION: Remove Policies
+        if(org.dspace.submit.step.AccessStep.wasRemovePolicyPressed(buttonPressed)){
+            Bitstream b = Bitstream.find(context, Integer.parseInt(request.getParameter("bitstream_id")));
+            subInfo.setBitstream(b);
+            org.dspace.submit.step.AccessStep.removePolicy(context, buttonPressed);
+            context.commit();
+            return STATUS_EDIT_POLICIES;
+        }
+        return -1;
     }
 
     /*
