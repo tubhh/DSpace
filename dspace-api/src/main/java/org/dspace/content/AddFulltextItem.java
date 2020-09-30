@@ -55,7 +55,7 @@ public class AddFulltextItem implements InProgressSubmission {
 
 		// Get the "Fulltext Collection" that will become the "Submitted to" collection here
 		String collectionHandle = ConfigurationManager.getProperty("submit.fulltext.to-collection");
-
+		log.debug("Resolving collection " + collectionHandle);
 		try {
 			DSpaceObject dso = HandleManager.resolveToObject(new Context(), collectionHandle);
 			if (dso.getType() == Constants.getTypeID("COLLECTION")) {
@@ -66,6 +66,7 @@ public class AddFulltextItem implements InProgressSubmission {
 				throw new RuntimeException();
 			}
 		} catch (SQLException e) {
+			log.error("Error resolving collection handle to collection object: " + e.getMessage());
 			throw new RuntimeException();
 		} catch (NullPointerException e) {
 			log.error("Collection not found (NPE) : " + collectionHandle);
