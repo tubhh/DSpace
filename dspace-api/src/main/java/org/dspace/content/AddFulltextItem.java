@@ -9,12 +9,7 @@ package org.dspace.content;
 
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
-import org.dspace.core.ConfigurationManager;
-import org.dspace.core.Constants;
-import org.dspace.core.Context;
 import org.dspace.eperson.EPerson;
-import org.dspace.handle.HandleManager;
-import org.mockito.internal.matchers.Null;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,8 +20,39 @@ public class AddFulltextItem implements InProgressSubmission {
 
 	private Item item;
 
+	private Collection fulltextCollection;
+
+	/**
+	 * Legacy 'InProgressSubmission' constructor - for our 'Add Files' purposes, this should not be used
+	 * @param item
+	 */
 	public AddFulltextItem(Item item) {
 		this.item = item;
+		try {
+			this.fulltextCollection = item.getParentObject();
+		} catch(SQLException e) {
+			log.error("Error setting fulltext collection: " + e.getMessage());
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Constructor that includes collection, avoiding the need to use contextual DB queries from this object
+	 * @param item
+	 * @param collection
+	 */
+	public AddFulltextItem(Item item, Collection collection) {
+		this.item = item;
+		if (collection == null) {
+			try {
+				this.fulltextCollection = item.getParentObject();
+			} catch(SQLException e) {
+				log.error("Error setting fulltext collection: " + e.getMessage());
+				throw new RuntimeException(e);
+			}
+		} else {
+			this.fulltextCollection = collection;
+		}
 	}
 
 	@Override
@@ -52,35 +78,7 @@ public class AddFulltextItem implements InProgressSubmission {
 
 	@Override
 	public Collection getCollection() {
-
-		// Get the "Fulltext Collection" that will become the "Submitted to" collection here
-		String collectionHandle = ConfigurationManager.getProperty("submit.fulltext.to-collection");
-		log.debug("Resolving collection " + collectionHandle);
-		try {
-			DSpaceObject dso = HandleManager.resolveToObject(new Context(), collectionHandle);
-			if (dso.getType() == Constants.getTypeID("COLLECTION")) {
-				Collection collection = (Collection) dso;
-				return collection;
-			} else {
-				log.error("Handle is not of type collection " + collectionHandle);
-				throw new RuntimeException();
-			}
-		} catch (SQLException e) {
-			log.error("Error resolving collection handle to collection object: " + e.getMessage());
-			throw new RuntimeException();
-		} catch (NullPointerException e) {
-			log.error("Collection not found (NPE) : " + collectionHandle);
-			throw new RuntimeException();
-		}
-		// In EditItem, this would be the item parentObject
-		// But in this case, we should make it hte configured FullText collection
-		/*
-		try {
-			return item.getParentObject();
-		} catch (SQLException e) {
-			throw new RuntimeException();
-		}
-		 */
+		return this.fulltextCollection;
 	}
 
 	@Override
