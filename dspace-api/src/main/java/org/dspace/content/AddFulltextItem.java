@@ -24,6 +24,8 @@ public class AddFulltextItem implements InProgressSubmission {
 
 	/**
 	 * Legacy 'InProgressSubmission' constructor - for our 'Add Files' purposes, this should not be used
+	 * but in the event that a different destination collection should *not* be set, this method will return
+	 * the original owning collection.
 	 * @param item
 	 */
 	public AddFulltextItem(Item item) {
@@ -44,6 +46,9 @@ public class AddFulltextItem implements InProgressSubmission {
 	public AddFulltextItem(Item item, Collection collection) {
 		this.item = item;
 		if (collection == null) {
+			// If the collection passed is null, return the original owning collection so that some kind of
+			// submission can continue. If this is intentional, also see the constructor above that does not
+			// take a collection argument
 			try {
 				this.fulltextCollection = item.getParentObject();
 			} catch(SQLException e) {
