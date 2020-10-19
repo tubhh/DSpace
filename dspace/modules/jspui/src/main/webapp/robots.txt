@@ -24,6 +24,7 @@ Disallow: /statistics
 # You also may wish to disallow access to the following paths, in order
 # to stop web spiders from accessing user-based content
 Disallow: /contact
+Disallow: /pubquestion
 Disallow: /feedback
 Disallow: /forgot
 Disallow: /login
