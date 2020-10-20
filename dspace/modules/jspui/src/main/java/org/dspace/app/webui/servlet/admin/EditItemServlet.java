@@ -771,10 +771,17 @@ public class EditItemServlet extends DSpaceServlet
                     }
                     String[] allowedBundleArray = allowedBundlesConfiguration.split("\\s*,\\s*");
                     ArrayList<String> allowedBundles = new ArrayList<String>(Arrays.asList(allowedBundleArray));
+                    
+                    // Get the names of the bundles that should not be accessible by default
+                    String restrictedBundlesConfiguration = ConfigurationManager.getProperty("item-edit.restricted-bundles");
+                    if (null == restrictedBundlesConfiguration) {
+                        restrictedBundlesConfiguration = "";
+                    }
+                    String[] restrictedBundleArray = restrictedBundlesConfiguration.split("\\s*,\\s*");
+                    ArrayList<String> restrictedBundles = new ArrayList<String>(Arrays.asList(restrictedBundleArray));
 
                     //Get all item's bundles matching that bundle name
                     Bundle[] itemsBundlesByName = item.getBundles(bitstreamsBundle);
-
 
                     // Is requested bundle valid, and either allowed or already a bundle for this item
                     if (bitstreamsBundle != null && !bitstreamsBundle.equals("")
@@ -794,12 +801,25 @@ public class EditItemServlet extends DSpaceServlet
                             else
                             {
                                 Bundle newBundle = item.createBundle(bitstreamsBundle);
+                                // A bundle inherits the item's policies, so we need to remove any read
+                                // policies, if the bundle is restricted
+                                if (restrictedBundles.contains(bitstreamsBundle)) {
+                                    AuthorizeManager.removePoliciesActionFilter(context, newBundle, Constants.READ);
+                                }
                                 newBundle.addBitstream(bitstream);
                                 bundle.removeBitstream(bitstream);
                             }
                             // Delete bundle too, if empty
                             if (bundle.getBitstreams().length == 0) {
                                 item.removeBundle(bundle);
+                            }
+                            
+                            // strip any read policies from the bitstream,
+                            // if the bundle is restricted
+                            if (restrictedBundles.contains(bitstreamsBundle)) {
+                                AuthorizeManager.removePoliciesActionFilter(context, bitstream, Constants.READ);
+                                log.debug("Removing read policies from bitstream " + bitstream.getID()
+                                        + " as it was moved in to bundle " + bitstreamsBundle + ".");
                             }
 
                         }
