@@ -25,9 +25,10 @@ import org.dspace.content.*;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
+import org.dspace.submit.step.AccessStep;
 import org.dspace.submit.step.UploadStep;
+import org.dspace.submit.step.UploadWithEmbargoStep;
 import org.dspace.utils.DSpace;
-import org.dspace.workflow.WorkflowManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +39,10 @@ import java.sql.SQLException;
 /**
  * Upload step for DSpace JSP-UI. Handles the pages that revolve around uploading files
  * (and verifying a successful upload) for an item being submitted into DSpace.
+ * This is a special extension of the normal upload step, that allows for the upload of 'pending' files
+ * to an archived item rather than normal submission for a new item. It also includes the embargo functionality
+ * introduced with UploadWithEmbargoStep
+ *
  * <P>
  * This JSPStep class works with the SubmissionController servlet
  * for the JSP-UI
@@ -61,8 +66,11 @@ import java.sql.SQLException;
  *
  * @see SubmissionController
  * @see JSPStep
+ * @see JSPUploadStep
+ * @see JSPUploadWithEmbargoStep
  * @see UploadStep
  *
+ * @author Kim Shepherd
  * @author Tim Donohue
  * @version $Revision$
  */
@@ -94,6 +102,15 @@ public class JSPPendingUploadStep extends JSPStep
     
     /** JSP to review uploaded files * */
     private static final String REVIEW_JSP = "/submit/review-upload.jsp";
+
+    /** Embargo: JSP to set access policies of uploaded files * */
+    private static final String ACCESS_POLICIES_JSP = "/submit/set-policies.jsp";
+
+    /** Embargo: JSP to edit access policy of selected policy * */
+    private static final String EDIT_POLICY_JSP = "/submit/edit-policy.jsp";
+
+    /** Embargo: JSP to edit access policy of selected policy * */
+    private static final String EDIT_BITSTREAM_ACCESS_JSP = "/submit/edit-bitstream-access.jsp";
 
     /** log4j logger */
     private static Logger log = Logger.getLogger(JSPPendingUploadStep.class);
@@ -252,7 +269,22 @@ public class JSPPendingUploadStep extends JSPStep
         {
             showUploadPage(context, request, response, subInfo, false);
         }
-        
+        // If user pressed 'edit access', show the policies / access edit form
+        else if (status == UploadWithEmbargoStep.STATUS_EDIT_POLICIES)
+        {
+            showEditBitstreamAccess(context, request, response, subInfo);
+        }
+        // [Cancel] button is pressed at edit-policy page
+        else if (status == UploadWithEmbargoStep.STATUS_EDIT_COMPLETE)
+        {
+            showUploadPage(context, request, response, subInfo, false);
+        }
+        // Edit a particular bitstream policy
+        else if (status == AccessStep.STATUS_EDIT_POLICY)
+        {
+            showEditPolicy(context, request, response, subInfo);
+        }
+
         // ------------------------------
         // Check for Errors!
         // ------------------------------
@@ -534,7 +566,8 @@ public class JSPPendingUploadStep extends JSPStep
         subInfo.setBitstream(null);
 
         // set a flag whether the current step is UploadWithEmbargoStep
-        boolean withEmbargo = SubmissionController.getCurrentStepConfig(request, subInfo).getProcessingClassName().equals("org.dspace.submit.step.UploadWithEmbargoStep") ? true : false;
+        // Note - with pending upload step, we assume this is always the case
+        boolean withEmbargo = true;
         request.setAttribute("with_embargo", Boolean.valueOf(withEmbargo));
 
         // load JSP which allows the user to select a file to upload
@@ -568,7 +601,8 @@ public class JSPPendingUploadStep extends JSPStep
         request.setAttribute("adding.fulltext", (subInfo.isAddingFulltext() || subInfo.hasPending()));
 
         // set a flag whether the current step is UploadWithEmbargoStep
-        boolean withEmbargo = SubmissionController.getCurrentStepConfig(request, subInfo).getProcessingClassName().equals("org.dspace.submit.step.UploadWithEmbargoStep") ? true : false;
+        // Note, with pending upload, we assume this is always the case
+        boolean withEmbargo = true;
         request.setAttribute("with_embargo", Boolean.valueOf(withEmbargo));
 
         // Always go to advanced view in workflow mode
@@ -646,6 +680,72 @@ public class JSPPendingUploadStep extends JSPStep
         // load JSP which allows the user to select a file to upload
         JSPStepManager.showJSP(request, response, subInfo, FILE_DESCRIPTION_JSP);
     }
+    /**
+     * Copied from JSPUploadWithEmbargoStep
+     * Show the page which allows the user to edit bitstream access settings
+     * was just uploaded
+     *
+     * @param context
+     *            context object
+     * @param request
+     *            the request object
+     * @param response
+     *            the response object
+     * @param subInfo
+     *            the SubmissionInfo object
+     *
+     * @see JSPUploadWithEmbargoStep
+     */
+    private void showEditBitstreamAccess(Context context, HttpServletRequest request,
+                                         HttpServletResponse response, SubmissionInfo subInfo)
+        throws SQLException, ServletException, IOException
+    {
+        if (subInfo == null || subInfo.getBitstream() == null)
+        {
+            // We have an integrity error, since we seem to have lost
+            // which bitstream was just uploaded
+            log.warn(LogManager.getHeader(context, "integrity_error", UIUtil
+                .getRequestLogInfo(request)));
+            JSPManager.showIntegrityError(request, response);
+        }
+
+        // display choose file format JSP next
+        JSPStepManager.showJSP(request, response, subInfo, EDIT_BITSTREAM_ACCESS_JSP);
+    }
+
+    /**
+     * Copied from JSPUploadWithEmbargoStep
+     * Show the page which allows the user to edit the specific resource policy
+     * was just uploaded
+     *
+     * @param context
+     *            context object
+     * @param request
+     *            the request object
+     * @param response
+     *            the response object
+     * @param subInfo
+     *            the SubmissionInfo object
+     *
+     * @see JSPUploadWithEmbargoStep
+     */
+    private void showEditPolicy(Context context, HttpServletRequest request,
+                                HttpServletResponse response, SubmissionInfo subInfo)
+        throws SQLException, ServletException, IOException
+    {
+        if (subInfo == null || subInfo.getBitstream() == null)
+        {
+            // We have an integrity error, since we seem to have lost
+            // which bitstream was just uploaded
+            log.warn(LogManager.getHeader(context, "integrity_error", UIUtil
+                .getRequestLogInfo(request)));
+            JSPManager.showIntegrityError(request, response);
+        }
+
+        // display choose file format JSP next
+        JSPStepManager.showJSP(request, response, subInfo, EDIT_POLICY_JSP);
+    }
+
     
     /**
      * Return the URL path (e.g. /submit/review-metadata.jsp) of the JSP
@@ -654,6 +754,8 @@ public class JSPPendingUploadStep extends JSPStep
      * This Review JSP is loaded by the 'Verify' Step, in order to dynamically
      * generate a submission verification page consisting of the information
      * gathered in all the enabled submission steps.
+     *
+     * Request attribute for 'upload with embargo' set - copied from JSPUploadWithEmbargo
      *
      * @param context
      *            current DSpace context
@@ -667,6 +769,9 @@ public class JSPPendingUploadStep extends JSPStep
     public String getReviewJSP(Context context, HttpServletRequest request,
             HttpServletResponse response, SubmissionInfo subInfo)
     {
+        request.setAttribute("submission.step.uploadwithembargo", true);
         return REVIEW_JSP;
     }
+
+
 }
