@@ -45,7 +45,7 @@
 		<property name="alias" value="project" />
 		<property name="metadata">
 			<list>
-				<value>dc.relation</value>
+				<value>dc.relation.project</value>
 			</list>
 		</property>
 		<property name="clazz">
@@ -58,6 +58,9 @@
 				</entry>
 				<entry key="funderid">
 					<value>funder.crossrefid</value>
+				</entry>
+				<entry key="funderrorid">
+					<value>funder.rorid</value>
 				</entry>
 				<entry key="grantno">
 					<value>code</value>

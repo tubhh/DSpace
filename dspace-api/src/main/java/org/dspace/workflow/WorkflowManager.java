@@ -39,6 +39,7 @@ import org.dspace.services.ConfigurationService;
 import org.dspace.storage.rdbms.DatabaseManager;
 import org.dspace.storage.rdbms.TableRow;
 import org.dspace.storage.rdbms.TableRowIterator;
+import org.dspace.submit.extraction.grobid.Author;
 import org.dspace.usage.UsageWorkflowEvent;
 import org.dspace.utils.DSpace;
 
@@ -710,13 +711,31 @@ public class WorkflowManager
                 }
                 originalBundle = myItem.getBundles("ORIGINAL")[0];
 
-                // Final bundle move of all pending bitstreams
+                // Final bundle move of all pending bitstreams, including preservation of any embargoes
                 for (Bundle pendingBundle : pendingBundles) {
                     for (Bitstream bitstream : pendingBundle.getBitstreams()) {
-                        // remove the old READ policies so the bitstream can
-                        AuthorizeManager.removePoliciesActionFilter(c, bitstream, Constants.READ);
-                        // the bitstream will now inherit policies from ORIGINAL
+                        boolean isEmbargoed = false;
+                        List<ResourcePolicy> bitstreamPolicies = AuthorizeManager.getPolicies(c, bitstream);
+                        List<ResourcePolicy> newPolicies = new ArrayList<>();
+                        for (ResourcePolicy rp : bitstreamPolicies) {
+                            log.debug("PENDING RP: " + rp.getActionText() + ", " + rp.getRpName() + ", "
+                                + rp.getRpDescription() + ", " + rp.getResourceType() + ", start=" + rp.getStartDate() + ", end=" + rp.getEndDate());
+                            if (rp.getStartDate() != null) {
+                                isEmbargoed = true;
+                                newPolicies.add(rp);
+                                log.debug("non-null start date for bitstream " + bitstream.getName() + ", that means we should ensure no anon read policies added later");
+                            }
+                        }
+
+                        // The bitstream will now inherit policies from ORIGINAL
                         originalBundle.addBitstream(bitstream);
+
+                        // If it was embargoed, replace with the original policies we had set under PENDING
+                        if (isEmbargoed) {
+                            AuthorizeManager.removePoliciesActionFilter(c, bitstream, Constants.READ);
+                            AuthorizeManager.addPolicies(c, newPolicies, bitstream);
+                        }
+
                         pendingBundle.removeBitstream(bitstream);// this should be treated as a pending fulltext review
                     }
                     // One last check that it's empty, then remove the empty pending bundle
@@ -731,18 +750,16 @@ public class WorkflowManager
 
                 // Clear previous submitter metadata
                 clearSubmitterMetadata(myItem);
-
-                myItem.update();
-
-                c.commit();
-
+                // Start notification events
                 notifyOfArchiveFulltext(c, myItem, mycollection);
-
                 // remove any workflow policies left
                 revokeReviewerPolicies(c, myItem);
-
+                // Update item and commit database changes
+                myItem.update();
                 // Restore authorisation state
                 c.restoreAuthSystemState();
+                // Commit context changes
+                c.commit();
 
             } else {
                 // This is a regular workflow submission, archive as normal

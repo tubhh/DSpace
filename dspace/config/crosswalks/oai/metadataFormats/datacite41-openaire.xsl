@@ -22,10 +22,10 @@
 	
 	<xsl:template match="/">
 		<oai_datacite xmlns="http://schema.datacite.org/oai/oai-1.1/" xsi:schemaLocation="http://schema.datacite.org/oai/oai-1.1/ http://schema.datacite.org/oai/oai-1.1/oai.xsd" >
-			<schemaVersion>4.1</schemaVersion>
+			<schemaVersion>4.3</schemaVersion>
 			<!-- <datacentreSymbol>XXXX</datacentreSymbol>  -->
 			<payload>
-				<resource xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.1/metadata.xsd" >
+				<resource xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.3/metadata.xsd" >
 					
 					
 					<!-- placeholder variable contains the value of the placeholder -->
@@ -767,8 +767,13 @@
 									<xsl:value-of select="$references"/>
 								</relatedIdentifier>
 							</xsl:if>
-                                                        <xsl:if test="$ismetadatafor!=''">
-                                                            <relatedIdentifier relatedIdentifierType="DOI" relationType="isMetadataFor">
+                                                        <xsl:if test="$ismetadatafor!='' and not(contains($doi, '10.15480'))">
+                                                            <relatedIdentifier relatedIdentifierType="DOI" relationType="IsMetadataFor">
+                                                                <xsl:value-of select="$ismetadatafor"/>
+                                                            </relatedIdentifier>
+                                                        </xsl:if>
+                                                        <xsl:if test="$ismetadatafor!='' and contains($doi, '10.15480')">
+                                                            <relatedIdentifier relatedIdentifierType="DOI" relationType="IsVersionOf">
                                                                 <xsl:value-of select="$ismetadatafor"/>
                                                             </relatedIdentifier>
                                                         </xsl:if>
@@ -778,8 +783,8 @@
 					
 					
 					<!-- select all sizes and formats -->
-					<xsl:variable name="size" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='extent']/doc:element/doc:field[@name='value']"/>
-					<xsl:variable name="format" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='mimetype']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="size" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='extent']//doc:field[@name='value']"/>
+					<xsl:variable name="format" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='format']/doc:element[@name='mimetype']//doc:field[@name='value']"/>
 					
 					<!-- enable that to avoid size and format when multiple bitstreams are present -->
 					<!-- <xsl:variable name="check_sf">
@@ -799,9 +804,9 @@
 							<xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']">
 								<xsl:if test="./doc:field[@name='name']='ORIGINAL'">
 									<xsl:for-each select="./doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
-										<xsl:if test="./doc:element/doc:field[@name='size']!=''">
+										<xsl:if test=".//doc:field[@name='size']!=''">
 											<size>
-												<xsl:value-of select="./doc:element/doc:field[@name='size']"/>
+												<xsl:value-of select=".//doc:field[@name='size']"/>
 											</size>
 										</xsl:if>
 									</xsl:for-each>
@@ -813,9 +818,9 @@
 							<xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']">
 								<xsl:if test="./doc:field[@name='name']='ORIGINAL'">
 								<xsl:for-each select="./doc:element[@name='bitstreams']/doc:element[@name='bitstream']">
-										<xsl:if test="./doc:element/doc:field[@name='format']!=''">
+										<xsl:if test=".//doc:field[@name='format']!=''">
 											<format>
-												<xsl:value-of select="./doc:element/doc:field[@name='format']"/>
+												<xsl:value-of select=".//doc:field[@name='format']"/>
 											</format>
 										</xsl:if>
 									</xsl:for-each>
@@ -878,8 +883,8 @@
 									</xsl:when>
 									<xsl:otherwise>-->
 										<rights rightsURI="{$rightsuri}">
-											<xsl:if test="$rights/doc:element/doc:element/doc:field[@name='value']!=''">
-												<xsl:value-of select="$rights/doc:element/doc:element/doc:field[@name='value']"/>
+											<xsl:if test="$rights/doc:element//doc:field[@name='value']!=''">
+												<xsl:value-of select="$rights/doc:element//doc:field[@name='value']"/>
 											</xsl:if>
 										</rights>
 									<!--</xsl:otherwise>
@@ -917,9 +922,10 @@
 					<!-- select all funding references -->
 					<xsl:variable name="funder" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funder']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="funderid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funderid']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="funderrorid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='funderrorid']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="grantno" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='grantno']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awarduri" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='awardURL']/doc:element/doc:field[@name='value']"/>
-					<xsl:variable name="awardtitle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="awardtitle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='project']/doc:element/doc:field[@name='value']"/>
 					
 					<xsl:variable name="check_fundingreference">
 						<xsl:for-each select="$funder">
@@ -938,11 +944,20 @@
 										<funderName>
 											<xsl:value-of select="."/>
 										</funderName>
-										<xsl:if test="$funderid[$counter]!='' and $funderid[$counter]!=$placeholder">
+                                                                                <xsl:choose>
+                                                                                    <xsl:when test="$funderid[$counter]!='' and $funderid[$counter]!=$placeholder">
 											<funderIdentifier funderIdentifierType="Crossref Funder ID">
-												<xsl:value-of select="$funderid[$counter]"/>	
+												<xsl:text>https://doi.org/10.13039/</xsl:text><xsl:value-of select="$funderid[$counter]"/>	
 											</funderIdentifier>
-										</xsl:if>
+                                                                                    </xsl:when>
+                                                                                    <xsl:otherwise>
+                                                                                        <xsl:if test="$funderrorid[$counter]!='' and $funderrorid[$counter]!=$placeholder">
+                                                                                            <funderIdentifier funderIdentifierType="ROR">
+												<xsl:value-of select="$funderrorid[$counter]"/>	
+                                                                                            </funderIdentifier>
+                                                                                        </xsl:if>
+                                                                                    </xsl:otherwise>
+                                                                                </xsl:choose>
 										<xsl:if test="$grantno[$counter]!='' and $grantno[$counter]!=$placeholder">
 											<awardNumber>
 												<xsl:value-of select="$grantno[$counter]"/>

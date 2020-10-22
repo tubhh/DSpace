@@ -32,7 +32,9 @@
     
     <!-- Don't copy everything by default! -->
     <xsl:template match="@* | text()" />
-    
+
+    <xsl:variable name="placeholder">#PLACEHOLDER_PARENT_METADATA_VALUE#</xsl:variable>
+
     <xsl:template match="/dspace:dim[@dspaceType='ITEM']">
         <!--
             org.dspace.identifier.doi.DataCiteConnector uses this XSLT to
@@ -43,7 +45,7 @@
         -->
         <resource xmlns="http://datacite.org/schema/kernel-4"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.2/metadata.xsd">
+                  xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4.3/metadata.xsd">
 
             <!-- 
                 MANDATORY PROPERTIES
@@ -273,6 +275,16 @@
                 DSpace currently doesn't store geolocations.
             -->
 
+            <!--
+                DataCite (19)
+                Funding References
+                Occ: 0-n
+            -->
+            <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funder']">
+                <xsl:element name="fundingReferences">
+                    <xsl:call-template name="fundingReference" />
+                </xsl:element>
+            </xsl:if>
         </resource>
     </xsl:template>
     
@@ -288,7 +300,7 @@
             <xsl:value-of select="."/>
         </identifier>
     </xsl:template>
-    
+
     <!-- DataCite (2) :: Creator -->
     <xsl:template name="creator">
         <xsl:choose>
@@ -902,6 +914,7 @@
                     <xsl:attribute name="rightsURI">
                         <xsl:value-of select="." />
                     </xsl:attribute>
+                    <xsl:text>CC-</xsl:text><xsl:value-of select="." /><xsl:text>-</xsl:text><xsl:value-of select="//dspace:field[@mdschema='dc' and @element='rights' and @qualifier='ccversion']" />
 -->
                     <xsl:choose>
                         <xsl:when test="//dspace:field[@mdschema='dc' and @element='rights'][not(@qualifier)]">
@@ -965,5 +978,50 @@
             <xsl:value-of select="." />
         </xsl:element>
     </xsl:template>
-    
+
+    <!-- 
+        DataCite (19)
+        Funding Reference
+    -->
+    <xsl:template name="fundingReference">
+        <xsl:for-each select="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funder']">
+            <xsl:variable name="f">
+                <xsl:number value="position()" />
+            </xsl:variable>
+            <fundingReference>
+                <funderName>
+                    <xsl:value-of select="." />
+                </funderName>
+                <xsl:choose>
+                    <xsl:when test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderid'][number($f)]!='' and //dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderid'][number($f)]!=$placeholder">
+                        <funderIdentifier>
+                            <xsl:attribute name="funderIdentifierType">Crossref Funder ID</xsl:attribute>
+                            <xsl:attribute name="schemeURI">https://www.crossref.org/services/funder-registry/</xsl:attribute>
+                            <xsl:text>https://doi.org/10.13039/</xsl:text><xsl:value-of select="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderid'][number($f)]" />
+                        </funderIdentifier>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderrorid'][number($f)]!='' and //dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderrorid'][number($f)]!=$placeholder">
+                            <funderIdentifier>
+                                <xsl:attribute name="funderIdentifierType">ROR</xsl:attribute>
+                                <xsl:attribute name="schemeURI">https://ror.org</xsl:attribute>
+                                <xsl:value-of select="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funderrorid'][number($f)]" />
+                            </funderIdentifier>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='grantno'][number($f)]!='' and //dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='grantno'][number($f)]!=$placeholder">
+                    <awardNumber>
+                        <xsl:value-of select="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='grantno'][number($f)]" />
+                    </awardNumber>
+                </xsl:if>
+                <xsl:if test="//dspace:field[@mdschema='dc' and @element='relation' and @qualifier='project'][number($f)]!='' and //dspace:field[@mdschema='dc' and @element='relation' and @qualifier='project'][number($f)]!=$placeholder">
+                    <awardTitle>
+                        <xsl:value-of select="//dspace:field[@mdschema='dc' and @element='relation' and @qualifier='project'][number($f)]" />
+                    </awardTitle>
+                </xsl:if>
+            </fundingReference>
+        </xsl:for-each>
+    </xsl:template>
+
 </xsl:stylesheet>

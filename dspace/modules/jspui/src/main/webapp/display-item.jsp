@@ -122,7 +122,7 @@
       for (Metadatum m : mAuthors)
       {
         authors += (!authors.equals("") ? " ; " : "") + m.value;
-        if (authorAuthority == 0 && m.authority != null) {
+        if (authorAuthority == 0 && m.authority != null && !m.authority.startsWith("will be generated")) {
             authorAuthority = Integer.parseInt(m.authority.substring(2));
         }
       }
@@ -134,7 +134,7 @@
       Metadatum[] mOus = item.getMetadata("tuhh", "publication", "institute", Item.ANY);
       for (Metadatum o : mOus)
       {
-        if (ouAuthority == 0 && o.authority != null) {
+        if (ouAuthority == 0 && o.authority != null && !o.authority.startsWith("will be generated")) {
             ouAuthority = Integer.parseInt(o.authority.substring(2));
         }
       }

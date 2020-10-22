@@ -282,11 +282,29 @@
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='source']/doc:element/doc:element/doc:field[@name='value']">
 				<dc:source><xsl:value-of select="." /></dc:source>
 			</xsl:for-each>
+			<!-- dc.source.* -->
+			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='citation']/doc:element/doc:field[@name='value']">
+				<dc:source><xsl:value-of select="." /></dc:source>
+			</xsl:for-each>
+			<!-- datacite.relation.IsSupplementedBy  -->
+			<xsl:for-each select="doc:metadata/doc:element[@name='datacite']/doc:element[@name='relation']/doc:element[@name='IsSupplementedBy']/doc:element/doc:field[@name='value']">
+                            <dc:relation><xsl:text>info:eu-repo/semantics/dataset/</xsl:text><xsl:value-of select="substring(., 1, 3)"/><xsl:text>/</xsl:text><xsl:value-of select="substring(., 5)"/></dc:relation>
+			</xsl:for-each>
 			<!-- dc.relation Project OpenAire -->
 			<xsl:for-each select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='openAire']/doc:field[@name='value']">
 				<dc:relation><xsl:value-of select="." /></dc:relation>
 			</xsl:for-each>
 			
+                        <!-- dc.format -->
+                        <xsl:for-each select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']/doc:field[@name='name' and text()='ORIGINAL']/../doc:element[@name='bitstreams']/doc:element[@name='bitstream']/doc:field[@name='format']">
+                            <dc:format>
+                                <xsl:value-of select="."/>
+                            </dc:format>
+                        </xsl:for-each>
+
+                        <!-- Add Audience statically -->
+                        <dc:audience>Researchers</dc:audience>
+                        <dc:audience>Students</dc:audience>
 		</oai_dc:dc>
 	</xsl:template>
 </xsl:stylesheet>

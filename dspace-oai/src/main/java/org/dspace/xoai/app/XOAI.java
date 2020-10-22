@@ -356,6 +356,7 @@ public class XOAI {
             throws DSpaceSolrIndexerException {
         try {
             int i = 0;
+            long itemstart = System.currentTimeMillis();
             SolrServer server = solrServerResolver.getServer();
             for (DSpaceObject o : result.getDspaceObjects()) {
                 try {
@@ -395,6 +396,7 @@ public class XOAI {
                 if ((i+subtotal) % 100 == 0) System.out.println((i+subtotal) + " items imported so far...");
             }
             System.out.println("Partial Total: " + (i+subtotal) + " items");
+            System.out.println("It took "+ ((System.currentTimeMillis()-itemstart) / 1000) +" seconds for this portion");
             server.commit();
             return i;
         } catch (SolrServerException ex) {
@@ -598,7 +600,7 @@ public class XOAI {
             case ITEMTYPE_DEFAULT:
             	eraseQuery = ConfigurationManager.getProperty("oai", "oai.erase.query.item");
             	if (eraseQuery == null || eraseQuery.trim().length() <= 0) {
-            		eraseQuery = "item.type:item";
+            		eraseQuery = "item.type:item OR item.type:cfitem";
             	}
     	        break;
             case "rp":
@@ -622,7 +624,7 @@ public class XOAI {
             case "other":
             	eraseQuery = ConfigurationManager.getProperty("oai", "oai.erase.query.crisother");
             	if (eraseQuery == null || eraseQuery.trim().length() <= 0) {
-            		eraseQuery = "NOT (item.type:item OR item.type:rp OR item.type:project OR item.type:ou)";
+            		eraseQuery = "NOT (item.type:item OR item.type:cfitem OR item.type:rp OR item.type:project OR item.type:ou)";
             	}
     	        break;
             case "all":

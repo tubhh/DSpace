@@ -46,6 +46,9 @@
 			<xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value'] = 'en_US'">
 				<xsl:text>eng</xsl:text>
 			</xsl:when>
+			<xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value'] = 'hr'">
+				<xsl:text>hrv</xsl:text>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value']" />
 			</xsl:otherwise>
@@ -101,6 +104,9 @@
                                                 </xsl:when>
                                                 <xsl:when test="doc:element[@name='alternative']/doc:element/@name = 'en_US'">
                                                     <xsl:attribute name="lang"><xsl:text>eng</xsl:text></xsl:attribute>
+                                                </xsl:when>
+                                                <xsl:when test="doc:element[@name='alternative']/doc:element/@name = 'hr'">
+                                                    <xsl:attribute name="lang"><xsl:text>hrv</xsl:text></xsl:attribute>
                                                 </xsl:when>
                                             </xsl:choose>
                                             <xsl:value-of select="doc:element[@name='alternative']/doc:element/doc:field[@name='value']"/>

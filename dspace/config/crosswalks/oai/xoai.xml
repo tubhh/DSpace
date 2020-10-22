@@ -160,6 +160,8 @@
 			<Set ref="ddc980Set" />
 			<Set ref="ddc990Set" />
 
+            <Set ref="instM7Set" />
+
             <!-- formats to expose on default context -->
             <Format ref="oaidc"/>
             <Format ref="xmetadissplus" />
@@ -248,7 +250,8 @@
             <Transformer ref="openaireTransformer"/>
             <!-- The driver filter -->
             <!-- <Filter ref="driverFilter"/> -->
-            <Filter ref="onlyDSpaceItemFilter"/>
+            <!-- <Filter ref="onlyDSpaceItemFilter"/> -->
+            <Filter ref="openAireTuhhFilter"/>
             <!-- Just an alias, in fact it returns all items within the driver context -->
             <!-- <Set ref="driverSet"/> -->
             <Set ref="openaireFundedResourcesSet"/>
@@ -1115,7 +1118,22 @@
                 <Custom ref="doctypeTextCondition"/>
             </Definition>
         </Filter>
- 
+
+        <Filter id="institute-m7-filter">
+            <Definition>
+                <Custom ref="institute-m7-authorityCondition"/>
+            </Definition>
+        </Filter>
+
+        <CustomCondition id="institute-m7-authorityCondition">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Configuration>
+                <string name="field">tuhh.publication.institute.authority</string>
+                <string name="operator">equal</string>
+                <string name="value">ou00021</string>
+            </Configuration>
+        </CustomCondition>
+
 		<!-- Eldorado Anpassung - DINI Zertifikat -->
 		<!-- customConditions fuer Publikationstypen -->
 		<CustomCondition id="doctypepreprintCondition">
@@ -2305,14 +2323,56 @@
 		                        </And>
 		                    </RightCondition>
 		                </And>
-					</LeftCondition>
+			</LeftCondition>
                 	<RightCondition>
                 		<Custom ref="dspaceItemCondition" />
                 	</RightCondition>
                 </And>		                
             </Definition>
         </Filter>
-        
+
+        <Filter id="openAireTuhhFilter">
+            <Definition>
+                <And>
+                    <LeftCondition>
+                        <And>
+                            <LeftCondition>
+                                <And>
+                                    <LeftCondition>
+                                        <Custom ref="titleExistsCondition"/>
+                                    </LeftCondition>
+                                    <RightCondition>
+                                        <Custom ref="authorExistsCondition"/>
+                                    </RightCondition>
+                                </And>
+                            </LeftCondition>
+                            <RightCondition>
+                                <And>
+                                    <LeftCondition>
+                                        <Not>
+                                            <Condition>
+                                                <Custom ref="noFulltextCondition"/>
+                                            </Condition>
+                                        </Not>
+                                    </LeftCondition>
+                                    <RightCondition>
+                                        <Not>
+                                            <Condition>
+                                                <Custom ref="researchDataCondition"/>
+                                            </Condition>
+                                        </Not>
+                                    </RightCondition>
+                                </And>
+                            </RightCondition>
+                        </And>
+                    </LeftCondition>
+                    <RightCondition>
+                        <Custom ref="dspaceItemCondition" />
+                    </RightCondition>
+                </And>
+            </Definition>
+        </Filter>
+
         <!-- create a new filter for the openairedata Context -->
         <!--
         <Filter id="openaireDataFilter">
@@ -3520,7 +3580,13 @@
 			<Name>General history of other areas</Name>
 			<Filter ref="ddc990Filter"/>
 		</Set>	
-        
+
+        <Set id="instM7Set">
+            <Spec>institute:m7</Spec>
+            <Name>Institute M-7</Name>
+            <Filter ref="institute-m7-filter"/>
+        </Set>
+
         <Set id="driverSet">
             <Spec>driver</Spec>
             <Name>Open Access DRIVERset</Name>

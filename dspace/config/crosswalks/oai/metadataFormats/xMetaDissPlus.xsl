@@ -14,6 +14,9 @@
         <xsl:variable name="gkdnr">1097763-6</xsl:variable>
         <xsl:variable name="dnbnr">F6000-0198</xsl:variable>
 
+        <!-- placeholder variable contains the value of the placeholder -->
+        <xsl:variable name="placeholder">#PLACEHOLDER_PARENT_METADATA_VALUE#</xsl:variable>
+
 	<xsl:variable name="lang">
 		<xsl:choose>
 			<xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element/doc:element/doc:field[@name='value'] = 'deu'">
@@ -45,6 +48,9 @@
 			</xsl:when>
 			<xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value'] = 'en_US'">
 				<xsl:text>eng</xsl:text>
+			</xsl:when>
+			<xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value'] = 'hr'">
+				<xsl:text>hrv</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value']" />
@@ -102,24 +108,27 @@
                                                 <xsl:when test="doc:element[@name='alternative']/doc:element/@name = 'en_US'">
                                                     <xsl:attribute name="lang"><xsl:text>eng</xsl:text></xsl:attribute>
                                                 </xsl:when>
+                                                <xsl:when test="doc:element[@name='alternative']/doc:element/@name = 'hr'">
+                                                    <xsl:attribute name="lang"><xsl:text>hrv</xsl:text></xsl:attribute>
+                                                </xsl:when>
                                             </xsl:choose>
                                             <xsl:value-of select="doc:element[@name='alternative']/doc:element/doc:field[@name='value']"/>
 					</dcterms:alternative>
 	        		</xsl:if>
     			</xsl:for-each>
-                        <xsl:variable name="orcid" select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority']"/>
+                        <xsl:variable name="author" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='author']/doc:element/doc:field[@name='value']"/>
+                        <xsl:variable name="orcid" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='author']/doc:element[@name='orcid']/doc:element/doc:field[@name='value']"/>
+                        <xsl:variable name="gndid" select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorGND']/doc:element/doc:field[@name='authority']"/>
 			<!-- author data: dc.contributor.author -->
-			<xsl:for-each select="doc:metadata/doc:element[@name='item']/doc:element[@name='creatorGND']/doc:element/doc:field[@name='value']">
-                            <xsl:variable name="i">
-                                <xsl:number value="position()" />
-                            </xsl:variable>
+			<xsl:for-each select="$author">
+                            <xsl:variable name="i" select="position()" />
 				<dc:creator xsi:type="pc:MetaPers">
 					<pc:person>
-                                            <xsl:if test="../doc:field[@name='authority'][$i]!=''">
-                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="../doc:field[@name='authority'][$i]" /></xsl:attribute>
+                                            <xsl:if test="$gndid[$i]!='' and $gndid[$i]!=$placeholder">
+                                                <xsl:attribute name="ddb:GND-Nr"><xsl:value-of select="$gndid[$i]" /></xsl:attribute>
                                             </xsl:if>
-                                            <xsl:if test="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][$i]!=''">
-                                                <ddb:ORCID><xsl:value-of select="../../../../doc:element[@name='item']/doc:element[@name='creatorOrcid']//doc:field[@name='authority'][$i]" /></ddb:ORCID>
+                                            <xsl:if test="$orcid[$i]!='' and $orcid[$i]!=$placeholder">
+                                                <ddb:ORCID><xsl:value-of select="$orcid[$i]" /></ddb:ORCID>
                                             </xsl:if>
             					<pc:name type="nameUsedByThePerson">
 							<!-- handle names with "von", "van", "Van", and "de" -->
@@ -530,6 +539,7 @@
                             </ddb:transfer>
                         </xsl:for-each>
 			<ddb:identifier ddb:type="URL"><xsl:value-of select="$handle"/></ddb:identifier>
+			<ddb:identifier ddb:type="DOI"><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']"/></ddb:identifier>
 
                         <!-- select all rights -->
                         <!-- RULES:
