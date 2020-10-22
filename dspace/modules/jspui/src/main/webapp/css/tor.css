@@ -341,6 +341,10 @@ td > ul {
     color: #2edcdc;
 }
 
+.fa-user.studentstaff {
+    color: #2edc82;
+}
+
 .fa-user.externalstaff {
     color: #999999;
 }
