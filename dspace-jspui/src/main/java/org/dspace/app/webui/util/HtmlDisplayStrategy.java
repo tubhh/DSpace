@@ -22,6 +22,7 @@ public class HtmlDisplayStrategy extends AUniformDisplayStrategy
 
     protected String getDisplayForValue(HttpServletRequest hrq, String value, int itemid)
     {
+        value = value.replace("\n", "<br/>");
         return value;
     }
 
