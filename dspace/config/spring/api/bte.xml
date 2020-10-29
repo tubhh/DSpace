@@ -192,6 +192,7 @@
                             <ref bean="splitBibTexKeywords"/>
                             <ref bean="splitAuthors"/>
 			    <ref bean="removeLastDot"/>
+			    <ref bean="extractArxivIdentifier"/>
 			</list>
 		</property>
 	</bean>
@@ -342,6 +343,17 @@
                 </list>
             </property>
             <property name="separator" value=";" />
+        </bean>
+
+        <!-- Extract arXiv-ID from arXiV link -->
+        <bean name="extractArxivID" class="org.dspace.submit.lookup.ArxivIdentifierModifier">
+            <constructor-arg value="SplitValue Modifier"/>
+            <property name="fieldKeys">
+                <list>
+                    <value>arxiv</value>
+                </list>
+            </property>
+            <property name="separator" value="/" />
         </bean>
 
         <!-- Decode LaTeX input into normal UTF8 strings -->
@@ -752,7 +764,7 @@
 				<entry key="published" value="issued" />
 				<entry key="articleTitle" value="title" />
 				<entry key="summary" value="abstract" />
-				<entry key="id" value="url" />
+				<entry key="id" value="arxiv" />
 				<entry key="pdfUrl" value="fulltextUrl" />
 				<entry key="primaryCategory" value="arxivCategory" />
 				<entry key="category" value="arxivCategory" />
@@ -968,6 +980,7 @@
 				<entry value="jissn" key="dc.identifier.issn" />
 				<entry value="jeissn" key="dc.identifier.issn" />
                                 <entry value="allissns" key="dc.identifier.issn" />
+                                <entry value="arxiv" key="dc.identifier.arxiv" />
 				<entry value="pisbn" key="dc.identifier.isbn" />
 				<entry value="eisbn" key="dc.identifier.eisbn" />
 				<entry value="journal" key="dc.relation.ispartof" />				
