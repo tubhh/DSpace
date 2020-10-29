@@ -867,10 +867,11 @@ public class OrcidPreferencesUtils
                                     OrcidPreferencesUtils.PREFIX_ORCID_SYSTEMPROFILE_PREF,
                                     "");
                 }
-                
+                log.debug("Trying to map ORCID field "+metadataShortnameORCID+" to internal field "+metadataShortnameINTERNAL);
                 if (propsToSkip == null || !propsToSkip.contains(metadataShortnameINTERNAL)) {
 	                mapMetadata.put(metadataShortnameORCID,
 	                        metadataShortnameINTERNAL);
+                log.debug("Mapping done!");
                 }
             }
 
@@ -1083,14 +1084,23 @@ public class OrcidPreferencesUtils
                         .getExternalIdentifiers();
                 if (eids != null)
                 {
+                    log.debug("Found external IDs");
                 	HashSet<String> extIdAllowedInThisIteration = new HashSet<String>();
                     for (ExternalId eid : eids.getExternalIdentifier())
                     {
                         String extIdKey = "external-identifier-"
                                 + eid.getExternalIdType();
+                        log.debug("Found external ID "+extIdKey);
+                        log.debug("External ID "+eid.getExternalIdValue()+" maps to "+mapMetadata.get(extIdKey));
+                        if (extIdKey.equals("external-identifier-ResearcherID")) {
+                            extIdKey = "external-identifier-Researcher ID";
+                            log.debug("Moved external ID to "+extIdKey);
+                            log.debug("External ID "+eid.getExternalIdValue()+" now maps to "+mapMetadata.get(extIdKey));
+                        }
 						if (extIdAllowedInThisIteration.contains(extIdKey) || (mapMetadata.containsKey(extIdKey)
 								&& checkSyncAllowed(crisObject, mapMetadata.get(extIdKey), propsToReplace)))
                         {
+                            log.debug("Adding "+eid.getExternalIdValue()+" to field "+mapMetadata.get(extIdKey));
 							extIdAllowedInThisIteration.add(extIdKey);
                             ResearcherPageUtils.buildTextValue(crisObject,
                                     eid.getExternalIdValue(),
