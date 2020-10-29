@@ -192,7 +192,7 @@
                             <ref bean="splitBibTexKeywords"/>
                             <ref bean="splitAuthors"/>
 			    <ref bean="removeLastDot"/>
-			    <ref bean="extractArxivIdentifier"/>
+			    <ref bean="extractArxivID"/>
 			</list>
 		</property>
 	</bean>
