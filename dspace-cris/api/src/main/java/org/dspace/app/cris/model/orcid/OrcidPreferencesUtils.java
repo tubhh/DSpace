@@ -1092,7 +1092,7 @@ public class OrcidPreferencesUtils
                                 + eid.getExternalIdType();
                         log.debug("Found external ID "+extIdKey);
                         log.debug("External ID "+eid.getExternalIdValue()+" maps to "+mapMetadata.get(extIdKey));
-                        if (extIdKey.equals("external-identifier-ResearcherID")) {
+                        if (extIdKey.equals("external-identifier-ResearcherID") && mapMetadata.get(extIdKey) == null) {
                             extIdKey = "external-identifier-Researcher ID";
                             log.debug("Moved external ID to "+extIdKey);
                             log.debug("External ID "+eid.getExternalIdValue()+" now maps to "+mapMetadata.get(extIdKey));
