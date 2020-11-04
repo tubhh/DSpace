@@ -2493,14 +2493,7 @@
                                                 <Custom ref="oaioutputCondition"/>
                                             </LeftCondition>
                                             <RightCondition>
-                                                <OR>
-                                                    <LeftCondition>
-                                                        <Custom ref="noFulltextCondition"/>
-                                                    </LeftCondition>
-                                                    <RightCondition>
-                                                        <Custom ref="researchDataCondition"/>
-                                                    </RightCondition>
-                                                </OR>
+                                                <Custom ref="researchDataCondition"/>
                                             </RightCondition>
                                         </OR>
 		                    </LeftCondition>
