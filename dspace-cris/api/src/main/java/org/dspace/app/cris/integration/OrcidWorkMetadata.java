@@ -116,7 +116,7 @@ public class OrcidWorkMetadata extends MappingMetadata {
 		addSingleField(LANGUAGE);
 
 		// CITATION
-		addCitation(CITATION);
+		addDisseminatedValue(CITATION);
 		
 		//URL
 		addSingleField(URL);
