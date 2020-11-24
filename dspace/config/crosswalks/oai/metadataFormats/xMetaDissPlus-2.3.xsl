@@ -471,21 +471,21 @@
                                                 </xsl:if>
                                                 <cc:name><xsl:value-of select="doc:metadata/doc:element[@name='thesis']/doc:element[@name='grantor']/doc:element[@name='universityOrInstitution']/doc:element/doc:field[@name='value']" /></cc:name>
                                                 <cc:place><xsl:value-of select="doc:metadata/doc:element[@name='thesis']/doc:element[@name='grantor']/doc:element[@name='place']/doc:element/doc:field[@name='value']" /></cc:place>
-                                                <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publication']/doc:element[@name='institute']/doc:element/doc:field[@name='value']">
+                                                <xsl:for-each select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publication']/doc:element[@name='institute']/doc:element/doc:field[@name='value']">
                                                     <cc:department>
 <!-- Goettinger Institutselement
                                                         <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='affiliation']/doc:element[@name='institute']/doc:element/doc:field[@name='value']">
 							    <cc:name><xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='affiliation']/doc:element[@name='institute']/doc:element/doc:field[@name='value']"/></cc:name>
                                                         </xsl:if>
 -->
-							    <cc:name><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publication']/doc:element[@name='institute']/doc:element/doc:field[@name='value']"/></cc:name>
+							    <cc:name><xsl:value-of select="."/></cc:name>
 <!--
                                                         <xsl:if test="doc:metadata/doc:element[@name='thesis']/doc:element[@name='grantor']/doc:element/doc:field[@name='value']">
 							    <cc:name><xsl:value-of select="doc:metadata/doc:element[@name='thesis']/doc:element[@name='grantor']/doc:element/doc:field[@name='value']"/></cc:name>
                                                         </xsl:if>
 -->
                                                     </cc:department>
-                                                </xsl:if>
+                                                </xsl:for-each>
 					</cc:universityOrInstitution>
 				</thesis:grantor>
 			</thesis:degree>
