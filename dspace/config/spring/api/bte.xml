@@ -129,6 +129,8 @@
 <!-- 	            depending on your apiKey you should use scopusOnlineDataLoader or scivalOnlineDataLoader or
 					adsOnlineDataLoader -->
 		    <entry key="scopus" value-ref="scopusOnlineDataLoader"/>
+                    <entry key="b3kat" value-ref="ISBNOnlineDataLoaderB3Kat" />
+                    <entry key="loc" value-ref="ISBNOnlineDataLoaderLOC" />
 <!--
 	            <entry key="wos" value-ref="wosOnlineDataLoader"/> 
 	            <entry key="ads" value-ref="adsOnlineDataLoader"/>-->
