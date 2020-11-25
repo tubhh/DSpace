@@ -557,7 +557,8 @@ public abstract class MappingMetadata {
 	 * 
 	 * @param FIELD
 	 */
-	protected void addMultipleValues(String FIELD) {
+	protected boolean addMultipleValues(String FIELD) {
+	    boolean result = false;
 		String fieldConfig = configuredFields.get(FIELD);
 		ArrayList<Metadatum> fields = resolveMetadataFields(fieldConfig);
 
@@ -566,7 +567,9 @@ public abstract class MappingMetadata {
 				// TODO if this is author field, first-name first
 				metadataMappings.put(FIELD, field.value);
 			}
+			result = true;
 		}
+		return result;
 	}
 
 	protected void addMultipleWithAuthorityValues(String FIELD) {
@@ -712,7 +715,7 @@ public abstract class MappingMetadata {
 		return false;
 	}
 
-	protected boolean addCitation(String fieldName) {
+	protected boolean addDisseminatedValue(String fieldName) {
 
 		String config = configuredFields.get(fieldName);
 

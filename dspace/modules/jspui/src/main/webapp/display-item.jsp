@@ -200,13 +200,16 @@
 	boolean coreRecommender = ConfigurationManager.getBooleanProperty("core-aggregator","core-aggregator.enabled");
 	String coreCredentials = ConfigurationManager.getProperty("core-aggregator", "core-aggregator.credentials");
 
-        String odataPath = ConfigurationManager.getProperty("cris","odataPath");
-	
+    String odataPath = ConfigurationManager.getProperty("cris","odataPath");
+    
 	String crisID = (String)request.getAttribute("crisID");
+	
+	boolean datasetSchemaOrgEnabled = ConfigurationManager.getBooleanProperty("schemaorg-dataset-metadata.enable", false);
 %>
 
-<% if(pmcEnabled || scopusEnabled || wosEnabled || scholarEnabled || altMetricEnabled) { %>
 <c:set var="dspace.layout.head.last" scope="request">
+<% if(pmcEnabled || scopusEnabled || wosEnabled || scholarEnabled || altMetricEnabled) { %>
+
 <% if(altMetricEnabled) { %> 
 <script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
 <% } %>
@@ -277,9 +280,16 @@ j(document).ready(function() {
 		}(document, 'script', 'recommender-embed', '<%= coreCredentials %>', {}));
 	</script>
 	<% } %>
-</c:set>
+	
 <% } %>
-
+	<% if(datasetSchemaOrgEnabled) { %>
+		<c:if test="${!empty schemaOrgJsonLD}">
+			<script type="application/ld+json">
+				${schemaOrgJsonLD}
+			</script>
+		</c:if>
+	<% } %>
+</c:set>
 <dspace:layout title="<%= title %>">
 <%
     if (handle != null)
