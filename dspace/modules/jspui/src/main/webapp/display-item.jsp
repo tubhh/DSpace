@@ -207,6 +207,8 @@
 	boolean datasetSchemaOrgEnabled = ConfigurationManager.getBooleanProperty("schemaorg-dataset-metadata.enable", false);
 %>
 
+<script type="text/javascript" src="<%= request.getContextPath() %>/static/js/abbreviatetext.js"> </script>
+
 <c:set var="dspace.layout.head.last" scope="request">
 <% if(pmcEnabled || scopusEnabled || wosEnabled || scholarEnabled || altMetricEnabled) { %>
 
