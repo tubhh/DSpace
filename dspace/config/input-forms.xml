@@ -2409,6 +2409,10 @@
        <stored-value>Article</stored-value>
      </pair>
      <pair>
+       <displayed-value>Audiovisual</displayed-value>
+       <stored-value>Audiovisual</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Book</displayed-value>
        <stored-value>book</stored-value>
      </pair>
@@ -2490,6 +2494,10 @@
        <stored-value>Software</stored-value>
      </pair>
 -->
+     <pair>
+       <displayed-value>Sound</displayed-value>
+       <stored-value>Sound</stored-value>
+     </pair>
      <pair>
        <displayed-value>Technical Report</displayed-value>
        <stored-value>Technical Report</stored-value>

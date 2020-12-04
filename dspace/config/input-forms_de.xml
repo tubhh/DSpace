@@ -2358,6 +2358,10 @@
        <displayed-value>Arbeitspapier</displayed-value>
        <stored-value>Working Paper</stored-value>
      </pair>
+     <pair>
+       <displayed-value>Audiovisuell</displayed-value>
+       <stored-value>Audiovisual</stored-value>
+     </pair>
 <!--
      <pair>
        <displayed-value>Bild</displayed-value>
@@ -2432,6 +2436,10 @@
        <stored-value>Software</stored-value>
      </pair>
 -->
+     <pair>
+       <displayed-value>Sound</displayed-value>
+       <stored-value>Sound</stored-value>
+     </pair>
      <pair>
        <displayed-value>Technischer Report</displayed-value>
        <stored-value>Technical Report</stored-value>
