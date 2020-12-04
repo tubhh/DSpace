@@ -224,17 +224,6 @@
        </field>
 
        <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>publisher</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Verlag</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier den Namen des Verlages ein, wenn es sich um eine Parallelpublikation handelt.</hint>
-         <required></required>
-       </field>
-
-       <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>container</dc-element>
          <dc-qualifier>volume</dc-qualifier>
@@ -332,6 +321,17 @@
          <label>Quelle</label>
          <input-type>onebox</input-type>
          <hint>Geben Sie hier eine Referenz zu dieser Arbeit an, bei einem Artikel zum Beispiel die Ausgabe und die Zeitschrift, in der er erschienen ist; bei einem Buchkapitel den Buchtitel und die Seitenangabe.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Verlag</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier den Namen des Verlages ein, wenn es sich um eine Parallelpublikation handelt.</hint>
          <required></required>
        </field>
 
@@ -1180,17 +1180,6 @@
        </field>
 
        <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>publisher</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Verlag</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier den Namen des Verlages ein, wenn es sich um eine Parallelpublikation handelt.</hint>
-         <required></required>
-       </field>
-
-       <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>container</dc-element>
          <dc-qualifier>volume</dc-qualifier>
@@ -1288,6 +1277,17 @@
          <label>Quelle</label>
          <input-type>onebox</input-type>
          <hint>Geben Sie hier eine Referenz zu dieser Arbeit an, bei einem Artikel zum Beispiel die Ausgabe und die Zeitschrift, in der er erschienen ist; bei einem Buchkapitel den Buchtitel und die Seitenangabe.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Verlag</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier den Namen des Verlages ein, wenn es sich um eine Parallelpublikation handelt.</hint>
          <required></required>
        </field>
 
