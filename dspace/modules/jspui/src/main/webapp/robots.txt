@@ -43,8 +43,8 @@ Disallow: */browse*
 # Turnitinbot should not crawl researcher profiles and cris specific stuff, as this is probably no needed for plagiarism detection
 #User-agent: TurnitinBot
 # At the moment nobody should index the cris directory
-Disallow: /cris
-Disallow: /dspace-cris
+#Disallow: /cris
+#Disallow: /dspace-cris
 
 # advertising-related bots:
 User-agent: Mediapartners-Google*
