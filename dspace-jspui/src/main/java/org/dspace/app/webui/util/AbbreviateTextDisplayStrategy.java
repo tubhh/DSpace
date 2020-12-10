@@ -18,7 +18,9 @@ public class AbbreviateTextDisplayStrategy extends AUniformDisplayStrategy {
 
     protected String getDisplayForValue(HttpServletRequest hrq, String value, int itemid) {
         if (StringUtils.isNotBlank(value)) {
-            value = value.replaceAll("\\r\\n|\\n", "<br/>");
+            value = value.replaceAll("\\r\\n\\r\\n|\\n\\n", "<br/><br/>");
+            value = value.replaceAll("\\.\\r\\n|\\.\\n", "<br/>");
+            value = value.replaceAll("\\r\\n|\\n", " ");
             return "<div class=\"abbreviate-me\">" + value + "</div>";
         } 
         return null;
