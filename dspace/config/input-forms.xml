@@ -2254,6 +2254,10 @@
        <displayed-value>Springer AAM Terms of Use</displayed-value>
        <stored-value>https://www.springer.com/gp/open-access/publication-policies/aam-terms-of-use</stored-value>
      </pair>
+     <pair>
+       <displayed-value>f-DPPL v1 de 11-2004</displayed-value>
+       <stored-value>https://www.hbz-nrw.de/produkte/open-access/lizenzen/dppl/fdppl/f-DPPL_v1_de_11-2004</stored-value>
+     </pair>
    </value-pairs>
 
    <value-pairs value-pairs-name="cc_license_en" dc-term="dc_rights_cc">

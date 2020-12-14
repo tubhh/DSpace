@@ -589,7 +589,7 @@
          <repeatable>false</repeatable>
          <label>Lizenz</label>
          <input-type value-pairs-name="license_de">dropdown</input-type>
-         <hint>Wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
+         <hint>Wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf http://creativecommons.org.</hint>
          <required></required>
        </field>
 <!--
@@ -899,7 +899,7 @@
          <repeatable>false</repeatable>
          <label>Lizenz</label>
          <input-type value-pairs-name="license_fdm_de">dropdown</input-type>
-         <hint>Wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf <a href="http://creativecommons.org">http://creativecommons.org</a>.</hint>
+         <hint>Wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf http://creativecommons.org.</hint>
          <required></required>
        </field>
          
@@ -2210,6 +2210,10 @@
      <pair>
        <displayed-value>Springer AAM Terms of Use</displayed-value>
        <stored-value>https://www.springer.com/gp/open-access/publication-policies/aam-terms-of-use</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>f-DPPL v1 de 11-2004</displayed-value>
+       <stored-value>https://www.hbz-nrw.de/produkte/open-access/lizenzen/dppl/fdppl/f-DPPL_v1_de_11-2004</stored-value>
      </pair>
    </value-pairs>
 
