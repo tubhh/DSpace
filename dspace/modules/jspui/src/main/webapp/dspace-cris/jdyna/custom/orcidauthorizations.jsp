@@ -54,7 +54,7 @@ j(document).ready(function() {
 			<div class="dynaField"></div>								
 			<c:choose>
 				<c:when test="${!empty anagraficaObject.anagrafica4view['orcid']}">
-                                        <br/><span style="min-width: 30em;"><a target="_blank" href="https://orcid.org/${anagraficaObject.anagrafica4view['orcid'][0]}"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" /> orcid.org/${anagraficaObject.anagrafica4view['orcid'][0]}</a></span>
+                                        <br/><span style="min-width: 30em;"><a target="_blank" href="https://orcid.org/${anagraficaObject.anagrafica4view['orcid'][0]}"><img src="/image/orcid_16x16.png" /> orcid.org/${anagraficaObject.anagrafica4view['orcid'][0]}</a></span>
 					<c:forEach items="${propertiesDefinitionsInHolder[holder.shortName]}" var="tipologiaDaVisualizzare" varStatus="status">
 						<c:choose>
 						<c:when test="${!empty anagraficaObject.anagrafica4view['system-orcid-token-authenticate']}">
