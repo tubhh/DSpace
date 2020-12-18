@@ -34,7 +34,7 @@ Disallow: /password-login
 Disallow: /Shibboleth.sso
 Disallow: */simple-search*
 Disallow: */browse*
-Disallow: /*.h5$
+Disallow: *.h5$
 
 ##############################
 # Section for misbehaving bots
