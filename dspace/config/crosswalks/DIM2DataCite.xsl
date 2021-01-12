@@ -988,6 +988,7 @@
             <xsl:variable name="f">
                 <xsl:number value="position()" />
             </xsl:variable>
+            <xsl:if test=".!=$placeholder">
             <fundingReference>
                 <funderName>
                     <xsl:value-of select="." />
@@ -1021,6 +1022,7 @@
                     </awardTitle>
                 </xsl:if>
             </fundingReference>
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
 
