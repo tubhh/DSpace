@@ -1008,8 +1008,7 @@ public class DOIIdentifierProvider
         if (metadataStrategy == null) {
             item.addMetadata(MD_SCHEMA, DOI_ELEMENT, DOI_QUALIFIER, null, DOI.DOIToExternalForm(doi));
         } else {
-            item.addMetadata(MD_SCHEMA, DOI_ELEMENT, DOI_QUALIFIER_DOI, null, doi);
-            item.addMetadata(metadataStrategy, DOI_ELEMENT, DOI_QUALIFIER_DOI, null, doi);
+            item.addMetadata(metadataStrategy, DOI_ELEMENT, DOI_QUALIFIER_DOI, null, doi.substring(DOI.SCHEME.length()));
         }
 
         try
