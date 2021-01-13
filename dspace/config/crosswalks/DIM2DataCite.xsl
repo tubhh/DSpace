@@ -219,10 +219,11 @@
                 DataCite (12)
                 Add related identifiers
             -->
-            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='relation' and @qualifier='issupplementedby'] or //dspace:field[@mdschema='datacite' and @element='relation']">
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='relation' and @qualifier='issupplementedby'] or //dspace:field[@mdschema='datacite' and @element='relation'] or //dspace:field[@mdschema='tuhh' and @element='publisher']">
                 <xsl:element name="relatedIdentifiers">
                     <xsl:apply-templates select="//dspace:field[@mdschema='tuhh' and @element='relation' and @qualifier='issupplementedby']" />
                     <xsl:apply-templates select="//dspace:field[@mdschema='datacite' and @element='relation']" />
+                    <xsl:apply-templates select="//dspace:field[@mdschema='tuhh' and @element='publisher']" />
                 </xsl:element>
             </xsl:if>
 
@@ -666,6 +667,44 @@
                     </xsl:attribute>
                     <xsl:attribute name="relationType"><xsl:value-of select="@qualifier" /></xsl:attribute>
                     <xsl:value-of select="substring-after(., ':')" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:element>
+    </xsl:template>
+    <xsl:template match="//dspace:field[@mdschema='tuhh' and @element='publisher']">
+        <xsl:element name="relatedIdentifier">
+            <xsl:choose>
+                <xsl:when test="starts-with(substring-before(., ':'), 'http')">
+                    <xsl:attribute name="relatedIdentifierType">
+                        <xsl:text>URL</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="relationType">
+                        <xsl:choose>
+                            <xsl:when test="//dspace:field[@mdschema='local' and @element='type' and @qualifier='version']='publishedVersion'">
+                                <xsl:text>IsIdenticalTo</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>IsVersionOf</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:value-of select="." />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="relatedIdentifierType">
+                        <xsl:text>DOI</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="relationType">
+                        <xsl:choose>
+                            <xsl:when test="//dspace:field[@mdschema='local' and @element='type' and @qualifier='version']='publishedVersion'">
+                                <xsl:text>IsIdenticalTo</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>IsVersionOf</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:value-of select="." />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
