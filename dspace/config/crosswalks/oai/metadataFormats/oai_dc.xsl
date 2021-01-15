@@ -145,7 +145,11 @@
                         </xsl:for-each>
                         <!-- TUHH identifier first -->
                         <xsl:for-each select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']">
-                            <dc:identifier><xsl:text>http://dx.doi.org/</xsl:text><xsl:value-of select="." /></dc:identifier>
+                            <dc:identifier><xsl:text>https://doi.org/</xsl:text><xsl:value-of select="." /></dc:identifier>
+                        </xsl:for-each>
+                        <!-- dc.identifier.doi -->
+                        <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']">
+                            <dc:identifier><xsl:text>https://doi.org/</xsl:text><xsl:value-of select="." /></dc:identifier>
                         </xsl:for-each>
 			<!-- dc.identifier -->
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element/doc:field[@name='value']">
