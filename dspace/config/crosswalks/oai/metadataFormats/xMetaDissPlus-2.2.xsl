@@ -529,6 +529,7 @@
                             </ddb:transfer>
                         </xsl:for-each>
 			<ddb:identifier ddb:type="URL"><xsl:value-of select="$handle"/></ddb:identifier>
+			<ddb:identifier ddb:type="DOI"><xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']"/></ddb:identifier>
                         <!-- select all rights -->
                         <!-- RULES:
                         mixedopen, open = free
