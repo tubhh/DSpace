@@ -14,6 +14,7 @@
 
 	<bean id="dspaceitemsLayoutView"
 		class="org.dspace.discovery.configuration.DiscoveryViewConfiguration">
+                <property name="thumbnail" value="true" />
 		<property name="metadataHeadingFields">
 			<list>
 				<bean
@@ -44,6 +45,7 @@
 					<property name="preHtml" value="&lt;small&gt;" />
 					<property name="postHtml" value="&lt;/small&gt;" />
 					<property name="field" value="dc.type" />
+					<property name="decorator" value="valuepairs" />
 				</bean>
 			</list>
 		</property>
