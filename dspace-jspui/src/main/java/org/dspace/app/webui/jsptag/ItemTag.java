@@ -595,27 +595,6 @@ public class ItemTag extends TagSupport {
 								out.print(bitstreams[k].getFormatDescription());
 								out.print("</td><td class=\"standard\" align=\"center\">");
 
-								// is there a thumbnail bundle?
-								if ((thumbs.length > 0) && showThumbs) {
-									String tName = bitstreams[k].getName() + ".jpg";
-									String tAltText = LocaleSupport.getLocalizedMessage(pageContext,
-											"org.dspace.app.webui.jsptag.ItemTag.thumbnail");
-									Bitstream tb = thumbs[0].getBitstreamByName(tName);
-
-									if (tb != null) {
-										if (AuthorizeManager.authorizeActionBoolean(context, tb, Constants.READ)) {
-											String myPath = request.getContextPath() + "/retrieve/" + tb.getID() + "/"
-													+ UIUtil.encodeBitstreamName(tb.getName(),
-															Constants.DEFAULT_ENCODING);
-
-											out.print("<a ");
-											out.print(bsLink);
-											out.print("<img src=\"" + myPath + "\" ");
-											out.print("alt=\"" + tAltText + "\" /></a><br />");
-										}
-									}
-								}
-
 								boolean authorizedToVew = AuthorizeManager.authorizeActionBoolean(context,
 										bitstreams[k], Constants.READ);
 
@@ -828,6 +807,28 @@ public class ItemTag extends TagSupport {
 										}
 									}
 								}
+
+								// is there a thumbnail bundle?
+								if ((thumbs.length > 0) && showThumbs) {
+									String tName = bitstreams[k].getName() + ".jpg";
+									String tAltText = LocaleSupport.getLocalizedMessage(pageContext,
+											"org.dspace.app.webui.jsptag.ItemTag.thumbnail");
+									Bitstream tb = thumbs[0].getBitstreamByName(tName);
+
+									if (tb != null) {
+										if (AuthorizeManager.authorizeActionBoolean(context, tb, Constants.READ)) {
+											String myPath = request.getContextPath() + "/retrieve/" + tb.getID() + "/"
+													+ UIUtil.encodeBitstreamName(tb.getName(),
+															Constants.DEFAULT_ENCODING);
+
+											out.print("<br /><a ");
+											out.print(bsLink);
+											out.print("<img src=\"" + myPath + "\" ");
+											out.print("alt=\"" + tAltText + "\" /></a>");
+										}
+									}
+								}
+
 							}
 						}
 						out.print("</td></tr>");
