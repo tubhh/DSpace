@@ -384,6 +384,17 @@
        </field>
 
        <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier>version</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publication Version (status for this item at a publisher)</label>
+         <input-type value-pairs-name="publication_version">dropdown</input-type>
+         <hint>Select the version of this publication, if it has been submitted or published at another publisher.</hint>
+         <required></required>
+        </field>
+
+       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>arxiv</dc-qualifier>
@@ -528,17 +539,6 @@
      </page>
 
      <page number="3">
-       <field>
-         <dc-schema>local</dc-schema>
-         <dc-element>type</dc-element>
-         <dc-qualifier>version</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Publication Version (status for this item at a publisher)</label>
-         <input-type value-pairs-name="publication_version">dropdown</input-type>
-         <hint>Select the version of this publication, if it has been submitted or published at another publisher.</hint>
-         <required></required>
-        </field>
-
        <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>oai</dc-element>
