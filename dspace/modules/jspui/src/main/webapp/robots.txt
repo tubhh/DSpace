@@ -34,7 +34,7 @@ Disallow: /password-login
 Disallow: /Shibboleth.sso
 Disallow: */simple-search*
 Disallow: */browse*
-Disallow: *.h5$
+Disallow: h5$
 
 ##############################
 # Section for misbehaving bots
@@ -42,10 +42,14 @@ Disallow: *.h5$
 ##############################
 
 # Turnitinbot should not crawl researcher profiles and cris specific stuff, as this is probably no needed for plagiarism detection
-#User-agent: TurnitinBot
-# At the moment nobody should index the cris directory
-#Disallow: /cris
-#Disallow: /dspace-cris
+User-agent: TurnitinBot
+Disallow: /cris
+Disallow: /dspace-cris
+
+# SemrushBot should not crawl researcher profiles and cris specific stuff
+User-agent: SemrushBot
+Disallow: /dspace-cris
+Disallow: /cris
 
 # advertising-related bots:
 User-agent: Mediapartners-Google*
