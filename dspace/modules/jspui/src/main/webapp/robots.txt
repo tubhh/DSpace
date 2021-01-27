@@ -34,7 +34,9 @@ Disallow: /password-login
 Disallow: /Shibboleth.sso
 Disallow: */simple-search*
 Disallow: */browse*
-Disallow: h5$
+Disallow: /*.h5$
+Disallow: /*_raw.zip$
+Disallow: /*_reco.zip$
 
 ##############################
 # Section for misbehaving bots
@@ -50,6 +52,9 @@ Disallow: /dspace-cris
 User-agent: SemrushBot
 Disallow: /dspace-cris
 Disallow: /cris
+Disallow: /*.h5$
+Disallow: /*_raw.zip$
+Disallow: /*_reco.zip$
 
 # advertising-related bots:
 User-agent: Mediapartners-Google*
