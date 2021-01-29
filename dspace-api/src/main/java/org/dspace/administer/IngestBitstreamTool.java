@@ -180,25 +180,13 @@ public class IngestBitstreamTool {
                 verbose("Found bundle " + bundles[0].getName() + " in item, using that for new bitstream");
                 bundle = bundles[0];
             } else {
-//                try {
+                try {
                     verbose("Creating new " + bundleName + " bundle in item");
-/*
-// set bundle's name to ORIGINAL
-bitstream = item.createSingleBitstream(is, bundleName);
-
-// set the permission as defined in the owning collection
-Collection owningCollection = item.getOwningCollection();
-if (owningCollection != null)
-{
-    Bundle bnd = bitstream.getBundles()[0];.
-    bnd.inheritCollectionDefaultPolicies(owningCollection);
-}
-
+                    bundle = item.createBundle(bundleName);
                 } catch (AuthorizeException e) {
-                    System.out.println("Authorization error creating new " + bundleName + " bundle in item");
+                    System.out.println("Authorization error creating new " + bundleName + " bundle in item " + Integer.toString(item.getID()));
                     throw new AuthorizeException(e.getMessage());
                 }
-*/
             }
 
             if (bundle == null) {
