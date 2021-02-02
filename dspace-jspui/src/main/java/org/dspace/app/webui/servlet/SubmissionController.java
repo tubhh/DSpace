@@ -40,11 +40,13 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.AddFulltextItem;
 import org.dspace.content.Bitstream;
 import org.dspace.content.Bundle;
+import org.dspace.content.DSpaceObject;
 import org.dspace.content.EditItem;
 import org.dspace.content.Item;
 import org.dspace.content.WorkspaceItem;
 import org.dspace.content.Collection;
 import org.dspace.core.ConfigurationManager;
+import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
 import org.dspace.eperson.EPerson;
@@ -246,7 +248,13 @@ public class SubmissionController extends DSpaceServlet
                 // load the item
                 Item item = Item.find(context, Integer.parseInt(addFullTextItemID));
 
-                AddFulltextItem addFulltextItem = new AddFulltextItem(item);
+                // Get fulltext collection
+                Collection fulltextCollection = getFulltextCollection(context);
+                if (fulltextCollection == null) {
+                    // We require fulltext collection here, or the item will not end up in the right place
+                    throw new ServletException("Invalid or missing fulltext collection configured!");
+                }
+                AddFulltextItem addFulltextItem = new AddFulltextItem(item, fulltextCollection);
 
                 // load submission information
                 SubmissionInfo si = SubmissionInfo.load(context, request, addFulltextItem);
@@ -1233,9 +1241,16 @@ public class SubmissionController extends DSpaceServlet
 
                 int itemID = UIUtil.getIntParameter(request, "add_fulltext_item");
 
+                // Get fulltext collection
+                Collection fulltextCollection = getFulltextCollection(context);
+                if (fulltextCollection == null) {
+                    // We require fulltext collection here, or the item will not end up in the right place
+                    throw new ServletException("Invalid or missing fulltext collection configured!");
+                }
+
                 // load the item
                 Item item = Item.find(context, itemID);
-                AddFulltextItem addFulltextItem = new AddFulltextItem(item);
+                AddFulltextItem addFulltextItem = new AddFulltextItem(item, fulltextCollection);
 
                 // load submission information
                 info = SubmissionInfo.load(context, request, addFulltextItem);
@@ -2071,5 +2086,18 @@ public class SubmissionController extends DSpaceServlet
                         + subInfo.getSubmissionItem().getItem().getHandle();
         response.sendRedirect(response
                 .encodeRedirectURL(request.getContextPath() + exitPath));
+    }
+
+    private static Collection getFulltextCollection(Context context) throws SQLException {
+        // Get fulltext collection
+        String collectionHandle = ConfigurationManager.getProperty("submit.fulltext.to-collection");
+        Collection fulltextCollection = null;
+        DSpaceObject dso = HandleManager.resolveToObject(context, collectionHandle);
+        if (dso.getType() == Constants.getTypeID("COLLECTION")) {
+            fulltextCollection = (Collection) dso;
+        } else {
+            log.error("Configured 'submit.fulltext.to-collection is not a collection!");
+        }
+        return fulltextCollection;
     }
 }

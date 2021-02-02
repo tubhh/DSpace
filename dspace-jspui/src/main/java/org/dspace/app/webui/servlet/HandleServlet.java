@@ -342,8 +342,27 @@ public class HandleServlet extends DSpaceServlet
         // Tombstone?
         if (item.isWithdrawn())
         {
+            String redirectionMetadataField = ConfigurationManager.getProperty("webui.item-display.redirection-field");
+            if (StringUtils.isBlank(redirectionMetadataField)) {
+                redirectionMetadataField = "dc.relation.isreplacedby";
+            }
+            String redirectionHandle = item.getMetadata(redirectionMetadataField);
+            if (StringUtils.isNotBlank(redirectionHandle)) {
+                // strip prefix 'hdl:'
+                if (StringUtils.substringBefore(redirectionHandle, "/").contains(":")) {
+                    redirectionHandle = StringUtils.substringAfter(redirectionHandle, ":");
+                }
+                String redirectionUrl = HandleManager.resolveToURL(context, redirectionHandle);
+                // check if we were able to resolve the handle
+                if (StringUtils.isNotBlank(redirectionUrl)) {
+                    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                    response.setHeader("Location", response.encodeRedirectURL(redirectionUrl));
+                    return;
+                }
+            }
+            
+            // if we did not send the redirect and returned above, show the tombstone page
             JSPManager.showJSP(request, response, "/tombstone.jsp");
-
             return;
         }
 

@@ -224,7 +224,7 @@ j(document).ready(function() {
 					</div></div>									
 					</c:when>
 					<c:otherwise>
-						<div class="col-md-2"><div class="row"><a class="col-md-offset-4" href="http://sandbox.orcid.org"><img src="<%= request.getContextPath() %>/image/orcid_64x64.png" title="ORCID Website"></a></div>
+						<div class="col-md-2"><div class="row"><a class="col-md-offset-4" href="https://orcid.org"><img src="<%= request.getContextPath() %>/image/orcid_64x64.png" title="ORCID Website"></a></div>
 						</div>
 <!--					
 						<div class="col-md-5"><div class="panel panel-default">

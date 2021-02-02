@@ -50,7 +50,7 @@ public class SeriesRefGenerator implements EnhancedValuesGenerator
             log.debug("Found "+num+" series elements");
             String[] values = new String[num];
             for (int idx = 0; idx < num; idx++) {
-                if (n[idx] != null) {
+                if (n.length > 0 && n[idx] != null) {
                     values[idx] = m[idx].value+";"+n[idx].value;
                 }
                 else {

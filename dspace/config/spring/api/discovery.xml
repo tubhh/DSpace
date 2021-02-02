@@ -722,8 +722,8 @@
 			</bean>
 		</property>
 		<!--Default result per page -->
-		<property name="defaultRpp" value="10" />
-		<property name="maxRpp" value="20" />
+		<property name="defaultRpp" value="50" />
+		<property name="maxRpp" value="50" />
 		<property name="hitHighlightingConfiguration">
 			<bean
 				class="org.dspace.discovery.configuration.DiscoveryHitHighlightingConfiguration">
@@ -1720,7 +1720,7 @@
 			<bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
 				<property name="defaultSort" ref="sortEventsName"/>
 				<!--DefaultSortOrder can either be desc or asc (desc is default) -->
-				<property name="defaultSortOrder" value="asc" />
+				<property name="defaultSortOrder" value="desc" />
 				<property name="sortFields">
 					<list>
 						<ref bean="sortEventsName" />
@@ -2011,6 +2011,7 @@
 				<value>crisrp.this</value>
 				<value>crisproject.investigator</value>
 				<value>crisproject.coinvestigators</value>
+				<value>crisproject.copi</value>
 				<value>crisproject.extprincipalinvestigator</value>
 				<value>crisproject.extcoinvestigators</value>
 				<value>crisou.director</value>
@@ -2226,6 +2227,7 @@
 			<list>
 				<value>crisproject.principalinvestigator.dept</value>
 				<value>crisproject.coinvestigators.dept</value>
+				<value>crisproject.copi.dept</value>
 			</list>
 		</property>
 		<property name="facetLimit" value="10" />
@@ -2238,6 +2240,7 @@
 		<property name="metadataFields">
 			<list>
 				<value>crisproject.principalinvestigator</value>
+				<value>crisproject.copi</value>
 				<value>crisproject.extprincipalinvestigator</value>
 				<value>crisproject.coinvestigators</value>
 				<value>crisproject.extcoinvestigators</value>
@@ -2331,6 +2334,11 @@
 	<bean id="sortEventsName"
 		class="org.dspace.discovery.configuration.DiscoverySortFieldConfiguration">
 		<property name="metadataField" value="crisevents.eventsname" />
+	</bean>
+
+	<bean id="sortEventsYear"
+		class="org.dspace.discovery.configuration.DiscoverySortFieldConfiguration">
+		<property name="metadataField" value="crisevents.eventsyear" />
 	</bean>
 
 	<bean id="sortEquipmentName"

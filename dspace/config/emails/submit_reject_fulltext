@@ -6,15 +6,20 @@
 # {3}  Reason for the rejection
 # {4}  Link to Item Page
 #
-Subject: DSpace: New Files Rejected
+Subject: TORE: Ergänzung von Dateien abgelehnt
 
-You submitted fulltext for your item: {0}
+Sie haben einen Volltext an folgender Publikation ergänzt: {0}
 
-To collection: {1}
+In der Sammlung: {1}
 
-Your submission has been rejected by {2}
-with the following explanation:
+Ihre Veröffentlichung wurde mit der folgenden
+Begründung abgelehnt:
 
 {3}
 
-The original item has not been deleted.  You can can re-submit files from the item page at {4}
+Die Veröffentlichung wurde nicht gelöscht. Sie können
+sie über die Seite "Mein TORE" aufrufen oder dort selbst
+löschen: {4}
+
+Mit freundlichen Grüßen
+Das TORE-Team

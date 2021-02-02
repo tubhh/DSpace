@@ -8,6 +8,7 @@
 
 package org.dspace.identifier;
 
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,11 @@ import org.apache.commons.lang.StringUtils;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.Collection;
 import org.dspace.content.Metadatum;
-import org.dspace.content.WorkspaceItem;
 import org.dspace.content.DSpaceObject;
+import org.dspace.content.FormatIdentifier;
 import org.dspace.content.Item;
+import org.dspace.content.WorkspaceItem;
+import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.identifier.doi.DOIConnector;
@@ -84,6 +87,7 @@ public class DOIIdentifierProvider
     public static final String MD_SCHEMA = "dc";
     public static final String DOI_ELEMENT = "identifier";
     public static final String DOI_QUALIFIER = "uri";
+    public static final String DOI_QUALIFIER_DOI = "doi";
 
     public static final Integer IGNORED = -1;
     public static final Integer TO_BE_REGISTERED = 1;
@@ -107,6 +111,19 @@ public class DOIIdentifierProvider
                     CFG_PREFIX + ".");
         }
         return prefix;
+    }
+
+    protected static List<String> getAllowedTypes() {
+        String allowedTypeValue =
+            ConfigurationManager.getProperty("identifier.doi.objects");
+        List<String> allowedTypeList = new ArrayList<>();
+        if(!StringUtils.isBlank(allowedTypeValue)) {
+            String[] allowedTypes = allowedTypeValue.split(",");
+            for (String allowedType : allowedTypes) {
+                allowedTypeList.add(allowedType.trim());
+            }
+        }
+        return(allowedTypeList);
     }
 
     @Required
@@ -522,6 +539,15 @@ public class DOIIdentifierProvider
         
         if (null == doi)
         {
+            List<String> allowedTypeList = getAllowedTypes();
+            // Safe checking of type to avoid index errors, type errors
+            String dsoType = dso.getTypeText();
+            if(!allowedTypeList.contains(dsoType)) {
+                // We never expect DOIs for this type anyway, return null
+                return null;
+            }
+
+            // If the previous tests don't apply, thrown an exception
             throw new IdentifierNotFoundException("No DOI for DSpaceObject of type "
                     + dso.getTypeText() + " with ID " + dso.getID() + " found.");
         }
@@ -967,6 +993,11 @@ public class DOIIdentifierProvider
     protected void saveDOIToObject(Context context, DSpaceObject dso, String doi)
             throws SQLException, AuthorizeException, IdentifierException
     {
+        String metadataStrategy = null;
+        if (this.configurationService.getProperty("identifier.doi.metadata") != null) {
+            metadataStrategy = this.configurationService.getProperty("identifier.doi.metadata");
+        }
+
         // FIXME
         if (!(dso instanceof Item))
         {
@@ -974,8 +1005,13 @@ public class DOIIdentifierProvider
                     + "Items only, not for " + dso.getTypeText() + ".");
         }
         Item item = (Item) dso;
+        if (metadataStrategy == null) {
+            item.addMetadata(MD_SCHEMA, DOI_ELEMENT, DOI_QUALIFIER, null, DOI.DOIToExternalForm(doi));
+        } else {
+            item.addMetadata(MD_SCHEMA, DOI_ELEMENT, DOI_QUALIFIER_DOI, null, doi);
+            item.addMetadata(metadataStrategy, DOI_ELEMENT, DOI_QUALIFIER_DOI, null, doi);
+        }
 
-        item.addMetadata(MD_SCHEMA, DOI_ELEMENT, DOI_QUALIFIER, null, DOI.DOIToExternalForm(doi));
         try
         {
             item.update();

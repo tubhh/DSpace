@@ -14,11 +14,10 @@
  <!-- the mapping for handle "default".                                    -->
 
  <form-map>
+<!--   <name-map collection-handle="default" form-name="traditional" /> -->
    <name-map collection-handle="default" form-name="pubwithfulltext" />
-<!--
-   <name-map collection-handle="NO_FULLTEXT-COLLECTION-Handle" form-name="pubwithoutfulltext" />
-   <name-map collection-handle="FDM-COLLECTION-Handle" form-name="fdm-nontuhh" />
--->
+   <name-map collection-handle="11420/2023" form-name="fdm" />
+   <name-map collection-handle="11420/2093" form-name="pubwithoutfulltext" />
  </form-map>
 
 
@@ -300,7 +299,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the volume number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -312,7 +311,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the issue number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -372,12 +371,23 @@
 
        <field>
          <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>conference</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Conference</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the conference name, on that this item was presented</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>citation</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Citation</label>
+         <label>Citation/Source</label>
          <input-type>onebox</input-type>
-         <hint>Enter the standard citation for the previously issued instance of this item.</hint>
+         <hint>Enter the standard citation for the previously issued instance (source) of this item.</hint>
          <required></required>
        </field>
 
@@ -390,6 +400,40 @@
          <input-type value-pairs-name="common_uritypes_en">qualdrop_value</input-type>
          <hint>Enter the link to the publisher's version of this document.</hint>
          <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>arxiv</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>arXiv ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>scopus</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Scopus EID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the Scopus EID of the work, if it has one.</hint>
+         <required></required>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>pmid</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>PubMed ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the PubMed ID of the work, if it has one.</hint>
+         <visibility>workflow</visibility>
        </field>
 
        <field>
@@ -504,6 +548,17 @@
 
      <page number="3">
        <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier>version</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publication Version (status for this item at a publisher)</label>
+         <input-type value-pairs-name="publication_version">dropdown</input-type>
+         <hint>Select the version of this publication, if it has been submitted or published at another publisher.</hint>
+         <required></required>
+        </field>
+
+       <field>
          <dc-schema>tuhh</dc-schema>
          <dc-element>oai</dc-element>
          <dc-qualifier>show</dc-qualifier>
@@ -515,6 +570,17 @@
         </field>
 
        <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>status</dc-element>
+         <dc-qualifier>inpress</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Inpress?</label>
+         <input-type value-pairs-name="nl_en">dropdown</input-type>
+         <hint>Is this item in press (not yet really published)?</hint>
+         <visibility>workflow</visibility>
+        </field>
+<!--
+       <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>rights</dc-element>
          <dc-qualifier></dc-qualifier>
@@ -525,7 +591,7 @@
          <required>Please select access rights policy!</required>
          <visibility>workflow</visibility>
         </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
@@ -565,11 +631,23 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
+         <dc-qualifier>creditline</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Creditline</label>
+         <input-type>textarea</input-type>
+         <hint>Enter the creditline for AIP publications here.</hint>
+         <required></required>
+         <visibility>workflow</visibility>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>rights</dc-element>
          <dc-qualifier>uri</dc-qualifier>
          <repeatable>false</repeatable>
          <label>License</label>
-         <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>Please select the license applicable for this record here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
+         <input-type value-pairs-name="license_en">dropdown</input-type>
+         <hint>Please select the license applicable for your work here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
          <required></required>
        </field>
 <!--
@@ -639,17 +717,6 @@
          <label>Supplemented By</label>
          <input-type>onebox</input-type>
          <hint>This item is supplemented by research data. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>conference</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Conference</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the conference name, on that this item was presented</hint>
          <required></required>
        </field>
 
@@ -775,12 +842,23 @@
          <dc-element>contributor</dc-element>
          <dc-qualifier></dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Contributors</label>
+         <label>Personal Contributors</label>
          <input-type value-pairs-name="contributor_fdm_en">qualdrop_value</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) or corporates here and select their role</hint>
+         <hint>Enter the names of the contributing persons (last name, first name) here and select their role</hint>
          <required></required>
        </field>
-         
+
+       <field>
+         <dc-schema>datacite</dc-schema>
+         <dc-element>contributorCorporate</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Corporate Contributors</label>
+         <input-type value-pairs-name="contributorCorporate_fdm_en">qualdrop_value</input-type>
+         <hint>Enter the names of the contributing corporates here and select their role</hint>
+         <required></required>
+       </field>
+
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>date</dc-element>
@@ -857,10 +935,10 @@
          <repeatable>true</repeatable>
          <label>Related Identifiers</label>
          <input-type value-pairs-name="relation_types_en">qualdrop_value</input-type>
-         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation</hint>
+         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
          <required></required>
        </field>
-
+<!--
        <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>rights</dc-element>
@@ -872,13 +950,13 @@
          <required>Please select access rights policy!</required>
          <visibility>workflow</visibility>
         </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>rights</dc-element>
          <dc-qualifier>uri</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
+         <label>Creative Commons Lizenz</label>
          <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
          <hint>Please select the license applicable for your work here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
          <required></required>
@@ -956,7 +1034,7 @@
          <dc-element>publication</dc-element>
          <dc-qualifier>institute</dc-qualifier>
          <repeatable>true</repeatable>
-         <label>TUHH-Institute / Workgroup</label>
+         <label>TUHH-Institute</label>
          <input-type>onebox</input-type>
          <hint>Choose the institute(s) or the workgroup(s), at that this work has been produced by typing the name or the code of the institute and using the lookup button.</hint>
          <required>Please provide the institute of your publication.</required>
@@ -968,8 +1046,8 @@
          <dc-qualifier>deleteaftertenyears</dc-qualifier>
          <repeatable>false</repeatable>
          <label>Automatic Deletion</label>
-         <input-type value-pairs-name="oai_flag">dropdown</input-type>
-         <hint>Shall we drop the item in 10 years?</hint>
+         <input-type value-pairs-name="nl_en">dropdown</input-type>
+         <hint>Should the files be deleted in 10 years?</hint>
          <required></required>
        </field>
      </page>
@@ -1180,7 +1258,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the volume number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -1192,7 +1270,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the issue number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article</type-bind>
+         <type-bind>Article,inProceedings,Research Paper</type-bind>
        </field>
 
        <field>
@@ -1252,12 +1330,23 @@
 
        <field>
          <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>conference</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Conference</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the conference name, on that this item was presented</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>citation</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Citation</label>
+         <label>Citation/Source</label>
          <input-type>onebox</input-type>
-         <hint>Enter the standard citation for the previously issued instance of this item.</hint>
+         <hint>Enter the standard citation for the previously issued instance (source) of this item.</hint>
          <required></required>
        </field>
 
@@ -1270,6 +1359,40 @@
          <input-type value-pairs-name="common_uritypes_en">qualdrop_value</input-type>
          <hint>Enter the link to the publisher's version of this document.</hint>
          <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>arxiv</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>arXiv ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the arXiv ID of your work, if it is available on https://arxiv.org/.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>scopus</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Scopus EID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the Scopus EID of the work, if it has one.</hint>
+         <visibility>workflow</visibility>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>pmid</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>PubMed ID</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the PubMed ID of the work, if it has one.</hint>
+         <visibility>workflow</visibility>
        </field>
 
        <field>
@@ -1383,6 +1506,18 @@
      </page>
 
      <page number="3">
+<!--
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier>version</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publication Version (status for this item at a publisher)</label>
+         <input-type value-pairs-name="publication_version">dropdown</input-type>
+         <hint>Select the version of this publication, if it has been submitted or published at another publisher.</hint>
+         <required></required>
+        </field>
+-->
        <field>
          <dc-schema>local</dc-schema>
          <dc-element>status</dc-element>
@@ -1535,17 +1670,6 @@
        </field>
 
        <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>conference</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Conference</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the conference name, on that this item was presented</hint>
-         <required></required>
-       </field>
-
-       <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>funder</dc-element>
          <dc-qualifier>name</dc-qualifier>
@@ -1614,251 +1738,6 @@
      </page>
 
    </form>
-
-   <form name="fdm-nontuhh">
-     <page number="1">
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>type</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Data type</label>
-         <input-type value-pairs-name="fdm_types_en">dropdown</input-type>
-         <hint>Select the resource type of your data file(s).</hint>
-         <required>The resource type of your data is required.</required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>title</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Title</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required>Please enter the main title for this item.</required>
-       </field>
-
-      <field>
-          <dc-element>contributor</dc-element>
-          <dc-qualifier>department</dc-qualifier>
-          <label>Author Department</label>
-          <input-type>onebox</input-type>
-          <repeatable>true</repeatable>
-          <parent>dc_contributor_author</parent>
-          <required></required>
-          <hint>Enter an affiliation for each author.</hint>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>author</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Author</label>
-         <input-type>name</input-type>
-         <!--<hint>Enter the names of the authors of this item below.</hint>-->
-         <required>Please enter the author(s) of the dataset.</required>
-       </field>
-
-       <field>
-         <dc-schema>datacite</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Contributors</label>
-         <input-type value-pairs-name="contributor_fdm_en">qualdrop_value</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) or corporates here and select their role</hint>
-         <required></required>
-       </field>
-         
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>date</dc-element>
-         <dc-qualifier>issued</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Date of Issue</label>
-         <input-type>date</input-type>
-         <hint>Please give the date of publication below.  You can leave out the day and/or month if they aren't applicable.</hint>
-         <required>Please enter at least the year of your data publication.</required>
-       </field>
-         
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>language</dc-element>
-         <dc-qualifier>iso</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Language</label>
-         <input-type value-pairs-name="common_iso_languages_en">dropdown</input-type>
-         <!--<hint>Select the language of the main content of the item.  If the language does not appear in the list below, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>-->
-         <required></required>
-       </field>
-         
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>abstract</dc-element>
-         <dc-qualifier>english</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Description (English)</label>
-         <input-type>textarea</input-type>
-         <hint>Information about content, context and reuse of your data.</hint>
-         <required>Please enter descriptive information.</required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>abstract</dc-element>
-         <dc-qualifier>german</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Description (German)</label>
-         <input-type>textarea</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-         
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Key Word</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-         
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>ddc</dc-qualifier>
-         <!-- An input-type of twobox MUST be marked as repeatable -->
-         <repeatable>true</repeatable>
-         <label>DDC class</label>
-         <input-type>twobox</input-type>
-         <hint>Select an appropriate subject class below. </hint>
-         <required>One DDC class is required as a minimum!</required>
-         <vocabulary>ddc_en</vocabulary>
-         <visibility>workflow</visibility>
-       </field>
-         
-       <field>
-         <dc-schema>datacite</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Related Identifiers</label>
-         <input-type value-pairs-name="relation_types_en">qualdrop_value</input-type>
-         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Access Rights</label>
-         <input-type value-pairs-name="access_rights">dropdown</input-type>
-         <hint>Select the access rights policy appropriate for this publication.</hint>
-         <required>Please select access rights policy!</required>
-         <visibility>workflow</visibility>
-        </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier>uri</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>CreativeCommons Lizenz</label>
-         <input-type value-pairs-name="license_fdm_en">dropdown</input-type>
-         <hint>Wählen Sie die Lizenz bitte hier aus. Wenn Sie Ihre Lizenz hier nicht finden, kontaktieren Sie uns bitte. Wenn Sie mehr zu CreativeCommons Lizenzen erfahren möchten, schauen Sie bitte auf https://creativecommons.org.</hint>
-         <required></required>
-       </field>
-         
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>name</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>EU funder</label>
-         <input-type value-pairs-name="funder_names">dropdown</input-type>
-         <hint>For EU-Projects: Please fill out the next three fields.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>programme</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>EU funding programme</label>
-         <input-type value-pairs-name="funding_programmes">dropdown</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>openaire</dc-schema>
-         <dc-element>funder</dc-element>
-         <dc-qualifier>projectid</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>EU project ID</label>
-         <input-type>textarea</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>project</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Project</label>
-         <input-type>onebox</input-type>
-         <hint>For projects without EU funding</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>description</dc-element>
-         <dc-qualifier>sponsorship</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Funder</label>
-         <input-type>textarea</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the doi of one sponsor (according to Fundref, http://fundref.org/fundref/fundref_registry.html) in the box below. </hint>
-         <required></required>
-         <visibility>workflow</visibility>
-       </field>
-         
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>urn</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>URN</label>
-         <input-type>onebox</input-type>
-         <hint></hint>
-         <required></required>
-       </field>
-
-     </page>
-
-   </form>
  </form-definitions>
 
 
@@ -1876,6 +1755,33 @@
  <!-- stores the associated stored-values in the database.                  -->
 
  <form-value-pairs>
+   <value-pairs value-pairs-name="publication_version" dc-term="publication_version">
+     <pair>
+       <displayed-value>not submitted to a publisher</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Draft</displayed-value>
+       <stored-value>draft</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Submitted Version</displayed-value>
+       <stored-value>submittedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Accepted Version</displayed-value>
+       <stored-value>acceptedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Published Version</displayed-value>
+       <stored-value>publishedVersion</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Updated Version</displayed-value>
+       <stored-value>updatedVersion</stored-value>
+     </pair>
+    </value-pairs>
+
    <value-pairs value-pairs-name="relation_types_en" dc-term="datacite_relation">
 <!--
      <pair>
@@ -2048,7 +1954,15 @@
      </pair>
    </value-pairs>
 
-   <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_rights_uri">
+   <value-pairs value-pairs-name="license_all_en" dc-term="dc_rights_uri">
+     <pair>
+       <displayed-value>Nutzungsbestimmungen für die Bereitstellung von Geodaten des Bundes (GeoNutzV)</displayed-value>
+       <stored-value>http://www.gesetze-im-internet.de/geonutzv/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Springer AAM Terms of Use</displayed-value>
+       <stored-value>https://www.springer.com/gp/open-access/publication-policies/aam-terms-of-use</stored-value>
+     </pair>
      <pair>
        <displayed-value>In Copyright</displayed-value>
        <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
@@ -2126,6 +2040,10 @@
        <stored-value>https://creativecommons.org/licenses/by-nc-nd/3.0/de/</stored-value>
      </pair>
      <pair>
+       <displayed-value>CC BY-NC-ND 2.5 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/3.0/de/</stored-value>
+     </pair>
+     <pair>
        <displayed-value>CC BY 2.0 (Attribution)</displayed-value>
        <stored-value>https://creativecommons.org/licenses/by/2.0/</stored-value>
      </pair>
@@ -2176,6 +2094,184 @@
      <pair>
        <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
        <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_license">
+     <pair>
+       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
+       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Nutzungsbestimmungen für die Bereitstellung von Geodaten des Bundes (GeoNutzV)</displayed-value>
+       <stored-value>http://www.gesetze-im-internet.de/geonutzv/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>In Copyright</displayed-value>
+       <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="license_en" dc-term="dc_license">
+     <pair>
+       <displayed-value>In Copyright</displayed-value>
+       <stored-value>http://rightsstatements.org/vocab/InC/1.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 4.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 4.0 (Attribution-ShareAlike 4.0)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 4.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 4.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 4.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/4.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 3.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 3.0 (Attribution-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 3.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 3.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 3.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 3.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/3.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 3.0 DE (Namensnennung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 3.0 DE (Namensnennung - Weitergabe unter gleichen Bedingungen)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 3.0 DE (Namensnennung-Keine Bearbeitung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 3.0 DE (Namensnennung-Nicht kommerziell)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 3.0 DE (Namensnennung - Nicht-kommerziell - Weitergabe unter gleichen Bedingungen)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 3.0 DE (Namensnennung - Nicht-kommerziell - Keine Bearbeitung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 2.5 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/3.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 2.0 (Attribution)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 2.0 (Attribution-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 2.0 (Attribution-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 2.0 (Attribution-NonCommercial)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 2.0 (Attribution-NonCommercial-ShareAlike)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 2.0 (Attribution-NonCommercial-NoDerivatives)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/2.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY 2.0 DE (Namensnennung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-SA 2.0 DE (Namensnennung - Weitergabe unter gleichen Bedingungen)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-sa/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-ND 2.0 DE (Namensnennung-Keine Bearbeitung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nd/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC 2.0 DE (Namensnennung-Nicht kommerziell)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-SA 2.0 DE (Namensnennung - Nicht-kommerziell - Weitergabe unter gleichen Bedingungen)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-sa/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC BY-NC-ND 2.0 DE (Namensnennung - Nicht-kommerziell - Keine Bearbeitung)</displayed-value>
+       <stored-value>https://creativecommons.org/licenses/by-nc-nd/2.0/de/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
+       <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Springer AAM Terms of Use</displayed-value>
+       <stored-value>https://www.springer.com/gp/open-access/publication-policies/aam-terms-of-use</stored-value>
      </pair>
    </value-pairs>
 
@@ -2309,14 +2405,6 @@
 
    <value-pairs value-pairs-name="common_types_en" dc-term="type">
      <pair>
-       <displayed-value>---</displayed-value>
-       <stored-value>Other</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>Thesis</displayed-value>
-       <stored-value>Thesis</stored-value>
-     </pair>
-     <pair>
        <displayed-value>Article</displayed-value>
        <stored-value>Article</stored-value>
      </pair>
@@ -2390,7 +2478,11 @@
 -->
      <pair>
        <displayed-value>Research Paper</displayed-value>
-       <stored-value>Working Paper</stored-value>
+       <stored-value>Research Paper</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Review (Article)</displayed-value>
+       <stored-value>article-review</stored-value>
      </pair>
 <!--
      <pair>
@@ -2403,8 +2495,16 @@
        <stored-value>Technical Report</stored-value>
      </pair>
      <pair>
+       <displayed-value>Thesis</displayed-value>
+       <stored-value>Thesis</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Video/Movie</displayed-value>
        <stored-value>Video</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Working Paper</displayed-value>
+       <stored-value>Working Paper</stored-value>
      </pair>
      <pair>
        <displayed-value>Other</displayed-value>
@@ -2543,10 +2643,12 @@
        <displayed-value>N/A</displayed-value>
        <stored-value></stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>English (United States)</displayed-value>
        <stored-value>en_US</stored-value>
       </pair>
+-->
      <pair>
        <displayed-value>English</displayed-value>
        <stored-value>en</stored-value>
@@ -2617,6 +2719,31 @@
        <displayed-value>Contact Person</displayed-value>
        <stored-value>ContactPerson</stored-value>
      </pair>
+     <pair>
+       <displayed-value>Other</displayed-value>
+       <stored-value>Other</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="contributorCorporate_fdm_en" dc-term="datacite_contributor">
+     <pair>
+       <displayed-value>Data Collector</displayed-value>
+       <stored-value>DataCollector</stored-value>
+     </pair>
+<!-- These roles are only persons according to DataCite desriptions
+     <pair>
+       <displayed-value>Data Curator</displayed-value>
+       <stored-value>DataCurator</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Researcher</displayed-value>
+       <stored-value>Researcher</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Contact Person</displayed-value>
+       <stored-value>ContactPerson</stored-value>
+     </pair>
+-->
      <pair>
        <displayed-value>Other</displayed-value>
        <stored-value>Other</stored-value>
