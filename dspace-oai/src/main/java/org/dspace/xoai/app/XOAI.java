@@ -9,6 +9,7 @@ package org.dspace.xoai.app;
 
 import static com.lyncode.xoai.dataprovider.core.Granularity.Second;
 import static org.dspace.xoai.util.ItemUtils.retrieveMetadata;
+import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
