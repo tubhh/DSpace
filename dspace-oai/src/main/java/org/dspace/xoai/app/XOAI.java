@@ -73,6 +73,7 @@ import com.lyncode.xoai.dataprovider.exceptions.ConfigurationException;
 import com.lyncode.xoai.dataprovider.exceptions.MetadataBindException;
 import com.lyncode.xoai.dataprovider.exceptions.WritingXmlException;
 import com.lyncode.xoai.dataprovider.xml.XmlOutputContext;
+import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
 
 /**
  * @author Lyncode Development Team <dspace@lyncode.com>
@@ -588,7 +589,7 @@ public class XOAI {
             case ITEMTYPE_DEFAULT:
             	eraseQuery = ConfigurationManager.getProperty("oai", "oai.erase.query.item");
             	if (eraseQuery == null || eraseQuery.trim().length() <= 0) {
-            		eraseQuery = "item.type:item OR item.type:cfitem";
+            		eraseQuery = "item.type:item";
             	}
     	        break;
             case "rp":
@@ -612,7 +613,7 @@ public class XOAI {
             case "other":
             	eraseQuery = ConfigurationManager.getProperty("oai", "oai.erase.query.crisother");
             	if (eraseQuery == null || eraseQuery.trim().length() <= 0) {
-            		eraseQuery = "NOT (item.type:item OR item.type:cfitem OR item.type:rp OR item.type:project OR item.type:ou)";
+            		eraseQuery = "NOT (item.type:item OR item.type:rp OR item.type:project OR item.type:ou)";
             	}
     	        break;
             case "all":
