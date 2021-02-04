@@ -104,7 +104,7 @@ public class ResolverDisplayStrategy extends AUniformDisplayStrategy
             if (foundUrn != null)
             {
 
-                if (value.startsWith(foundUrn + ":"))
+                if (value.startsWith(foundUrn + ":") || field.endsWith(foundUrn))
                 {
                     value = value.substring(foundUrn.length() + 1).trim();
                 }
