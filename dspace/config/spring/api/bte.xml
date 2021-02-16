@@ -459,7 +459,7 @@
                     <entry key="articlenumber" value="articlenumber" />
                 </map>
             </property>
-            <property name="basicString" value="%%journalname%% %%journalissue%% (%%journalvolume%%): %%articlenumber%% %%journalfirstpage%%-%%journallastpage%% (%%journalyear%%)" />
+            <property name="basicString" value="%%journalname%% %%journalvolume%% (%%journalissue%%): %%articlenumber%% %%journalfirstpage%%-%%journallastpage%% (%%journalyear%%)" />
         </bean>
 
 	<bean name="valueConcatenationModifier" class="org.dspace.submit.lookup.ValueConcatenationModifier">
