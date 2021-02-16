@@ -892,6 +892,9 @@ if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
 %>
     <script>
         function csl_select() {
+            var xx = document.getElementById("citationbox");
+            xx.innerHTML = '<span class="fa fa-spin fa-spinner"> </span><span> loading...</span>';
+
             if (window.XMLHttpRequest) {
                 httpodata = new XMLHttpRequest();
             } else if (window.ActiveXObject) {
@@ -925,6 +928,9 @@ if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
                 xx.innerHTML = data['value'][0]['csl'];
             }
         }
+        $(document).ready( function() {
+            csl_select();
+        } );
     </script>
       <div class="col-sm-5 col-md-4 col-lg-3">
         <div class="panel panel-info">
@@ -936,7 +942,7 @@ if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
           <div class="panel-list">
               <form action="#" name="csl_selector">
                   <select name="citationstyle" onchange="javascript:csl_select()">
-                      <option value=""></option>
+                      <!-- <option value=""></option> -->
                       <option value="apa">APA</option>
                       <option value="ieee">IEEE</option>
                       <option value="chicago-author-date">Chicago</option>
