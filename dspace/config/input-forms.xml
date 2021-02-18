@@ -269,7 +269,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the volume number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article,inProceedings,Research Paper</type-bind>
+         <type-bind>Article,inProceedings,Research Paper,Review</type-bind>
        </field>
 
        <field>
@@ -281,7 +281,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the issue number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article,inProceedings,Research Paper</type-bind>
+         <type-bind>Article,inProceedings,Research Paper,Review</type-bind>
        </field>
 
        <field>
@@ -1228,7 +1228,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the volume number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article,inProceedings,Research Paper</type-bind>
+         <type-bind>Article,inProceedings,Research Paper,Review</type-bind>
        </field>
 
        <field>
@@ -1240,7 +1240,7 @@
          <input-type>onebox</input-type>
          <hint>Enter the issue number of the journal, in that this article has been published.</hint>
          <required></required>
-         <type-bind>Article,inProceedings,Research Paper</type-bind>
+         <type-bind>Article,inProceedings,Research Paper,Review</type-bind>
        </field>
 
        <field>
