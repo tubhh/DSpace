@@ -711,6 +711,17 @@
          <dc-qualifier>sponsorship</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Förderer</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>funding</dc-element>
+         <dc-qualifier>info</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Weitere Förderungsinformationen</label>
          <input-type>textarea</input-type>
          <hint></hint>
          <required></required>
@@ -951,8 +962,19 @@
          <dc-schema>dc</dc-schema>
          <dc-element>description</dc-element>
          <dc-qualifier>sponsorship</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Förderer</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>funding</dc-element>
+         <dc-qualifier>info</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Weitere Förderungsinformationen</label>
          <input-type>textarea</input-type>
          <hint></hint>
          <required></required>
@@ -1657,6 +1679,17 @@
          <dc-qualifier>sponsorship</dc-qualifier>
          <repeatable>true</repeatable>
          <label>Förderer</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>funding</dc-element>
+         <dc-qualifier>info</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Weitere Förderungsinformationen</label>
          <input-type>textarea</input-type>
          <hint></hint>
          <required></required>
