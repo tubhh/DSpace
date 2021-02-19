@@ -156,7 +156,6 @@
                     </contributorName>
                 </xsl:element>
                 <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='contributor'][not(@qualifier='author')]" />
-                <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='description' and @qualifier='sponsorship']" />
             </contributors>
 
             <!-- 
@@ -281,7 +280,7 @@
                 Funding References
                 Occ: 0-n
             -->
-            <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funder']">
+            <xsl:if test="//dspace:field[(@mdschema='crisitem' and @element='project' and @qualifier='funder') or (@mdschema='dc' and @element='description' and @qualifier='sponsorship')]">
                 <xsl:element name="fundingReferences">
                     <xsl:call-template name="fundingReference" />
                 </xsl:element>
@@ -1060,6 +1059,36 @@
                         <xsl:value-of select="//dspace:field[@mdschema='dc' and @element='relation' and @qualifier='project'][number($f)]" />
                     </awardTitle>
                 </xsl:if>
+            </fundingReference>
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:for-each select="//dspace:field[@mdschema='dc' and @element='description' and @qualifier='sponsorship']">
+            <xsl:variable name="g">
+                <xsl:number value="position()" />
+            </xsl:variable>
+            <xsl:if test=".!=$placeholder">
+            <fundingReference>
+                <funderName>
+                    <xsl:value-of select="." />
+                </funderName>
+                <xsl:choose>
+                    <xsl:when test="//dspace:field[@mdschema='crisitem' and @element='funder' and @qualifier='funderid'][number($g)]!='' and //dspace:field[@mdschema='crisitem' and @element='funder' and @qualifier='funderid'][number($g)]!=$placeholder">
+                        <funderIdentifier>
+                            <xsl:attribute name="funderIdentifierType">Crossref Funder ID</xsl:attribute>
+                            <xsl:attribute name="schemeURI">https://www.crossref.org/services/funder-registry/</xsl:attribute>
+                            <xsl:text>https://doi.org/10.13039/</xsl:text><xsl:value-of select="//dspace:field[@mdschema='crisitem' and @element='funder' and @qualifier='funderid'][number($g)]" />
+                        </funderIdentifier>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="//dspace:field[@mdschema='crisitem' and @element='funder' and @qualifier='funderrorid'][number($g)]!='' and //dspace:field[@mdschema='crisitem' and @element='funder' and @qualifier='funderrorid'][number($g)]!=$placeholder">
+                            <funderIdentifier>
+                                <xsl:attribute name="funderIdentifierType">ROR</xsl:attribute>
+                                <xsl:attribute name="schemeURI">https://ror.org</xsl:attribute>
+                                <xsl:value-of select="//dspace:field[@mdschema='crisitem' and @element='funder' and @qualifier='funderrorid'][number($g)]" />
+                            </funderIdentifier>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
             </fundingReference>
             </xsl:if>
         </xsl:for-each>
