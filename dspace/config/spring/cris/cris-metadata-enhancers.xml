@@ -82,6 +82,28 @@
 	</bean>	
 
 	<bean class="org.dspace.app.cris.integration.CrisItemEnhancer">
+		<property name="alias" value="funder" />
+		<property name="metadata">
+			<list>
+				<value>dc.description.sponsorship</value>
+			</list>
+		</property>
+		<property name="clazz">
+			<value>org.dspace.app.cris.model.OrganizationUnit</value>
+		</property>
+		<property name="qualifiers2path">
+			<map>
+				<entry key="funderid">
+					<value>crossrefid</value>
+				</entry>
+				<entry key="funderrorid">
+					<value>rorid</value>
+				</entry>
+			</map>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.app.cris.integration.CrisItemEnhancer">
 		<property name="alias" value="journal" />
 		<property name="metadata">
 			<list>
