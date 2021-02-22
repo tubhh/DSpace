@@ -37,6 +37,7 @@
 <%@ page import="org.dspace.core.ConfigurationManager" %>
 <%@ page import="org.dspace.handle.HandleManager" %>
 <%@ page import="org.dspace.license.CreativeCommons" %>
+
 <%@page import="javax.servlet.jsp.jstl.fmt.LocaleSupport"%>
 <%@page import="org.dspace.versioning.Version"%>
 <%@page import="org.dspace.core.Context"%>
@@ -905,12 +906,12 @@ if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
             <%
                 if (authorAuthority != 0) {
             %>
-                    httpodata.open( "GET" , "<%=odataPath%>/cslforresearcher(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=authorAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
+                    httpodata.open( "GET" , "<%=odataPath%>?style=" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "&author=<%=authorAuthority%>&handle=<%=handle%>", true );
                 <%
                 }
                 else if (ouAuthority != 0) {
                 %>
-                    httpodata.open( "GET" , "<%=odataPath%>/cslfororgunit(style='" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "',id=<%=ouAuthority%>)?$filter=contains(handle,%27<%=handle%>%27)", true );
+                    httpodata.open( "GET" , "<%=odataPath%>?style=" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "&ou=<%=ouAuthority%>&handle=<%=handle%>", true );
                 <%
                 }
                 %>
@@ -923,9 +924,10 @@ if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
         function setcsl() {
             if ( httpodata.readyState == 4 ) {
                 var jsonResponse = httpodata.responseText;
-                var data = JSON.parse(jsonResponse);
+//                var data = JSON.parse(jsonResponse);
                 var xx = document.getElementById("citationbox");
-                xx.innerHTML = data['value'][0]['csl'];
+//                xx.innerHTML = data['value'][0]['csl'];
+                xx.innerHTML = jsonResponse;
             }
         }
         $(document).ready( function() {
