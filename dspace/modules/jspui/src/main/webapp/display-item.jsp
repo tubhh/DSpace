@@ -49,7 +49,6 @@
 <%@page import="org.dspace.eperson.EPerson"%>
 <%@page import="org.dspace.versioning.VersionHistory"%>
 <%@page import="org.dspace.app.webui.servlet.MyDSpaceServlet"%>
-<%--<%@page import="eu.zbw.EconStor.BibTeXGenerator.Generator"%>--%>
 
 <%
     // Attributes
@@ -171,6 +170,7 @@
     boolean scopusEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.elsevier.scopus.enabled",false);
     boolean wosEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.thomsonreuters.wos.enabled",false);
     String doiMd = item.getMetadata("dc.identifier.doi");
+    String publisherDoiMd = item.getMetadata("tuhh.publisher.doi");
     boolean scholarEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.google.scholar.enabled",false);
     boolean altMetricEnabled = ConfigurationManager.getBooleanProperty("cris","ametrics.altmetric.enabled",false) && StringUtils.isNotBlank(doiMd);
     
@@ -201,7 +201,7 @@
 	boolean coreRecommender = ConfigurationManager.getBooleanProperty("core-aggregator","core-aggregator.enabled");
 	String coreCredentials = ConfigurationManager.getProperty("core-aggregator", "core-aggregator.credentials");
 
-    String odataPath = ConfigurationManager.getProperty("cris","odataPath");
+    String citationGenerator = ConfigurationManager.getProperty("cris","citationGenerator");
     
 	String crisID = (String)request.getAttribute("crisID");
 	
@@ -889,7 +889,7 @@ if (dedupEnabled && admin_button) { %>
 
 <%------ CSL-Einbindung -----%>
 <%
-if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
+if (!citationGenerator.equals("") && (StringUtils.isNotBlank(doiMd) || StringUtils.isNotBlank(publisherDoiMd))) {
 %>
     <script>
         function csl_select() {
@@ -904,17 +904,17 @@ if ((authorAuthority != 0 || ouAuthority != 0) && !odataPath.equals("")) {
 
             if (httpodata != null) {
             <%
-                if (authorAuthority != 0) {
+                if (StringUtils.isNotBlank(doiMd)) {
             %>
-                    httpodata.open( "GET" , "<%=odataPath%>?style=" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "&author=<%=authorAuthority%>&handle=<%=handle%>", true );
-                <%
+                    httpodata.open( "GET" , "<%=citationGenerator%>?style=" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "&doi=<%=doiMd%>", true );
+            <%
                 }
-                else if (ouAuthority != 0) {
-                %>
-                    httpodata.open( "GET" , "<%=odataPath%>?style=" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "&ou=<%=ouAuthority%>&handle=<%=handle%>", true );
-                <%
+                else if (StringUtils.isNotBlank(publisherDoiMd)) {
+            %>
+                    httpodata.open( "GET" , "<%=citationGenerator%>?style=" + document.csl_selector.citationstyle.options[document.csl_selector.citationstyle.selectedIndex].value + "&doi=<%=publisherDoiMd%>", true );
+            <%
                 }
-                %>
+            %>
 
                 httpodata.onreadystatechange = setcsl;
                 httpodata.send( null );
