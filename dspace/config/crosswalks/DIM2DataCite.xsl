@@ -1066,7 +1066,7 @@
             <xsl:variable name="g">
                 <xsl:number value="position()" />
             </xsl:variable>
-            <xsl:if test=".!=$placeholder">
+            <xsl:if test=".!=$placeholder and not(contains(//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funder'],.))">
             <fundingReference>
                 <funderName>
                     <xsl:value-of select="." />
