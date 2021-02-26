@@ -741,7 +741,7 @@
          <repeatable>true</repeatable>
          <label>Project</label>
          <input-type>onebox</input-type>
-         <hint>For projects without EU funding:</hint>
+         <hint>If this publication was created in context of a project, please select the project here</hint>
          <required></required>
        </field>
 
@@ -752,7 +752,7 @@
          <repeatable>true</repeatable>
          <label>Funder</label>
          <input-type>onebox</input-type>
-         <hint></hint>
+         <hint>Please choose any sponsoring or funding organisations for this publication</hint>
          <required></required>
        </field>
 
@@ -760,23 +760,11 @@
          <dc-schema>local</dc-schema>
          <dc-element>funding</dc-element>
          <dc-qualifier>info</dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>More Funding information</label>
          <input-type>textarea</input-type>
-         <hint></hint>
+         <hint>If you want or need to provide more funding information, please do that in this field</hint>
          <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the doi of one sponsor (according to Fundref, http://fundref.org/fundref/fundref_registry.html) in the box below. </hint>
-         <required></required>
-         <visibility>workflow</visibility>
        </field>
      </page>
 
@@ -994,7 +982,7 @@
          <repeatable>true</repeatable>
          <label>Project</label>
          <input-type>onebox</input-type>
-         <hint>For projects without EU funding</hint>
+         <hint>If this publication was created in context of a project, please select the project here</hint>
          <required></required>
        </field>
 
@@ -1005,7 +993,7 @@
          <repeatable>true</repeatable>
          <label>Funder</label>
          <input-type>onebox</input-type>
-         <hint></hint>
+         <hint>Please choose any sponsoring or funding organisations for this publication</hint>
          <required></required>
        </field>
 
@@ -1013,23 +1001,11 @@
          <dc-schema>local</dc-schema>
          <dc-element>funding</dc-element>
          <dc-qualifier>info</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Funder</label>
+         <repeatable>false</repeatable>
+         <label>More Funding information</label>
          <input-type>textarea</input-type>
-         <hint></hint>
+         <hint>If you want or need to provide more funding information, please do that in this field</hint>
          <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the doi of one sponsor (according to Fundref, http://fundref.org/fundref/fundref_registry.html) in the box below. </hint>
-         <required></required>
-         <visibility>workflow</visibility>
        </field>
 
        <field>
@@ -1712,7 +1688,7 @@
          <repeatable>true</repeatable>
          <label>Project</label>
          <input-type>onebox</input-type>
-         <hint>For projects without EU funding:</hint>
+         <hint>If this publication was created in context of a project, please select the project here</hint>
          <required></required>
        </field>
 
@@ -1720,23 +1696,22 @@
          <dc-schema>dc</dc-schema>
          <dc-element>description</dc-element>
          <dc-qualifier>sponsorship</dc-qualifier>
-         <repeatable>false</repeatable>
+         <repeatable>true</repeatable>
          <label>Funder</label>
-         <input-type>textarea</input-type>
-         <hint></hint>
+         <input-type>onebox</input-type>
+         <hint>Please choose any sponsoring or funding organisations for this publication</hint>
          <required></required>
        </field>
 
        <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the doi of one sponsor (according to Fundref, http://fundref.org/fundref/fundref_registry.html) in the box below. </hint>
+         <dc-schema>local</dc-schema>
+         <dc-element>funding</dc-element>
+         <dc-qualifier>info</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>More Funding information</label>
+         <input-type>textarea</input-type>
+         <hint>If you want or need to provide more funding information, please do that in this field</hint>
          <required></required>
-         <visibility>workflow</visibility>
        </field>
      </page>
 

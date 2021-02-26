@@ -701,7 +701,7 @@
          <repeatable>true</repeatable>
          <label>Projekt</label>
          <input-type>onebox</input-type>
-         <hint>Für Projekte ohne EU-Förderung:</hint>
+         <hint>Falls diese Publikation in einem Projektkontext entstanden ist, wählen Sie hier bitte das passende Projekt aus</hint>
          <required></required>
        </field>
 
@@ -712,7 +712,7 @@
          <repeatable>true</repeatable>
          <label>Förderer</label>
          <input-type>onebox</input-type>
-         <hint></hint>
+         <hint>Wählen Sie hier Organisationen aus, die die Publikation finanziell unterstützt haben</hint>
          <required></required>
        </field>
 
@@ -720,24 +720,13 @@
          <dc-schema>local</dc-schema>
          <dc-element>funding</dc-element>
          <dc-qualifier>info</dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>Weitere Förderungsinformationen</label>
          <input-type>textarea</input-type>
-         <hint></hint>
+         <hint>Falls Sie weitere Förderungsinformationen bereitstellen wollen oder müssen, geben Sie diese bitte hier ein</hint>
          <required></required>
        </field>
 
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Bitte geben Sie hier die DOI der Förderer an (aus Fundref). </hint>
-         <required></required>
-         <visibility>workflow</visibility>
-       </field>
      </page>
 
    </form>
@@ -954,7 +943,7 @@
          <repeatable>true</repeatable>
          <label>Projekt</label>
          <input-type>onebox</input-type>
-         <hint>Für Projekte ohne EU-Förderung:</hint>
+         <hint>Falls diese Publikation in einem Projektkontext entstanden ist, wählen Sie hier bitte das passende Projekt aus</hint>
          <required></required>
        </field>
 
@@ -965,7 +954,7 @@
          <repeatable>true</repeatable>
          <label>Förderer</label>
          <input-type>onebox</input-type>
-         <hint></hint>
+         <hint>Wählen Sie hier Organisationen aus, die die Publikation finanziell unterstützt haben</hint>
          <required></required>
        </field>
 
@@ -973,23 +962,11 @@
          <dc-schema>local</dc-schema>
          <dc-element>funding</dc-element>
          <dc-qualifier>info</dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>Weitere Förderungsinformationen</label>
          <input-type>textarea</input-type>
-         <hint></hint>
+         <hint>Falls Sie weitere Förderungsinformationen bereitstellen wollen oder müssen, geben Sie diese bitte hier ein</hint>
          <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Bitte geben Sie hier die DOI der Sponsoren an (aus Fundref). </hint>
-         <required></required>
-         <visibility>workflow</visibility>
        </field>
 
        <field>
@@ -1669,7 +1646,7 @@
          <repeatable>true</repeatable>
          <label>Projekt</label>
          <input-type>onebox</input-type>
-         <hint>Für Projekte ohne EU-Förderung:</hint>
+         <hint>Falls diese Publikation in einem Projektkontext entstanden ist, wählen Sie hier bitte das passende Projekt aus</hint>
          <required></required>
        </field>
 
@@ -1680,7 +1657,7 @@
          <repeatable>true</repeatable>
          <label>Förderer</label>
          <input-type>onebox</input-type>
-         <hint></hint>
+         <hint>Wählen Sie hier Organisationen aus, die die Publikation finanziell unterstützt haben</hint>
          <required></required>
        </field>
 
@@ -1688,23 +1665,11 @@
          <dc-schema>local</dc-schema>
          <dc-element>funding</dc-element>
          <dc-qualifier>info</dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>Weitere Förderungsinformationen</label>
          <input-type>textarea</input-type>
-         <hint></hint>
+         <hint>Falls Sie weitere Förderungsinformationen bereitstellen wollen oder müssen, geben Sie diese bitte hier ein</hint>
          <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>sponsor</dc-element>
-         <dc-qualifier>doi</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Fundref-DOI</label>
-         <input-type>onebox</input-type>
-         <hint>Bitte geben Sie hier die DOI der Förderer an (aus Fundref). </hint>
-         <required></required>
-         <visibility>workflow</visibility>
        </field>
      </page>
 
