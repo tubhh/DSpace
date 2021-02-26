@@ -926,7 +926,8 @@
 					<xsl:variable name="grantno" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='grantno']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awarduri" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='awardURL']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awardtitle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='project']/doc:element/doc:field[@name='value']"/>
-					
+                                        <xsl:variable name="sponsorcrossref" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='funder']/doc:element[@name='funderid']/doc:element/doc:field[@name='value']"/>
+					<xsl:variable name="sponsorror" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='funder']/doc:element[@name='funderrorid']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="check_fundingreference">
 						<xsl:for-each select="$funder">
 							<xsl:if test="$funder!='' and $funder!=$placeholder">
@@ -976,6 +977,34 @@
 									</fundingReference>
 								</xsl:if>
 							</xsl:for-each>
+        <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='sponsorship']/doc:element/doc:field[@name='value']">
+            <xsl:if test=".!='' and .!=$placeholder and not(contains($funder,.))">
+            <xsl:variable name="g" select="position()"/>
+            <fundingReference>
+                <funderName>
+                    <xsl:value-of select="." />
+                </funderName>
+                <xsl:choose>
+                    <xsl:when test="$sponsorcrossref[$g]!='' and $sponsorcrossref[$g]!=$placeholder">
+                        <funderIdentifier>
+                            <xsl:attribute name="funderIdentifierType">Crossref Funder ID</xsl:attribute>
+                            <xsl:attribute name="schemeURI">https://www.crossref.org/services/funder-registry/</xsl:attribute>
+                            <xsl:text>https://doi.org/10.13039/</xsl:text><xsl:value-of select="$sponsorcrossref[$g]" />
+                        </funderIdentifier>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$sponsorror[$g]!='' and $sponsorror[$g]!=$placeholder">
+                            <funderIdentifier>
+                                <xsl:attribute name="funderIdentifierType">ROR</xsl:attribute>
+                                <xsl:attribute name="schemeURI">https://ror.org</xsl:attribute>
+                                <xsl:value-of select="$sponsorror[$g]" />
+                            </funderIdentifier>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </fundingReference>
+            </xsl:if>
+        </xsl:for-each>
 						</fundingReferences>
 					</xsl:if>
 					
