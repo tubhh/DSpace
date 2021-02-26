@@ -87,6 +87,12 @@ public class RelationConsumer implements Consumer
         DSpaceObject dso = event.getSubject(ctx);
         //MetadataValue.PARENT_PLACEHOLDER_VALUE
 
+/* TODO:
+* fix endless loop in debug mode
+* new reciprocal links are deleting existing links in target item
+* if a link is removed, it still stays in the reciprocally added item
+*/
+
         // Unless this is  an item, we'll skip this item
         if (dso.getType() == Constants.ITEM)
         {
@@ -108,15 +114,16 @@ public class RelationConsumer implements Consumer
                                 .setQuery(query);
                             solrQuery.setFields("search.resourceid");
                             QueryResponse resp = getSolr().query(solrQuery);
-                            logDebugMessage("Looking for identifier "+identifier+" in Solr... Query was: "+query+". Got "+Long.toString(resp.getResults().getNumFound())+" results.");
+                            log.debug("Looking for identifier "+identifier+" in Solr... Query was: "+query+". Got "+Long.toString(resp.getResults().getNumFound())+" results.");
                             if (resp.getResults().getNumFound() > 0) {
                                 SolrDocumentList resultList = resp.getResults();
                                 for (SolrDocument result : resultList) {
                                     int internalId = (int)result.getFieldValue("search.resourceid");
                                     relatedItem = Item.find(ctx,internalId);
-                                    logDebugMessage("Found related item for "+getItemHandle(item)+" while looking for identifier "+identifier+": "+getItemHandle(relatedItem));
+                                    log.debug("Found related item for "+getItemHandle(item)+" while looking for identifier "+identifier+": "+getItemHandle(relatedItem));
                                 }
                                 if (relatedItem != null) {
+/* The second local link is not required, better improve the display strategy for local DOIs
                                     // Check, if local metadata field is available (necessary?)
                                     Metadatum[] titleMd = relatedItem.getMetadata("dc", "title", Item.ANY, Item.ANY);
                                     String title = getItemHandle(relatedItem);
@@ -128,17 +135,20 @@ public class RelationConsumer implements Consumer
                                     if (languageMd.length > 0) {
                                         lang = languageMd[0].value;
                                     }
+*/
                                     Metadatum[] identifierMd = item.getMetadata("dc", "identifier", "doi", Item.ANY);
                                     String id = "hdl:"+getItemHandle(item);
                                     if (identifierMd.length > 0) {
                                         id = "doi:"+identifierMd[0].value;
                                     }
+/*
                                     // Clear local metadata field
                                     item.clearMetadata(targetschema, "relation", relation.qualifier, Item.ANY);
                                     // transfer content to a corresponding field in local schema
                                     item.addMetadata(targetschema, "relation", relation.qualifier, lang, title, getItemHandle(relatedItem), 600);
                                     // build corresponding datacite field in related item
                                     // only set this field if the item is already approved and not in workflow and the metadata value has not been set
+*/
                                     Metadatum[] relationMd = relatedItem.getMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
                                     boolean applied = false;
                                     for (Metadatum relMd : relationMd) {
@@ -147,7 +157,7 @@ public class RelationConsumer implements Consumer
                                         }
                                     }
                                     if (item.isArchived() && applied == false) {
-                                        relatedItem.clearMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
+                                        //relatedItem.clearMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), Item.ANY);
                                         relatedItem.addMetadata(sourceschema, "relation", reciprocalRelations.get(relation.qualifier), null, id, null, -1);
                                         relatedItem.updateMetadata();
                                         relatedItem.update();
@@ -155,15 +165,15 @@ public class RelationConsumer implements Consumer
                                 }
                             }
                         }
-                        item.updateMetadata();
-                        item.update();
+                        //item.updateMetadata();
+                        //item.update();
                         ctx.getDBConnection().commit();
                     } catch (AuthorizeException ae) {
                         // Something went wrong
-                        logDebugMessage(ae.getMessage());
+                        log.debug(ae.getMessage());
                     } catch (SQLException sqle) {
                         // Something went wrong
-                        logDebugMessage(sqle.getMessage());
+                        log.debug(sqle.getMessage());
                     }
                 }
             }
@@ -179,19 +189,6 @@ public class RelationConsumer implements Consumer
             }
         }
         return false;
-    }
-
-    /**
-     * Debugging logging if required
-     *
-     * @param message The message to log
-     */
-    private void logDebugMessage(String message)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug(message);
-        }
     }
 
     /**
@@ -313,7 +310,7 @@ public class RelationConsumer implements Consumer
                     //solrQuery.setFields(RESOURCE_RESOURCETYPE_FIELD,
                     //        RESOURCE_ID_FIELD);
                     QueryResponse resp = solr.query(solrQuery);
-                    logDebugMessage("Solr test query done - got "+Long.toString(resp.getResults().getNumFound())+" results!");
+                    log.debug("Solr test query done - got "+Long.toString(resp.getResults().getNumFound())+" results!");
                 }
                 catch (SolrServerException e)
                 {
