@@ -926,11 +926,17 @@
 					<xsl:variable name="grantno" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='grantno']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awarduri" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='project']/doc:element[@name='awardURL']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="awardtitle" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='project']/doc:element/doc:field[@name='value']"/>
+                                        <xsl:variable name="sponsor" select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='sponsorship']/doc:element/doc:field[@name='value']" />
                                         <xsl:variable name="sponsorcrossref" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='funder']/doc:element[@name='funderid']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="sponsorror" select="doc:metadata/doc:element[@name='crisitem']/doc:element[@name='funder']/doc:element[@name='funderrorid']/doc:element/doc:field[@name='value']"/>
 					<xsl:variable name="check_fundingreference">
 						<xsl:for-each select="$funder">
 							<xsl:if test="$funder!='' and $funder!=$placeholder">
+								<xsl:value-of select="."/>
+							</xsl:if>
+						</xsl:for-each>
+						<xsl:for-each select="$sponsor">
+							<xsl:if test="$sponsor!='' and $sponsor!=$placeholder">
 								<xsl:value-of select="."/>
 							</xsl:if>
 						</xsl:for-each>
@@ -977,7 +983,7 @@
 									</fundingReference>
 								</xsl:if>
 							</xsl:for-each>
-        <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='sponsorship']/doc:element/doc:field[@name='value']">
+        <xsl:for-each select="$sponsor">
             <xsl:if test=".!='' and .!=$placeholder and not(contains($funder,.))">
             <xsl:variable name="g" select="position()"/>
             <fundingReference>
