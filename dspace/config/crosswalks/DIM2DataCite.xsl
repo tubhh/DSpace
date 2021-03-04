@@ -1022,6 +1022,11 @@
         Funding Reference
     -->
     <xsl:template name="fundingReference">
+        <xsl:variable name="funders">
+            <xsl:for-each select="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funder']">
+                <xsl:value-of select="." /><xsl:text> </xsl:text>
+            </xsl:for-each>
+        </xsl:variable>
         <xsl:for-each select="//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funder']">
             <xsl:variable name="f">
                 <xsl:number value="position()" />
@@ -1066,7 +1071,7 @@
             <xsl:variable name="g">
                 <xsl:number value="position()" />
             </xsl:variable>
-            <xsl:if test=".!=$placeholder and not(contains(//dspace:field[@mdschema='crisitem' and @element='project' and @qualifier='funder'],.))">
+            <xsl:if test=".!=$placeholder and not(contains($funders,.))">
             <fundingReference>
                 <funderName>
                     <xsl:value-of select="." />
