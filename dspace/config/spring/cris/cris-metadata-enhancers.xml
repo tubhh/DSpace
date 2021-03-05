@@ -338,6 +338,20 @@
 	</bean>
 
 	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="mappedtype" />
+		<property name="metadata">
+			<list>
+				<value>placeholder.placeholder.placeholder</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerTypemapper"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="languageiso639-1" />
 		<property name="metadata">
 			<list>
@@ -458,6 +472,9 @@
 	<bean name="enhancerFulltext" class="org.dspace.content.integration.defaultvalues.FulltextInfoGenerator"/>
 	<bean name="enhancerPermissionFulltext" class="org.dspace.content.integration.defaultvalues.FulltextPermissionGenerator"/>
 	<bean name="enhancerOrcid" class="org.dspace.content.integration.defaultvalues.OrcidAuthorityGenerator">
+            <property name="applicationService" ref="applicationService" />
+        </bean>
+	<bean name="enhancerTypemapper" class="org.dspace.content.integration.defaultvalues.TypeMapper">
             <property name="applicationService" ref="applicationService" />
         </bean>
 	<bean name="enhancerGnd" class="org.dspace.content.integration.defaultvalues.GNDAuthorityGenerator">
