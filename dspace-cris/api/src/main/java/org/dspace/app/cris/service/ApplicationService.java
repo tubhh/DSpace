@@ -12,12 +12,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
@@ -101,7 +103,7 @@ public class ApplicationService extends ExtendedTabService
     private Cache cacheByUUID;
     
     // the key is the UUID of the CRIS object, the set contains the UUIDs of all the CRIS objects that hold a reference to such object
-    private Map<String, Set<String>> cacheDependencies = new HashMap<String, Set<String>>();
+    private Map<String, Set<String>> cacheDependencies = new ConcurrentHashMap<String, Set<String>>();
 
     private static Logger log = Logger.getLogger(ApplicationService.class);
 
@@ -1011,15 +1013,20 @@ public class ApplicationService extends ExtendedTabService
 
 	    // remove from the cache all the depending objects
 	    if (dependencies != null) {
-		for (String uuidDep : dependencies) {
-		    clearCacheByUUID(uuidDep);
-		}
+	    	synchronized (dependencies) {
+                for (String uuidDep : dependencies) {
+                    // prevent a stack overflow if the item depends on itself
+                    if (!uuidDep.equals(myUuid)) {
+                        clearCacheByUUID(uuidDep);
+                    }
+                }			
+			}
 	    }
 	    cacheDependencies.remove(myUuid);
 
 	    // add the object for all the CRIS objects mentioned in its direct properties to the dependencies map
 	    List<Property> props = ((ACrisObject) object).getAnagrafica();
-	    Set<String> myDeps = new HashSet<String>();
+	    Set<String> myDeps = Collections.synchronizedSet(new HashSet<String>());
 	    for (Property prop : props) {
 		Object val = prop.getValue().getReal();
 		if (val instanceof ACrisObject) {
@@ -1027,14 +1034,16 @@ public class ApplicationService extends ExtendedTabService
 		}
 	    }
 	    if (myDeps.size() > 0) {
-		for (String myDep : myDeps) {
-		    Set<String> relatedUuids = cacheDependencies.get(myDep);
-		    if (relatedUuids == null) {
-			relatedUuids = new HashSet<String>();
-		    }
-		    relatedUuids.add(myUuid);
-		    cacheDependencies.put(myDep, relatedUuids);
-		}
+			for (String myDep : myDeps) {
+			    Set<String> relatedUuids = cacheDependencies.get(myDep);
+			    if (relatedUuids == null) {
+			    	relatedUuids = Collections.synchronizedSet(new HashSet<String>());
+			    }
+			    synchronized (relatedUuids) {
+				    relatedUuids.add(myUuid);
+				    cacheDependencies.put(myDep, relatedUuids);				
+				}
+			}
 	    }
 
 	    if (cacheByCrisID != null) {
