@@ -73,7 +73,7 @@ import com.lyncode.xoai.dataprovider.exceptions.ConfigurationException;
 import com.lyncode.xoai.dataprovider.exceptions.MetadataBindException;
 import com.lyncode.xoai.dataprovider.exceptions.WritingXmlException;
 import com.lyncode.xoai.dataprovider.xml.XmlOutputContext;
-
+import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
 /**
  * @author Lyncode Development Team <dspace@lyncode.com>
  */
