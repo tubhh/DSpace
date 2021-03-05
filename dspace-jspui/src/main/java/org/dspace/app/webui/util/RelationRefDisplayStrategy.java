@@ -158,14 +158,23 @@ public class RelationRefDisplayStrategy extends ResolverDisplayStrategy
             log.error("Error while initializing solr server", e);
         }
 
+        String internalLinkIcon = ConfigurationManager.getProperty("cris", "relation.internallink_faclass");
+        String externalLinkIcon = ConfigurationManager.getProperty("cris", "relation.externallink_faclass");
+        if (internalLinkIcon == null) {
+            internalLinkIcon = "anchor";
+        }
+        if (externalLinkIcon == null) {
+            externalLinkIcon = "link";
+        }
+
         String startLink = null;
         String linkIcon = null;
         if (!relatedItemTitle.equals("")) {
-            linkIcon = " <span class=\"fa fa-anchor\"";
+            linkIcon = " <span class=\"fa fa-"+internalLinkIcon+"\"";
             linkIcon += " title=\""+relatedItemTitle+"\"";
             linkIcon += "> </span>";
         } else {
-            linkIcon = " <span class=\"fa fa-link\"> </span>";
+            linkIcon = " <span class=\"fa fa-"+externalLinkIcon+"\"> </span>";
         }
         try
         {   boolean newwindow=ConfigurationManager.getBooleanProperty("webui.resolver.link.newwindow");
