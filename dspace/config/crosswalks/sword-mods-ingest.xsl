@@ -85,7 +85,7 @@
     
     <!--   mods:/note[@type='funding'] ====>   dc.description.sponsorship  -->
     <xsl:template match="mods:mods/mods:note[@type='funding']">
-        <dim:field mdschema="dc" element="description" qualifier="sponsorship">
+        <dim:field mdschema="local" element="funding" qualifier="info">
             <xsl:value-of select="."/>
         </dim:field>
     </xsl:template>
