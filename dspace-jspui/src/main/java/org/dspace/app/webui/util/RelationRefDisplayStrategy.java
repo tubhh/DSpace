@@ -133,6 +133,7 @@ public class RelationRefDisplayStrategy extends ResolverDisplayStrategy
             Item relatedItem = null;
             // Search for identifier
             String query = buildQuery(value);
+            if (query != null) {
             SolrQuery solrQuery = new SolrQuery()
                 .setQuery(query);
             solrQuery.setFields("search.resourceid");
@@ -147,6 +148,7 @@ public class RelationRefDisplayStrategy extends ResolverDisplayStrategy
                 if (relatedItem != null) {
                     relatedItemTitle = relatedItem.getMetadata("dc.title");
                 }
+            }
             }
         }
         catch (SQLException e)
@@ -279,6 +281,9 @@ public class RelationRefDisplayStrategy extends ResolverDisplayStrategy
         String q = null;
         int ind = 0;
         String[] fieldsToQuery = indexfields.split(";");
+        if (identifier.equals("")) {
+            return null;
+        }
         for (String f : fieldsToQuery) {
             if (q == null) {
                 q = f+":"+identifier;
