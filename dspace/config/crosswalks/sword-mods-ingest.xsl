@@ -170,7 +170,15 @@
         <!--   mods:/relatedItem[@type="host"]/identifier[@type="issn' or @type='eIssn' or @type='isbn' 
         ====>   dc.identifier.issn, dc.identifier.eissn, dc.identifier.eissn -->
         <xsl:for-each select="mods:identifier">
-            <xsl:if test="@type='issn' or @type='eIssn' or @type='isbn'">
+            <xsl:if test="@type='issn' or @type='eIssn'">
+                <xsl:element name="dim:field">
+                    <xsl:attribute name="mdschema">dc</xsl:attribute> 
+                    <xsl:attribute name="element">identifier</xsl:attribute> 
+                    <xsl:attribute name="qualifier">issn</xsl:attribute>
+                    <xsl:value-of select="."/>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="@type='isbn'">
                 <xsl:element name="dim:field">
                     <xsl:attribute name="mdschema">dc</xsl:attribute> 
                     <xsl:attribute name="element">identifier</xsl:attribute> 
