@@ -183,6 +183,7 @@
 	<bean name="phase1LinearWorkflow" class="gr.ekt.bte.core.LinearWorkflow" scope="prototype">
 	    <property name="process">
 			<list>
+				<ref bean="mapConverter_bibtexType"/>
 			    <ref bean="mapConverter_arxivSubject"/>
 			    <ref bean="mapConverter_pubstatusPubmed"/>
 				<ref bean="mapConverter_classificationASJC" />
