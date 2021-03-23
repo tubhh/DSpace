@@ -2073,6 +2073,10 @@
        <displayed-value>CC0 1.0 (Public Domain Dedication)</displayed-value>
        <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
      </pair>
+     <pair>
+       <displayed-value>GPL v3</displayed-value>
+       <stored-value>https://opensource.org/licenses/GPL-3.0</stored-value>
+     </pair>
    </value-pairs>
 
    <value-pairs value-pairs-name="license_fdm_en" dc-term="dc_license">
@@ -2107,6 +2111,10 @@
      <pair>
        <displayed-value>Nutzungsbestimmungen für die Bereitstellung von Geodaten des Bundes (GeoNutzV)</displayed-value>
        <stored-value>http://www.gesetze-im-internet.de/geonutzv/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>GPL v3</displayed-value>
+       <stored-value>https://opensource.org/licenses/GPL-3.0</stored-value>
      </pair>
      <pair>
        <displayed-value>In Copyright</displayed-value>
