@@ -619,13 +619,13 @@
 
 	<!-- The keys in the RIS data loader map have to be the RIS tags that 
 		need to be loaded. -->
-	<bean id="risDataLoader" class="gr.ekt.bteio.loaders.RISDataLoader">
+	<bean id="risDataLoader" class="org.dspace.submit.extraction.RisDataLoader">
 		<property name="fieldMap">
 			<map>
 				<entry key="T1" value="title" />
 				<entry key="TI" value="title" />
 				<entry key="T2" value="journal" />
-                                <entry key="SO" value="journal" />
+                <entry key="SO" value="journal" />
 				<entry key="AU" value="authors" />
 				<entry key="PY" value="issued" />
 				<entry key="SN" value="jissn" />
