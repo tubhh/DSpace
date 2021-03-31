@@ -28,6 +28,7 @@
 -->
 				<entry key="ris" value-ref="risDataLoader" />
 <!--
+				<entry key="isiceciw" value-ref="isiceCiwDataLoader" />
 				<entry key="endnote" value-ref="endnoteDataLoader" />
 				<entry key="csv" value-ref="csvDataLoader" />
 				<entry key="tsv" value-ref="tsvDataLoader" />
@@ -140,7 +141,7 @@
 -->
 	            <entry key="bibtex" value-ref="bibTeXDataLoader"/>
 	            <entry key="ris" value-ref="risDataLoader"/>
-<!--	            <entry key="wosris" value-ref="wosRISDataLoader"/>
+<!--	            <entry key="isiceciw" value-ref="isiceCiwDataLoader"/>
 	            <entry key="endnote" value-ref="endnoteDataLoader"/>
 	            <entry key="csv" value-ref="csvDataLoader"/>
 	            <entry key="tsv" value-ref="tsvDataLoader"/> -->
@@ -642,6 +643,31 @@
 				<entry key="LA" value="language" />
 				<entry key="UR" value="url" />
 				<entry key="DO" value="doi" />			</map>
+		</property>
+	</bean>
+
+	<bean id="isiceCiwDataLoader" class="org.dspace.submit.extraction.ISICECiwDataLoader">
+		<property name="fieldMap">
+			<map>
+				<entry key="TI" value="title" />
+				<entry key="T2" value="journal" />
+				<entry key="AU" value="authors" />
+				<entry key="PY" value="issued" />
+				<entry key="SN" value="jissn" />
+				<entry key="PT" value="subtype" />
+				<entry key="M3" value="subtype" />
+				<entry key="AB" value="abstract" />
+				<entry key="VL" value="volume" />
+				<entry key="IS" value="issue" />
+				<entry key="SP" value="firstpage" />
+				<entry key="EP" value="lastpage" />
+				<entry key="KW" value="keywords" />
+				<entry key="PB" value="publisher" />
+				<entry key="PP" value="publisherPlace" />
+				<entry key="LA" value="language" />
+				<entry key="UR" value="url" />
+				<entry key="DO" value="doi" />
+			</map>
 		</property>
 	</bean>
 
