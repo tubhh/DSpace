@@ -21,6 +21,7 @@ import it.cilea.osd.jdyna.value.PointerValue;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -354,7 +355,13 @@ public class CrisSearchService extends SolrServiceImpl
             if(value == null) {
                 return;    
             }
-            
+            String searchablePrivateFieldsCfg = ConfigurationManager.getProperty(CrisConstants.CFG_MODULE, "system.search.private.fields");
+        	if (searchablePrivateFieldsCfg != null) {
+        		List<String> searchablePrivateFields = Arrays.asList(searchablePrivateFieldsCfg.split("\\s*,\\s*"));
+        		if (searchablePrivateFields.contains(field)) {
+        			doc.addField(field + "_restrictedvisibility", value);	
+        		}
+        	}            
             if(storePrivate) {
                 doc.addField(field + "_private", value);
             }

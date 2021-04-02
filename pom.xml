@@ -41,7 +41,7 @@
 		<org.jdyna.version>5.18</org.jdyna.version>
 		<it.cilea.ccommons.version>2.5</it.cilea.ccommons.version>
 		
-		<ckan.addon.modules>[CRIS-5.1-SNAPSHOT,CRIS-6.0-SNAPSHOT)</ckan.addon.modules>
+		<ckan.addon.modules>[CRIS-5.2-SNAPSHOT,CRIS-6.0-SNAPSHOT)</ckan.addon.modules>
 		<iiif.addon.modules>[CRIS-5.0-SNAPSHOT,CRIS-6.0-SNAPSHOT)</iiif.addon.modules>
 		<woocommerce.addon.modules>[CRIS-5.0-SNAPSHOT,CRIS-6.0-SNAPSHOT)</woocommerce.addon.modules>
 		<commons.addon.modules>[CRIS-5.3-SNAPSHOT,CRIS-6.0-SNAPSHOT)</commons.addon.modules>
@@ -53,7 +53,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
         <jackson.version>2.8.5</jackson.version>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <!-- Added maven compiler version for eclipse setting -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -1733,6 +1733,11 @@
 			<type>jar</type>
 		</dependency>
 
+		<dependency>
+		    <groupId>com.github.dpaukov</groupId>
+		    <artifactId>combinatoricslib3</artifactId>
+		    <version>3.3.0</version>
+		</dependency>
       </dependencies>
    </dependencyManagement>
 

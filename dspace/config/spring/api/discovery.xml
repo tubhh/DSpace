@@ -61,7 +61,8 @@
 	<!-- Additional indexing plugin to add rpsurnames SOLR -->
 	<bean id="RPSurnameSolrIndexer" class="org.dspace.app.cris.discovery.RPSurnameSolrIndexer">
 	</bean>
-	
+	<!-- Additional indexing plugin to add generated abbreviation to the rp name lookup -->
+	<bean class="org.dspace.app.cris.discovery.CRISPersonNamesGeneratorSolrIndexPlugin" />
 	<!-- Additional indexing plugin to add sorting field for authority -->
 	<bean id="CRISAuthoritySortSolrIndexPlugin" class="org.dspace.app.cris.discovery.CRISAuthoritySortSolrIndexPlugin">
 	</bean>

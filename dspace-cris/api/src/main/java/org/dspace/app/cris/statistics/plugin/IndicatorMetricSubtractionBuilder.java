@@ -24,7 +24,7 @@ public class IndicatorMetricSubtractionBuilder<ACO extends DSpaceObject>
     {
 
         Double valueComputed = mapValueComputed.containsKey(this.getName())
-                ? mapValueComputed.get(this.getName()) : 0;
+                ? mapValueComputed.get(this.getName()) : 0d;
 
         if (doc != null)
         {
