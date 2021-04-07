@@ -378,6 +378,32 @@ public class ResearcherPage extends
         return results;
     }
 
+    @Transient
+    public List<String> getAllPrivateNames()
+    {
+        List<String> results = new ArrayList<String>();
+        results.add(getFullName());
+        if (getPreferredName().getValue() != null
+                && !getPreferredName().getValue().isEmpty())
+        {
+            results.add(getPreferredName().getValue());
+        }
+        if (getTranslatedName().getValue() != null
+                && !getTranslatedName().getValue().isEmpty())
+        {
+            results.add(getTranslatedName().getValue());
+        }
+        for (RestrictedField rf : getVariants())
+        {
+            if (rf.getVisibility() != VisibilityConstants.PUBLIC
+                    && rf.getValue() != null)
+            {
+                results.add(rf.getValue());
+            }
+        }
+        return results;
+    }
+
     public List<String> getAllNames()
     {
         List<String> results = new ArrayList<String>();

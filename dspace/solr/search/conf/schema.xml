@@ -556,6 +556,17 @@
    <copyField source="crisrp.preferredName" dest="crisauthoritylookup"/>
    <copyField source="crisrp.translatedName" dest="crisauthoritylookup"/>
    <copyField source="crisrp.variants" dest="crisauthoritylookup"/>
+   <copyField source="crisrpnamesabbreviations" dest="crisauthoritylookup"/>
+   <!-- comment the next copyFields if private names should be not available for the suggestion lookup -->
+   <copyField source="crisrp.fullName_private" dest="crisauthoritylookup"/>
+   <copyField source="crisrp.preferredName_private" dest="crisauthoritylookup"/>
+   <copyField source="crisrp.translatedName_private" dest="crisauthoritylookup"/>
+   <copyField source="crisrp.variants_private" dest="crisauthoritylookup"/>
+   <copyField source="crisrpnamesabbreviations_private" dest="crisauthoritylookup"/>
+   <!-- 
+        end. The private names can be made available for the public search using 
+        the system.search.private.fields in the cris.cfg file
+    -->
    <copyField source="crisproject.title" dest="crisauthoritylookup"/>
    <copyField source="crisproject.title_en" dest="crisauthoritylookup"/>
    <copyField source="crisproject.acronym" dest="crisauthoritylookup"/>

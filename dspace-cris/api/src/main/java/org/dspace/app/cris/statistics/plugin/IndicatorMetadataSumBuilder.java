@@ -25,7 +25,7 @@ public class IndicatorMetadataSumBuilder<ACO extends DSpaceObject> extends AIndi
         Double valueComputed = mapValueComputed
                 .containsKey(this.getName())
                         ? mapValueComputed.get(this.getName())
-                        : 0;
+                        : 0d;
                                 
         DSpaceObject object = null;
         if (resourceType >= CrisConstants.RP_TYPE_ID)

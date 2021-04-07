@@ -42,14 +42,19 @@ import gr.ekt.bte.exceptions.EmptySourceException;
 import gr.ekt.bte.exceptions.MalformedSourceException;
 import gr.ekt.bte.record.MapRecord;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.log4j.Logger;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
@@ -66,7 +71,7 @@ import org.jbibtex.ParseException;
 public class BibTeXFileDataLoader extends FileDataLoader {
     private static Logger logger_ = Logger.getLogger(BibTeXFileDataLoader.class);
     private Map<String, String> field_map_;
-    private FileReader reader_;
+    private Reader reader_;
     private String typefield;
 
     public BibTeXFileDataLoader() {
@@ -80,7 +85,9 @@ public class BibTeXFileDataLoader extends FileDataLoader {
         field_map_ = fields;
 
         try {
-            reader_ = new FileReader(new File(filename));
+        	BOMInputStream is = new BOMInputStream(new FileInputStream(filename));
+        	Reader reader = new InputStreamReader(is);
+            reader_ = new BufferedReader(reader);
         } catch(IOException e) {
             logger_.info("Problem loading file: " + filename);
             throw new EmptySourceException("Problem loading file: " + filename);
