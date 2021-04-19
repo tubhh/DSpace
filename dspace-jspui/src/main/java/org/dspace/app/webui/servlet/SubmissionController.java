@@ -269,22 +269,29 @@ public class SubmissionController extends DSpaceServlet
                 // 2. It's complete, ready for review and this is the reviewer
                 if (WorkflowManager.isPendingFulltext(item)) {
                     if (isInFulltext) {
-                        log.debug("State check: Has pending, and is in fulltext, but add files clicked. Throw auth ex.");
+                        log.error("State check: Has pending, and is in fulltext, but add files clicked. Throw auth ex.");
                         // A user has already completed adding files and the review is already complete, throw exception
                         throw new AuthorizeException("Item is already reviewed and approved after fulltext added, but Add Files was retroactively clicked again: " + item.getHandle());
                     } else if (isInReview) {
                         // The item is in review already, we shouldn't allow add files right now
-                        log.debug("Add files was clicked for an item, but it's already in workflow with pending items for review: " + item.getHandle() + ". Throw an authorization exception.");
+                        log.error("Add files was clicked for an item, but it's already in workflow with pending items for review: " + item.getHandle() + ". Throw an authorization exception.");
                         throw new AuthorizeException("Add files was clicked for an item, but it's already in workflow with pending items for review: " + item.getHandle());
                     } else if (context.getCurrentUser().equals(item.getSubmitter())) {
                         // It's still in the non-fulltext collection, so the user might be continuing their original add files
-                        log.debug("State check: Is still in non-fulltext collection but has pending, and the Add Files / Continue button was clicked again by the submitter. " +
+                        log.debug("State check: Is still in non-fulltext collection but has pending, and the Add Files / Continue button was clicked again by the submitter. Continue is allowed. " +
                             "Item 'submitter'=" + item.getSubmitter().getEmail() + ", current user=" + context.getCurrentUser().getEmail());
                     } else {
-                        log.debug("State check: The Add Files button appears to have been clicked and the item is in non-fulltext" +
+                        log.error("State check: The Add Files button appears to have been clicked and the item is in non-fulltext" +
                             "and has pending files already, but the user doesn't match whoever uploaded existing pending files.");
                         throw new AuthorizeException("Item has pending files already uploaded by a different user. Only this user can continue adding files: " + item.getHandle() +
                             ", item 'submitter'=" + item.getSubmitter().getEmail() + ", current user=" + context.getCurrentUser().getEmail());
+                    }
+                } else {
+                    if (isInFulltext) {
+                        // Item has no pending files and is already in fulltext collection, which is the most common scenario when the file are already
+                        // added and the review already completed.
+                        log.error("Item has already had fulltext added and approved, throw an authorize exception: " + item.getHandle());
+                        throw new AuthorizeException("Item has already had fulltext added and approved, throw an authorize exception: " + item.getHandle());
                     }
                 }
 
@@ -295,7 +302,6 @@ public class SubmissionController extends DSpaceServlet
                 // load submission information
                 SubmissionInfo si = SubmissionInfo.load(context, request, addFulltextItem);
                 log.debug("After submissionInfo load - Item 'submitter'=" + item.getSubmitter().getEmail() + ", current user=" + context.getCurrentUser().getEmail());
-
 
                 // start over at beginning of first workflow step
                 setBeginningOfStep(request, true);
