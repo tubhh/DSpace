@@ -244,9 +244,6 @@ public class SubmissionController extends DSpaceServlet
         }
         else if (addFullTextItemID != null && addFulltext) {
             try {
-                log.debug("Loading item in add fulltext mode: " + addFullTextItemID);
-                // load the item
-                Item item = Item.find(context, Integer.parseInt(addFullTextItemID));
 
                 // Get fulltext collection
                 Collection fulltextCollection = getFulltextCollection(context);
@@ -254,10 +251,51 @@ public class SubmissionController extends DSpaceServlet
                     // We require fulltext collection here, or the item will not end up in the right place
                     throw new ServletException("Invalid or missing fulltext collection configured!");
                 }
+
+                // User has clicked Add Files or Continue Adding Files
+                log.debug("User has clicked Add Files or Continue Adding Files: " + addFullTextItemID);
+                // We might have a concurrency case, where the Add Files button was clicked in a different tab
+                // after the actual files were uploaded
+
+                // load the item
+                Item item = Item.find(context, Integer.parseInt(addFullTextItemID));
+
+                // Get the *current* collection, which will help determine if this is unfinished pending or not
+                boolean isInFulltext = (item.getParentObject().equals(fulltextCollection));
+                boolean isInReview = (WorkflowItem.findByItem(context, item) != null);
+
+                // If this item has pending files already, we really only want to allow things to continue if
+                // 1. It's incomplete and the user is continuing to add files before submitting for review
+                // 2. It's complete, ready for review and this is the reviewer
+                if (WorkflowManager.isPendingFulltext(item)) {
+                    if (isInFulltext) {
+                        log.debug("State check: Has pending, and is in fulltext, but add files clicked. Throw auth ex.");
+                        // A user has already completed adding files and the review is already complete, throw exception
+                        throw new AuthorizeException("Item is already reviewed and approved after fulltext added, but Add Files was retroactively clicked again: " + item.getHandle());
+                    } else if (isInReview) {
+                        // The item is in review already, we shouldn't allow add files right now
+                        log.debug("Add files was clicked for an item, but it's already in workflow with pending items for review: " + item.getHandle() + ". Throw an authorization exception.");
+                        throw new AuthorizeException("Add files was clicked for an item, but it's already in workflow with pending items for review: " + item.getHandle());
+                    } else if (context.getCurrentUser().equals(item.getSubmitter())) {
+                        // It's still in the non-fulltext collection, so the user might be continuing their original add files
+                        log.debug("State check: Is still in non-fulltext collection but has pending, and the Add Files / Continue button was clicked again by the submitter. " +
+                            "Item 'submitter'=" + item.getSubmitter().getEmail() + ", current user=" + context.getCurrentUser().getEmail());
+                    } else {
+                        log.debug("State check: The Add Files button appears to have been clicked and the item is in non-fulltext" +
+                            "and has pending files already, but the user doesn't match whoever uploaded existing pending files.");
+                        throw new AuthorizeException("Item has pending files already uploaded by a different user. Only this user can continue adding files: " + item.getHandle() +
+                            ", item 'submitter'=" + item.getSubmitter().getEmail() + ", current user=" + context.getCurrentUser().getEmail());
+                    }
+                }
+
+                log.debug("Loading item in add fulltext mode: " + addFullTextItemID);
+
                 AddFulltextItem addFulltextItem = new AddFulltextItem(item, fulltextCollection);
 
                 // load submission information
                 SubmissionInfo si = SubmissionInfo.load(context, request, addFulltextItem);
+                log.debug("After submissionInfo load - Item 'submitter'=" + item.getSubmitter().getEmail() + ", current user=" + context.getCurrentUser().getEmail());
+
 
                 // start over at beginning of first workflow step
                 setBeginningOfStep(request, true);
