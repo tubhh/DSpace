@@ -224,6 +224,12 @@ public class OrcidService extends RestSource
     public static final String ORCID_MODE_UPDATE = "PUT";
 
     public static final String ORCID_MODE_DELETE = "DELETE";
+    
+    public static final String QUERY_GIVEN_NAME = "(given-names:";
+    public static final String QUERY_FAMILY_NAME = "(family-name:";
+	public static final String QUERY_MIDDLE = "* OR other-names:";
+	public static final String QUERY_END = "*)";
+    public static final String QUERY_AND = " AND ";
 
     private static OrcidService orcid;
 
@@ -472,33 +478,43 @@ public class OrcidService extends RestSource
 
         if(StringUtils.isNotBlank(text)) {
             DCPersonName tmpPersonName = new DCPersonName(text);
-            query.append("(");
-            if (StringUtils.isNotBlank(tmpPersonName.getLastName()))
+            boolean givenNameNotBlank = false;
+            
+            String givenName = tmpPersonName.getFirstNames();
+            if (StringUtils.isNotBlank(givenName))
             {
-                query.append("family-name:(").append(tmpPersonName.getLastName().trim())
-                		.append( (StringUtils.isNotBlank(tmpPersonName.getFirstNames()) 
-                				? "" : "*") )
-                					.append(")");
+            	givenNameNotBlank = true;
+            	
+            	query.append(QUERY_GIVEN_NAME)
+            	.append(givenName)
+            	.append(QUERY_MIDDLE)
+            	.append(givenName)
+            	.append(QUERY_END);
             }
-    
-            if (StringUtils.isNotBlank(tmpPersonName.getFirstNames()))
+            
+            String familyName = tmpPersonName.getLastName();
+            if (StringUtils.isNotBlank(familyName))
             {
-                if (StringUtils.isNotBlank(tmpPersonName.getLastName())) {
-                    query.append(" AND ");        
-                }
-                query.append("given-names:(")
-                			.append(tmpPersonName.getFirstNames().trim()).append("*)");
+            	if (givenNameNotBlank)
+            	{
+            		query.append(QUERY_AND);        
+            	}
+            	
+                query.append(QUERY_FAMILY_NAME)
+                	 .append(familyName)
+                	 .append(QUERY_MIDDLE)
+                	 .append(familyName)
+                	 .append(QUERY_END);
             }
-            query.append(")");
-            query.append(" OR ");
-            query.append("other-names:(").append(text).append(")");
         }
         else {
             //default action, should be never used 
             query.append("other-names:*");
         }
-
-        log.debug("Lookup on ORCID with query "+query.toString());
+        
+        if (log.isDebugEnabled()) {
+        	log.debug("Lookup on ORCID with query "+query.toString());
+		}
 
         List<Result> results = search(query.toString(), start, max);
 
