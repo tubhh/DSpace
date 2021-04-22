@@ -255,7 +255,7 @@
            <jspui-binding>org.dspace.app.webui.submit.step.JSPPendingUploadStep</jspui-binding>
            <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadStep</xmlui-binding>
            <add-fulltext-step>only</add-fulltext-step>
-           <review-fulltext-step>only</review-fulltext-step>
+           <!-- <review-fulltext-step>only</review-fulltext-step> -->
        </step>
 
        <!-- Step 4 Upload Item with Embargo Features
@@ -275,6 +275,7 @@
  	    <jspui-binding>org.dspace.app.webui.submit.step.JSPVerifyStep</jspui-binding>
 		<xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.ReviewStep</xmlui-binding>
 		<workflow-editable>true</workflow-editable>
+           <review-fulltext-step>true</review-fulltext-step>
       </step>
 
       <!--Step 6 will be to select a Creative Commons License-->
