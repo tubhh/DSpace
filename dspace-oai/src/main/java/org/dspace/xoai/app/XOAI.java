@@ -9,7 +9,6 @@ package org.dspace.xoai.app;
 
 import static com.lyncode.xoai.dataprovider.core.Granularity.Second;
 import static org.dspace.xoai.util.ItemUtils.retrieveMetadata;
-import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -60,7 +59,6 @@ import org.dspace.discovery.DiscoverQuery;
 import org.dspace.discovery.DiscoverResult;
 import org.dspace.discovery.SearchServiceException;
 import org.dspace.discovery.SearchUtils;
-import org.dspace.xoai.services.api.config.ConfigurationService;
 import org.dspace.utils.DSpace;
 import org.dspace.xoai.services.api.database.CollectionsService;
 import org.dspace.xoai.services.api.solr.SolrServerResolver;
@@ -75,6 +73,7 @@ import com.lyncode.xoai.dataprovider.exceptions.MetadataBindException;
 import com.lyncode.xoai.dataprovider.exceptions.WritingXmlException;
 import com.lyncode.xoai.dataprovider.xml.XmlOutputContext;
 import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
+
 /**
  * @author Lyncode Development Team <dspace@lyncode.com>
  */
@@ -362,7 +361,6 @@ public class XOAI {
             throws DSpaceSolrIndexerException {
         try {
             int i = 0;
-            long itemstart = System.currentTimeMillis();
             SolrServer server = solrServerResolver.getServer();
             for (DSpaceObject o : result.getDspaceObjects()) {
                 try {
@@ -394,7 +392,6 @@ public class XOAI {
                 }
             }
             System.out.println("Partial Total: " + (i+subtotal) + " items");
-            System.out.println("It took "+ ((System.currentTimeMillis()-itemstart) / 1000) +" seconds for this portion");
             server.commit();
             return i;
         } catch (SolrServerException ex) {
@@ -589,7 +586,7 @@ public class XOAI {
             case ITEMTYPE_DEFAULT:
             	eraseQuery = ConfigurationManager.getProperty("oai", "oai.erase.query.item");
             	if (eraseQuery == null || eraseQuery.trim().length() <= 0) {
-            		eraseQuery = "item.type:item OR item.type:cfitem";
+            		eraseQuery = "item.type:item";
             	}
     	        break;
             case "rp":
@@ -613,7 +610,7 @@ public class XOAI {
             case "other":
             	eraseQuery = ConfigurationManager.getProperty("oai", "oai.erase.query.crisother");
             	if (eraseQuery == null || eraseQuery.trim().length() <= 0) {
-            		eraseQuery = "NOT (item.type:item OR item.type:cfitem OR item.type:rp OR item.type:project OR item.type:ou)";
+            		eraseQuery = "NOT (item.type:item OR item.type:rp OR item.type:project OR item.type:ou)";
             	}
     	        break;
             case "all":

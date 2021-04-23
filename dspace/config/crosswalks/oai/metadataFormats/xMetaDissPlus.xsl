@@ -352,11 +352,20 @@
                         -->
 
                         <!-- External source of publication: dc.identifier.citation -->
-                        <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='citation']/doc:element/doc:field[@name='value']">
+                        <xsl:choose>
+                        <xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='citation']/doc:element/doc:field[@name='value']">
                             <dc:source xsi:type="ddb:noScheme">
                                 <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='citation']/doc:element/doc:field[@name='value']"/>
                             </dc:source>
-                        </xsl:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:if test="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='conference']/doc:element/doc:field[@name='value']">
+                                <dc:source xsi:type="ddb:noScheme">
+                                    <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='relation']/doc:element[@name='conference']/doc:element/doc:field[@name='value']"/>
+                                </dc:source>
+                            </xsl:if>
+                        </xsl:otherwise>
+                        </xsl:choose>
 
 			<!-- language of publication: dc.language.iso -->
 			<dc:language xsi:type="dcterms:ISO639-2">
