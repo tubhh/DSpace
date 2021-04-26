@@ -689,7 +689,7 @@
          <hint>Select the main research area of this publication (multiple selection possible).</hint>
          <required></required>
        </field>
--->
+
        <field>
          <dc-schema>datacite</dc-schema>
          <dc-element>relation</dc-element>
@@ -700,7 +700,18 @@
          <hint>This item is supplemented by research data. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
          <required></required>
        </field>
-
+-->
+       <field>
+         <dc-schema>datacite</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Related Identifiers</label>
+         <input-type value-pairs-name="relation_types_en">qualdrop_value</input-type>
+         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
+         <required></required>
+       </field>
+<!--
        <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>funder</dc-element>
@@ -733,7 +744,7 @@
          <hint></hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
@@ -941,7 +952,7 @@
          <hint>Please select the license applicable for your work here. If you miss your license here, please contact us. If you want to learn more about CC licenses, visit http://creativecommons.org.</hint>
          <required></required>
        </field>
-
+<!--
        <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>funder</dc-element>
@@ -974,7 +985,7 @@
          <hint></hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
@@ -1636,7 +1647,7 @@
          <hint>Select the main research area of this publication (multiple selection possible).</hint>
          <required></required>
        </field>
--->
+
        <field>
          <dc-schema>datacite</dc-schema>
          <dc-element>relation</dc-element>
@@ -1647,7 +1658,18 @@
          <hint>This item is supplemented by research data. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
          <required></required>
        </field>
-
+-->
+       <field>
+         <dc-schema>datacite</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Related Identifiers</label>
+         <input-type value-pairs-name="relation_types_en">qualdrop_value</input-type>
+         <hint>Enter related identifiers of the item (e.g. URL, DOI, ...) and select a qualification of the relation. You can provide a persistent identifier (DOI, URN or Handle) by prefixing your input with doi:, urn: or hdl: followed by the identifier without resolver (for example type doi:10.15480/882.1264 here to reference the DOI 10.15480/882.1264). You can also provide any HTTP(S) URI to reference material without a persistent Identifier (NOT recommended).</hint>
+         <required></required>
+       </field>
+<!--
        <field>
          <dc-schema>openaire</dc-schema>
          <dc-element>funder</dc-element>
@@ -1680,7 +1702,7 @@
          <hint></hint>
          <required></required>
        </field>
-
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
@@ -1761,27 +1783,22 @@
     </value-pairs>
 
    <value-pairs value-pairs-name="relation_types_en" dc-term="datacite_relation">
-<!--
      <pair>
        <displayed-value>cites</displayed-value>
        <stored-value>Cites</stored-value>
      </pair>
--->
      <pair>
        <displayed-value>is cited by</displayed-value>
        <stored-value>IsCitedBy</stored-value>
      </pair>
-<!--
      <pair>
        <displayed-value>is supplemented by</displayed-value>
        <stored-value>IsSupplementedBy</stored-value>
      </pair>
--->
      <pair>
        <displayed-value>is a supplement to</displayed-value>
        <stored-value>IsSupplementTo</stored-value>
      </pair>
-<!--
      <pair>
        <displayed-value>is referenced by</displayed-value>
        <stored-value>IsReferencedBy</stored-value>
@@ -1802,12 +1819,10 @@
        <displayed-value>has as part</displayed-value>
        <stored-value>HasPart</stored-value>
      </pair>
--->
      <pair>
        <displayed-value>is part of</displayed-value>
        <stored-value>IsPartOf</stored-value>
      </pair>
-<!--
      <pair>
        <displayed-value>documents</displayed-value>
        <stored-value>Documents</stored-value>
@@ -1828,7 +1843,6 @@
        <displayed-value>is identical to</displayed-value>
        <stored-value>IsIdenticalTo</stored-value>
      </pair>
--->
 <!--
      <pair>
        <displayed-value>is an alternate identifier of this upload</displayed-value>
