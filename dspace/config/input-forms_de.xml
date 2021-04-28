@@ -2447,6 +2447,10 @@
        <stored-value>Patent</stored-value>
      </pair>
      <pair>
+       <displayed-value>Patent: Offenlegungsschrift</displayed-value>
+       <stored-value>Offenlegungsschrift</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Poster</displayed-value>
        <stored-value>Poster</stored-value>
      </pair>
