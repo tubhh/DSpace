@@ -298,6 +298,13 @@ public class TypeSettingConsumer implements Consumer
             ret.put("casrai", "Other");
             ret.put("dcmi", "InteractiveResource");
             break;
+        case "Patent":
+            ret.put("opus", "Patent");
+            ret.put("dini", "Patent");
+            ret.put("driver", "patent");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            break;
         case "Presentation":
             ret.put("opus", "Präsentation");
             ret.put("dini", "Other");

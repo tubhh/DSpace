@@ -2443,6 +2443,10 @@
        <stored-value>Learning Object</stored-value>
      </pair>
      <pair>
+       <displayed-value>Patent</displayed-value>
+       <stored-value>Patent</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Poster</displayed-value>
        <stored-value>Poster</stored-value>
      </pair>
