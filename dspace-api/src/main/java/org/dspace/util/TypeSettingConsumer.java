@@ -157,14 +157,14 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("dcmi", "Text");
                         break;
                     case "diplomaThesis":
-                        ret.put("opus", "Diplomarbeit");
+                        ret.put("opus", "Diplomarbeit, Magisterarbeit");
                         ret.put("dini", "masterThesis");
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
                         break;
                     case "magisterThesis":
-                        ret.put("opus", "Magisterarbeit");
+                        ret.put("opus", "Diplomarbeit, Magisterarbeit");
                         ret.put("dini", "masterThesis");
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
@@ -446,6 +446,14 @@ public class TypeSettingConsumer implements Consumer
             ret.put("dini", "Other");
             ret.put("driver", "other");
             ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            break;
+        case "editorial":
+            //Cerif:Editorial
+            ret.put("opus", "Editorial");
+            ret.put("dini", "article");
+            ret.put("driver", "article");
+            ret.put("casrai", "Journal Article");
             ret.put("dcmi", "Text");
             break;
         default:
