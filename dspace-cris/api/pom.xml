@@ -139,6 +139,11 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+		    <groupId>com.github.dpaukov</groupId>
+		    <artifactId>combinatoricslib3</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

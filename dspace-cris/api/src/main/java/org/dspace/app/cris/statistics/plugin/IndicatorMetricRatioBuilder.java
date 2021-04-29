@@ -25,12 +25,12 @@ public class IndicatorMetricRatioBuilder<ACO extends DSpaceObject>
         Double valueComputed = mapValueComputed
                 .containsKey(this.getName())
                         ? mapValueComputed.get(this.getName())
-                        : 0;
+                        : 0d;
         Double additionalValueComputed = mapAdditionalValueComputed
                 .containsKey(this.getName())
                         ? mapAdditionalValueComputed
                                 .get(this.getName())
-                        : 0;
+                        : 0d;
                                 
         if (valueComputed > 0)
         {

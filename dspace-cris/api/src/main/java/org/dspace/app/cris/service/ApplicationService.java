@@ -981,7 +981,7 @@ public class ApplicationService extends ExtendedTabService
         }	
     }
     
-    public <T extends Serializable, PK extends Serializable> void putToCache(Class<T> model,
+    public synchronized <T extends Serializable, PK extends Serializable> void putToCache(Class<T> model,
             T object, PK objectId)
     {
 	if (object == null) {
@@ -1011,9 +1011,9 @@ public class ApplicationService extends ExtendedTabService
 
 	    // remove from the cache all the depending objects
 	    if (dependencies != null) {
-		for (String uuidDep : dependencies) {
-		    clearCacheByUUID(uuidDep);
-		}
+			for (String uuidDep : dependencies) {
+			    clearCacheByUUID(uuidDep);
+			}
 	    }
 	    cacheDependencies.remove(myUuid);
 
