@@ -817,6 +817,18 @@
          <required>Please enter the main title for this item.</required>
        </field>
 <!--
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>versionnumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Version</label>
+         <input-type>onebox</input-type>
+         <hint>If this item has a special version reference (like a version number or a branch name), you can type that version reference here.</hint>
+         <required></required>
+       </field>
+-->
+<!--
       <field>
           <dc-element>contributor</dc-element>
           <dc-qualifier>department</dc-qualifier>
@@ -904,7 +916,19 @@
          <hint></hint>
          <required></required>
        </field>
-         
+<!--
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>technicalInfo</dc-qualifier>
+         !--<language value-pairs-name="common_iso_languages_en">true</language>--
+         <repeatable>true</repeatable>
+         <label>Technical Information</label>
+         <input-type>textarea</input-type>
+         <hint>If you need to provide any technical information about this item, you can rather put it here than in the generic desciption</hint>
+         <required></required>
+       </field>
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>subject</dc-element>

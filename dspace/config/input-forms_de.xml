@@ -777,7 +777,18 @@
        <!--  <hint>Haupttitel des Dokuments.</hint>-->
          <required>Es muss ein Titel eingegeben werden.</required>
        </field>
-
+<!--
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>versionnumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Version</label>
+         <input-type>onebox</input-type>
+         <hint>Wenn eine Versionsangabe (Versionsnummer oder Branchname) notwendig ist, kann diese hier angegeben werden.</hint>
+         <required></required>
+       </field>
+-->
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
@@ -854,8 +865,20 @@
          <hint></hint>
          <required></required>
        </field>
-
+<!--
        <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>technicalInfo</dc-qualifier>
+         !--<language value-pairs-name="common_iso_languages_de">true</language>--
+         <repeatable>true</repeatable>
+         <label>Technische Information</label>
+         <input-type>textarea</input-type>
+         <hint>Hinweise zu technischen Voraussetzungen oder Besonderheiten dieser Daten (z.B. bei Software)</hint>
+         <required></required>
+        </field>
+-->
+        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>subject</dc-element>
          <dc-qualifier></dc-qualifier>
