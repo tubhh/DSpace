@@ -197,7 +197,7 @@
 	                				<a class="btn btn-default" href="<%= request.getContextPath() %>/cris/tools/subscription/unsubscribe?uuid=${entity.uuid}"><i class="fa fa-bell-o"></i> <fmt:message key="jsp.cris.detail.link.email.alert.remove" /></a>
 	        					</c:otherwise>      
 						</c:choose>						
-        				<a class="btn btn-default" href="<%= request.getContextPath() %>/open-search?query=dc.description.sponsorship_authority:${authority}&amp;format=rss"><i class="fa fa-rss"></i> <fmt:message key="jsp.cris.detail.link.rssfeed" /></a>
+        				<a class="btn btn-default" href="<%= request.getContextPath() %>/open-search?query=tuhh.publication.institute_authority:${authority}&amp;format=rss"><i class="fa fa-rss"></i> <fmt:message key="jsp.cris.detail.link.rssfeed" /></a>
 				</div>
 				<c:if test="${(ou_page_menu || canEdit) && !empty ou}">
 					<c:if test="${!empty addModeType && addModeType=='display'}"> 	
