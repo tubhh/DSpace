@@ -1858,7 +1858,7 @@
        <stored-value>IsCompiledBy</stored-value>
      </pair>
      <pair>
-       <displayed-value>compiled/created</displayed-value>
+       <displayed-value>compiles/creates</displayed-value>
        <stored-value>Compiles</stored-value>
      </pair>
 <!--

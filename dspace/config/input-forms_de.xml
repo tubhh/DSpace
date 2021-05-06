@@ -1780,7 +1780,7 @@
        <stored-value>IsSupplementTo</stored-value>
      </pair>
      <pair>
-       <displayed-value>ist verwendet in</displayed-value>
+       <displayed-value>wird verwendet von</displayed-value>
        <stored-value>IsReferencedBy</stored-value>
      </pair>
      <pair>
@@ -1788,15 +1788,15 @@
        <stored-value>References</stored-value>
      </pair>
      <pair>
-       <displayed-value>ist eine vorherige Version</displayed-value>
+       <displayed-value>ist vorherige Version</displayed-value>
        <stored-value>IsPreviousVersionOf</stored-value>
      </pair>
      <pair>
-       <displayed-value>ist eine neue Version von</displayed-value>
+       <displayed-value>ist neue Version von</displayed-value>
        <stored-value>IsNewVersionOf</stored-value>
      </pair>
      <pair>
-       <displayed-value>enthaelt</displayed-value>
+       <displayed-value>enthält</displayed-value>
        <stored-value>HasPart</stored-value>
      </pair>
      <pair>
@@ -1808,7 +1808,7 @@
        <stored-value>Documents</stored-value>
      </pair>
      <pair>
-       <displayed-value>ist dokumentiert in</displayed-value>
+       <displayed-value>wird dokumentiert von</displayed-value>
        <stored-value>IsDocumentedBy</stored-value>
      </pair>
      <pair>
