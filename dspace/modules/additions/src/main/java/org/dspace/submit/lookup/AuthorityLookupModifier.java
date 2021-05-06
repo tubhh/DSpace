@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.cris.util.ResearcherPageUtils;
+import org.dspace.content.DSpaceObject;
 import org.dspace.content.authority.Choices;
 import org.dspace.discovery.DiscoverQuery;
 import org.dspace.discovery.DiscoverResult;
@@ -49,6 +50,12 @@ public class AuthorityLookupModifier<T extends ACrisObject>
      * the key is the CRIS object prop name, the value the BTE field
      */
     private Map<String, String> mappingOutputConfiguration;
+    
+    /**
+     *	the identifiers from the record<key> to check against the object's metadata<value>
+     *	the first match will be selected
+     */
+    private Map<String, String> mappingIdentifierCheck = null;
 
 	// the list of BTE field that should be linked to the CRIS object if found via
 	// the authority framework. They need to appear in the enhanced fields map as
@@ -99,7 +106,35 @@ public class AuthorityLookupModifier<T extends ACrisObject>
                         if (result.getTotalSearchResults() == 1)
                         {
                             cris = (T) result.getDspaceObjects().get(0);
-                        }
+                        } else if (result.getTotalSearchResults() > 1 && mappingIdentifierCheck != null)
+                        {	// if undecided between multiple cris and mappingIdentifierCheck is configured then
+                        	// try to find the one with a matching identifier
+                        	
+                        	List<DSpaceObject> dsos = result.getDspaceObjects();
+                        	
+                        	ext: for (String idField : mappingIdentifierCheck.keySet()) 
+                        	{
+                        		String idMetadata = mappingIdentifierCheck.get(idField);
+                        		List<String> idValues = normalize(getValue(rec, idField));
+                        		
+                        		if (idValues != null && idValues.size() > pos) 
+                        		{
+                        			String idValue = idValues.get(pos);
+                        			for (DSpaceObject potential : dsos) 
+                        			{
+                        				String md = potential.getMetadata(idMetadata);
+                        				// check if the identifier matches or if both values are empty
+                        				if (StringUtils.equals(md, idValue) || 
+                        						(StringUtils.isBlank(md) && StringUtils.equals(idValue, ScopusUtils.PLACEHOLDER_NO_DATA))) 
+                        				{
+											cris = (T) potential;
+											break ext;
+										}
+                        			}
+                        		}
+							}
+						}
+                        
                         if (crisObjects.size() > pos) {
                         	crisObjects.set(pos, cris);
                         }
@@ -210,7 +245,11 @@ public class AuthorityLookupModifier<T extends ACrisObject>
         this.mappingOutputConfiguration = mappingOutputConfiguration;
     }
 
-    public void setMappingAuthorityConfiguration(
+    public void setMappingIdentifierCheck(Map<String, String> mappingIdentifierCheck) {
+		this.mappingIdentifierCheck = mappingIdentifierCheck;
+	}
+
+	public void setMappingAuthorityConfiguration(
             List<String> mappingAuthorityConfiguration)
     {
         this.mappingAuthorityConfiguration = mappingAuthorityConfiguration;

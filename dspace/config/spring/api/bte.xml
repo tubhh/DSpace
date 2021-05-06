@@ -508,6 +508,12 @@
 				<value>authors</value>
 			</list>
 		</property>
+		<property name="mappingIdentifierCheck">
+			<!-- wether to check if the metadata has one of the following identifiers -->
+			<map>
+				<entry key="orcid" value="orcid" />
+			</map>
+		</property>
 		<property name="clazzCrisObject" value="org.dspace.app.cris.model.ResearcherPage" />
 	</bean>
 	
