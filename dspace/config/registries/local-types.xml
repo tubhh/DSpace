@@ -86,6 +86,13 @@ updatedVersion</scope_note>
 
   <dc-type>
     <schema>local</schema>
+    <element>publisher</element>
+    <qualifier>peerreviewed</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+    <schema>local</schema>
     <element>fakeitem</element>
     <scope_note>Set to true/yes/on to flag the item for deletation upon
 	deposit by the DeleteFakeItem consumer</scope_note>

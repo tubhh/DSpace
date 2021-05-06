@@ -560,6 +560,17 @@
          <hint>Is this item in press (not yet really published)?</hint>
          <visibility>workflow</visibility>
         </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier>peerreviewed</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Peer Reviewed?</label>
+         <input-type value-pairs-name="yes_no_none">dropdown</input-type>
+         <hint>Please select whether this publication went through a peer review or not. If you are not sure, leave it unset.</hint>
+         <required></required>
+        </field>
 <!--
        <field>
          <dc-schema>openaire</dc-schema>
@@ -1518,6 +1529,17 @@
          <hint>Is this item in press (not yet really published)?</hint>
          <visibility>workflow</visibility>
         </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier>peerreviewed</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Peer Reviewed?</label>
+         <input-type value-pairs-name="yes_no_none">dropdown</input-type>
+         <hint>Please select whether this publication went through a peer review or not. If you are not sure, leave it unset.</hint>
+         <required></required>
+        </field>
 <!--
        <field>
          <dc-schema>tuhh</dc-schema>
@@ -1917,6 +1939,21 @@
    </value-pairs>
 
    <value-pairs value-pairs-name="oai_flag" dc-term="show">
+     <pair>
+       <displayed-value>Yes</displayed-value>
+       <stored-value>true</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>No</displayed-value>
+       <stored-value>false</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="yes_no_none" dc-term="nowhere">
+     <pair>
+       <displayed-value>Unknown</displayed-value>
+       <stored-value></stored-value>
+     </pair>
      <pair>
        <displayed-value>Yes</displayed-value>
        <stored-value>true</stored-value>

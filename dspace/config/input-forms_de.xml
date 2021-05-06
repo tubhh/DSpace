@@ -521,6 +521,17 @@
          <hint>Ist dieser Datensatz noch "in press" (also noch nicht wirklich veröffentlicht)?</hint>
          <visibility>workflow</visibility>
         </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier>peerreviewed</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Peer Reviewed?</label>
+         <input-type value-pairs-name="ja_nein_nix">dropdown</input-type>
+         <hint>Wählen Sie hier aus, ob die Publikation peer-reviewed wurde. Wenn Sie nicht sicher sind, wählen Sie bitte nichts aus.</hint>
+         <required></required>
+        </field>
 <!--
        <field>
          <dc-schema>openaire</dc-schema>
@@ -1477,6 +1488,17 @@
          <hint>Ist dieser Datensatz noch "in press" (also noch nicht wirklich veröffentlicht)?</hint>
          <visibility>workflow</visibility>
         </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier>peerreviewed</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Peer Reviewed?</label>
+         <input-type value-pairs-name="ja_nein_nix">dropdown</input-type>
+         <hint>Wählen Sie hier aus, ob die Publikation peer-reviewed wurde. Wenn Sie nicht sicher sind, wählen Sie bitte nichts aus.</hint>
+         <required></required>
+        </field>
 <!--
        <field>
          <dc-schema>tuhh</dc-schema>
@@ -1875,6 +1897,21 @@
    </value-pairs>
 
    <value-pairs value-pairs-name="oai_flag_de" dc-term="show">
+     <pair>
+       <displayed-value>Ja</displayed-value>
+       <stored-value>true</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Nein</displayed-value>
+       <stored-value>false</stored-value>
+     </pair>
+   </value-pairs>
+
+   <value-pairs value-pairs-name="ja_nein_nix" dc-term="nowhere">
+     <pair>
+       <displayed-value>Unbekannt</displayed-value>
+       <stored-value></stored-value>
+     </pair>
      <pair>
        <displayed-value>Ja</displayed-value>
        <stored-value>true</stored-value>
