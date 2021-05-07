@@ -105,8 +105,11 @@ footer {
 
 .media.scopus, .media.scopus_aggregate, .media.scopus_count,
 .media.scopus a, .media.scopus_aggregate a, .media.scopus_count a {
-    color: white;
-    background: #ff7800;
+/*    color: white;
+    background: #ff7800; */
+    color: #333;
+    background: #fff;
+    border: solid 1px #dcdcdc;
 }
 .media.pubmed, .media.pubmed_aggregate, .media.pubmed_count,
 .media.pubmed a, .media.pubmed_aggregate a, .media.pubmed_count a {
