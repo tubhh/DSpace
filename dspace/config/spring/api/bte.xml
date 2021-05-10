@@ -487,7 +487,7 @@
 	</bean>
 	
 	<bean name="authorsModifier"
-		class="org.dspace.submit.lookup.AuthorityLookupModifier">
+		class="org.dspace.submit.lookup.OrcidLookupModifier">
 		<property name="searchService" ref="org.dspace.discovery.SearchService" />
 		<property name="resourceTypeID" value="9" />
 		<property name="metadataInputConfiguration">
@@ -507,12 +507,6 @@
 			<list>
 				<value>authors</value>
 			</list>
-		</property>
-		<property name="mappingIdentifierCheck">
-			<!-- wether to check if the metadata has one of the following identifiers -->
-			<map>
-				<entry key="orcid" value="orcid" />
-			</map>
 		</property>
 		<property name="clazzCrisObject" value="org.dspace.app.cris.model.ResearcherPage" />
 	</bean>

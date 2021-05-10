@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.app.cris.model.ACrisObject;
 import org.dspace.app.cris.util.ResearcherPageUtils;
+import org.dspace.content.DSpaceObject;
 import org.dspace.content.authority.Choices;
 import org.dspace.discovery.DiscoverQuery;
 import org.dspace.discovery.DiscoverResult;
@@ -35,10 +36,10 @@ import gr.ekt.bte.core.Value;
  * found
  *
  */
-public class AuthorityLookupModifier<T extends ACrisObject>
+public class OrcidLookupModifier<T extends ACrisObject>
         extends AbstractModifier
 {
-    private static Logger log = Logger.getLogger(AuthorityLookupModifier.class);
+    private static Logger log = Logger.getLogger(OrcidLookupModifier.class);
 
     /**
      * the key is the BTE field, the value the SOLR field
@@ -49,7 +50,7 @@ public class AuthorityLookupModifier<T extends ACrisObject>
      * the key is the CRIS object prop name, the value the BTE field
      */
     private Map<String, String> mappingOutputConfiguration;
-
+    
 	// the list of BTE field that should be linked to the CRIS object if found via
 	// the authority framework. They need to appear in the enhanced fields map as
 	// well
@@ -61,9 +62,9 @@ public class AuthorityLookupModifier<T extends ACrisObject>
 
     private Class<T> clazzCrisObject;
 
-    public AuthorityLookupModifier()
+    public OrcidLookupModifier()
     {
-        super("AuthorityLookupModifier");
+        super("OrcidLookupModifier");
     }
 
     @Override
@@ -72,12 +73,16 @@ public class AuthorityLookupModifier<T extends ACrisObject>
         try
         {
         	List<T> crisObjects = new ArrayList<T>();
+        	List<Integer> crisConfidence = new ArrayList<Integer>();
         	
             for (String mm : metadataInputConfiguration.keySet())
             {
             	// lookup for the cris object using the preferred field
                 List<String> values = new ArrayList<String>();
                 values.addAll(normalize(getValue(rec, mm)));
+                
+                List<String> orcid = new ArrayList<String>();
+                orcid.addAll(normalize(getValue(rec, "orcid")));
                 int pos = 0;
                 for (String value : values)
                 {
@@ -90,21 +95,34 @@ public class AuthorityLookupModifier<T extends ACrisObject>
                     {
                         DiscoverQuery query = new DiscoverQuery();
                         query.setQuery("search.resourcetype:" + resourceTypeID
-                                + " AND " + metadataInputConfiguration.get(mm)
-                                + ":\"" + value + "\"");
+                                + " AND (orcid:\"" + orcid.get(pos) +"\" OR " + metadataInputConfiguration.get(mm)
+                                + ":\"" + value + "\")");
                         DiscoverResult result = searchService.search(null,
                                 query, true);
                         
                         T cris = null;
-                        if (result.getTotalSearchResults() == 1)
+                        boolean accepted = true;
+                        if (result.getTotalSearchResults() >= 1)
                         {
                             cris = (T) result.getDspaceObjects().get(0);
+                            String orcidValue = cris.getMetadata("orcid");
+                            if(StringUtils.isNotBlank(orcidValue)) {
+                                if(!orcidValue.equals(orcid.get(pos))) {
+                                    cris = null;
+                                }
+                            } else {
+                                // UNCERTAIN CONFIDENCE
+                                accepted = false;
+                            }
                         }
+                        
                         if (crisObjects.size() > pos) {
                         	crisObjects.set(pos, cris);
+                        	crisConfidence.set(pos, accepted?Choices.CF_ACCEPTED:Choices.CF_UNCERTAIN);
                         }
                         else {
                         	crisObjects.add(cris);
+                        	crisConfidence.add(accepted?Choices.CF_ACCEPTED:Choices.CF_UNCERTAIN);
                         }
                     }
                     pos++;                    
@@ -130,7 +148,7 @@ public class AuthorityLookupModifier<T extends ACrisObject>
 							if (mappingAuthorityConfiguration.contains(bteField)) {
 								newValues.add(new StringValue(ResearcherPageUtils.getStringValue(cris, propShortname)
 										+ SubmissionLookupService.SEPARATOR_VALUE_REGEX + cris.getCrisID()
-										+ SubmissionLookupService.SEPARATOR_VALUE_REGEX + Choices.CF_ACCEPTED));
+										+ SubmissionLookupService.SEPARATOR_VALUE_REGEX + crisConfidence.get(pos)));
 							} else {
 								newValues.add(new StringValue(ResearcherPageUtils.getStringValue(cris, propShortname)));
 							}
@@ -210,7 +228,7 @@ public class AuthorityLookupModifier<T extends ACrisObject>
         this.mappingOutputConfiguration = mappingOutputConfiguration;
     }
 
-    public void setMappingAuthorityConfiguration(
+	public void setMappingAuthorityConfiguration(
             List<String> mappingAuthorityConfiguration)
     {
         this.mappingAuthorityConfiguration = mappingAuthorityConfiguration;
