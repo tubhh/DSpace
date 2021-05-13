@@ -27,7 +27,7 @@ public class AuthorityLookupModifier<T extends ACrisObject>
 {
     public AuthorityLookupModifier()
     {
-        super(AbstractLookupModifier.class.getSimpleName());
+        super(AuthorityLookupModifier.class.getSimpleName());
     }
     
     protected String getQuery(String value, String field, Integer resID, List extraMd, Integer pos)

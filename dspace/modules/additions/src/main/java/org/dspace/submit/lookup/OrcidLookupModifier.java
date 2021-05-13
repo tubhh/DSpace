@@ -35,7 +35,7 @@ public class OrcidLookupModifier<T extends ACrisObject>
     protected String getQuery(String value, String field, Integer resID, List orcid, Integer pos) 
     {
     	return "search.resourcetype:" + resID
-                + " AND (crisrp.orcid:\"" + orcid.get(pos) +"\"^50 OR " + field
+                + " AND (crisrp.orcid:\"" + orcid.get(pos) +"\" OR " + field
                 + ":\"" + value + "\")";
     }
     
@@ -63,10 +63,11 @@ public class OrcidLookupModifier<T extends ACrisObject>
         				cris = (T) candidate;
         				accepted = true;
         				break;
-        			}	// keep as uncertain candidate the first cris without orcid
-        			else if (cris == null && StringUtils.isBlank(orcidValue))
+        			}	// if the orcids don't match then take the first candidate with blank orcid and keep uncertain
+        			else if (StringUtils.isBlank(orcidValue))
         			{
         				cris = (T) candidate;
+        				break;
 					}
         		}
         	}
