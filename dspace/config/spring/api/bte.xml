@@ -502,7 +502,7 @@
 	</bean>
 	
 	<bean name="authorsModifier"
-		class="org.dspace.submit.lookup.AuthorityLookupModifier">
+		class="org.dspace.submit.lookup.OrcidLookupModifier">
 		<property name="searchService" ref="org.dspace.discovery.SearchService" />
 		<property name="resourceTypeID" value="9" />
 		<property name="metadataInputConfiguration">
