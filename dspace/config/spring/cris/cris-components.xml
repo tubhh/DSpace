@@ -762,7 +762,7 @@
 		<property name="types">
 			<map>
 				<entry key="selected" value-ref="selectedPublicationForEventComponent" />				
-				<entry key="journalList" value-ref="allPublicationForEventComponent" />
+				<entry key="eventList" value-ref="allPublicationForEventComponent" />
 			</map>
 		</property>
 	</bean>
@@ -785,7 +785,7 @@
 	</bean>
 
 	<bean id="allPublicationForEventComponent" class="org.dspace.app.webui.cris.components.BeanFacetComponent">
-		<property name="componentIdentifier" value="journalList" />
+		<property name="componentIdentifier" value="eventList" />
 		<property name="facetQuery">
 			<value>*:*</value>
 		</property>
