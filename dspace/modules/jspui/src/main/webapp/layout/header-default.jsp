@@ -21,6 +21,7 @@
 <%@ page import="org.dspace.app.webui.util.JSPManager" %>
 <%@ page import="org.dspace.core.ConfigurationManager" %>
 <%@ page import="org.dspace.app.util.Util" %>
+<%@ page import="org.dspace.core.Utils"%>
 <%@ page import="javax.servlet.jsp.jstl.core.*" %>
 <%@ page import="javax.servlet.jsp.jstl.fmt.*" %>
 <%@ page import="java.util.Locale"%>
@@ -207,7 +208,7 @@ for (int i = supportedLocales.length-1; i >= 0; i--)
 %>
         <a class ="langChange"
                   onclick="javascript:document.langrepost.locale.value='<%=supportedLocales[i].toString()%>';
-                  var t = '<%=request.getParameter("type")%>';
+                  var t = '<%=Utils.addEntities(request.getParameter("type"))%>';
                   if (t != null) {
                       document.langrepost.subst_type.value=t;
                       document.langrepost.subst_type.setAttribute('name', 'type');
