@@ -486,7 +486,19 @@
          <input-type>name</input-type>
          <hint>Enter the name of your thesis referee(s) (without academic title) here.</hint>
          <required></required>
-         <type-bind>Thesis,Projectthesis</type-bind>
+         <type-bind>Thesis</type-bind>
+       </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>supervisor</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Supervisor</label>
+         <input-type>name</input-type>
+         <hint>Enter the name of your thesis supervisor(s) (without academic title) here.</hint>
+         <required></required>
+         <type-bind>Projectthesis</type-bind>
        </field>
 
        <field>
@@ -1474,7 +1486,19 @@
          <input-type>name</input-type>
          <hint>Enter the name of your thesis referee(s) (without academic title) here.</hint>
          <required></required>
-         <type-bind>Thesis,Projectthesis</type-bind>
+         <type-bind>Thesis</type-bind>
+       </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>supervisor</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Supervisor</label>
+         <input-type>name</input-type>
+         <hint>Enter the name of your thesis supervisor(s) (without academic title) here.</hint>
+         <required></required>
+         <type-bind>Projectthesis</type-bind>
        </field>
 
        <field>

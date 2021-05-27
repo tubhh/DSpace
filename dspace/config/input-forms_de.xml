@@ -445,9 +445,21 @@
          <repeatable>true</repeatable>
          <label>Gutachter</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen weiterer Gutachter ohne akademischen Titel ein.</hint>
+         <hint>Tragen Sie hier die Namen weiterer Gutachter*innen ohne akademischen Titel ein.</hint>
          <required></required>
          <type-bind>Thesis,Projectthesis</type-bind>
+       </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>supervisor</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Betreuung</label>
+         <input-type>name</input-type>
+         <hint>Tragen Sie hier die Namen der Betreuer*innen ohne akademischen Titel ein.</hint>
+         <required></required>
+         <type-bind>Projectthesis</type-bind>
        </field>
 
        <field>
@@ -1430,9 +1442,21 @@
          <repeatable>true</repeatable>
          <label>Gutachter</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen weiterer Gutachter ohne akademischen Titel ein.</hint>
+         <hint>Tragen Sie hier die Namen weiterer Gutachter*innen ohne akademischen Titel ein.</hint>
          <required></required>
-         <type-bind>Thesis,Projectthesis</type-bind>
+         <type-bind>Thesis</type-bind>
+       </field>
+
+       <field>
+         <dc-schema>local</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>supervisor</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Betreuung</label>
+         <input-type>name</input-type>
+         <hint>Tragen Sie hier die Namen der Betreuer*innen ohne akademischen Titel ein.</hint>
+         <required></required>
+         <type-bind>Projectthesis</type-bind>
        </field>
 
        <field>
