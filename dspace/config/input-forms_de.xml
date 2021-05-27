@@ -447,7 +447,7 @@
          <input-type>name</input-type>
          <hint>Tragen Sie hier die Namen weiterer Gutachter*innen ohne akademischen Titel ein.</hint>
          <required></required>
-         <type-bind>Thesis,Projectthesis</type-bind>
+         <type-bind>Thesis</type-bind>
        </field>
 
        <field>
