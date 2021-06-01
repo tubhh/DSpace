@@ -889,34 +889,6 @@ if (dedupEnabled && admin_button) { %>
       </div>
 <%------ End Feedback Box from Bamberg University -------------%>
 
-<%------ Download-All-Button ---------------%>
-<%
-    Bundle[] zip = item.getBundles("ARCHIVE");
-    // is there an archive bundle (containing a zip file)?
-    if (zip.length > 0) {
-        Bitstream tb = zip[0].getBitstreamByName("container.zip");
-
-        if (tb != null) {
-            String myPath = request.getContextPath() + "/retrieve/" + tb.getID() + "/"
-                          + UIUtil.encodeBitstreamName(tb.getName(),
-                          Constants.DEFAULT_ENCODING);
-%>
-      <div class="col-sm-5 col-md-4 col-lg-3">
-        <div class="panel panel-info">
-          <div class="panel-heading">
-            <h3 class="panel-title larger-panel-title">
-              <fmt:message key="jsp.display-item.info.download-all" />
-            </h3>
-          </div>
-          <div class="panel-list">
-            <a href="<%=myPath%>"><fmt:message key="jsp.display-item.button.download-all" /></a>
-          </div>
-        </div>
-      </div>
-<%
-        }
-    }
-%>
 
 <%------ CSL-Einbindung -----%>
 <%
@@ -1081,6 +1053,25 @@ if (!citationGenerator.equals("") && (StringUtils.isNotBlank(doiMd) || StringUti
 </div>
 <!----------------- Ende BibTeX-Export ------------------------->
 </div>
+<%------ Download-All-Button ---------------%>
+<%
+    Bundle[] zip = item.getBundles("ARCHIVE");
+    // is there an archive bundle (containing a zip file)?
+    if (zip.length > 0) {
+        Bitstream tb = zip[0].getBitstreamByName("container.zip");
+
+        if (tb != null) {
+            String myPath = request.getContextPath() + "/retrieve/" + tb.getID() + "/"
+                          + UIUtil.encodeBitstreamName(tb.getName(),
+                          Constants.DEFAULT_ENCODING);
+%>
+      <div>
+            <a href="<%=myPath%>" class="btn btn-default"><fmt:message key="jsp.display-item.button.download-all" /></a>
+      </div>
+<%
+        }
+    }
+%>
 </div>
 <div class="container">
     <%-- Versioning table --%>
