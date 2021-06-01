@@ -369,7 +369,7 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
 
         for (Bitstream bitstream : originalBitstreams) {
             if (!StringUtils.equals(checksumMap.get(
-                    BAGIT_PAYLOAD_DIR + getMd5FileName(bitstream.getName())), bitstream.getChecksum())) {
+                    BAGIT_PAYLOAD_DIR + bitstream.getName()), bitstream.getChecksum())) {
                 return false;
             }
         }
@@ -456,7 +456,7 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
             StringBuffer checksums = new StringBuffer();
 
             for (Bitstream bitstream : bitstreamList) {
-                String fileName = getMd5FileName(bitstream.getName());
+                String fileName = bitstream.getName();
                 // You can't have several files with the same name in a zip
                 if (fileNamesInZip.contains(fileName)) {
                     continue;
