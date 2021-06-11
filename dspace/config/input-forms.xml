@@ -71,7 +71,7 @@
          <repeatable>true</repeatable>
          <label>Authors</label>
          <input-type>name</input-type>
-         <hint>Enter the names of the authors of this item below.</hint>
+         <hint>Enter the names of the authors of this item below. If you know the ORCID of the author, you can type the ORCID as last name and use the ORCID lookup to find that person.</hint>
          <required></required>
        </field>
 
@@ -82,7 +82,7 @@
          <repeatable>true</repeatable>
          <label>Contributors (persons)</label>
          <input-type value-pairs-name="common_roles_en">qualdrop_value</input-type>
-         <hint>Enter the names of contributing persons (last name, first name) here and select their role</hint>
+         <hint>Enter the names of contributing persons (last name, first name) here and select their role. If you know the ORCID of the person, you can type the ORCID here and use the ORCID lookup to find that person.</hint>
          <required></required>
        </field>
 
@@ -472,7 +472,7 @@
          <repeatable>true</repeatable>
          <label>Main Advisor</label>
          <input-type>name</input-type>
-         <hint>Enter the name of your main thesis advisor (without academic title) here.</hint>
+         <hint>Enter the name of your main thesis advisor (without academic title) here. If you know the ORCID of the person, you can type the ORCID as the last name and use the ORCID lookup to find that person.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -484,7 +484,7 @@
          <repeatable>true</repeatable>
          <label>Referee</label>
          <input-type>name</input-type>
-         <hint>Enter the name of your thesis referee(s) (without academic title) here.</hint>
+         <hint>Enter the name of your thesis referee(s) (without academic title) here. If you know the ORCID of the person, you can type the ORCID as the last name and use the ORCID lookup to find that person.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -496,7 +496,7 @@
          <repeatable>true</repeatable>
          <label>Supervisor</label>
          <input-type>name</input-type>
-         <hint>Enter the name of your thesis supervisor(s) (without academic title) here.</hint>
+         <hint>Enter the name of your thesis supervisor(s) (without academic title) here. If you know the ORCID of the person, you can type the ORCID as the last name and use the ORCID lookup to find that person.</hint>
          <required></required>
          <type-bind>Projectthesis</type-bind>
        </field>
@@ -858,7 +858,7 @@
          <label>Author</label>
          <input-type>name</input-type>
          <!--<hint>Enter the names of the authors of this item below.</hint>-->
-         <required>Please enter the author(s) of the dataset.</required>
+         <required>Please enter the author(s) of the dataset. If you know the ORCID of the person, you can type the ORCID as the last name and use the ORCID lookup to find that person.</required>
        </field>
 
        <field>
@@ -868,7 +868,7 @@
          <repeatable>true</repeatable>
          <label>Personal Contributors</label>
          <input-type value-pairs-name="contributor_fdm_en">qualdrop_value</input-type>
-         <hint>Enter the names of the contributing persons (last name, first name) here and select their role</hint>
+         <hint>Enter the names of the contributing persons (last name, first name) here and select their role. If you know the ORCID of the person, you can type the ORCID here and use the ORCID lookup to find that person.</hint>
          <required></required>
        </field>
 
@@ -1119,7 +1119,7 @@
          <repeatable>true</repeatable>
          <label>Authors</label>
          <input-type>name</input-type>
-         <hint>Enter the names of the authors of this item below.</hint>
+         <hint>Enter the names of the authors of this item below. If you know the ORCID of the person, you can type the ORCID as the last name and use the ORCID lookup to find that person.</hint>
          <required></required>
        </field>
 
@@ -1130,7 +1130,7 @@
          <repeatable>true</repeatable>
          <label>Contributors (persons)</label>
          <input-type value-pairs-name="common_roles_en">qualdrop_value</input-type>
-         <hint>Enter the names of contributing persons (last name, first name) here and select their role</hint>
+         <hint>Enter the names of contributing persons (last name, first name) here and select their role. If you know the ORCID of the person, you can type the ORCID here and use the ORCID lookup to find that person.</hint>
          <required></required>
        </field>
 
@@ -1472,7 +1472,7 @@
          <repeatable>true</repeatable>
          <label>Main Advisor</label>
          <input-type>name</input-type>
-         <hint>Enter the name of your main thesis advisor (without academic title) here.</hint>
+         <hint>Enter the name of your main thesis advisor (without academic title) here. If you know the ORCID of the person, you can type the ORCID as the last name and use the ORCID lookup to find that person.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -1484,7 +1484,7 @@
          <repeatable>true</repeatable>
          <label>Referee</label>
          <input-type>name</input-type>
-         <hint>Enter the name of your thesis referee(s) (without academic title) here.</hint>
+         <hint>Enter the name of your thesis referee(s) (without academic title) here. If you know the ORCID of the person, you can type the ORCID as the last name and use the ORCID lookup to find that person.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -1496,7 +1496,7 @@
          <repeatable>true</repeatable>
          <label>Supervisor</label>
          <input-type>name</input-type>
-         <hint>Enter the name of your thesis supervisor(s) (without academic title) here.</hint>
+         <hint>Enter the name of your thesis supervisor(s) (without academic title) here. If you know the ORCID of the person, you can type the ORCID as the last name and use the ORCID lookup to find that person.</hint>
          <required></required>
          <type-bind>Projectthesis</type-bind>
        </field>

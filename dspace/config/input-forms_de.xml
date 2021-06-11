@@ -71,7 +71,7 @@
          <repeatable>true</repeatable>
          <label>Autor/Autorin</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen der Autoren bzw. der Autorinnen ein.</hint>
+         <hint>Tragen Sie hier die Namen der Autoren bzw. der Autorinnen ein. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID als Nachnamen eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
        </field>
 
@@ -82,7 +82,7 @@
          <repeatable>true</repeatable>
          <label>Weitere Beteiligte Personen</label>
          <input-type value-pairs-name="common_roles_de">qualdrop_value</input-type>
-         <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) ein und wählen Sie die Rolle aus.</hint>
+         <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) ein und wählen Sie die Rolle aus. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID hier eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
        </field>
 
@@ -433,7 +433,7 @@
          <repeatable>false</repeatable>
          <label>Hauptberichter</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen des Hauptgutachters (Doktorvater) ohne akademischen Titel ein.</hint>
+         <hint>Tragen Sie hier die Namen des Hauptgutachters (Doktorvater) ohne akademischen Titel ein. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID als Nachnamen eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -445,7 +445,7 @@
          <repeatable>true</repeatable>
          <label>Gutachter</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen weiterer Gutachter*innen ohne akademischen Titel ein.</hint>
+         <hint>Tragen Sie hier die Namen weiterer Gutachter*innen ohne akademischen Titel ein. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID als Nachnamen eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -457,7 +457,7 @@
          <repeatable>true</repeatable>
          <label>Betreuung</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen der Betreuer*innen ohne akademischen Titel ein.</hint>
+         <hint>Tragen Sie hier die Namen der Betreuer*innen ohne akademischen Titel ein. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID als Nachnamen eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
          <type-bind>Projectthesis</type-bind>
        </field>
@@ -817,7 +817,7 @@
          <repeatable>true</repeatable>
          <label>Weitere Beteiligte</label>
          <input-type value-pairs-name="contributor_fdm_de">qualdrop_value</input-type>
-         <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) und/oder Institutionen ein und wählen Sie die Rolle aus.</hint>
+         <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) und/oder Institutionen ein und wählen Sie die Rolle aus. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
        </field>
 
@@ -1079,7 +1079,7 @@
          <repeatable>true</repeatable>
          <label>Autor/Autorin</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen der Autoren bzw. der Autorinnen ein.</hint>
+         <hint>Tragen Sie hier die Namen der Autoren bzw. der Autorinnen ein. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID als Nachnamen eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
        </field>
 
@@ -1090,7 +1090,7 @@
          <repeatable>true</repeatable>
          <label>Weitere Beteiligte Personen</label>
          <input-type value-pairs-name="common_roles_de">qualdrop_value</input-type>
-         <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) ein und wählen Sie die Rolle aus.</hint>
+         <hint>Tragen Sie hier die Namen weiterer beteiligter Personen (Nachname, Vorname) ein und wählen Sie die Rolle aus. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
        </field>
 
@@ -1430,7 +1430,7 @@
          <repeatable>false</repeatable>
          <label>Hauptberichter</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen des Hauptgutachters (Doktorvater) ohne akademischen Titel ein.</hint>
+         <hint>Tragen Sie hier die Namen des Hauptgutachters (Doktorvater) ohne akademischen Titel ein. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID als Nachnamen eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -1442,7 +1442,7 @@
          <repeatable>true</repeatable>
          <label>Gutachter</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen weiterer Gutachter*innen ohne akademischen Titel ein.</hint>
+         <hint>Tragen Sie hier die Namen weiterer Gutachter*innen ohne akademischen Titel ein. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID als Nachnamen eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
          <type-bind>Thesis</type-bind>
        </field>
@@ -1454,7 +1454,7 @@
          <repeatable>true</repeatable>
          <label>Betreuung</label>
          <input-type>name</input-type>
-         <hint>Tragen Sie hier die Namen der Betreuer*innen ohne akademischen Titel ein.</hint>
+         <hint>Tragen Sie hier die Namen der Betreuer*innen ohne akademischen Titel ein. Wenn Sie die ORCID dieser Person kennen, können Sie die ORCID als Nachnamen eingeben und die ORCID-Suche nutzen, um diese Person zu finden.</hint>
          <required></required>
          <type-bind>Projectthesis</type-bind>
        </field>
