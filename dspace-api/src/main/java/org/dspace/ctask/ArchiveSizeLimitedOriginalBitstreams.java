@@ -439,6 +439,8 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
     private File createBagitZipArchive(Context context, List<Bitstream> bitstreamList)
             throws SQLException, IOException, AuthorizeException {
 
+        Date now = new Date();
+
         if (bitstreamList == null || bitstreamList.size() == 0) {
             return null;
         }
@@ -456,6 +458,22 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
             StringBuffer checksums = new StringBuffer();
 
             for (Bitstream bitstream : bitstreamList) {
+                // Check for restrictions (restricted bitstreams should not go into the zipfile)
+                List<ResourcePolicy> resourcePolicies = AuthorizeManager.getPoliciesActionFilter(
+                    Curator.curationContext(),
+                    bitstream,
+                    Constants.READ
+                );
+                boolean isRestricted = true;
+                for (ResourcePolicy resourcePolicy : resourcePolicies) {
+                    if (resourcePolicy.getGroupID() == groupAnonymous.getID()) {
+                        isRestricted = false;
+                    }
+                }
+                if (isRestricted) {
+                    continue;
+                }
+
                 String fileName = bitstream.getName();
                 // You can't have several files with the same name in a zip
                 if (fileNamesInZip.contains(fileName)) {
@@ -475,19 +493,21 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
 
             }
 
-            //Write manifest file to zip
-            ZipEntry zipEntry = new ZipEntry(BAGIT_BASE_DIR + BAGIT_MANIFEST_FILE_NAME);
-            zipOutputStream.putNextEntry(zipEntry);
-            zipOutputStream.write(checksums.toString().getBytes());
+            // only write archive if at least one file is not restricted
+            if (fileNamesInZip.size() > 0) {
+                //Write manifest file to zip
+                ZipEntry zipEntry = new ZipEntry(BAGIT_BASE_DIR + BAGIT_MANIFEST_FILE_NAME);
+                zipOutputStream.putNextEntry(zipEntry);
+                zipOutputStream.write(checksums.toString().getBytes());
 
-            //Write begit declation file to zip
-            zipEntry = new ZipEntry(BAGIT_BASE_DIR + BAGIT_DECLARATION_FILE_NAME);
-            zipOutputStream.putNextEntry(zipEntry);
-            zipOutputStream.write(BAGIT_DECLARATION_CONTENT.getBytes());
+                //Write begit declation file to zip
+                zipEntry = new ZipEntry(BAGIT_BASE_DIR + BAGIT_DECLARATION_FILE_NAME);
+                zipOutputStream.putNextEntry(zipEntry);
+                zipOutputStream.write(BAGIT_DECLARATION_CONTENT.getBytes());
 
-            zipOutputStream.close();
-            fileOutputStream.close();
-
+                zipOutputStream.close();
+                fileOutputStream.close();
+            }
         } catch (IOException e) {
             errors.add("Error creating zip archive: " + e);
             throw e;
