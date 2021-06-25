@@ -507,6 +507,8 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
 
                 zipOutputStream.close();
                 fileOutputStream.close();
+            } else {
+                throw new IOException("Error creating zip archive: no files to provide for archive. Maybe all of the files are restricted in accessability?");
             }
         } catch (IOException e) {
             errors.add("Error creating zip archive: " + e);
