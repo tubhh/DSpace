@@ -381,13 +381,13 @@ function DSpaceChoicesLoad(form)
             select.add(new Option(dspace_formatMessage(nonAuthority, value), value), null);
           }
           var defaultSelected = -1;
-          if (selectedByChoices >= 0)
+          if (selectedByChoices > 0)
             defaultSelected = selectedByChoices;
-          else if (selectedByAuthority >= 0)
+          else if (selectedByAuthority > 0)
             defaultSelected = selectedByAuthority;
-          else if (selectedByValue >= 0)
+          else if (selectedByValue > 0)
             defaultSelected = selectedByValue;
-          else if (select.options.length == 1)
+          else if (select.options.length >= 1)
             defaultSelected = 0;
 
           // load default-selected value
