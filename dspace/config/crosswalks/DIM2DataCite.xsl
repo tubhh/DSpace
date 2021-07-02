@@ -318,7 +318,7 @@
                         <familyName><xsl:value-of select="substring-before(., ',')"/></familyName>
                         <xsl:if test="@authority!=''">
                             <nameIdentifier>
-                                <xsl:attribute name="schemeURI">http://orcid.org/</xsl:attribute>
+                                <xsl:attribute name="schemeURI">https://orcid.org/</xsl:attribute>
                                 <xsl:attribute name="nameIdentifierScheme">ORCID</xsl:attribute>
                                 <xsl:value-of select="@authority" />
                             </nameIdentifier>
