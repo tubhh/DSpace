@@ -140,7 +140,8 @@ function renderingDedupSummary(data, type, full) {
 		result = result + '</a><br/>';		
 	}
 	ref = '<dl class="dl-horizontal">';
-	ref += '<dt>'+tmpl("tmpl-deduplication-label-owner",{})+'</dt><dd>' + renderingDedupSubmitter(full.duplicateItem['submitter'],type,full);
+	//ref += '<dt>'+tmpl("tmpl-deduplication-label-owner",{})+'</dt><dd>' + renderingDedupSubmitter(full.duplicateItem['submitter'],type,full);
+	ref += '<dt>'+tmpl("tmpl-deduplication-label-owner",{})+'</dt><dd>' + full.duplicateItem['submitter'][3];
 	ref += '<dt>'+tmpl("tmpl-deduplication-label-identifier",{})+'</dt><dd>';	
 	
 	if(full.handle =='undefined' || full.handle =='' || full.handle == null){
