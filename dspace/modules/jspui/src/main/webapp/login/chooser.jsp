@@ -72,7 +72,13 @@
 		<%-- This kludge is necessary because fmt:message won't
                      evaluate its attributes, so we can't use it on java expr --%>
                 <%= javax.servlet.jsp.jstl.fmt.LocaleSupport.getLocalizedMessage(pageContext, am.loginPageTitle(context)) %>
-                        </a></p></li>
+                        </a>
+                <%
+                    if (am.loginPageTitle(context) == "org.dspace.authenticate.OAuthAuthentication.title") {
+                %>
+                <br/><span style="font-size:12pt;"><fmt:message key="jsp.oauth.orcid.login.help"/></span>
+                <% } %>
+                </p></li>
 <%
         }
         }
