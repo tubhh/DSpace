@@ -118,11 +118,13 @@ public class ResolverDisplayStrategy extends AUniformDisplayStrategy
 
         String startLink = null;
         try
-        {   boolean newwindow=ConfigurationManager.getBooleanProperty("webui.resolver.link.newwindow");
+        {
+            boolean newwindow=ConfigurationManager.getBooleanProperty("webui.resolver.link.newwindow");
+            // do not encode slashes (all other characters should still be encoded for security reasons, though)
             if (newwindow){
-                startLink = "<a target=_blank href=\"" + url + URLEncoder.encode(value, "UTF-8") + "\">";
+                startLink = "<a target=_blank href=\"" + url + URLEncoder.encode(value, "UTF-8").replace("%2F", "/") + "\">";
             } else {
-                startLink = "<a href=\"" + url + URLEncoder.encode(value, "UTF-8") + "\">";
+                startLink = "<a href=\"" + url + URLEncoder.encode(value, "UTF-8").replace("%2F", "/") + "\">";
             }
         }
         catch (UnsupportedEncodingException e)
