@@ -37,6 +37,9 @@ Disallow: */browse*
 Disallow: /*.h5$
 Disallow: /*_raw.zip$
 Disallow: /*_reco.zip$
+Disallow: /*.tif$
+Allow: /bitstream/*.pdf
+Disallow: /bitstream/
 
 ##############################
 # Section for misbehaving bots
@@ -55,6 +58,9 @@ Disallow: /cris
 Disallow: /*.h5$
 Disallow: /*_raw.zip$
 Disallow: /*_reco.zip$
+Disallow: /*.tif$
+Allow: /bitstream/*.pdf
+Disallow: /bitstream/
 
 # advertising-related bots:
 User-agent: Mediapartners-Google*
