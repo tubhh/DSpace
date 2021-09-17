@@ -18,6 +18,15 @@
     <!--   mods:/abstract   ====>   dc.description.abstract   -->
     <xsl:template match="mods:mods/mods:abstract">
         <xsl:element name="dim:field">
+            <xsl:attribute name="mdschema">tuhh</xsl:attribute>
+            <xsl:attribute name="element">abstract</xsl:attribute>
+            <xsl:attribute name="qualifier">english</xsl:attribute> 
+            <xsl:attribute name="lang">
+                <xsl:value-of select="@xml:lang"/>
+            </xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+        <xsl:element name="dim:field">
             <xsl:attribute name="mdschema">dc</xsl:attribute>
             <xsl:attribute name="element">description</xsl:attribute>
             <xsl:attribute name="qualifier">abstract</xsl:attribute> 
@@ -218,7 +227,7 @@
     <!--  mods:/subject/topic ====>   dc.subject.other  -->
     <xsl:template match="mods:mods/mods:subject">
         <xsl:for-each select="mods:topic">
-            <dim:field mdschema="dc" element="subject" qualifier="other">
+            <dim:field mdschema="dc" element="subject">
                 <xsl:value-of select="."/>
             </dim:field>
         </xsl:for-each>
