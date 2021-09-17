@@ -153,6 +153,7 @@
         <xsl:if test="mods:dateIssued[@encoding='iso8601']">
             <dim:field mdschema="dc" element="date" qualifier="issued">
                 <xsl:value-of select="mods:dateIssued"/>
+                <xsl:variable name="pubyear"><xsl:value-of select="mods:dateIssued"/></xsl:variable>
             </dim:field>
         </xsl:if>
     </xsl:template>
@@ -222,6 +223,29 @@
                 </dim:field>
             </xsl:if>
         </xsl:if>
+
+        <!-- source element dc.identifier.citation -->
+        <dim:field mdschema="dc" element="identifier" qualifier="citation">
+            <xsl:if test="mods:titleInfo/mods:title">
+                <xsl:value-of select="normalize-space(mods:titleInfo/mods:title)" /><xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:if test="mods:titleInfo/mods:title">
+                <xsl:value-of select="normalize-space(mods:part/mods:detail[@type='volume'])" /><xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:if test="mods:titleInfo/mods:title">
+                (<xsl:value-of select="normalize-space(mods:part/mods:detail[@type='issue'])" />)
+            </xsl:if>
+            <xsl:if test="mods:part/mods:extent[@unit='pages']">
+                <xsl:text>: </xsl:text>
+                <xsl:value-of select="normalize-space(mods:part/mods:extent/mods:start)"/><xsl:text>-</xsl:text>
+                <xsl:value-of select="normalize-space(mods:part/mods:extent/mods:end)"/>
+            </xsl:if>
+            <!-- oder artikelnummer (aber wo krieg ich die her?) -->
+            <xsl:if test="../mods:originInfo/mods:dateIssued">
+                (<xsl:value-of select="../mods:originInfo/mods:dateIssued"/>)
+            </xsl:if>
+        </dim:field>
+
     </xsl:template>
     
     <!--  mods:/subject/topic ====>   dc.subject.other  -->
