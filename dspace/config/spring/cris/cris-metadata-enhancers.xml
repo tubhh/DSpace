@@ -296,6 +296,20 @@
 	</bean>
 
 	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="advisorOrcid" />
+		<property name="metadata">
+			<list>
+				<value>placeholder.placeholder.placeholder</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerAdvisorOrcid"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="tuhhseriesid" />
 		<property name="metadata">
 			<list>
@@ -487,6 +501,9 @@
             <property name="applicationService" ref="applicationService" />
         </bean>
 	<bean name="enhancerAdvisorGnd" class="org.dspace.content.integration.defaultvalues.GNDAdvisorAuthorityGenerator">
+            <property name="applicationService" ref="applicationService" />
+        </bean>
+	<bean name="enhancerAdvisorOrcid" class="org.dspace.content.integration.defaultvalues.OrcidAdvisorAuthorityGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>
 	<bean name="enhancerTuhhSeries" class="org.dspace.content.integration.defaultvalues.TUHHSeriesIdGenerator">
