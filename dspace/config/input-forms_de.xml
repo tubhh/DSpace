@@ -202,6 +202,28 @@
        </field>
 
        <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Schriftenreihe</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier den Namen der Schriftenreihe und die Bandnummer an, falls die Arbeit Teil einer Schriftenreihe ist.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Schriftenreihe Bandnummer</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>issn</dc-qualifier>
@@ -281,32 +303,10 @@
        </field>
 
        <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseries</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Schriftenreihe</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier den Namen der Schriftenreihe an, falls die Arbeit Teil einer Schriftenreihe ist.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Schriftenreihe Bandnummer</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Bandnummer innerhalb der Schriftenreihe an, falls die Arbeit Teil einer Schriftenreihe ist.</hint>
-         <required></required>
-       </field>
-
-       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>conference</dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>Konferenz</label>
          <input-type>onebox</input-type>
          <hint>Geben Sie hier den Namen der Konferenz ein, mit der diese Veröffentlichung in Verbindung steht</hint>
@@ -1210,6 +1210,28 @@
        </field>
 
        <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Schriftenreihe</label>
+         <input-type>onebox</input-type>
+         <hint>Geben Sie hier den Namen und die Bandnummer der Schriftenreihe an, falls die Arbeit Teil einer Schriftenreihe ist.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Bandnummer</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>issn</dc-qualifier>
@@ -1289,32 +1311,10 @@
        </field>
 
        <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseries</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Schriftenreihe</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier den Namen der Schriftenreihe an, falls die Arbeit Teil einer Schriftenreihe ist.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Schriftenreihe Bandnummer</label>
-         <input-type>onebox</input-type>
-         <hint>Geben Sie hier die Bandnummer innerhalb der Schriftenreihe an, falls die Arbeit Teil einer Schriftenreihe ist.</hint>
-         <required></required>
-       </field>
-
-       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>conference</dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>Konferenz</label>
          <input-type>onebox</input-type>
          <hint>Geben Sie hier den Namen der Konferenz ein, mit der diese Veröffentlichung in Verbindung steht</hint>
@@ -2163,10 +2163,6 @@
      <pair>
        <displayed-value>GNU General Public License Version 3 (GPL v3)</displayed-value>
        <stored-value>https://opensource.org/licenses/GPL-3.0</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>MIT License</displayed-value>
-       <stored-value>https://mit-license.org/</stored-value>
      </pair>
      <pair>
        <displayed-value>Nutzungsbestimmungen für die Bereitstellung von Geodaten des Bundes (GeoNutzV)</displayed-value>

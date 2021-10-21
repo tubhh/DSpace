@@ -202,6 +202,28 @@
        </field>
 
        <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Series</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the series and the volume number assigned to this item.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Volume Number</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>issn</dc-qualifier>
@@ -318,32 +340,10 @@
        </field>
 
        <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseries</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Series</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the series assigned to this item by your community.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Series Number</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the number of the volume in the series assigned to this item by your community.</hint>
-         <required></required>
-       </field>
-
-       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>conference</dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>Conference</label>
          <input-type>onebox</input-type>
          <hint>Enter the conference name, on that this item was presented</hint>
@@ -1250,6 +1250,28 @@
        </field>
 
        <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Series</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the series and the volume number within this series assigned to this item.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>tuhh</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Volume Number</label>
+         <input-type>onebox</input-type>
+         <hint></hint>
+         <required></required>
+       </field>
+
+       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>identifier</dc-element>
          <dc-qualifier>issn</dc-qualifier>
@@ -1329,32 +1351,10 @@
        </field>
 
        <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseries</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Series</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the series assigned to this item by your community.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>tuhh</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseriesnumber</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Series Number</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the number of the volume in the series assigned to this item by your community.</hint>
-         <required></required>
-       </field>
-
-       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>conference</dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>Conference</label>
          <input-type>onebox</input-type>
          <hint>Enter the conference name, on that this item was presented</hint>
@@ -2204,16 +2204,12 @@
        <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
      </pair>
      <pair>
-       <displayed-value>GNU General Public License Version 3 (GPL v3)</displayed-value>
-       <stored-value>https://opensource.org/licenses/GPL-3.0</stored-value>
-     </pair>
-     <pair>
-       <displayed-value>MIT License</displayed-value>
-       <stored-value>https://mit-license.org/</stored-value>
-     </pair>
-     <pair>
        <displayed-value>Nutzungsbestimmungen für die Bereitstellung von Geodaten des Bundes (GeoNutzV)</displayed-value>
        <stored-value>http://www.gesetze-im-internet.de/geonutzv/</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>GNU General Public License Version 3 (GPL v3)</displayed-value>
+       <stored-value>https://opensource.org/licenses/GPL-3.0</stored-value>
      </pair>
      <pair>
        <displayed-value>In Copyright</displayed-value>
