@@ -2204,6 +2204,10 @@
        <stored-value>https://creativecommons.org/publicdomain/zero/1.0/</stored-value>
      </pair>
      <pair>
+        <displayed-value>MIT License</displayed-value>
+        <stored-value>https://mit-license.org/</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Nutzungsbestimmungen für die Bereitstellung von Geodaten des Bundes (GeoNutzV)</displayed-value>
        <stored-value>http://www.gesetze-im-internet.de/geonutzv/</stored-value>
      </pair>
