@@ -76,6 +76,9 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
     @Override
     public int perform(DSpaceObject dso) throws IOException
     {
+        // Operate on items only
+        if (dso.getType() == Constants.ITEM)
+        {
         distribute(dso);
         if (errors.size() > 0)
         {
@@ -87,6 +90,10 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
                 errorBuilder.append("\n");
             }
             setResult(errorBuilder.toString());
+            return Curator.CURATE_ERROR;
+        }
+        } else {
+            report("This object is not an item, nothing to do...");
             return Curator.CURATE_ERROR;
         }
         return Curator.CURATE_SUCCESS;
