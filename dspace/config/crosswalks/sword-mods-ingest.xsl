@@ -100,12 +100,23 @@
     </xsl:template>
     
     
-    <!--   mods:/name[@type="personal"]  ====>   dc.contributor.[author, editor] -->
-    <xsl:template match="mods:mods/mods:name/mods:role/mods:roleTerm[.='editor' or .='author']">
+    <!--   mods:/name[@type="personal"]  ====>   dc.contributor.[author] -->
+    <xsl:template match="mods:mods/mods:name/mods:role/mods:roleTerm[.='author']">
         <xsl:variable name="contributorName" select="concat(../../mods:namePart[@type='family'],', ',../../mods:namePart[@type='given'])"/>
         <xsl:element name="dim:field">
             <xsl:attribute name="mdschema">dc</xsl:attribute>
             <xsl:attribute name="element">contributor</xsl:attribute>
+            <xsl:attribute name="qualifier">
+                <xsl:value-of select="."/>
+            </xsl:attribute>
+            <xsl:value-of select="$contributorName"/>
+        </xsl:element>
+    <!--   mods:/name[@type="personal"]  ====>   dc.contributor.[editor] -->
+    <xsl:template match="mods:mods/mods:name/mods:role/mods:roleTerm[.='editor']">
+        <xsl:variable name="contributorName" select="concat(../../mods:namePart[@type='family'],', ',../../mods:namePart[@type='given'])"/>
+        <xsl:element name="dim:field">
+            <xsl:attribute name="mdschema">local</xsl:attribute>
+            <xsl:attribute name="element">contributorPerson</xsl:attribute>
             <xsl:attribute name="qualifier">
                 <xsl:value-of select="."/>
             </xsl:attribute>
