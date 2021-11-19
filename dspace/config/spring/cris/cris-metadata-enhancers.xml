@@ -394,6 +394,62 @@
 	</bean>	
 
 	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="contributorOrcid" />
+		<property name="metadata">
+			<list>
+				<value>local.contributorPerson.other</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGenericOrcid"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="contributorGND" />
+		<property name="metadata">
+			<list>
+				<value>local.contributorPerson.other</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGnd"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="dataciteContributorOrcid" />
+		<property name="metadata">
+			<list>
+				<value>datacite.contributor.*</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGenericOrcid"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="dataciteContributorGND" />
+		<property name="metadata">
+			<list>
+				<value>datacite.contributor.*</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGnd"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="refereeOrcid" />
 		<property name="metadata">
 			<list>
