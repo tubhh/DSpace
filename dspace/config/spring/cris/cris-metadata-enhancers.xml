@@ -252,7 +252,7 @@
 			</list>
 		</property>
 	</bean>
-	
+<!--
 	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="creatorOrcid" />
 		<property name="metadata">
@@ -308,7 +308,7 @@
 			</list>
 		</property>
 	</bean>
-
+-->
 	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="tuhhseriesid" />
 		<property name="metadata">
@@ -364,6 +364,90 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="advisorOrcid" />
+		<property name="metadata">
+			<list>
+				<value>dc.contributor.advisor</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGenericOrcid"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="creatorOrcid" />
+		<property name="metadata">
+			<list>
+				<value>dc.contributor.author</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGenericOrcid"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="refereeOrcid" />
+		<property name="metadata">
+			<list>
+				<value>tuhh.contributor.referee</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGenericOrcid"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="advisorGND" />
+		<property name="metadata">
+			<list>
+				<value>dc.contributor.advisor</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGnd"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="creatorGND" />
+		<property name="metadata">
+			<list>
+				<value>dc.contributor.author</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGnd"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="refereeGND" />
+		<property name="metadata">
+			<list>
+				<value>tuhh.contributor.referee</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGnd"/>
+			</list>
+		</property>
+	</bean>	
 
 	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="languageiso639-1" />
@@ -485,18 +569,24 @@
 
 	<bean name="enhancerFulltext" class="org.dspace.content.integration.defaultvalues.FulltextInfoGenerator"/>
 	<bean name="enhancerPermissionFulltext" class="org.dspace.content.integration.defaultvalues.FulltextPermissionGenerator"/>
+<!--
 	<bean name="enhancerOrcid" class="org.dspace.content.integration.defaultvalues.OrcidAuthorityGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>
+-->
 	<bean name="enhancerTypemapper" class="org.dspace.content.integration.defaultvalues.TypeMapper">
             <property name="applicationService" ref="applicationService" />
         </bean>
 	<bean name="enhancerGnd" class="org.dspace.content.integration.defaultvalues.GNDAuthorityGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>
+	<bean name="enhancerGenericOrcid" class="org.dspace.content.integration.defaultvalues.OrcidGenericAuthorityGenerator">
+            <property name="applicationService" ref="applicationService" />
+        </bean>
 	<bean name="enhancerSeriesRef" class="org.dspace.content.integration.defaultvalues.SeriesRefGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>
+<!--
 	<bean name="enhancerAuthorGnd" class="org.dspace.content.integration.defaultvalues.GNDAuthorAuthorityGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>
@@ -506,6 +596,7 @@
 	<bean name="enhancerAdvisorOrcid" class="org.dspace.content.integration.defaultvalues.OrcidAdvisorAuthorityGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>
+-->
 	<bean name="enhancerTuhhSeries" class="org.dspace.content.integration.defaultvalues.TUHHSeriesIdGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>

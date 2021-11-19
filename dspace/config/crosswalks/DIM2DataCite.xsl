@@ -156,6 +156,7 @@
                     </contributorName>
                 </xsl:element>
                 <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='contributor'][not(@qualifier='author')]" />
+                <xsl:apply-templates select="//dspace:field[@mdschema='tuhh' and @element='contributor' and @qualifier='referee']" />
             </contributors>
 
             <!-- 
@@ -465,12 +466,36 @@
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@qualifier='advisor'">
-                <xsl:element name="contributor">
-                    <xsl:attribute name="contributorType">RelatedPerson</xsl:attribute>
-                    <contributorName>
-                        <xsl:value-of select="." />
-                    </contributorName>
-                </xsl:element>
+            <xsl:if test="//dspace:field[@mdschema='item' and @element='advisorOrcid']">
+                <xsl:for-each select="//dspace:field[@mdschema='item' and @element='advisorOrcid']">
+                    <xsl:variable name="i">
+                        <xsl:number value="position()" />
+                    </xsl:variable>
+                    <contributor>
+                        <xsl:attribute name="contributorType">RelatedPerson</xsl:attribute>
+                        <contributorName>
+                            <xsl:attribute name="nameType">Personal</xsl:attribute>
+                            <xsl:value-of select="." />
+                        </contributorName>
+                        <givenName><xsl:value-of select="substring-after(., ',')"/></givenName>
+                        <familyName><xsl:value-of select="substring-before(., ',')"/></familyName>
+                        <xsl:if test="@authority!=''">
+                            <nameIdentifier>
+                                <xsl:attribute name="schemeURI">https://orcid.org/</xsl:attribute>
+                                <xsl:attribute name="nameIdentifierScheme">ORCID</xsl:attribute>
+                                <xsl:value-of select="@authority" />
+                            </nameIdentifier>
+                        </xsl:if>
+                        <xsl:if test="//dspace:field[@mdschema='item' and @element='advisorGND'][number($i)]/@authority!=''">
+                            <nameIdentifier>
+                                <xsl:attribute name="nameIdentifierScheme">GND</xsl:attribute>
+                                <xsl:attribute name="schemeURI">https://d-nb.info/gnd/</xsl:attribute>
+                                <xsl:value-of select="//dspace:field[@mdschema='item' and @element='advisorGND'][number($i)]/@authority" />
+                            </nameIdentifier>
+                        </xsl:if>
+                    </contributor>
+                </xsl:for-each>
+            </xsl:if>
             </xsl:when>
             <xsl:when test="@qualifier='illustrator'">
                 <xsl:element name="contributor">
@@ -497,6 +522,42 @@
                 </xsl:element>
             </xsl:when>
         </xsl:choose>
+    </xsl:template>
+    <!-- 
+        DataCite (7), DataCite (7.1)
+        Adds contributor and contributorType information
+    -->
+    <xsl:template match="//dspace:field[@mdschema='tuhh' and @element='contributor' and @qualifier='referee']">
+            <xsl:if test="//dspace:field[@mdschema='item' and @element='refereeOrcid']">
+                <xsl:for-each select="//dspace:field[@mdschema='item' and @element='refereeOrcid']">
+                    <xsl:variable name="i">
+                        <xsl:number value="position()" />
+                    </xsl:variable>
+                    <contributor>
+                        <xsl:attribute name="contributorType">Other</xsl:attribute>
+                        <contributorName>
+                            <xsl:attribute name="nameType">Personal</xsl:attribute>
+                            <xsl:value-of select="." />
+                        </contributorName>
+                        <givenName><xsl:value-of select="substring-after(., ',')"/></givenName>
+                        <familyName><xsl:value-of select="substring-before(., ',')"/></familyName>
+                        <xsl:if test="@authority!=''">
+                            <nameIdentifier>
+                                <xsl:attribute name="schemeURI">https://orcid.org/</xsl:attribute>
+                                <xsl:attribute name="nameIdentifierScheme">ORCID</xsl:attribute>
+                                <xsl:value-of select="@authority" />
+                            </nameIdentifier>
+                        </xsl:if>
+                        <xsl:if test="//dspace:field[@mdschema='item' and @element='refereeGND'][number($i)]/@authority!=''">
+                            <nameIdentifier>
+                                <xsl:attribute name="nameIdentifierScheme">GND</xsl:attribute>
+                                <xsl:attribute name="schemeURI">https://d-nb.info/gnd/</xsl:attribute>
+                                <xsl:value-of select="//dspace:field[@mdschema='item' and @element='refereeGND'][number($i)]/@authority" />
+                            </nameIdentifier>
+                        </xsl:if>
+                    </contributor>
+                </xsl:for-each>
+            </xsl:if>
     </xsl:template>
 
     <!-- 

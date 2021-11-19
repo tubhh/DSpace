@@ -23,52 +23,45 @@ import org.dspace.core.Constants;
 
 import org.apache.log4j.Logger;
 
-public class GNDAuthorityGenerator implements EnhancedValuesGenerator
+public class OrcidGenericAuthorityGenerator implements EnhancedValuesGenerator
 {
 
     private ApplicationService applicationService;
-    protected String enhancingRole;
-
     private static final Logger log = Logger
-            .getLogger(GNDAuthorityGenerator.class);
+            .getLogger(OrcidAuthorityGenerator.class);
 
     public void setApplicationService(ApplicationService applicationService){
         this.applicationService = applicationService;
-    }
-
-    public void setEnhancingRole(String role){
-        this.enhancingRole = role;
     }
 
     @Override
     public DefaultValuesBean generateValues(Item item, String schema,
             String element, String qualifier, String value)
     {
-log.debug("Starting to enhance item "+item.getID()+"  (Handle "+item.getHandle()+") on "+schema+"."+element+"."+qualifier+" with value "+value);
+log.debug("Starting to enhance item "+item.getID()+" with generic ORCID enhancer (Handle "+item.getHandle()+") on "+schema+"."+element+"."+qualifier+" with value "+value);
         DefaultValuesBean result = new DefaultValuesBean();
         result.setLanguage("en");
         result.setMetadataSchema(schema);
         result.setMetadataElement(element);
         result.setMetadataQualifier(qualifier);
-
+        int num = item.getMetadata(schema, element, qualifier, Item.ANY).length;
         Metadatum[] m = item.getMetadata(schema, element, qualifier, Item.ANY);
-        int num = m.length;
         String[] values = new String[num];
         String[] authorities = new String[num];
         int[] confidences = new int[num];
-log.debug("Found "+num+" "+enhancingRole+" elements");
+log.debug("Found "+num+" author elements");
         for (int idx = 0; idx < num; idx++){
-log.debug("Found "+enhancingRole+" element "+m[idx].value+" at Item ID "+item.getID()+" (Handle "+item.getHandle()+")");
+log.debug("Found author element "+m[idx].value+" at Item ID "+item.getID()+" (Handle "+item.getHandle()+")");
     	if (StringUtils.isNotEmpty(m[idx].authority)){
 log.debug("Item ID "+item.getID()+" (Handle "+item.getHandle()+") has authorityKey "+m[idx].authority);
     	    ResearcherPage rp = applicationService
                         .getResearcherByAuthorityKey(m[idx].authority);
             if (rp != null) {
-    	        String gndid = ResearcherPageUtils.getStringValue(rp, "gndid");
-                if (StringUtils.isNotBlank(gndid)) {
-log.debug("Found GND ID "+gndid+" for "+enhancingRole+" "+m[idx].value);
+    	        String orcid = ResearcherPageUtils.getStringValue(rp, "orcid");
+                if (StringUtils.isNotBlank(orcid)) {
+log.debug("Found ORCID "+orcid+" for author "+m[idx].value);
                     values[idx] = m[idx].value;
-    		    authorities[idx]=gndid;
+    		    authorities[idx]=orcid;
     		    confidences[idx]=Choices.CF_ACCEPTED;
     	        }
     	        else {
