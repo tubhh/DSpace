@@ -58,6 +58,7 @@ log.debug("Starting to enhance item "+item.getID()+"  (Handle "+item.getHandle()
         int[] confidences = new int[num];
 log.debug("Found "+num+" "+enhancingRole+" elements");
         for (int idx = 0; idx < num; idx++){
+        if (value.equals(m[idx].value)) {
 log.debug("Found "+enhancingRole+" element "+m[idx].value+" at Item ID "+item.getID()+" (Handle "+item.getHandle()+")");
     	if (StringUtils.isNotEmpty(m[idx].authority)){
 log.debug("Item ID "+item.getID()+" (Handle "+item.getHandle()+") has authorityKey "+m[idx].authority);
@@ -89,7 +90,7 @@ log.debug("Found GND ID "+gndid+" for "+enhancingRole+" "+m[idx].value);
 		confidences[idx]=Choices.CF_UNSET;
 	    }
         }
-
+        }
         result.setAuthorities(authorities);
         result.setValues(values);
         result.setConfidences(confidences);

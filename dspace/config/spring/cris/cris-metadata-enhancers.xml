@@ -394,10 +394,38 @@
 	</bean>	
 
 	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="editorOrcid" />
+		<property name="metadata">
+			<list>
+				<value>dc.contributor.editor</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGenericOrcid"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="editorGND" />
+		<property name="metadata">
+			<list>
+				<value>dc.contributor.editor</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGnd"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="contributorOrcid" />
 		<property name="metadata">
 			<list>
-				<value>local.contributorPerson.other</value>
+				<value>local.contributorPerson.*</value>
 			</list>
 		</property>
 		<property name="generators">
@@ -411,7 +439,7 @@
 		<property name="alias" value="contributorGND" />
 		<property name="metadata">
 			<list>
-				<value>local.contributorPerson.other</value>
+				<value>local.contributorPerson.*</value>
 			</list>
 		</property>
 		<property name="generators">

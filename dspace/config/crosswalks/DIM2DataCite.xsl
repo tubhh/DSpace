@@ -157,7 +157,7 @@
                 </xsl:element>
                 <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='contributor'][not(@qualifier='author')]" />
                 <xsl:apply-templates select="//dspace:field[@mdschema='tuhh' and @element='contributor' and @qualifier='referee']" />
-                <xsl:apply-templates select="//dspace:field[@mdschema='local' and @element='contributorPerson' and @qualifier='other']" />
+                <xsl:apply-templates select="//dspace:field[@mdschema='local' and @element='contributorPerson']" />
                 <xsl:apply-templates select="//dspace:field[@mdschema='datacite' and @element='contributor']" />
             </contributors>
 
@@ -565,14 +565,28 @@
         DataCite (7), DataCite (7.1)
         Adds contributor and contributorType information
     -->
-    <xsl:template match="//dspace:field[@mdschema='local' and @element='contributorPerson' and @qualifier='other']">
+    <xsl:template match="//dspace:field[@mdschema='local' and @element='contributorPerson']">
+	<xsl:variable name="actualPersonName"><xsl:value-of select="." /></xsl:variable>
+        <xsl:variable name="qualifier"><xsl:value-of select="@qualifier" /></xsl:variable>
             <xsl:if test="//dspace:field[@mdschema='item' and @element='contributorOrcid']">
                 <xsl:for-each select="//dspace:field[@mdschema='item' and @element='contributorOrcid']">
+		<xsl:if test='.=$actualPersonName'>
                     <xsl:variable name="i">
                         <xsl:number value="position()" />
                     </xsl:variable>
                     <contributor>
-                        <xsl:attribute name="contributorType">Other</xsl:attribute>
+                        <xsl:attribute name="contributorType">
+        <xsl:choose>
+            <xsl:when test="$qualifier='editor'">
+                <xsl:element name="contributor">
+                    <xsl:text>Editor</xsl:text>
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                    <xsl:text>Other</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+                        </xsl:attribute>
                         <contributorName>
                             <xsl:attribute name="nameType">Personal</xsl:attribute>
                             <xsl:value-of select="." />
@@ -594,6 +608,7 @@
                             </nameIdentifier>
                         </xsl:if>
                     </contributor>
+                </xsl:if>
                 </xsl:for-each>
             </xsl:if>
     </xsl:template>

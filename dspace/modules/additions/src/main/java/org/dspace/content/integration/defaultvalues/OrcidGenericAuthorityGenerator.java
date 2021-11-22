@@ -50,7 +50,8 @@ log.debug("Starting to enhance item "+item.getID()+" with generic ORCID enhancer
         String[] authorities = new String[num];
         int[] confidences = new int[num];
 log.debug("Found "+num+" author elements");
-        for (int idx = 0; idx < num; idx++){
+        for (int idx = 0; idx < num; idx++) {
+        if (value.equals(m[idx].value)) {
 log.debug("Found author element "+m[idx].value+" at Item ID "+item.getID()+" (Handle "+item.getHandle()+")");
     	if (StringUtils.isNotEmpty(m[idx].authority)){
 log.debug("Item ID "+item.getID()+" (Handle "+item.getHandle()+") has authorityKey "+m[idx].authority);
@@ -82,7 +83,7 @@ log.debug("Found ORCID "+orcid+" for author "+m[idx].value);
 		confidences[idx]=Choices.CF_UNSET;
 	    }
         }
-
+        }
         result.setAuthorities(authorities);
         result.setValues(values);
         result.setConfidences(confidences);
