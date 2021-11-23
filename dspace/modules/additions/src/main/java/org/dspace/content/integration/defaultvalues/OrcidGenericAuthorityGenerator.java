@@ -28,7 +28,7 @@ public class OrcidGenericAuthorityGenerator implements EnhancedValuesGenerator
 
     private ApplicationService applicationService;
     private static final Logger log = Logger
-            .getLogger(OrcidAuthorityGenerator.class);
+            .getLogger(OrcidGenericAuthorityGenerator.class);
 
     public void setApplicationService(ApplicationService applicationService){
         this.applicationService = applicationService;

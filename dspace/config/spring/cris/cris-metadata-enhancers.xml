@@ -104,6 +104,28 @@
 	</bean>	
 
 	<bean class="org.dspace.app.cris.integration.CrisItemEnhancer">
+		<property name="alias" value="corporateEditor" />
+		<property name="metadata">
+			<list>
+				<value>local.contributorCorporate.editor</value>
+			</list>
+		</property>
+		<property name="clazz">
+			<value>org.dspace.app.cris.model.OrganizationUnit</value>
+		</property>
+		<property name="qualifiers2path">
+			<map>
+				<entry key="crossrefid">
+					<value>crossrefid</value>
+				</entry>
+				<entry key="rorid">
+					<value>rorid</value>
+				</entry>
+			</map>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.app.cris.integration.CrisItemEnhancer">
 		<property name="alias" value="journal" />
 		<property name="metadata">
 			<list>
@@ -454,6 +476,34 @@
 	</bean>	
 
 	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="contributorCorpGND" />
+		<property name="metadata">
+			<list>
+				<value>local.contributorCorporate.*</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGnd"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="contributorCorpROR" />
+		<property name="metadata">
+			<list>
+				<value>local.contributorCorporate.*</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerRor"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="dataciteContributorOrcid" />
 		<property name="metadata">
 			<list>
@@ -666,6 +716,9 @@
             <property name="applicationService" ref="applicationService" />
         </bean>
 	<bean name="enhancerGnd" class="org.dspace.content.integration.defaultvalues.GNDAuthorityGenerator">
+            <property name="applicationService" ref="applicationService" />
+        </bean>
+	<bean name="enhancerRor" class="org.dspace.content.integration.defaultvalues.RORAuthorityGenerator">
             <property name="applicationService" ref="applicationService" />
         </bean>
 	<bean name="enhancerGenericOrcid" class="org.dspace.content.integration.defaultvalues.OrcidGenericAuthorityGenerator">

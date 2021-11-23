@@ -25,14 +25,14 @@ import org.dspace.core.Constants;
 
 import org.apache.log4j.Logger;
 
-public class GNDAuthorityGenerator implements EnhancedValuesGenerator
+public class RORAuthorityGenerator implements EnhancedValuesGenerator
 {
 
     private ApplicationService applicationService;
     protected String enhancingRole;
 
     private static final Logger log = Logger
-            .getLogger(GNDAuthorityGenerator.class);
+            .getLogger(RORAuthorityGenerator.class);
 
     public void setApplicationService(ApplicationService applicationService){
         this.applicationService = applicationService;
@@ -69,9 +69,9 @@ log.debug("Item ID "+item.getID()+" (Handle "+item.getHandle()+") has authorityK
 //    	    ResearcherPage rp = applicationService
 //                        .getResearcherByAuthorityKey(m[idx].authority);
             if (rp != null) {
-    	        String gndid = ResearcherPageUtils.getStringValue(rp, "gndid");
+    	        String gndid = ResearcherPageUtils.getStringValue(rp, "rorid");
                 if (StringUtils.isNotBlank(gndid)) {
-log.debug("Found GND ID "+gndid+" for "+enhancingRole+" "+m[idx].value);
+log.debug("Found ROR ID "+gndid+" for "+enhancingRole+" "+m[idx].value);
                     values[idx] = m[idx].value;
     		    authorities[idx]=gndid;
     		    confidences[idx]=Choices.CF_ACCEPTED;
