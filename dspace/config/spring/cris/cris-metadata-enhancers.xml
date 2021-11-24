@@ -426,6 +426,8 @@
 		<property name="metadata">
 			<list>
 				<value>local.contributorPerson.*</value>
+                                <value>dc.contributor.editor</value>
+                                <value>dc.contributor.other</value>
 			</list>
 		</property>
 		<property name="generators">
@@ -440,6 +442,8 @@
 		<property name="metadata">
 			<list>
 				<value>local.contributorPerson.*</value>
+                                <value>dc.contributor.editor</value>
+                                <value>dc.contributor.other</value>
 			</list>
 		</property>
 		<property name="generators">
