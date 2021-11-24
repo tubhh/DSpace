@@ -352,6 +352,12 @@ td > ul {
 .fa-user.undefinedstaff {
     color: #afafaf;
 }
+.fa-user.associatestaff {
+    color: #2e8fdc
+}
+.fa-user.associateexstaff {
+    color: #2e61dc
+}
 
 /* Abstand Text-Buttonrand */
 .btn-default.col-md-6 , .btn-primary.col-md-6 {
