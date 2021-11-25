@@ -720,9 +720,7 @@
                         <xsl:attribute name="contributorType">
         <xsl:choose>
             <xsl:when test="$qualifier='editor'">
-                <xsl:element name="contributor">
                     <xsl:text>Editor</xsl:text>
-                </xsl:element>
             </xsl:when>
             <xsl:otherwise>
                     <xsl:text>Other</xsl:text>
@@ -851,7 +849,6 @@
     <xsl:template match="//dspace:field[@mdschema='datacite' and @element='contributorCorporate']">
 	<xsl:variable name="actualCorporateName"><xsl:value-of select="." /></xsl:variable>
         <xsl:variable name="qualifier"><xsl:value-of select="@qualifier" /></xsl:variable>
-<xsl:text>datacite.contributorCorporate found</xsl:text>
             <xsl:if test="//dspace:field[@mdschema='item' and @element='dataciteContributorCorpGND']">
                 <xsl:for-each select="//dspace:field[@mdschema='item' and @element='dataciteContributorCorpGND']">
 		<xsl:if test='.=$actualCorporateName'>
