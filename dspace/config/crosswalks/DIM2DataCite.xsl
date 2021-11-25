@@ -160,6 +160,7 @@
                 <xsl:apply-templates select="//dspace:field[@mdschema='local' and @element='contributorPerson']" />
                 <xsl:apply-templates select="//dspace:field[@mdschema='local' and @element='contributorCorporate']" />
                 <xsl:apply-templates select="//dspace:field[@mdschema='datacite' and @element='contributor']" />
+                <xsl:apply-templates select="//dspace:field[@mdschema='datacite' and @element='contributorCorporate']" />
             </contributors>
 
             <!-- 
@@ -772,9 +773,7 @@
                         <xsl:attribute name="contributorType">
         <xsl:choose>
             <xsl:when test="$qualifier='editor'">
-                <xsl:element name="contributor">
                     <xsl:text>Editor</xsl:text>
-                </xsl:element>
             </xsl:when>
             <xsl:otherwise>
                     <xsl:text>Other</xsl:text>
@@ -838,6 +837,47 @@
                                 <xsl:attribute name="nameIdentifierScheme">GND</xsl:attribute>
                                 <xsl:attribute name="schemeURI">https://d-nb.info/gnd/</xsl:attribute>
                                 <xsl:value-of select="//dspace:field[@mdschema='item' and @element='dataciteContributorGND'][number($i)]/@authority" />
+                            </nameIdentifier>
+                        </xsl:if>
+                    </contributor>
+                </xsl:if>
+                </xsl:for-each>
+            </xsl:if>
+    </xsl:template>
+    <!-- 
+        DataCite (7), DataCite (7.1)
+        Adds contributor and contributorType information
+    -->
+    <xsl:template match="//dspace:field[@mdschema='datacite' and @element='contributorCorporate']">
+	<xsl:variable name="actualCorporateName"><xsl:value-of select="." /></xsl:variable>
+        <xsl:variable name="qualifier"><xsl:value-of select="@qualifier" /></xsl:variable>
+<xsl:text>datacite.contributorCorporate found</xsl:text>
+            <xsl:if test="//dspace:field[@mdschema='item' and @element='dataciteContributorCorpGND']">
+                <xsl:for-each select="//dspace:field[@mdschema='item' and @element='dataciteContributorCorpGND']">
+		<xsl:if test='.=$actualCorporateName'>
+                    <xsl:variable name="i">
+                        <xsl:number value="position()" />
+                    </xsl:variable>
+                    <contributor>
+                        <xsl:attribute name="contributorType">
+                            <xsl:value-of select="$qualifier" />
+                        </xsl:attribute>
+                        <contributorName>
+                            <xsl:attribute name="nameType">Organizational</xsl:attribute>
+                            <xsl:value-of select="." />
+                        </contributorName>
+                        <xsl:if test="@authority!=''">
+                            <nameIdentifier>
+                                <xsl:attribute name="nameIdentifierScheme">GND</xsl:attribute>
+                                <xsl:attribute name="schemeURI">https://d-nb.info/gnd/</xsl:attribute>
+                                <xsl:value-of select="@authority" />
+                            </nameIdentifier>
+                        </xsl:if>
+                        <xsl:if test="//dspace:field[@mdschema='item' and @element='dataciteContributorCorpROR'][number($i)]/@authority!=''">
+                            <nameIdentifier>
+                                <xsl:attribute name="schemeURI">https://ror.org/</xsl:attribute>
+                                <xsl:attribute name="nameIdentifierScheme">ROR</xsl:attribute>
+                                <xsl:value-of select="//dspace:field[@mdschema='item' and @element='dataciteContributorCorpROR'][number($i)]/@authority" />
                             </nameIdentifier>
                         </xsl:if>
                     </contributor>

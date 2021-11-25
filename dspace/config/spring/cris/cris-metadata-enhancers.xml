@@ -504,6 +504,34 @@
 	</bean>	
 
 	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="dataciteContributorCorpGND" />
+		<property name="metadata">
+			<list>
+				<value>datacite.contributorCorporate.*</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerGnd"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
+		<property name="alias" value="dataciteContributorCorpROR" />
+		<property name="metadata">
+			<list>
+				<value>datacite.contributorCorporate.*</value>
+			</list>
+		</property>
+		<property name="generators">
+			<list>				
+			    <ref bean="enhancerRor"/>
+			</list>
+		</property>
+	</bean>	
+
+	<bean class="org.dspace.content.ItemEnhancer">
 		<property name="alias" value="dataciteContributorOrcid" />
 		<property name="metadata">
 			<list>
