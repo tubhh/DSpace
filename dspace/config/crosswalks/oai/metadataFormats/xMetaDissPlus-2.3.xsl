@@ -200,6 +200,7 @@
 
 			<!-- abstract data: dc.description -->
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='abstract']/doc:element/doc:field[@name='value']">
+                            <xsl:if test="../@name='de' or ../@name='de_DE' or ../@name='en' or ../@name='en_US'">
 				<dcterms:abstract xsi:type="ddb:contentISO639-2">
                                     <xsl:choose>
                                         <xsl:when test="../@name = 'de'">
@@ -217,6 +218,7 @@
                                     </xsl:choose>
 					<xsl:value-of select="."/>
 				</dcterms:abstract>
+                            </xsl:if>
 			</xsl:for-each>
 
 			<!-- publisher: constant data -->
