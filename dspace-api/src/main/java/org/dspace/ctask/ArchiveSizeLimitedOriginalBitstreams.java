@@ -94,7 +94,7 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
         }
         } else {
             report("This object is not an item, nothing to do...");
-            return Curator.CURATE_ERROR;
+            return Curator.CURATE_SKIP;
         }
         return Curator.CURATE_SUCCESS;
     }
