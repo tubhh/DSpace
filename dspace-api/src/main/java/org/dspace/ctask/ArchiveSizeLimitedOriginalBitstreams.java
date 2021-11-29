@@ -7,6 +7,7 @@
  */
 package org.dspace.ctask;
 
+import org.apache.log4j.Logger;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -62,11 +63,9 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
     
     private Group groupAnonymous;
 
-    @Override
-    public void init(Curator curator, String taskId) throws IOException {
-        super.init(curator, taskId);
-    }
-    
+    // The log4j logger for this class
+    private static Logger log = Logger.getLogger(ArchiveSizeLimitedOriginalBitstreams.class);
+
     /**
      * Perform the curation task upon passed DSO.
      *
@@ -76,6 +75,7 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
     @Override
     public int perform(DSpaceObject dso) throws IOException
     {
+        log.info("performing ArchiveSizeLimitedOriginalBitstreams Curation Task on "+dso.getHandle());
         // Operate on items only
         if (dso.getType() == Constants.ITEM)
         {
@@ -93,6 +93,7 @@ public class ArchiveSizeLimitedOriginalBitstreams extends AbstractCurationTask {
             return Curator.CURATE_ERROR;
         }
         } else {
+            setResult("This object is not an item, nothing to do...");
             report("This object is not an item, nothing to do...");
             return Curator.CURATE_SKIP;
         }
