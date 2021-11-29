@@ -48,7 +48,7 @@ public class MetadataAbstractCurationTask extends AbstractCurationTask
     private static final String NEW_ITEM_HANDLE = "in workflow";
 
     // The log4j logger for this class
-    private static Logger log = Logger.getLogger(TypeSetter.class);
+    private static Logger log = Logger.getLogger(MetadataAbstractCurationTask.class);
 
 
     /**
