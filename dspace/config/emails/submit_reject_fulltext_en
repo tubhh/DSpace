@@ -12,9 +12,14 @@ You submitted fulltext for your item: {0}
 
 To collection: {1}
 
-Your submission has been rejected by {2}
+Your file submission has been rejected
 with the following explanation:
 
 {3}
 
-The original item has not been deleted.  You can can re-submit files from the item page at {4}
+The file you submitted has been deleted.
+You can can re-submit files from the item page at
+{4}
+
+Best regards
+The TORE Team
