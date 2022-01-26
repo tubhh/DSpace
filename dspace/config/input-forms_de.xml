@@ -254,7 +254,7 @@
          <input-type>onebox</input-type>
          <hint>Geben Sie hier den Jahrgang (Band) der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
          <required></required>
-         <type-bind>Article,inProceedings,Research Paper,Review</type-bind>
+         <type-bind>Article,inProceedings,Research Paper,Review,Journal</type-bind>
        </field>
 
        <field>
@@ -1262,7 +1262,7 @@
          <input-type>onebox</input-type>
          <hint>Geben Sie hier den Jahrgang (Band) der Zeitschrift an, in der dieser Artikel erschienen ist.</hint>
          <required></required>
-         <type-bind>Article,inProceedings,Research Paper,Review</type-bind>
+         <type-bind>Article,inProceedings,Research Paper,Review,Journal</type-bind>
        </field>
 
        <field>
