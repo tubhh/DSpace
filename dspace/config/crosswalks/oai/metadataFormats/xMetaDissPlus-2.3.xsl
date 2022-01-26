@@ -58,6 +58,9 @@
                         <xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value'] = 'pt'">
                             <xsl:text>por</xsl:text>
                         </xsl:when>
+                        <xsl:when test="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value'] = 'fr'">
+                            <xsl:text>fre</xsl:text>
+                        </xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='language']/doc:element[@name='iso']/doc:element/doc:field[@name='value']" />
 			</xsl:otherwise>
@@ -116,6 +119,9 @@
                                                 </xsl:when>
                                                 <xsl:when test="doc:element[@name='alternative']/doc:element/@name = 'hr'">
                                                     <xsl:attribute name="lang"><xsl:text>hrv</xsl:text></xsl:attribute>
+                                                </xsl:when>
+                                                <xsl:when test="doc:element[@name='alternative']/doc:element/@name = 'fr'">
+                                                    <xsl:attribute name="lang"><xsl:text>fre</xsl:text></xsl:attribute>
                                                 </xsl:when>
                                             </xsl:choose>
                                             <xsl:value-of select="doc:element[@name='alternative']/doc:element/doc:field[@name='value']"/>
@@ -214,6 +220,9 @@
                                         </xsl:when>
                                         <xsl:when test="../@name = 'en_US'">
                                             <xsl:attribute name="lang"><xsl:text>eng</xsl:text></xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="../@name = 'fr'">
+                                            <xsl:attribute name="lang"><xsl:text>fre</xsl:text></xsl:attribute>
                                         </xsl:when>
                                     </xsl:choose>
 					<xsl:value-of select="."/>
