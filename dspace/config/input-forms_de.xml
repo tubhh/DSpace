@@ -691,7 +691,7 @@
          <repeatable>true</repeatable>
          <label>Verwandte Identifier</label>
          <input-type value-pairs-name="relation_types_de">qualdrop_value</input-type>
-         <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus. Die Beziehung kann über ihren Persistent Identifier (DOI, URN oder Handle) eingegeben werden, indem Sie einen Präfix doi:, urn: or hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
+         <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus. Die Beziehung kann über ihren Persistent Identifier (DOI oder Handle) eingegeben werden, indem Sie einen Präfix doi: oder hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
          <required></required>
        </field>
 <!--
@@ -917,7 +917,7 @@
          <repeatable>true</repeatable>
          <label>Verwandte Identifier</label>
          <input-type value-pairs-name="relation_types_de">qualdrop_value</input-type>
-         <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus. Die Beziehung kann über ihren Persistent Identifier (DOI, URN oder Handle) eingegeben werden, indem Sie einen Präfix doi:, urn: or hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
+         <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus. Die Beziehung kann über ihren Persistent Identifier (DOI oder Handle) eingegeben werden, indem Sie einen Präfix doi: oder hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
          <required></required>
        </field>
 <!--
@@ -1689,7 +1689,7 @@
          <repeatable>true</repeatable>
          <label>Verwandte Identifier</label>
          <input-type value-pairs-name="relation_types_de">qualdrop_value</input-type>
-         <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus. Die Beziehung kann über ihren Persistent Identifier (DOI, URN oder Handle) eingegeben werden, indem Sie einen Präfix doi:, urn: or hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
+         <hint>Geben Sie hier mit diesem Werk in Beziehung stehende Identifier (z.B. URL, DOI, ...) ein und wählen Sie die Art der Beziehung aus. Die Beziehung kann über ihren Persistent Identifier (DOI oder Handle) eingegeben werden, indem Sie einen Präfix doi: oder hdl: vor den Identifier setzen (geben Sie zum Beispiel doi:10.15480/882.1264 ein, um die DOI 10.15480/882.1264 zu referenzieren). Wenn das referenzierte Material keinen Persitent Identifier hat, können Sie auch eine HTTP(S)-URI zur Referenzierung verwenden. Dies ist jedoch ausdrücklich nicht empfohlen.</hint>
          <required></required>
        </field>
 <!--
