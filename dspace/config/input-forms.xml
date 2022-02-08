@@ -2366,6 +2366,10 @@
        <displayed-value>Amtliches Werk § 5 Abs. 2 Urheberrechtsgesetz (UrhG)</displayed-value>
        <stored-value>http://www.gesetze-im-internet.de/urhg/__5.html</stored-value>
      </pair>
+     <pair>
+       <displayed-value>ArXiv Nonexclusive License</displayed-value>
+       <stored-value>http://arxiv.org/licenses/nonexclusive-distrib/1.0/</stored-value>
+     </pair>
    </value-pairs>
 
    <value-pairs value-pairs-name="cc_license_en" dc-term="dc_rights_cc">
