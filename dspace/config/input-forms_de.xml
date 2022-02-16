@@ -600,9 +600,9 @@
          <repeatable>false</repeatable>
          <label>Creditline</label>
          <input-type>textarea</input-type>
-         <hint>Geben Sie hier die Creditline für AIP Publikationen ein, falls erforderlich.</hint>
+         <hint>Falls vom Verlag gefordert: Angabe eines Copyright Vermerks o.ä.</hint>
          <required></required>
-         <visibility>workflow</visibility>
+         <visibility></visibility>
        </field>
 
        <field>
