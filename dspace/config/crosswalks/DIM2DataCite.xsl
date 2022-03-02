@@ -257,7 +257,7 @@
             -->
             <xsl:if test="//dspace:field[@mdschema='dc' and @element='rights'] or //dspace:field[@mdschema='item' and @element='grantfulltext']">
                 <xsl:element name="rightsList">
-                    <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='rights']" />
+                    <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='rights'][not(@qualifier='creditline')]" />
                     <xsl:apply-templates select="//dspace:field[@mdschema='item' and @element='grantfulltext']" />
                 </xsl:element>
             </xsl:if>
