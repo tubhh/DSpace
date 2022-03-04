@@ -1862,11 +1862,11 @@
        <displayed-value>kompiliert/erstellt</displayed-value>
        <stored-value>Compiles</stored-value>
      </pair>
-<!--
      <pair>
        <displayed-value>ist identisch mit</displayed-value>
        <stored-value>IsIdenticalTo</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>is an alternate identifier of this upload</displayed-value>
        <stored-value>IsAlternateIdentifier</stored-value>

@@ -1905,11 +1905,11 @@
        <displayed-value>compiles/creates</displayed-value>
        <stored-value>Compiles</stored-value>
      </pair>
-<!--
      <pair>
        <displayed-value>is identical to</displayed-value>
        <stored-value>IsIdenticalTo</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>is an alternate identifier of this upload</displayed-value>
        <stored-value>IsAlternateIdentifier</stored-value>
