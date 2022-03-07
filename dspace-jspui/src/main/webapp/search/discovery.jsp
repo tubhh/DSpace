@@ -343,7 +343,7 @@ if(StringUtils.contains(searchScope, hdlPrefix) ){
                                 <a class="btn btn-default" href="<%= request.getContextPath()+"/global-search" %>"><fmt:message key="jsp.search.general.new-search" /></a>
                                
 <% if (StringUtils.isNotBlank(spellCheckQuery)) {%>
-	<p class="lead"><fmt:message key="jsp.search.didyoumean"><fmt:param><a id="spellCheckQuery" data-spell="<%= Utils.addEntities(spellCheckQuery) %>" href="#"><%= spellCheckQuery %></a></fmt:param></fmt:message></p>
+	<p class="lead"><fmt:message key="jsp.search.didyoumean"><fmt:param><a id="spellCheckQuery" data-spell="<%= Utils.addEntities(spellCheckQuery) %>" href="#"><%= Utils.addEntities(spellCheckQuery) %></a></fmt:param></fmt:message></p>
 <% } %>                  
 
 <br/>
