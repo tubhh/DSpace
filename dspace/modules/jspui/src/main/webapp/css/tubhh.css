@@ -113,8 +113,11 @@ footer {
 }
 .media.pubmed, .media.pubmed_aggregate, .media.pubmed_count,
 .media.pubmed a, .media.pubmed_aggregate a, .media.pubmed_count a {
-    color: white;
-    background: #141927;
+/*    color: white;
+    background: #141927; */
+    color: #333;
+    background: #fff;
+    border: solid 1px #dcdcdc;
 }
 .media.wos, .media.wos_aggregate, .media.wos_count,
 .media.wos a, .media.wos_aggregate a, .media.wos_count a {
