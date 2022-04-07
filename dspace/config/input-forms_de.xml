@@ -1815,11 +1815,11 @@
        <stored-value>IsCitedBy</stored-value>
      </pair>
      <pair>
-       <displayed-value>ergänzt</displayed-value>
+       <displayed-value>wird ergänzt durch</displayed-value>
        <stored-value>IsSupplementedBy</stored-value>
      </pair>
      <pair>
-       <displayed-value>ist eine Ergänzung zu</displayed-value>
+       <displayed-value>ergänzt</displayed-value>
        <stored-value>IsSupplementTo</stored-value>
      </pair>
      <pair>
