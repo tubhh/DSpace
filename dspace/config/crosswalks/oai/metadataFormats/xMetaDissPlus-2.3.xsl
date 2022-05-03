@@ -565,7 +565,9 @@
                             </ddb:transfer>
                         </xsl:for-each>
 			<ddb:identifier ddb:type="URL"><xsl:value-of select="$handle"/></ddb:identifier>
-			<ddb:identifier ddb:type="DOI"><xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='doi']/doc:element/doc:field[@name='value']"/></ddb:identifier>
+                        <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publisher']/doc:element[@name='doi']/doc:element/doc:field[@name='value']">
+                            <ddb:identifier ddb:type="DOI"><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publisher']/doc:element[@name='doi']/doc:element/doc:field[@name='value']"/></ddb:identifier>
+                        </xsl:if>
 
                         <!-- select all rights -->
                         <!-- RULES:

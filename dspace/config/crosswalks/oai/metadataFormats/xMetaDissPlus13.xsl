@@ -454,6 +454,10 @@
 					<!--<ddb:transfer ddb:type="dcterms:URI"><xsl:value-of select="concat($baseUrl, '/download', substring-after($handle, $download-prefix), '-files.zip')"/></ddb:transfer>-->
 				</xsl:otherwise> 
 			</xsl:choose>	
+                        <xsl:if test="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publisher']/doc:element[@name='doi']/doc:element/doc:field[@name='value']">
+                            <ddb:identifier ddb:type="DOI"><xsl:value-of select="doc:metadata/doc:element[@name='tuhh']/doc:element[@name='publisher']/doc:element[@name='doi']/doc:element/doc:field[@name='value']"/></ddb:identifier>
+                        </xsl:if>
+
 			<!--<ddb:identifier ddb:type="handle"><xsl:value-of select="$handle"/></ddb:identifier>-->
                         <!-- ddb:identifier ddb:type=URL => Dieser Wert wird in Feld 7133 bzw. 4083 geschrieben -->
 <!--
