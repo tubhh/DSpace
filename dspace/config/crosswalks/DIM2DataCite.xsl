@@ -1021,7 +1021,7 @@
             </xsl:choose>
         </xsl:element>
     </xsl:template>
-    <xsl:template match="//dspace:field[@mdschema='datacite' and @element='relation']">
+    <xsl:template match="//dspace:field[@mdschema='datacite' and @element='relation' and @qualifier!='IsIdenticalTo']">
         <xsl:element name="relatedIdentifier">
             <xsl:choose>
                 <xsl:when test="starts-with(substring-before(., ':'), 'http')">
