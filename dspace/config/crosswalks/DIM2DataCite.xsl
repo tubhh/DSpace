@@ -1067,7 +1067,7 @@
                                 <xsl:text>IsIdenticalTo</xsl:text>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:text>IsVersionOf</xsl:text>
+                                <xsl:text>IsVariantFormOf</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
@@ -1083,7 +1083,7 @@
                                 <xsl:text>IsIdenticalTo</xsl:text>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:text>IsVersionOf</xsl:text>
+                                <xsl:text>IsVariantFormOf</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
