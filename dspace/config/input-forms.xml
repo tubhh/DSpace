@@ -1905,11 +1905,11 @@
        <displayed-value>compiles/creates</displayed-value>
        <stored-value>Compiles</stored-value>
      </pair>
+<!--
      <pair>
        <displayed-value>is identical to</displayed-value>
        <stored-value>IsIdenticalTo</stored-value>
      </pair>
-<!--
      <pair>
        <displayed-value>is an alternate identifier of this upload</displayed-value>
        <stored-value>IsAlternateIdentifier</stored-value>
@@ -2520,6 +2520,10 @@
      <pair>
        <displayed-value>Chapter/Article (Proceedings)</displayed-value>
        <stored-value>inProceedings</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Conference Paper (not in Proceedings)</displayed-value>
+       <stored-value>c_18cp</stored-value>
      </pair>
      <pair>
        <displayed-value>Commentary</displayed-value>
