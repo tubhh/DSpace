@@ -96,7 +96,9 @@ public class TypeSettingConsumer implements Consumer
                         item.clearMetadata("dc", "type", "casrai", Item.ANY);
                         item.clearMetadata("tuhh", "type", "opus", Item.ANY);
                         item.clearMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
-                        item.clearMetadata("datacite", "resourceType", Item.ANY, Item.ANY);
+                        if (typeset.get("datacite").length > 0) {
+                            item.clearMetadata("datacite", "resourceType", Item.ANY, Item.ANY);
+                        }
                         item.clearMetadata("datacite", "resourceTypeGeneral", Item.ANY, Item.ANY);
 
                         Map<String, String> typeset = mapTypeArray(type, thesistype);
@@ -322,7 +324,6 @@ public class TypeSettingConsumer implements Consumer
             ret.put("casrai", "Book Chapter");
             ret.put("dcmi", "Text");
             ret.put("dataciteGeneral", "BookChapter");
-            ret.put("datacite", "Book Chapter");
             break;
         case "inProceedings":
             ret.put("opus", "InProceedings (Aufsatz / Paper einer Konferenz etc.)");
@@ -331,7 +332,6 @@ public class TypeSettingConsumer implements Consumer
             ret.put("dcmi", "Text");
             ret.put("casrai", "Conference Paper");
             ret.put("dataciteGeneral", "ConferencePaper");
-            ret.put("datacite", "Conference Paper");
             break;
         case "Map":
             ret.put("opus", "Kartenmaterial");
@@ -385,7 +385,6 @@ public class TypeSettingConsumer implements Consumer
             ret.put("casrai", "Other");
             ret.put("dcmi", "Software");
             ret.put("dataciteGeneral", "Software");
-            ret.put("datacite", "Software");
             break;
         case "Technical Report":
         case "report":
@@ -414,7 +413,6 @@ public class TypeSettingConsumer implements Consumer
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
             ret.put("dataciteGeneral", "Preprint");
-            ret.put("datacite", "Preprint");
             break;
         case "Journal":
         case "Journal Issue":
@@ -480,7 +478,7 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Image");
-            ret.put("dataciteGeneral", "Audioviasual");
+            ret.put("dataciteGeneral", "Audiovisual");
             break;
         case "DataPaper":
             ret.put("opus", "DataPaper");
