@@ -202,7 +202,7 @@
                 Template call for ResourceType
                 DataCite allows the ResourceType to ouccre not more than once.
             -->
-            <xsl:apply-templates select="(//dspace:field[@mdschema='dc' and @element='type' and @qualifier='casrai'])" />
+            <xsl:apply-templates select="(//dspace:field[@mdschema='datacite' and @element='resourceType'])" />
 
             <!--
                 DataCite (11)
@@ -954,13 +954,13 @@
         DataCite (10), DataCite (10.1)
         Adds resourceType and resourceTypeGeneral information
     -->
-        <xsl:template match="//dspace:field[@mdschema='dc' and @element='type' and @qualifier='casrai']">
+        <xsl:template match="//dspace:field[@mdschema='datacite' and @element='resourceTypeGeneral']">
             <!-- Transforming the language flags according to ISO 639-2/B & ISO 639-3 -->
             <xsl:element name="resourceType">
                 <xsl:attribute name="resourceTypeGeneral">
-                    <xsl:value-of select="//dspace:field[@mdschema='dcterms' and @element='DCMIType']" />
+                    <xsl:value-of select="." />
                 </xsl:attribute>
-                <xsl:value-of select="." />
+                <xsl:value-of select="//dspace:field[@mdschema='datacite' and @element='resourceType']" />
             </xsl:element>
     </xsl:template>
 
