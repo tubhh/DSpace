@@ -1,0 +1,2 @@
+INSERT INTO metadatavalue (resource_id, metadata_field_id, text_value, text_lang, place, authority, confidence, resource_type_id) SELECT resource_id, '308', text_value, text_lang, place, authority, confidence, resource_type_id FROM metadatavalue WHERE metadata_field_id=207;
+INSERT INTO metadatavalue (resource_id, metadata_field_id, text_value, text_lang, place, authority, confidence, resource_type_id) SELECT resource_id, '309', text_value, text_lang, place, authority, confidence, resource_type_id FROM metadatavalue WHERE metadata_field_id=143;

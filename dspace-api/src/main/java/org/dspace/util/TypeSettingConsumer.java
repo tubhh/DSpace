@@ -96,6 +96,8 @@ public class TypeSettingConsumer implements Consumer
                         item.clearMetadata("dc", "type", "casrai", Item.ANY);
                         item.clearMetadata("tuhh", "type", "opus", Item.ANY);
                         item.clearMetadata("dcterms", "DCMIType", Item.ANY, Item.ANY);
+                        item.clearMetadata("datacite", "resourceType", Item.ANY, Item.ANY);
+                        item.clearMetadata("datacite", "resourceTypeGeneral", Item.ANY, Item.ANY);
 
                         Map<String, String> typeset = mapTypeArray(type, thesistype);
                         item.addMetadata("dc", "type", "dini", null, typeset.get("dini"), null, -1);
@@ -103,6 +105,8 @@ public class TypeSettingConsumer implements Consumer
                         item.addMetadata("dc", "type", "casrai", null, typeset.get("casrai"), null, -1);
                         item.addMetadata("dcterms", "DCMIType", null, null, typeset.get("dcmi"), null, -1);
                         item.addMetadata("tuhh", "type", "opus", null, typeset.get("opus"), null, -1);
+                        item.addMetadata("datacite", "resourceType", null, null, typeset.get("datacite"), null, -1);
+                        item.addMetadata("datacite", "resourceTypeGeneral", null, null, typeset.get("dataciteGeneral"), null, -1);
 
                         item.updateMetadata();
                         item.update();
@@ -155,6 +159,8 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("driver", "bachelorThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Bachelor Thesis");
                         break;
                     case "diplomaThesis":
                         ret.put("opus", "Diplomarbeit, Magisterarbeit");
@@ -162,6 +168,8 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Diploma Thesis");
                         break;
                     case "magisterThesis":
                         ret.put("opus", "Diplomarbeit, Magisterarbeit");
@@ -169,6 +177,8 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Magister Thesis");
                         break;
                     case "doctoralThesis":
                         ret.put("opus", "Dissertation");
@@ -176,6 +186,8 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("driver", "doctoralThesis");
                         ret.put("casrai", "Dissertation");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "PhD Thesis");
                         break;
                     case "habilitation":
                     case "habilitationThesis":
@@ -184,6 +196,8 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("driver", "doctoralThesis");
                         ret.put("casrai", "Dissertation");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Habilitational Thesis");
                         break;
                     case "masterThesis":
                         ret.put("opus", "Masterarbeit");
@@ -191,6 +205,8 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Master Thesis");
                         break;
                     default:
                         ret.put("opus", "Andere Abschlussarbeit");
@@ -198,6 +214,8 @@ public class TypeSettingConsumer implements Consumer
                         ret.put("driver", "report");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Study Thesis");
                 }
                 break;
             case "Projectthesis":
@@ -206,6 +224,8 @@ public class TypeSettingConsumer implements Consumer
                 ret.put("driver", "report");
                 ret.put("casrai", "Supervised Student Publication");
                 ret.put("dcmi", "Text");
+                ret.put("dataciteGeneral", "Dissertation");
+                ret.put("datacite", "Project Thesis");
                 break;
             case "manual":
                 ret.put("opus", "Anleitung (Manual)");
@@ -213,6 +233,8 @@ public class TypeSettingConsumer implements Consumer
                 ret.put("driver", "report");
                 ret.put("casrai", "Manual");
                 ret.put("dcmi", "Text");
+                ret.put("dataciteGeneral", "Text");
+                ret.put("datacite", "Manual");
                 break;
             case "workingPaper":
             case "Working Paper":
@@ -221,6 +243,8 @@ public class TypeSettingConsumer implements Consumer
                 ret.put("driver", "workingPaper");
                 ret.put("casrai", "Working Paper");
                 ret.put("dcmi", "Text");
+                ret.put("dataciteGeneral", "Text");
+                ret.put("datacite", "Working Paper");
                 break;
             case "ResearchPaper":
             case "Research Paper":
@@ -231,6 +255,8 @@ public class TypeSettingConsumer implements Consumer
                 ret.put("driver", "workingPaper");
                 ret.put("casrai", "Working Paper");
                 ret.put("dcmi", "Text");
+                ret.put("dataciteGeneral", "Report");
+                ret.put("datacite", "Research Paper");
                 break;
         case "article":
         case "Article":
@@ -239,6 +265,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "article");
             ret.put("casrai", "Journal Article");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "JournalArticle");
+            ret.put("datacite", "Article");
             break;
         case "Image":
             ret.put("opus", "Bild");
@@ -246,6 +274,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "Image");
             break;
         case "Image, 3-D":
             ret.put("opus", "3D Bild");
@@ -253,6 +283,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "3D Image");
             break;
         case "book":
             ret.put("opus", "Buch (Monographie)");
@@ -260,6 +292,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "book");
             ret.put("casrai", "Book");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Book");
+            ret.put("datacite", "Book");
             break;
         case "festschrift":
         case "Festschrift":
@@ -268,6 +302,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "book");
             ret.put("casrai", "Book");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Book");
+            ret.put("datacite", "Festschrift");
             break;
         case "Poster":
             ret.put("opus", "Poster");
@@ -275,6 +311,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Conference Poster");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "Conference Poster");
             break;
         case "bookPart":
         case "inBook":
@@ -283,6 +321,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "bookPart");
             ret.put("casrai", "Book Chapter");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "BookChapter");
+            ret.put("datacite", "Book Chapter");
             break;
         case "inProceedings":
             ret.put("opus", "InProceedings (Aufsatz / Paper einer Konferenz etc.)");
@@ -290,6 +330,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "contributionToPeriodical");
             ret.put("dcmi", "Text");
             ret.put("casrai", "Conference Paper");
+            ret.put("dataciteGeneral", "ConferencePaper");
+            ret.put("datacite", "Conference Paper");
             break;
         case "Map":
             ret.put("opus", "Kartenmaterial");
@@ -297,6 +339,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "Map");
             break;
         case "Learning Object":
             ret.put("opus", "Lernmaterial");
@@ -304,6 +348,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "InteractiveResource");
+            ret.put("dataciteGeneral", "InteractiveResource");
+            ret.put("datacite", "Course Material");
             break;
         case "Patent":
             ret.put("opus", "Patent");
@@ -311,6 +357,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "patent");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Patent");
             break;
         case "Offenlegungsschrift":
             ret.put("opus", "Patent: Offenlegungsschrift");
@@ -318,6 +366,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Patent Offenlegungsschrift");
             break;
         case "Presentation":
             ret.put("opus", "Präsentation");
@@ -325,6 +375,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "InteractiveResource");
+            ret.put("dataciteGeneral", "InteractiveResource");
+            ret.put("datacite", "Presentation");
             break;
         case "Software":
             ret.put("opus", "Software");
@@ -332,6 +384,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Software");
+            ret.put("dataciteGeneral", "Software");
+            ret.put("datacite", "Software");
             break;
         case "Technical Report":
         case "report":
@@ -340,6 +394,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "report");
             ret.put("casrai", "Report");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Report");
+            ret.put("datacite", "Technical Report");
             break;
         case "Video":
             ret.put("opus", "Video");
@@ -347,6 +403,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "Video");
             break;
         case "preprint":
         case "Preprint":
@@ -355,6 +413,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "preprint");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Preprint");
+            ret.put("datacite", "Preprint");
             break;
         case "Journal":
         case "Journal Issue":
@@ -364,6 +424,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Journal Issue");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Journal");
+            ret.put("datacite", "Journal Volume");
             break;
         case "lecture":
         case "Lecture":
@@ -372,6 +434,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "lecture");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Lecture");
             break;
         case "StudyThesis":
         case "Study Thesis":
@@ -380,6 +444,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Dissertation");
+            ret.put("datacite", "Study Thesis");
             break;
         case "Proceedings":
             ret.put("opus", "Proceedings (Komplette Ausgabe einer Konferenz etc.)");
@@ -387,6 +453,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "conferenceObject");
             ret.put("casrai", "Book");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "ConferenceProceeding");
+            ret.put("datacite", "Proceedings");
             break;
         case "Music":
         case "Sound":
@@ -395,6 +463,7 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "Sound");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Sound");
+            ret.put("dataciteGeneral", "Sound");
             break;
         case "Dataset":
             ret.put("opus", "Dataset");
@@ -402,6 +471,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Dataset");
+            ret.put("dataciteGeneral", "Dataset");
+            ret.put("datacite", "ResearchData");
             break;
         case "Audiovisual":
             ret.put("opus", "Audiovisuell");
@@ -409,6 +480,7 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Audioviasual");
             break;
         case "DataPaper":
             ret.put("opus", "DataPaper");
@@ -416,6 +488,7 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "DataPaper");
             break;
         case "InteractiveResource":
             ret.put("opus", "Interactive Resource");
@@ -423,6 +496,7 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "InteractiveResource");
+            ret.put("dataciteGeneral", "InteractiveResource");
             break;
         case "Other":
             ret.put("opus", "Sonstiges");
@@ -430,6 +504,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Other");
             break;
         case "Text":
             ret.put("opus", "Text");
@@ -437,6 +513,7 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
             break;
         case "article-review":
             //Cerif: Journal Article Review
@@ -445,6 +522,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "review");
             ret.put("casrai", "Journal Article");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "PeerReview");
+            ret.put("datacite", "Journal Article Review");
             break;
         case "letter":
             //Cerif: Letter to Editor
@@ -453,6 +532,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Letter to Editor");
             break;
         case "commentary":
             //Cerif:Commentary
@@ -461,6 +542,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Commentary");
             break;
         case "editorial":
             //Cerif:Editorial
@@ -469,6 +552,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "article");
             ret.put("casrai", "Journal Article");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Editorial");
             break;
         default:
             ret.put("opus", mainType);
@@ -476,6 +561,8 @@ public class TypeSettingConsumer implements Consumer
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", mainType);
             break;
     }
     return ret;

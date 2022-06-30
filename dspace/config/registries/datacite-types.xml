@@ -1,0 +1,271 @@
+<?xml version="1.0"?>
+<!--
+  - datacite-types.xml
+  -
+  - A registry providing fields specific for the DataCite Metadata Schema
+  - 
+  -->
+<dspace-dc-types>
+
+    <dspace-header>
+        <title>DataCite Metadata Schema</title>
+        <contributor.author>Oliver Goldschmidt</contributor.author>
+      </dspace-header>
+
+  <dc-schema>
+    <name>datacite</name>
+    <namespace>https://schema.datacite.org</namespace>
+  </dc-schema>
+
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsPublishedIn</qualifier>
+    <scope_note>New relation qualifier in DataCite 4.4</scope_note>
+  </dc-type>
+
+  <dc-type>
+    <schema>datacite</schema>
+    <element>resourceType</element>
+    <scope_note>Free text about the resource type. In DataCite MDS before 4.4 this term should be taken from CASRAI vocabulary.</scope_note>
+  </dc-type>
+
+  <dc-type>
+    <schema>datacite</schema>
+    <element>resourceTypeGeneral</element>
+    <scope_note>In DataCite MDS before 4.4 this term should be taken from DCMI Terms vocabulary. In DataCite MDS 4.4, this may be one of the following Controlled List Values:
+Audiovisual
+Book
+BookChapter
+Collection
+ComputationalNotebook
+ConferencePaper
+ConferenceProceeding
+DataPaper
+Dataset
+Dissertation
+Event
+Image
+InteractiveResource
+Journal
+JournalArticle
+Model
+OutputManagementPlan
+PeerReview
+PhysicalObject
+Preprint
+Report
+Service
+Software
+Sound
+Standard
+Text
+Workflow
+Other</scope_note>
+  </dc-type>
+
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsCitedBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>Cites</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsSupplementTo</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsSupplementedBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsContinuedBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>Continues</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsDescribedBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>Describes</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>HasMetadata</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsMetadataFor</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>HasVersion</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsVersionOf</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsNewVersionOf</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsPreviousVersionOf</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsPartOf</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>HasPart</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsPublishedIn</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsReferencedBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>References</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsDocumentedBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>Documents</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsCompiledBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>Compiles</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsVariantFormOf</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsOriginalFormOf</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsIdenticalTo</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsReviewedBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>Reviews</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsDerivedFrom</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsSourceOf</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsRequiredBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>Requires</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>IsObsoletedBy</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>datacite</schema>
+    <element>relation</element>
+    <qualifier>Obsoletes</qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+</dspace-dc-types>
