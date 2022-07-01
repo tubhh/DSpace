@@ -609,6 +609,7 @@
             </xsl:choose>
         </xsl:element>
         </xsl:if>
+        <!-- Do not show DDC code as we cannot resolve it smoothly to a readable form
         <xsl:if test="@qualifier='ddccode'">
         <xsl:element name="subject">
             <xsl:if test="@qualifier">
@@ -618,6 +619,7 @@
             <xsl:value-of select="." />
         </xsl:element>
         </xsl:if>
+        -->
     </xsl:template>
 
     <!-- 
