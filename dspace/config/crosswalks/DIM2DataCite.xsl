@@ -290,6 +290,16 @@
                     <xsl:call-template name="fundingReference" />
                 </xsl:element>
             </xsl:if>
+
+            <!--
+                DataCite (20)
+                Add related items
+            -->
+            <xsl:if test="//dspace:field[@mdschema='datacite' and @element='relation']">
+                <xsl:element name="relatedItems">
+                    <xsl:apply-templates select="relatedItems" />
+                </xsl:element>
+            </xsl:if>
         </resource>
     </xsl:template>
     
@@ -581,12 +591,33 @@
         (http://dublincore.org/documents/dcmi-terms/#terms-subject)
     -->
     <xsl:template match="//dspace:field[@mdschema='dc' and @element='subject']">
+        <xsl:if test="not(contains(@qualifier, 'code'))">
         <xsl:element name="subject">
             <xsl:if test="@qualifier">
-                <xsl:attribute name="subjectScheme"><xsl:value-of select="@qualifier" /></xsl:attribute>
+                <xsl:attribute name="subjectScheme"><xsl:value-of select="upper-case(@qualifier)" /></xsl:attribute>
             </xsl:if>
+            <xsl:if test="contains(., ':')">
+                <xsl:attribute name="classificationCode"><xsl:value-of select="substring-before(., ':')" /></xsl:attribute>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="contains(., ':')">
+                    <xsl:value-of select="substring-after(., ':')" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="." />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:element>
+        </xsl:if>
+        <xsl:if test="@qualifier='ddccode'">
+        <xsl:element name="subject">
+            <xsl:if test="@qualifier">
+                <xsl:attribute name="subjectScheme">DDC</xsl:attribute>
+            </xsl:if>
+            <xsl:attribute name="classificationCode"><xsl:value-of select="." /></xsl:attribute>
             <xsl:value-of select="." />
         </xsl:element>
+        </xsl:if>
     </xsl:template>
 
     <!-- 
@@ -1022,6 +1053,23 @@
         </xsl:element>
     </xsl:template>
     <xsl:template match="//dspace:field[@mdschema='datacite' and @element='relation' and @qualifier!='IsIdenticalTo']">
+        <xsl:if test="contains(., ':') and (substring-before(., ':')='hdl' or substring-before(., ':')='doi' or substring-before(., ':')='urn' or substring-before(., ':')='http' or substring-before(., ':')='ARK' or substring-before(., ':')='arXiv' or substring-before(., ':')='arxiv')">
+<!--
+bibcode
+EAN13
+EISSN
+IGSN
+ISBN
+ISSN
+ISTC
+LISSN
+LSID
+PMID
+PURL
+UPC
+URL
+w3id
+-->
         <xsl:element name="relatedIdentifier">
             <xsl:choose>
                 <xsl:when test="starts-with(substring-before(., ':'), 'http')">
@@ -1043,6 +1091,9 @@
                             <xsl:when test="substring-before(., ':')='urn'">
                                 <xsl:text>URN</xsl:text>
                             </xsl:when>
+                            <xsl:when test="substring-before(., ':')='arxiv'">
+                                <xsl:text>arXiv</xsl:text>
+                            </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="substring-before(., ':')" />
                             </xsl:otherwise>
@@ -1053,6 +1104,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="//dspace:field[@mdschema='tuhh' and @element='publisher']">
         <xsl:element name="relatedIdentifier">
@@ -1480,6 +1532,16 @@
                 </xsl:choose>
             </fundingReference>
             </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="relatedItems">
+        <xsl:for-each select="//dspace:field[@mdschema='datacite' and @element='relation' and @qualifier!='IsIdenticalTo']"><xsl:value-of select="." />
+        <xsl:if test="not(contains(., ':'))">
+        <xsl:element name="relatedItem">
+                    <xsl:value-of select="." />
+        </xsl:element>
+        </xsl:if>
         </xsl:for-each>
     </xsl:template>
 
