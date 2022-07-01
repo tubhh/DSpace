@@ -98,6 +98,10 @@ public class TypeSetter extends AbstractCurationTask
                 item.clearMetadata("dc", "type", "dini", Item.ANY);
                 item.clearMetadata("dc", "type", "driver", Item.ANY);
                 item.clearMetadata("tuhh", "type", "opus", Item.ANY);
+                if (typeset.get("datacite").length > 0) {
+                    item.clearMetadata("datacite", "resourceType", Item.ANY, Item.ANY);
+                }
+                item.clearMetadata("datacite", "resourceTypeGeneral", Item.ANY, Item.ANY);
 
                 Map<String, String> typeset = mapTypeArray(type, thesistype);
                 item.addMetadata("dc", "type", "dini", null, typeset.get("dini"), null, -1);
@@ -105,6 +109,8 @@ public class TypeSetter extends AbstractCurationTask
                 item.addMetadata("dc", "type", "casrai", null, typeset.get("casrai"), null, -1);
                 item.addMetadata("dcterms", "DCMIType", null, null, typeset.get("dcmi"), null, -1);
                 item.addMetadata("tuhh", "type", "opus", null, typeset.get("opus"), null, -1);
+                item.addMetadata("datacite", "resourceType", null, null, typeset.get("datacite"), null, -1);
+                item.addMetadata("datacite", "resourceTypeGeneral", null, null, typeset.get("dataciteGeneral"), null, -1);
 
                 results.append("Setting types for ").append(getItemHandle(item)).append(":\n");
                 results.append("DINI: ").append(typeset.get("dini")).append("\n");
@@ -112,6 +118,8 @@ public class TypeSetter extends AbstractCurationTask
                 results.append("Casrai: ").append(typeset.get("casrai")).append(":\n");
                 results.append("DCMI: ").append(typeset.get("dcmi")).append(":\n");
                 results.append("Opus: ").append(typeset.get("opus")).append(":\n");
+                results.append("DataCite ResourceTypeGeneral: ").append(typeset.get("dataciteGeneral")).append(":\n");
+                results.append("DataCite ResourceType: ").append(typeset.get("datacite")).append(":\n");
 
                 status = Curator.CURATE_SUCCESS;
 
@@ -166,6 +174,8 @@ public class TypeSetter extends AbstractCurationTask
                         ret.put("driver", "bachelorThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Bachelor Thesis");
                         break;
                     case "diplomaThesis":
                         ret.put("opus", "Diplomarbeit, Magisterarbeit");
@@ -173,6 +183,8 @@ public class TypeSetter extends AbstractCurationTask
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Diploma Thesis");
                         break;
                     case "magisterThesis":
                         ret.put("opus", "Diplomarbeit, Magisterarbeit");
@@ -180,6 +192,8 @@ public class TypeSetter extends AbstractCurationTask
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Magister Thesis");
                         break;
                     case "doctoralThesis":
                         ret.put("opus", "Dissertation");
@@ -187,6 +201,8 @@ public class TypeSetter extends AbstractCurationTask
                         ret.put("driver", "doctoralThesis");
                         ret.put("casrai", "Dissertation");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "PhD Thesis");
                         break;
                     case "habilitation":
                     case "habilitationThesis":
@@ -195,6 +211,8 @@ public class TypeSetter extends AbstractCurationTask
                         ret.put("driver", "doctoralThesis");
                         ret.put("casrai", "Dissertation");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Habilitational Thesis");
                         break;
                     case "masterThesis":
                         ret.put("opus", "Masterarbeit");
@@ -202,6 +220,8 @@ public class TypeSetter extends AbstractCurationTask
                         ret.put("driver", "masterThesis");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Master Thesis");
                         break;
                     default:
                         ret.put("opus", "Andere Abschlussarbeit");
@@ -209,6 +229,8 @@ public class TypeSetter extends AbstractCurationTask
                         ret.put("driver", "report");
                         ret.put("casrai", "Supervised Student Publication");
                         ret.put("dcmi", "Text");
+                        ret.put("dataciteGeneral", "Dissertation");
+                        ret.put("datacite", "Study Thesis");
                 }
                 break;
             case "Projectthesis":
@@ -217,6 +239,8 @@ public class TypeSetter extends AbstractCurationTask
                 ret.put("driver", "report");
                 ret.put("casrai", "Supervised Student Publication");
                 ret.put("dcmi", "Text");
+                ret.put("dataciteGeneral", "Dissertation");
+                ret.put("datacite", "Project Thesis");
                 break;
             case "manual":
                 ret.put("opus", "Anleitung (Manual)");
@@ -224,15 +248,31 @@ public class TypeSetter extends AbstractCurationTask
                 ret.put("driver", "report");
                 ret.put("casrai", "Manual");
                 ret.put("dcmi", "Text");
+                ret.put("dataciteGeneral", "Text");
+                ret.put("datacite", "Manual");
                 break;
             case "workingPaper":
             case "Working Paper":
-            ret.put("opus", "ResearchPaper");
-            ret.put("dini", "workingPaper");
-            ret.put("driver", "workingPaper");
-            ret.put("casrai", "Working Paper");
-            ret.put("dcmi", "Text");
-            break;
+                ret.put("opus", "ResearchPaper");
+                ret.put("dini", "workingPaper");
+                ret.put("driver", "workingPaper");
+                ret.put("casrai", "Working Paper");
+                ret.put("dcmi", "Text");
+                ret.put("dataciteGeneral", "Text");
+                ret.put("datacite", "Working Paper");
+                break;
+            case "ResearchPaper":
+            case "Research Paper":
+            case "ResearchReport":
+            case "Research Report":
+                ret.put("opus", "Research Report");
+                ret.put("dini", "workingPaper");
+                ret.put("driver", "workingPaper");
+                ret.put("casrai", "Working Paper");
+                ret.put("dcmi", "Text");
+                ret.put("dataciteGeneral", "Report");
+                ret.put("datacite", "Research Paper");
+                break;
         case "article":
         case "Article":
             ret.put("opus", "(wissenschaftlicher) Artikel");
@@ -240,6 +280,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "article");
             ret.put("casrai", "Journal Article");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "JournalArticle");
+            ret.put("datacite", "Article");
             break;
         case "MagazineArticle":
             ret.put("opus", "other");
@@ -247,6 +289,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "contributionToPeriodical");
             ret.put("casrai", "Magazine Article");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "JournalArticle");
+            ret.put("datacite", "Magazine Article");
             break;
         case "Image":
             ret.put("opus", "Bild");
@@ -254,6 +298,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "Image");
             break;
         case "Image, 3-D":
             ret.put("opus", "3D Bild");
@@ -261,6 +307,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "3D Image");
             break;
         case "book":
             ret.put("opus", "Buch (Monographie)");
@@ -268,6 +316,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "book");
             ret.put("casrai", "Book");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Book");
+            ret.put("datacite", "Book");
             break;
         case "festschrift":
         case "Festschrift":
@@ -276,6 +326,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "book");
             ret.put("casrai", "Book");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Book");
+            ret.put("datacite", "Festschrift");
             break;
         case "Poster":
             ret.put("opus", "Poster");
@@ -283,6 +335,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Conference Poster");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "Conference Poster");
             break;
         case "bookPart":
         case "inBook":
@@ -291,6 +345,7 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "bookPart");
             ret.put("casrai", "Book Chapter");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "BookChapter");
             break;
         case "inProceedings":
             ret.put("opus", "InProceedings (Aufsatz / Paper einer Konferenz etc.)");
@@ -298,6 +353,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "conferenceObject");
             ret.put("dcmi", "Text");
             ret.put("casrai", "Conference Paper");
+            ret.put("casrai", "Conference Paper");
+            ret.put("dataciteGeneral", "ConferencePaper");
             break;
         case "Map":
             ret.put("opus", "Kartenmaterial");
@@ -305,6 +362,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "Map");
             break;
         case "Learning Object":
             ret.put("opus", "Lernmaterial");
@@ -312,6 +371,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "InteractiveResource");
+            ret.put("dataciteGeneral", "InteractiveResource");
+            ret.put("datacite", "Course Material");
             break;
         case "Patent":
             ret.put("opus", "Patent");
@@ -319,6 +380,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "patent");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Patent");
             break;
         case "Offenlegungsschrift":
             ret.put("opus", "Patent: Offenlegungsschrift");
@@ -326,6 +389,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Patent Offenlegungsschrift");
             break;
         case "Presentation":
             ret.put("opus", "Präsentation");
@@ -333,6 +398,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "InteractiveResource");
+            ret.put("dataciteGeneral", "InteractiveResource");
+            ret.put("datacite", "Presentation");
             break;
         case "Software":
             ret.put("opus", "Software");
@@ -340,6 +407,7 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Software");
+            ret.put("dataciteGeneral", "Software");
             break;
         case "Technical Report":
         case "report":
@@ -348,6 +416,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "report");
             ret.put("casrai", "Report");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Report");
+            ret.put("datacite", "Technical Report");
             break;
         case "Video":
             ret.put("opus", "Video");
@@ -355,6 +425,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Image");
+            ret.put("datacite", "Video");
             break;
         case "preprint":
         case "Preprint":
@@ -363,6 +435,7 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "preprint");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Preprint");
             break;
         case "Journal":
         case "Journal Issue":
@@ -372,6 +445,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Journal Issue");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Journal");
+            ret.put("datacite", "Journal Volume");
             break;
         case "lecture":
         case "Lecture":
@@ -380,6 +455,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "lecture");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Lecture");
             break;
         case "StudyThesis":
         case "Study Thesis":
@@ -388,6 +465,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Dissertation");
+            ret.put("datacite", "Study Thesis");
             break;
         case "Proceedings":
             ret.put("opus", "Proceedings (Komplette Ausgabe einer Konferenz etc.)");
@@ -395,6 +474,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "conferenceObject");
             ret.put("casrai", "Book");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "ConferenceProceeding");
+            ret.put("datacite", "Proceedings");
             break;
         case "Music":
         case "Sound":
@@ -403,6 +484,7 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "Sound");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Sound");
+            ret.put("dataciteGeneral", "Sound");
             break;
         case "Dataset":
             ret.put("opus", "Dataset");
@@ -410,6 +492,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Dataset");
+            ret.put("dataciteGeneral", "Dataset");
+            ret.put("datacite", "ResearchData");
             break;
         case "Audiovisual":
             ret.put("opus", "Audiovisuell");
@@ -417,6 +501,7 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Image");
+            ret.put("dataciteGeneral", "Audiovisual");
             break;
         case "DataPaper":
             ret.put("opus", "DataPaper");
@@ -424,6 +509,7 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "DataPaper");
             break;
         case "InteractiveResource":
             ret.put("opus", "Interactive Resource");
@@ -431,6 +517,7 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "InteractiveResource");
+            ret.put("dataciteGeneral", "InteractiveResource");
             break;
         case "Other":
             ret.put("opus", "Sonstiges");
@@ -438,6 +525,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Other");
             break;
         case "Text":
             ret.put("opus", "Text");
@@ -445,6 +534,47 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Online Resource");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            break;
+        case "article-review":
+            //Cerif: Journal Article Review
+            ret.put("opus", "Review (Artikel)");
+            ret.put("dini", "review");
+            ret.put("driver", "review");
+            ret.put("casrai", "Journal Article");
+            ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "PeerReview");
+            ret.put("datacite", "Journal Article Review");
+            break;
+        case "letter":
+            //Cerif: Letter to Editor
+            ret.put("opus", "Letter (to Editor)");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Letter to Editor");
+            break;
+        case "commentary":
+            //Cerif:Commentary
+            ret.put("opus", "Kommentar");
+            ret.put("dini", "Other");
+            ret.put("driver", "other");
+            ret.put("casrai", "Other");
+            ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Commentary");
+            break;
+        case "editorial":
+            //Cerif:Editorial
+            ret.put("opus", "Editorial");
+            ret.put("dini", "article");
+            ret.put("driver", "article");
+            ret.put("casrai", "Journal Article");
+            ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", "Editorial");
             break;
         default:
             ret.put("opus", mainType);
@@ -452,6 +582,8 @@ public class TypeSetter extends AbstractCurationTask
             ret.put("driver", "other");
             ret.put("casrai", "Other");
             ret.put("dcmi", "Text");
+            ret.put("dataciteGeneral", "Text");
+            ret.put("datacite", mainType);
             break;
     }
     return ret;
