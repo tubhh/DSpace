@@ -213,9 +213,9 @@
                 Occ: 0-n
                 Required Attribute: alternateIdentifierType (free format)
             -->
-            <xsl:if test="//dspace:field[@mdschema='dc' and @element='identifier' and not(starts-with(., concat('http://dx.doi.org/', $prefix)))]">
+            <xsl:if test="//dspace:field[@mdschema='dc' and @element='identifier' and not(@qualifier='issn') and not(@qualifier='scopus') and not(starts-with(., concat('http://dx.doi.org/', $prefix)))]">
                 <xsl:element name="alternateIdentifiers">
-                    <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='identifier' and not(starts-with(., concat('http://dx.doi.org/', $prefix)))]" />
+                    <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='identifier' and not(@qualifier='issn') and not(@qualifier='scopus') and not(starts-with(., concat('http://dx.doi.org/', $prefix)))]" />
                 </xsl:element>
             </xsl:if>
 
@@ -295,9 +295,9 @@
                 DataCite (20)
                 Add related items
             -->
-            <xsl:if test="//dspace:field[@mdschema='datacite' and @element='relation']">
+            <xsl:if test="//dspace:field[@mdschema='dc' and @element='relation' and @qualifier='ispartof']">
                 <xsl:element name="relatedItems">
-                    <xsl:apply-templates select="relatedItems" />
+                    <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='relation' and @qualifier='ispartof']" />
                 </xsl:element>
             </xsl:if>
         </resource>
@@ -1006,7 +1006,7 @@
         resolveUrlToHandle(context, altId) until one is recognized or all have
         been tested.
     -->
-    <xsl:template match="//dspace:field[@mdschema='dc' and @element='identifier' and @qualifier and not(starts-with(., concat('http://dx.doi.org/', $prefix)))]">
+    <xsl:template match="//dspace:field[@mdschema='dc' and @element='identifier' and not(@qualifier='issn') and not(@qualifier='scopus') and @qualifier and not(starts-with(., concat('http://dx.doi.org/', $prefix)))]">
         <xsl:element name="alternateIdentifier">
             <xsl:if test="@qualifier">
                 <xsl:attribute name="alternateIdentifierType"><xsl:value-of select="@qualifier" /></xsl:attribute>
@@ -1535,14 +1535,53 @@ w3id
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template name="relatedItems">
-        <xsl:for-each select="//dspace:field[@mdschema='datacite' and @element='relation' and @qualifier!='IsIdenticalTo']"><xsl:value-of select="." />
-        <xsl:if test="not(contains(., ':'))">
+    <xsl:template match="//dspace:field[@mdschema='dc' and @element='relation' and @qualifier='ispartof']">
         <xsl:element name="relatedItem">
-                    <xsl:value-of select="." />
+            <xsl:attribute name="relationType">IsPublishedIn</xsl:attribute>
+            <xsl:attribute name="relatedItemType">Journal</xsl:attribute>
+            <xsl:element name="relatedItemIdentifier">
+                <xsl:attribute name="relatedItemIdentifierType">ISSN</xsl:attribute>
+                <xsl:value-of select="//dspace:field[@mdschema='dc' and @element='identifier' and @qualifier='issn']" />
+            </xsl:element>
+            <titles>
+                <title><xsl:value-of select="." /></title>
+            </titles>
+            <xsl:if test="//dspace:field[@mdschema='dc' and @element='date' and @qualifier='issued']">
+                <xsl:element name="publicationYear">
+                    <xsl:value-of select="substring(//dspace:field[@mdschema='dc' and @element='date' and @qualifier='issued'], 1, 4)" />
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='issue']">
+                <xsl:element name="issue">
+                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='issue']" />
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='volume']">
+                <xsl:element name="volume">
+                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='volume']" />
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='startpage']">
+                <xsl:element name="startpage">
+                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='startpage']" />
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='endpage']">
+                <xsl:element name="endpage">
+                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='endpage']" />
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='articlenumber']">
+                <xsl:element name="number">
+                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='articlenumber']" />
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="//dspace:field[@mdschema='dc' and @element='publisher']">
+                <xsl:element name="publisher">
+                    <xsl:value-of select="//dspace:field[@mdschema='dc' and @element='publisher']" />
+                </xsl:element>
+            </xsl:if>
         </xsl:element>
-        </xsl:if>
-        </xsl:for-each>
     </xsl:template>
 
 </xsl:stylesheet>
