@@ -202,7 +202,7 @@
                 Template call for ResourceType
                 DataCite allows the ResourceType to ouccre not more than once.
             -->
-            <xsl:apply-templates select="(//dspace:field[@mdschema='datacite' and @element='resourceType'])" />
+            <xsl:apply-templates select="(//dspace:field[@mdschema='datacite' and @element='resourceTypeGeneral'])" />
 
             <!--
                 DataCite (11)
