@@ -1043,6 +1043,9 @@
                             <xsl:when test="substring-before(., ':')='urn'">
                                 <xsl:text>URN</xsl:text>
                             </xsl:when>
+                            <xsl:when test="substring-before(., ':')='isbn'">
+                                <xsl:text>ISBN</xsl:text>
+                            </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="substring-before(., ':')" />
                             </xsl:otherwise>
