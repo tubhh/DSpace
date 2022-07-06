@@ -993,7 +993,13 @@
                 <xsl:attribute name="resourceTypeGeneral">
                     <xsl:value-of select="." />
                 </xsl:attribute>
-                <xsl:value-of select="//dspace:field[@mdschema='datacite' and @element='resourceType']" />
+                <xsl:choose>
+                    <xsl:when test="//dspace:field[@mdschema='datacite' and @element='resourceType']">
+                        <xsl:value-of select="//dspace:field[@mdschema='datacite' and @element='resourceType']" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="//dspace:field[@mdschema='dc' and @element='type' and @qualifier='casrai']" />
+                    </xsl:otherwise>
             </xsl:element>
     </xsl:template>
 
