@@ -107,7 +107,9 @@ public class TypeSettingConsumer implements Consumer
                         item.addMetadata("dc", "type", "casrai", null, typeset.get("casrai"), null, -1);
                         item.addMetadata("dcterms", "DCMIType", null, null, typeset.get("dcmi"), null, -1);
                         item.addMetadata("tuhh", "type", "opus", null, typeset.get("opus"), null, -1);
-                        item.addMetadata("datacite", "resourceType", null, null, typeset.get("datacite"), null, -1);
+                        if (typeset.get("datacite").length() > 0) {
+                            item.addMetadata("datacite", "resourceType", null, null, typeset.get("datacite"), null, -1);
+                        }
                         item.addMetadata("datacite", "resourceTypeGeneral", null, null, typeset.get("dataciteGeneral"), null, -1);
 
                         item.updateMetadata();
