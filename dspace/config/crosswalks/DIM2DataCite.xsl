@@ -1000,6 +1000,7 @@
                     <xsl:otherwise>
                         <xsl:value-of select="//dspace:field[@mdschema='dc' and @element='type' and @qualifier='casrai']" />
                     </xsl:otherwise>
+                </xsl:choose>
             </xsl:element>
     </xsl:template>
 
