@@ -2520,7 +2520,7 @@
      </pair>
      <pair>
        <displayed-value>Konferenzbeitrag (nicht im Tagungsband)</displayed-value>
-       <stored-value>c_18cp</stored-value>
+       <stored-value>ConferencePaper_not_in_proceedings</stored-value>
      </pair>
      <pair>
        <displayed-value>Karte</displayed-value>
