@@ -17,6 +17,7 @@
     prefix="fmt" %>
 	
 <%@ page import="java.io.PrintWriter" %>
+<%@ page import="org.dspace.core.Utils"%>
 
 <%@ page isErrorPage="true" %>
 
@@ -45,10 +46,10 @@
     else {
                 for(Throwable t = ex ; t!=null; t = t.getCause())
                 {
-                    out.println(t.getMessage());
-                    out.println("=============================================");
-                    t.printStackTrace(new PrintWriter(out));
-                    out.println("\n\n\n");
+                    //out.println(Utils.addEntities(t.getMessage()));
+                    //out.println("=============================================");
+                    //t.printStackTrace(new PrintWriter(out));
+                    //out.println("\n\n\n");
                 }
         }
         %>
