@@ -1563,29 +1563,29 @@ w3id
                     <xsl:value-of select="substring(//dspace:field[@mdschema='dc' and @element='date' and @qualifier='issued'], 1, 4)" />
                 </xsl:element>
             </xsl:if>
-            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='issue']">
-                <xsl:element name="issue">
-                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='issue']" />
-                </xsl:element>
-            </xsl:if>
             <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='volume']">
                 <xsl:element name="volume">
                     <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='volume']" />
                 </xsl:element>
             </xsl:if>
-            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='startpage']">
-                <xsl:element name="startpage">
-                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='startpage']" />
-                </xsl:element>
-            </xsl:if>
-            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='endpage']">
-                <xsl:element name="endpage">
-                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='endpage']" />
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='issue']">
+                <xsl:element name="issue">
+                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='issue']" />
                 </xsl:element>
             </xsl:if>
             <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='articlenumber']">
                 <xsl:element name="number">
                     <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='articlenumber']" />
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='startpage']">
+                <xsl:element name="firstPage">
+                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='startpage']" />
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='endpage']">
+                <xsl:element name="lastPage">
+                    <xsl:value-of select="//dspace:field[@mdschema='tuhh' and @element='container' and @qualifier='endpage']" />
                 </xsl:element>
             </xsl:if>
             <xsl:if test="//dspace:field[@mdschema='dc' and @element='publisher']">
